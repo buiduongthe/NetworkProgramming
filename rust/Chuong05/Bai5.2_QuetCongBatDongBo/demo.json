@@ -1,0 +1,8 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "ports", "cmd": ["../../target/release/bai5_2_quet_cong_bat_dong_bo", "ports", "21521,21524,21527", "21522,21525,21528,21529"], "background": true, "wait": 1.5},
+    {"name": "scan", "cmd": ["../../target/release/bai5_2_quet_cong_bat_dong_bo", "scan", "127.0.0.1", "21520", "21529", "10"], "timeout": 60}
+  ],
+  "titles": {"ports": "Cửa sổ 1 – cổng minh họa", "scan": "Cửa sổ 2 – quét cổng"}
+}

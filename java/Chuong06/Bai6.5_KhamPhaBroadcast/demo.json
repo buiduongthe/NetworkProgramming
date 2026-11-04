@@ -1,0 +1,62 @@
+{
+  "setup": [
+    [
+      "javac",
+      "-encoding",
+      "UTF-8",
+      "-d",
+      "out",
+      "Json.java",
+      "Discover.java",
+      "Responder.java"
+    ]
+  ],
+  "processes": [
+    {
+      "name": "r1",
+      "cmd": [
+        "java",
+        "-cp",
+        "out",
+        "Responder",
+        "9200",
+        "Phòng-Lab-A",
+        "9639"
+      ],
+      "background": true,
+      "wait": 1.0
+    },
+    {
+      "name": "r2",
+      "cmd": [
+        "java",
+        "-cp",
+        "out",
+        "Responder",
+        "9201",
+        "Phòng-Lab-B",
+        "9639"
+      ],
+      "background": true,
+      "wait": 1.0
+    },
+    {
+      "name": "client",
+      "cmd": [
+        "java",
+        "-cp",
+        "out",
+        "Discover",
+        "1000",
+        "9639",
+        "255.255.255.255"
+      ],
+      "wait": 0.3
+    }
+  ],
+  "titles": {
+    "r1": "Cửa sổ 1 – responder Phòng-Lab-A",
+    "r2": "Cửa sổ 2 – responder Phòng-Lab-B",
+    "client": "Cửa sổ 3 – client khám phá (broadcast)"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "31530", "1500"], "background": true, "wait": 0.8},
+    {"name": "gui", "cmd": ["out/app", "gui", "127.0.0.1", "31530", "31532"], "background": true, "wait": 0.8},
+    {"name": "browser", "cmd": ["python3", "chup_giao_dien.py", "31532", "31530", "31531"], "timeout": 60, "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server (trả lời chậm 1500 ms)", "gui": "Cửa sổ 2 – chương trình giao diện (Go)", "browser": "Cửa sổ 3 – trình duyệt do Playwright điều khiển"}
+}

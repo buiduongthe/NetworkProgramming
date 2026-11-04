@@ -1,0 +1,10 @@
+{
+  "processes": [
+    {"name": "server", "cmd": ["python3", "chat_server.py", "127.0.0.1", "9507"], "background": true, "wait": 0.8},
+    {"name": "binh", "cmd": ["python3", "chat_cli.py", "Bình", "127.0.0.1", "9507"], "background": true, "wait": 1.0,
+     "stdin": "/cho 2.5\nChào An, mình nghe rõ.\n"},
+    {"name": "an", "cmd": ["python3", "chat_cli.py", "An", "127.0.0.1", "9507"], "wait": 1.0,
+     "stdin": "Xin chào mọi người\n/cho 3\n/quit\n"}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server chat", "binh": "Cửa sổ 2 – Bình", "an": "Cửa sổ 3 – An"}
+}

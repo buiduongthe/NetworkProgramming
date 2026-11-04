@@ -1,0 +1,12 @@
+{
+  "processes": [
+    {"name": "server", "cmd": ["python3", "test_server.py", "127.0.0.1", "9210"], "background": true, "wait": 0.8},
+    {"name": "refused", "cmd": ["python3", "safe_connect.py", "127.0.0.1", "9211"]},
+    {"name": "not_found", "cmd": ["python3", "safe_connect.py", "khong-ton-tai.invalid", "9210"]},
+    {"name": "timeout", "cmd": ["python3", "safe_connect.py", "10.255.255.1", "9210", "3000"]},
+    {"name": "ok", "cmd": ["python3", "safe_connect.py", "localhost", "9210"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server thử nghiệm", "refused": "2 – cổng đóng trên localhost",
+             "not_found": "3 – tên không tồn tại", "timeout": "4 – địa chỉ không định tuyến được",
+             "ok": "5 – kết nối thành công"}
+}

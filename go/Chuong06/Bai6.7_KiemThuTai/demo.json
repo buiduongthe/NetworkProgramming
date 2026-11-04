@@ -1,0 +1,11 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "server1", "cmd": ["out/app", "threaded", "127.0.0.1", "31670", "500", "50"], "background": true, "wait": 0.8},
+    {"name": "load1", "cmd": ["out/app", "load", "127.0.0.1", "31670", "20", "1,10,100"], "timeout": 60, "wait": 0.3},
+    {"name": "server2", "cmd": ["out/app", "pool", "127.0.0.1", "31671", "8", "16", "50"], "background": true, "wait": 0.8},
+    {"name": "load2", "cmd": ["out/app", "load", "127.0.0.1", "31671", "20", "1,10,100"], "timeout": 60, "wait": 0.3}
+  ],
+  "titles": {"server1": "Cửa sổ 1 – server mỗi kết nối một luồng", "load1": "Cửa sổ 2 – bộ sinh tải → server 1",
+             "server2": "Cửa sổ 3 – server nhóm 8 luồng, hàng đợi 16", "load2": "Cửa sổ 4 – bộ sinh tải → server 2"}
+}

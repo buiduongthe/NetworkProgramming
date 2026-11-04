@@ -1,0 +1,29 @@
+===== server =====
+$ ../../target/release/bai2_2_ket_noi_an_toan server 127.0.0.1 21220
+[server] Đang lắng nghe tại 127.0.0.1:21220
+[server] Client kết nối: 127.0.0.1:57568
+
+===== refused =====
+$ ../../target/release/bai2_2_ket_noi_an_toan client 127.0.0.1 21221
+[client] Kết nối tới 127.0.0.1:21221, thời gian chờ 3000 ms
+[client] NetError REFUSED, thử lại: không, sau 0 ms
+[client] Nguyên nhân: ConnectionRefused: Connection refused (os error 111)
+
+===== not_found =====
+$ ../../target/release/bai2_2_ket_noi_an_toan client khong-ton-tai.invalid 21220
+[client] Kết nối tới khong-ton-tai.invalid:21220, thời gian chờ 3000 ms
+[client] NetError NOT_FOUND, thử lại: không, sau 0 ms
+[client] Nguyên nhân: Uncategorized: failed to lookup address information: Name or service not known
+
+===== timeout =====
+$ ../../target/release/bai2_2_ket_noi_an_toan client 10.255.255.1 21220 3000
+[client] Kết nối tới 10.255.255.1:21220, thời gian chờ 3000 ms
+[client] NetError UNREACHABLE, thử lại: có, sau 3002 ms
+[client] Nguyên nhân: TimedOut: connection timed out
+
+===== ok =====
+$ ../../target/release/bai2_2_ket_noi_an_toan client localhost 21220
+[client] Kết nối tới localhost:21220, thời gian chờ 3000 ms
+[client] Thành công: 127.0.0.1:57568 -> 127.0.0.1:21220, sau 0 ms
+[client] Đã đóng kết nối
+

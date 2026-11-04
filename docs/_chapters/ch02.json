@@ -1,0 +1,11 @@
+[
+  {"bai": "Bai2.1_DocCauHinh", "ten": "Đọc cấu hình địa chỉ và cổng (tham số dòng lệnh, biến môi trường)", "ma_gia": ["2.1"], "muc": "2.1.3",
+   "kiem_thu": {"csharp": "đã chạy", "java": "đã chạy", "python": "đã chạy"},
+   "ghi_chu": "Demo 5 trường hợp: mặc định, APP_PORT=9100, tham số 192.168.1.5 9200 (thắng APP_PORT), cổng \"abc\", cổng 70000; biến môi trường đặt cho từng tiến trình bằng lệnh env."},
+  {"bai": "Bai2.2_KetNoiAnToan", "ten": "Kết nối có thời gian chờ và phân loại lỗi", "ma_gia": ["2.2"], "muc": "2.2.3",
+   "kiem_thu": {"csharp": "đã chạy", "java": "đã chạy", "python": "đã chạy"},
+   "ghi_chu": "Kế thừa Mã giả 1.2, 2.1. Demo: REFUSED (cổng đóng 127.0.0.1), NOT_FOUND (khong-ton-tai.invalid), UNREACHABLE do hết thời gian chờ 3000 ms (10.255.255.1), kết nối thành công tới server thử nghiệm."},
+  {"bai": "Bai2.3_ClientDNS", "ten": "Client tra cứu DNS dùng bộ phân giải của hệ điều hành", "ma_gia": ["2.3"], "muc": "2.5",
+   "kiem_thu": {"csharp": "đã chạy", "java": "đã chạy", "python": "đã chạy"},
+   "ghi_chu": "Kế thừa Mã giả 1.1. Môi trường kiểm thử không có DNS bên ngoài: example.com không phân giải được, 8.8.8.8 không có PTR (kết quả thật được ghi lại)."}
+]

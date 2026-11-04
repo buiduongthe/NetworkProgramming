@@ -1,0 +1,20 @@
+{
+  "setup": [
+    ["protoc", "-I.",
+     "--go_out=.", "--go_opt=module=github.com/buiduongthe/NetworkProgramming/go/Chuong07/Bai7.5_gRPC",
+     "--go_opt=Mtra_cuu.proto=github.com/buiduongthe/NetworkProgramming/go/Chuong07/Bai7.5_gRPC/glossaryv1",
+     "--go-grpc_out=.", "--go-grpc_opt=module=github.com/buiduongthe/NetworkProgramming/go/Chuong07/Bai7.5_gRPC",
+     "--go-grpc_opt=Mtra_cuu.proto=github.com/buiduongthe/NetworkProgramming/go/Chuong07/Bai7.5_gRPC/glossaryv1",
+     "tra_cuu.proto"],
+    ["go", "mod", "tidy"],
+    ["go", "build", "-o", "out/app", "."]
+  ],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "31750"], "background": true, "wait": 1.5},
+    {"name": "server_cham", "cmd": ["out/app", "server", "127.0.0.1", "31751", "2000"], "background": true, "wait": 1.5},
+    {"name": "client", "cmd": ["out/app", "client", "127.0.0.1", "31750"]},
+    {"name": "client_cham", "cmd": ["out/app", "client", "127.0.0.1", "31751", "1000"], "wait": 3.0}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "server_cham": "Cửa sổ 2 – server chậm 2 giây",
+             "client": "Cửa sổ 3 – client, hạn chót 2 s", "client_cham": "Cửa sổ 4 – client, hạn chót 1 s"}
+}

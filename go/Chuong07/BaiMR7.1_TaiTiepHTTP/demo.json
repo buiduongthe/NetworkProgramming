@@ -1,0 +1,9 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."], ["rm", "-f", "tep_tai_ve.bin"]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "41715", "300000", "100000", "2"], "background": true, "wait": 0.8},
+    {"name": "tai", "cmd": ["out/app", "tai", "http://127.0.0.1:41715/tep.bin", "tep_tai_ve.bin"], "timeout": 30},
+    {"name": "tai_lai", "cmd": ["out/app", "tai", "http://127.0.0.1:41715/tep.bin", "tep_tai_ve.bin"], "timeout": 30}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server tệp (ngắt 2 lần sau 100000 byte)", "tai": "Cửa sổ 2 – tải có tải tiếp", "tai_lai": "Cửa sổ 3 – chạy lại khi tệp đã đủ"}
+}

@@ -1,0 +1,7 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "ping", "cmd": ["cargo", "run", "-q", "--release", "--", "127.0.0.1", "4"]}
+  ],
+  "titles": {"ping": "Cửa sổ lệnh (tài khoản root) – ping 127.0.0.1"}
+}

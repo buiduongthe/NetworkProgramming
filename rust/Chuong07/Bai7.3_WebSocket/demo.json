@@ -1,0 +1,9 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server", "cmd": ["cargo", "run", "-q", "--release", "--", "server", "127.0.0.1", "21730"], "background": true, "wait": 1.0},
+    {"name": "client", "cmd": ["cargo", "run", "-q", "--release", "--", "client", "127.0.0.1", "21730"], "stdin": "Xin chào\nWebSocket hai chiều\n"},
+    {"name": "kiemthu", "cmd": ["cargo", "run", "-q", "--release", "--", "kiemthu", "127.0.0.1", "21730"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server WebSocket", "client": "Cửa sổ 2 – client", "kiemthu": "Cửa sổ 3 – kiểm thử khung"}
+}

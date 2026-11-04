@@ -1,0 +1,3 @@
+# Mọi bài Rust dùng chung một thư mục build để tải và biên dịch thư viện một lần
+[build]
+target-dir = "target"

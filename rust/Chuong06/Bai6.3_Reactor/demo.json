@@ -1,0 +1,8 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server", "cmd": ["cargo", "run", "-q", "--release", "--", "server", "127.0.0.1", "21630"], "background": true, "wait": 1.0},
+    {"name": "client", "cmd": ["cargo", "run", "-q", "--release", "--", "client", "127.0.0.1", "21630", "3", "1048576"], "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server reactor một luồng", "client": "Cửa sổ 2 – 3 client echo đồng thời"}
+}

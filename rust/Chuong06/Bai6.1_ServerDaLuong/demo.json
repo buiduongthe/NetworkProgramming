@@ -1,0 +1,13 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server1", "cmd": ["cargo", "run", "-q", "--release", "--", "threaded", "127.0.0.1", "21610", "3"], "background": true, "wait": 1.0},
+    {"name": "client1", "cmd": ["cargo", "run", "-q", "--release", "--", "client", "127.0.0.1", "21610", "5", "1000"], "wait": 0.5},
+    {"name": "server2", "cmd": ["cargo", "run", "-q", "--release", "--", "pool", "127.0.0.1", "21611", "2", "1"], "background": true, "wait": 1.0},
+    {"name": "client2", "cmd": ["cargo", "run", "-q", "--release", "--", "client", "127.0.0.1", "21611", "5", "1000"], "wait": 0.5}
+  ],
+  "titles": {"server1": "Cửa sổ 1 – server mỗi kết nối một luồng (MAX_CLIENTS = 3)",
+             "client1": "Cửa sổ 2 – 5 client đồng thời",
+             "server2": "Cửa sổ 3 – server nhóm 2 luồng, hàng đợi 1",
+             "client2": "Cửa sổ 4 – 5 client đồng thời"}
+}

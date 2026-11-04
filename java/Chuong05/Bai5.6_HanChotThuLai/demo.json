@@ -1,0 +1,8 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "Khung.java", "FlakyServer.java", "DeadlineRetry.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "FlakyServer", "127.0.0.1", "9517"], "background": true, "wait": 1.0},
+    {"name": "client", "cmd": ["java", "-cp", "out", "DeadlineRetry", "127.0.0.1", "9517", "9518"], "timeout": 40, "wait": 1.0}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client": "Cửa sổ 2 – client"}
+}

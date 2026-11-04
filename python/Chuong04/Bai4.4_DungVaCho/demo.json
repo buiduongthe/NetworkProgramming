@@ -1,0 +1,10 @@
+{
+  "env": {"SAW_MAX_RTO": "2000"},
+  "processes": [
+    {"name": "recv", "cmd": ["python3", "saw_recv.py", "127.0.0.1", "9441", "tep_nhan.txt", "4,7"],
+     "show": ["SAW_MAX_RTO=2000", "python3", "saw_recv.py", "127.0.0.1", "9441", "tep_nhan.txt", "4,7"], "background": true, "wait": 0.8},
+    {"name": "send", "cmd": ["python3", "saw_send.py", "tep_mau.txt", "127.0.0.1", "9441", "3"],
+     "show": ["SAW_MAX_RTO=2000", "python3", "saw_send.py", "tep_mau.txt", "127.0.0.1", "9441", "3"], "wait": 5.0}
+  ],
+  "titles": {"recv": "Cửa sổ 1 – bên nhận (mất ACK thứ 4 và 7)", "send": "Cửa sổ 2 – bên gửi (mất DATA thứ 3)"}
+}

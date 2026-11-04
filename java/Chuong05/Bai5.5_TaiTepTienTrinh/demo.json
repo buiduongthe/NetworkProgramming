@@ -1,0 +1,9 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "Khung.java", "PutServer.java", "PutClient.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "PutServer", "127.0.0.1", "9512", "4096"], "background": true, "wait": 1.0},
+    {"name": "client", "cmd": ["java", "-cp", "out", "PutClient", "127.0.0.1", "9512", "du_lieu_thu.bin"], "wait": 0.5},
+    {"name": "client_huy", "cmd": ["java", "-cp", "out", "PutClient", "127.0.0.1", "9512", "du_lieu_thu.bin", "400"], "wait": 0.8}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client": "Cửa sổ 2 – tải lên đầy đủ", "client_huy": "Cửa sổ 3 – bấm Hủy sau 400 ms"}
+}

@@ -1,0 +1,10 @@
+[package]
+name = "bai3_2_dinh_khung"
+version = "0.1.0"
+edition = "2021"
+description = "Bài 3.2 – Thư viện định khung thông điệp (Mã giả 3.3–3.6)"
+publish = false
+
+[dependencies]
+serde_json = { version = "=1.0.143", features = ["preserve_order"] }
+sha2 = "=0.10.9"

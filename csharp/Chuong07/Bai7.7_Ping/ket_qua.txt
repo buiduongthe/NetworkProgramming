@@ -1,0 +1,23 @@
+===== raw =====
+$ dotnet run --no-build -c Release -- raw 127.0.0.1 4
+[ping] PING 127.0.0.1: 4 gói Echo Request, dữ liệu 32 byte, chờ tối đa 1000 ms
+[ping] Tiêu đề ICMP gửi đi: 08 00 B5 8D 0A AA 00 01 (kiểu, mã, checksum, id, seq)
+[ping]   bỏ qua gói ICMP kiểu 8 (không phải Echo Reply của tiến trình này)
+[ping] Trả lời từ 127.0.0.1: seq=1 ttl=64 thời gian=3.172 ms
+[ping]   bỏ qua gói ICMP kiểu 8 (không phải Echo Reply của tiến trình này)
+[ping] Trả lời từ 127.0.0.1: seq=2 ttl=64 thời gian=0.246 ms
+[ping]   bỏ qua gói ICMP kiểu 8 (không phải Echo Reply của tiến trình này)
+[ping] Trả lời từ 127.0.0.1: seq=3 ttl=64 thời gian=0.169 ms
+[ping]   bỏ qua gói ICMP kiểu 8 (không phải Echo Reply của tiến trình này)
+[ping] Trả lời từ 127.0.0.1: seq=4 ttl=64 thời gian=0.198 ms
+[ping] Đã gửi 4, nhận 4, mất 0%; RTT trung bình 0.946 ms
+
+===== lop =====
+$ dotnet run --no-build -c Release -- lop 127.0.0.1 4
+[ping] PING 127.0.0.1 bằng lớp System.Net.NetworkInformation.Ping, dữ liệu 32 byte
+[ping] Trả lời từ 127.0.0.1: seq=1 ttl=? thời gian=0 ms
+[ping] Trả lời từ 127.0.0.1: seq=2 ttl=? thời gian=0 ms
+[ping] Trả lời từ 127.0.0.1: seq=3 ttl=? thời gian=0 ms
+[ping] Trả lời từ 127.0.0.1: seq=4 ttl=? thời gian=0 ms
+[ping] Đã gửi 4, nhận 4, mất 0%; RTT trung bình 0.000 ms
+

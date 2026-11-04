@@ -1,0 +1,13 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "-v", "q", "-nologo"]],
+  "processes": [
+    {"name": "server", "cmd": ["python3", "-m", "http.server", "9121", "--bind", "127.0.0.1"], "background": true, "wait": 1.0},
+    {"name": "open", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "localhost", "9121"]},
+    {"name": "closed", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "localhost", "9122"]},
+    {"name": "unresolved", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "khong-ton-tai.invalid", "80"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server thử lắng nghe cổng 9121",
+             "open": "Cửa sổ 2 – cổng đang mở",
+             "closed": "Cửa sổ 3 – cổng không có chương trình lắng nghe",
+             "unresolved": "Cửa sổ 4 – tên không phân giải được"}
+}

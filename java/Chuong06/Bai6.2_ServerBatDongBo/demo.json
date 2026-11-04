@@ -1,0 +1,8 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "NetUtil.java", "LookupService.java", "AsyncServer.java", "MultiClient.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "AsyncServer", "127.0.0.1", "9633"], "background": true, "wait": 1.0},
+    {"name": "client", "cmd": ["java", "-cp", "out", "MultiClient", "127.0.0.1", "9633", "5", "1000"], "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server bất đồng bộ (luồng ảo)", "client": "Cửa sổ 2 – 5 client đồng thời"}
+}

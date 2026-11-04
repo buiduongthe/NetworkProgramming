@@ -1,0 +1,12 @@
+{
+  "processes": [
+    {"name": "server", "cmd": ["python3", "chat_server.py", "127.0.0.1", "9667"], "background": true, "wait": 0.8},
+    {"name": "an", "cmd": ["python3", "chat_client.py", "127.0.0.1", "9667", "An"], "stdin": "/join lop\n", "background": true, "wait": 0.8},
+    {"name": "binh", "cmd": ["python3", "chat_client.py", "127.0.0.1", "9667", "Bình"], "stdin": "/join lop\nChào cả lớp!\n", "background": true, "wait": 0.8},
+    {"name": "chi", "cmd": ["python3", "chat_client.py", "127.0.0.1", "9667", "Chi"], "stdin": "/join lop\nXin chào An và Bình\n/pm An Tin riêng gửi An\n/pm Dung Có ai tên Dung không?\n/leave lop\nCòn ai trong phòng không?\n/ping\n", "wait": 0.3},
+    {"name": "an2", "cmd": ["python3", "chat_client.py", "127.0.0.1", "9667", "An"], "wait": 0.3},
+    {"name": "bad", "cmd": ["python3", "chat_client.py", "127.0.0.1", "9667", "Tên sai!"], "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server chat", "an": "Cửa sổ 2 – client An", "binh": "Cửa sổ 3 – client Bình",
+             "chi": "Cửa sổ 4 – client Chi", "an2": "Cửa sổ 5 – client trùng tên An", "bad": "Cửa sổ 6 – client tên sai"}
+}

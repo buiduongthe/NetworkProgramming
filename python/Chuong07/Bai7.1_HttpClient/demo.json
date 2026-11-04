@@ -1,0 +1,7 @@
+{
+  "processes": [
+    {"name": "server", "cmd": ["python3", "server_thu.py", "127.0.0.1", "9711"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["python3", "http_client.py", "127.0.0.1", "9711", "/api/v1/terms/TCP", "/chunked", "/dong-ket-noi", "/khong-co"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server thử", "client": "Cửa sổ 2 – client HTTP/1.1"}
+}

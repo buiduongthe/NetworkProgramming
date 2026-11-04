@@ -1,0 +1,11 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "dns", "cmd": ["python3", "fake_dns_server.py", "127.0.0.1", "31430"], "background": true, "wait": 0.8},
+    {"name": "a", "cmd": ["out/app", "127.0.0.1", "demo.ltm.local", "A", "31430"]},
+    {"name": "aaaa", "cmd": ["out/app", "127.0.0.1", "demo.ltm.local", "AAAA", "31430"]},
+    {"name": "nx", "cmd": ["out/app", "127.0.0.1", "khong-co.ltm.local", "A", "31430"]},
+    {"name": "sys", "cmd": ["out/app", "8.8.8.8", "example.com", "A"]}
+  ],
+  "titles": {"dns": "Cửa sổ 1 – DNS server giả lập (Python)", "a": "Cửa sổ 2 – truy vấn A", "aaaa": "Cửa sổ 3 – truy vấn AAAA", "nx": "Cửa sổ 4 – tên không tồn tại", "sys": "Cửa sổ 5 – DNS trong /etc/resolv.conf (8.8.8.8)"}
+}

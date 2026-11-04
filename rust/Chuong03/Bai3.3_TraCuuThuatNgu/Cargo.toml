@@ -1,0 +1,9 @@
+[package]
+name = "bai3_3_tra_cuu_thuat_ngu"
+version = "0.1.0"
+edition = "2021"
+description = "Bài 3.3 – Dịch vụ tra cứu thuật ngữ dùng JSON (Mã giả 3.7, 3.8)"
+publish = false
+
+[dependencies]
+serde_json = { version = "=1.0.143", features = ["preserve_order"] }

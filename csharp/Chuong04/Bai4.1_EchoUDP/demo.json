@@ -1,0 +1,10 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "-v", "q", "-nologo"]],
+  "processes": [
+    {"name": "server", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "server", "127.0.0.1", "9412"], "background": true, "wait": 1.5},
+    {"name": "client1", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "client", "127.0.0.1", "9412"], "stdin": "Xin chào\nLập trình mạng UDP\n"},
+    {"name": "client2", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "client", "127.0.0.1", "9412"], "stdin": "Client thứ hai\n"},
+    {"name": "client3", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "client", "127.0.0.1", "9419"], "stdin": "Có ai không?\nGửi lần nữa\n"}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client1": "Cửa sổ 2 – client thứ nhất", "client2": "Cửa sổ 3 – client thứ hai", "client3": "Cửa sổ 4 – client, server không chạy (cổng 9419)"}
+}

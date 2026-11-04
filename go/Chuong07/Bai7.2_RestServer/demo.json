@@ -1,0 +1,47 @@
+{
+  "setup": [
+    [
+      "go",
+      "build",
+      "-o",
+      "out/app",
+      "."
+    ]
+  ],
+  "processes": [
+    {
+      "name": "server",
+      "cmd": [
+        "out/app",
+        "server",
+        "127.0.0.1",
+        "31720"
+      ],
+      "background": true,
+      "wait": 0.8
+    },
+    {
+      "name": "client",
+      "cmd": [
+        "out/app",
+        "client",
+        "127.0.0.1",
+        "31720"
+      ],
+      "stdin": "GET /api/v1/terms\nGET /api/v1/terms/TCP\nGET /api/v1/terms/Keep%20alive\nGET /api/v1/terms/XYZ\nPOST /api/v1/terms {\"term\":\"QUIC\",\"text\":\"Giao thức vận chuyển trên UDP\"}\nGET /api/v1/terms/QUIC\nDELETE /api/v1/terms/QUIC\nPUT /api/v1/terms/TCP {\"text\":\"x\"}\nGET /api/v2/khac\n"
+    },
+    {
+      "name": "curl",
+      "cmd": [
+        "sh",
+        "curl_demo.sh",
+        "31720"
+      ]
+    }
+  ],
+  "titles": {
+    "server": "Cửa sổ 1 – server REST",
+    "client": "Cửa sổ 2 – client (keep-alive)",
+    "curl": "Cửa sổ 3 – curl"
+  }
+}

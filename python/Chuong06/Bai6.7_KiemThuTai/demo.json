@@ -1,0 +1,10 @@
+{
+  "processes": [
+    {"name": "server1", "cmd": ["python3", "thread_server.py", "127.0.0.1", "9673", "500", "50"], "background": true, "wait": 0.8},
+    {"name": "load1", "cmd": ["python3", "load_test.py", "127.0.0.1", "9673", "20", "1,10,100"], "timeout": 60, "wait": 0.3},
+    {"name": "server2", "cmd": ["python3", "pool_server.py", "127.0.0.1", "9674", "8", "16", "50"], "background": true, "wait": 0.8},
+    {"name": "load2", "cmd": ["python3", "load_test.py", "127.0.0.1", "9674", "20", "1,10,100"], "timeout": 60, "wait": 0.3}
+  ],
+  "titles": {"server1": "Cửa sổ 1 – server mỗi kết nối một luồng", "load1": "Cửa sổ 2 – bộ sinh tải → server 1",
+             "server2": "Cửa sổ 3 – server nhóm 8 luồng, hàng đợi 16", "load2": "Cửa sổ 4 – bộ sinh tải → server 2"}
+}

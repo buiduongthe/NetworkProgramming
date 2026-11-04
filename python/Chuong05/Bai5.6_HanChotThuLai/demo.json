@@ -1,0 +1,7 @@
+{
+  "processes": [
+    {"name": "server", "cmd": ["python3", "flaky_server.py", "127.0.0.1", "9513"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["python3", "deadline_retry.py", "127.0.0.1", "9513", "9514"], "timeout": 40, "wait": 1.0}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client": "Cửa sổ 2 – client"}
+}

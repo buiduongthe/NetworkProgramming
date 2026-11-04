@@ -1,0 +1,18 @@
+[package]
+name = "bai8_4_tls_chat"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Server và client chat bất đồng bộ (như Bài 6.4)
+tokio = { version = "=1.54.1", features = ["rt-multi-thread", "macros", "net", "io-util", "time", "sync", "signal"] }
+# TLS_WRAP_ASYNC: rustls (bộ mật mã ring) cho luồng tokio; kho chứng chỉ của hệ điều hành
+rustls = { version = "=0.23.46", default-features = false, features = ["ring", "std", "tls12"] }
+tokio-rustls = { version = "=0.26.6", default-features = false, features = ["ring", "tls12"] }
+rustls-native-certs = "=0.8.5"
+# JWT HS256: HMAC-SHA-256 và Base64url
+hmac = "=0.12.1"
+sha2 = "=0.10.9"
+base64 = "=0.22.1"
+# Khung JSON; preserve_order giữ thứ tự khóa của claims như bản Python
+serde_json = { version = "=1.0.154", features = ["preserve_order"] }

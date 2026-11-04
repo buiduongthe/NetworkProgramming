@@ -1,0 +1,9 @@
+[package]
+name = "bai4_2_tra_cuu_udp"
+version = "0.1.0"
+edition = "2021"
+description = "Bài 4.2 – Dịch vụ tra cứu thuật ngữ trên UDP có gửi lại (Mã giả 4.3, 4.4)"
+publish = false
+
+[dependencies]
+serde_json = { version = "=1.0.143", features = ["preserve_order"] }

@@ -1,0 +1,8 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "Khung.java", "FrameServer.java", "FrameClient.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "FrameServer", "127.0.0.1", "9503"], "background": true, "wait": 1.0},
+    {"name": "client", "cmd": ["java", "-cp", "out", "FrameClient", "127.0.0.1", "9503"], "stdin": "TCP\nBất đồng bộ\nHTTP\n"}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client": "Cửa sổ 2 – client"}
+}

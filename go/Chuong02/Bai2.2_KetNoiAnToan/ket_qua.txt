@@ -1,0 +1,30 @@
+===== server =====
+$ out/app server 127.0.0.1 31220
+[server] Đang lắng nghe tại 127.0.0.1:31220
+[server] Client kết nối: 127.0.0.1:32884
+[server] Dừng server
+
+===== refused =====
+$ out/app client 127.0.0.1 31221
+[client] Kết nối tới 127.0.0.1:31221, thời gian chờ 3000 ms
+[client] NetError REFUSED, thử lại: không, sau 1 ms
+[client] Nguyên nhân: dial tcp4 127.0.0.1:31221: connect: connection refused
+
+===== not_found =====
+$ out/app client khong-ton-tai.invalid 31220
+[client] Kết nối tới khong-ton-tai.invalid:31220, thời gian chờ 3000 ms
+[client] NetError NOT_FOUND, thử lại: không, sau 1 ms
+[client] Nguyên nhân: lookup khong-ton-tai.invalid on 8.8.8.8:53: no such host
+
+===== timeout =====
+$ out/app client 10.255.255.1 31220 3000
+[client] Kết nối tới 10.255.255.1:31220, thời gian chờ 3000 ms
+[client] NetError UNREACHABLE, thử lại: có, sau 3002 ms
+[client] Nguyên nhân: dial tcp4 10.255.255.1:31220: i/o timeout
+
+===== ok =====
+$ out/app client localhost 31220
+[client] Kết nối tới localhost:31220, thời gian chờ 3000 ms
+[client] Thành công: 127.0.0.1:32884 -> 127.0.0.1:31220, sau 0 ms
+[client] Đã đóng kết nối
+

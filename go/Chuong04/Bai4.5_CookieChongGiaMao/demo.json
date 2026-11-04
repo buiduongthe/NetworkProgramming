@@ -1,0 +1,11 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "31450"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["out/app", "client", "127.0.0.1", "31450"], "stdin": "UDP\nQUIC\n"},
+    {"name": "client2", "cmd": ["out/app", "client", "127.0.0.1", "31450"], "stdin": "XYZ\n"},
+    {"name": "client3", "cmd": ["out/app", "client", "127.0.0.1", "31450", "deadbeef"], "stdin": "UDP\n"},
+    {"name": "raw", "cmd": ["out/app", "raw", "127.0.0.1", "31450", "{\"op\":\"list\"}"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server có mã thách thức", "client": "Cửa sổ 2 – client chưa có cookie", "client2": "Cửa sổ 3 – client mới, phản hồi nhỏ", "client3": "Cửa sổ 4 – client dùng cookie giả mạo", "raw": "Cửa sổ 5 – yêu cầu 13 byte không đệm"}
+}

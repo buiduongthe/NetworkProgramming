@@ -1,0 +1,9 @@
+{
+  "setup": [["rm", "-f", "tep_tai_ve.bin"]],
+  "processes": [
+    {"name": "server", "cmd": ["python3", "server_tep.py", "127.0.0.1", "41710", "--kich-thuoc", "300000", "--cat-sau", "100000", "--so-lan-cat", "2"], "background": true, "wait": 0.8},
+    {"name": "tai", "cmd": ["python3", "tai_tiep.py", "http://127.0.0.1:41710/tep.bin", "tep_tai_ve.bin"], "timeout": 30},
+    {"name": "tai_lai", "cmd": ["python3", "tai_tiep.py", "http://127.0.0.1:41710/tep.bin", "tep_tai_ve.bin"], "timeout": 30}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server tệp (ngắt 2 lần sau 100000 byte)", "tai": "Cửa sổ 2 – tải có tải tiếp", "tai_lai": "Cửa sổ 3 – chạy lại khi tệp đã đủ"}
+}

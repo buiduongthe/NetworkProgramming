@@ -1,0 +1,25 @@
+===== server =====
+$ out/app server 127.0.0.1 31620
+[server] Server bất đồng bộ đang lắng nghe tại 127.0.0.1:31620
+[server] Nhận 127.0.0.1:50104 (tác vụ: 1, luồng: 7)
+[server] Nhận 127.0.0.1:50114 (tác vụ: 2, luồng: 7)
+[server] Nhận 127.0.0.1:50118 (tác vụ: 3, luồng: 7)
+[server] Nhận 127.0.0.1:50132 (tác vụ: 4, luồng: 7)
+[server] Nhận 127.0.0.1:50140 (tác vụ: 5, luồng: 7)
+[server] Kết thúc 127.0.0.1:50104: client đóng kết nối
+[server] Kết thúc 127.0.0.1:50114: client đóng kết nối
+[server] Kết thúc 127.0.0.1:50118: client đóng kết nối
+[server] Kết thúc 127.0.0.1:50132: client đóng kết nối
+[server] Kết thúc 127.0.0.1:50140: client đóng kết nối
+[server] Dừng server
+
+===== client =====
+$ out/app client 127.0.0.1 31620 5 1000
+[client] 5 client cách nhau 100 ms, giữ kết nối 1000 ms
+[client 1] t = 0 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 2] t = 101 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 3] t = 201 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 4] t = 302 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 5] t = 403 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client] Hoàn tất sau 1403 ms
+

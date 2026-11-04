@@ -1,0 +1,8 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server", "cmd": ["../../target/release/bai5_6_han_chot_thu_lai", "server", "127.0.0.1", "21560"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["../../target/release/bai5_6_han_chot_thu_lai", "client", "127.0.0.1", "21560", "21569"], "timeout": 40, "wait": 1.0}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client": "Cửa sổ 2 – client"}
+}

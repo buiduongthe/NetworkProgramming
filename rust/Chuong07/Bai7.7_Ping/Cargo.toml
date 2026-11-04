@@ -1,0 +1,8 @@
+[package]
+name = "bai7_7_ping"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Thư viện chuẩn không tạo được socket RAW; socket2 tạo SOCKET(INET, RAW, ICMP)
+socket2 = { version = "=0.6.5", features = ["all"] }  # "all": có Type::RAW

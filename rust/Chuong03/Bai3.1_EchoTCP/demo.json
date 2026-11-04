@@ -1,0 +1,8 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server", "cmd": ["../../target/release/bai3_1_echo_tcp", "server", "127.0.0.1", "21310"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["../../target/release/bai3_1_echo_tcp", "client", "127.0.0.1", "21310"], "stdin": "Xin chào\nLập trình mạng\n"}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client": "Cửa sổ 2 – client"}
+}

@@ -1,0 +1,16 @@
+{
+  "processes": [
+    {"name": "dich", "cmd": ["python3", "server_dich.py", "127.0.0.1", "41311"], "background": true, "wait": 0.6},
+    {"name": "chuyen_tiep", "cmd": ["python3", "chuyen_tiep.py", "127.0.0.1", "41310", "127.0.0.1", "41311"], "background": true, "wait": 0.6},
+    {"name": "chuyen_tiep_hong", "cmd": ["python3", "chuyen_tiep.py", "127.0.0.1", "41312", "127.0.0.1", "41313"], "background": true, "wait": 0.6},
+    {"name": "client_nho", "cmd": ["python3", "client_thu.py", "127.0.0.1", "41310", "Xin chào lập trình mạng"]},
+    {"name": "client_lon", "cmd": ["python3", "client_thu.py", "127.0.0.1", "41310", "dữ liệu lớn ", "20000"]},
+    {"name": "client_hong", "cmd": ["python3", "client_thu.py", "127.0.0.1", "41312", "Có ai không?"], "wait": 0.5}
+  ],
+  "titles": {"dich": "Cửa sổ 1 – server đích (chữ hoa) cổng 41311",
+             "chuyen_tiep": "Cửa sổ 2 – chuyển tiếp 41310 -> 41311",
+             "chuyen_tiep_hong": "Cửa sổ 3 – chuyển tiếp 41312 -> 41313 (không có đích)",
+             "client_nho": "Cửa sổ 4 – client gửi chuỗi ngắn qua 41310",
+             "client_lon": "Cửa sổ 5 – client gửi 360 000 byte qua 41310",
+             "client_hong": "Cửa sổ 6 – client nối 41312 (đích không chạy)"}
+}

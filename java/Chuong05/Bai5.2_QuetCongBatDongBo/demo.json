@@ -1,0 +1,8 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "DemoPorts.java", "ScanAsync.java"]],
+  "processes": [
+    {"name": "ports", "cmd": ["java", "-cp", "out", "DemoPorts", "9563,9571,9577", "9565,9568,9573,9579"], "background": true, "wait": 2.5},
+    {"name": "scan", "cmd": ["java", "-cp", "out", "ScanAsync", "127.0.0.1", "9560", "9579", "10"], "timeout": 60}
+  ],
+  "titles": {"ports": "Cửa sổ 1 – cổng minh họa", "scan": "Cửa sổ 2 – quét cổng"}
+}

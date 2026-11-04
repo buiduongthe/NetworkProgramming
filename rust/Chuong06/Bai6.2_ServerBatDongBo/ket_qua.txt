@@ -1,0 +1,25 @@
+===== server =====
+$ cargo run -q --release -- server 127.0.0.1 21620
+[server] Server bất đồng bộ đang lắng nghe tại 127.0.0.1:21620
+[server] Nhận 127.0.0.1:54660 (tác vụ: 1, luồng: 2)
+[server] Nhận 127.0.0.1:54666 (tác vụ: 2, luồng: 2)
+[server] Nhận 127.0.0.1:54682 (tác vụ: 3, luồng: 2)
+[server] Nhận 127.0.0.1:54684 (tác vụ: 4, luồng: 2)
+[server] Nhận 127.0.0.1:54690 (tác vụ: 5, luồng: 2)
+[server] Kết thúc 127.0.0.1:54660: client đóng kết nối
+[server] Kết thúc 127.0.0.1:54666: client đóng kết nối
+[server] Kết thúc 127.0.0.1:54682: client đóng kết nối
+[server] Kết thúc 127.0.0.1:54684: client đóng kết nối
+[server] Kết thúc 127.0.0.1:54690: client đóng kết nối
+[server] Dừng server
+
+===== client =====
+$ cargo run -q --release -- client 127.0.0.1 21620 5 1000
+[client] 5 client cách nhau 100 ms, giữ kết nối 1000 ms
+[client 1] t = 0 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 2] t = 100 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 3] t = 201 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 4] t = 301 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 5] t = 401 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client] Hoàn tất sau 1402 ms
+

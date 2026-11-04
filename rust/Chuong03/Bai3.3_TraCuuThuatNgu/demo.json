@@ -1,0 +1,9 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server", "cmd": ["../../target/release/bai3_3_tra_cuu_thuat_ngu", "server", "127.0.0.1", "21330"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["../../target/release/bai3_3_tra_cuu_thuat_ngu", "client", "127.0.0.1", "21330"], "stdin": "TCP\nĐịnh khung\nXYZ\n"},
+    {"name": "kiem_thu", "cmd": ["../../target/release/bai3_3_tra_cuu_thuat_ngu", "kiemthu", "127.0.0.1", "21330"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client": "Cửa sổ 2 – client", "kiem_thu": "Cửa sổ 3 – client kiểm thử"}
+}

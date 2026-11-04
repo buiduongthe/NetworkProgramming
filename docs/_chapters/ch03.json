@@ -1,0 +1,14 @@
+[
+  {"bai": "Bai3.1_EchoTCP", "ten": "TCP Echo Server và Echo Client", "ma_gia": ["3.1", "3.2"], "muc": "3.2",
+   "kiem_thu": {"csharp": "đã chạy", "java": "đã chạy", "python": "đã chạy"},
+   "ghi_chu": "Bài mẫu; bổ sung README cho C# và Java. PARSE_ENDPOINT và SAFE_CONNECT ở dạng rút gọn (không đọc APP_HOST, không phân loại lỗi kết nối)."},
+  {"bai": "Bai3.2_DinhKhung", "ten": "Thư viện định khung thông điệp (SEND_ALL, RECV_EXACT, READ_LINE, khung JSON)", "ma_gia": ["3.3", "3.4", "3.5", "3.6"], "muc": "3.4",
+   "kiem_thu": {"csharp": "đã chạy", "java": "đã chạy", "python": "đã chạy"},
+   "ghi_chu": "Echo server/client khung JSON trao đổi thông điệp 200 000 ký tự (257 143 byte UTF-8) và chương trình minh họa READ_LINE. Java tự cài đặt JSON tối giản (Json.java)."},
+  {"bai": "Bai3.3_TraCuuThuatNgu", "ten": "Dịch vụ tra cứu thuật ngữ dùng JSON", "ma_gia": ["3.7", "3.8"], "muc": "3.5.1",
+   "kiem_thu": {"csharp": "đã chạy", "java": "đã chạy", "python": "đã chạy"},
+   "ghi_chu": "Kèm client kiểm thử các ca 1–7 của bảng ca kiểm thử và hai ca bổ sung: thao tác sai, JSON là mảng [1,2] (9/9 ca đạt ở C#, Java, Python); từ điển 22 thuật ngữ."},
+  {"bai": "Bai3.4_TaiTep", "ten": "Tải tệp lên server có kiểm tra SHA-256", "ma_gia": ["3.9", "3.10"], "muc": "3.5.2",
+   "kiem_thu": {"csharp": "đã chạy", "java": "đã chạy", "python": "đã chạy"},
+   "ghi_chu": "Kèm client kiểm thử ca 8, 9 và hai ca bổ sung (6/6 ca đạt). Theo Mã giả 3.9: BASENAME sau khi đổi '\\' thành '/', từ chối '', '.', '..', size phải là số nguyên, sha256 đúng 64 ký tự hex; CATCH ANY xóa tệp .part với mọi lỗi khi nhận."}
+]

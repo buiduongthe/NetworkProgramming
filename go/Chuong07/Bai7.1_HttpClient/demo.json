@@ -1,0 +1,8 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "31710"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["out/app", "client", "127.0.0.1", "31710", "/api/v1/terms/TCP", "/chunked", "/dong-ket-noi", "/khong-co"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server thử", "client": "Cửa sổ 2 – client HTTP/1.1"}
+}

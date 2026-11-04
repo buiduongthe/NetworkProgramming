@@ -1,0 +1,37 @@
+===== recv =====
+$ SAW_MAX_RTO=2000 dotnet run --no-build -c Release -- recv 127.0.0.1 9442 tep_nhan.txt 4,7
+[nhận] Đang chờ dữ liệu UDP tại 127.0.0.1:9442, ghi vào tep_nhan.txt
+[nhận] Mô phỏng mất ACK: 4,7
+[nhận] MAX_RTO = 2000 ms (ghi đè cho demo bằng biến môi trường SAW_MAX_RTO; mặc định 60000 ms)
+[nhận] seq=0 DATA 1195 byte: ghi tệp, gửi ACK 0
+[nhận] seq=1 DATA 1195 byte: ghi tệp, gửi ACK 1
+[nhận] seq=2 DATA 1195 byte: ghi tệp, gửi ACK 2
+[nhận] seq=3 DATA 1195 byte: ghi tệp, gửi ACK 3 – mô phỏng mất ACK
+[nhận] seq=3 trùng: bỏ dữ liệu, vẫn gửi ACK 3
+[nhận] seq=4 DATA 280 byte: ghi tệp, gửi ACK 4
+[nhận] seq=5 FIN: gửi ACK 5 – mô phỏng mất ACK; chờ 4000 ms (như TIME-WAIT)
+[nhận] seq=5 FIN: gửi ACK 5; chờ 4000 ms (như TIME-WAIT)
+[nhận] Hết 4000 ms không có datagram mới: kết thúc
+[nhận] Hoàn tất: 5060 byte, 1 datagram trùng; SHA-256:
+[nhận]   c5d6c21d8b8620335c18641498c5cefdeb327385720f3c052f3957612ea02617
+
+===== send =====
+$ SAW_MAX_RTO=2000 dotnet run --no-build -c Release -- send tep_mau.txt 127.0.0.1 9442 3
+[gửi] Tệp tep_mau.txt: 5060 byte, 5 khối; SHA-256:
+[gửi]   c5d6c21d8b8620335c18641498c5cefdeb327385720f3c052f3957612ea02617
+[gửi] Gửi tới 127.0.0.1:9442; mô phỏng mất DATA/FIN: 3
+[gửi] MAX_RTO = 2000 ms (ghi đè cho demo bằng biến môi trường SAW_MAX_RTO; mặc định 60000 ms)
+[gửi] seq=0 DATA 1200 byte, RTO 200 ms
+[gửi] seq=1 DATA 1200 byte, RTO 100 ms
+[gửi] seq=2 DATA 1200 byte, RTO 100 ms – mô phỏng mất gói
+[gửi] Hết 100 ms chờ ACK 2, gửi lại (lần 1)
+[gửi] seq=2 DATA 1200 byte, RTO 200 ms
+[gửi] seq=3 DATA 1200 byte, RTO 200 ms
+[gửi] Hết 200 ms chờ ACK 3, gửi lại (lần 1)
+[gửi] seq=3 DATA 1200 byte, RTO 400 ms
+[gửi] seq=4 DATA 285 byte, RTO 400 ms
+[gửi] seq=5 FIN 5 byte, RTO 100 ms
+[gửi] Hết 100 ms chờ ACK 5, gửi lại (lần 1)
+[gửi] seq=5 FIN 5 byte, RTO 200 ms
+[gửi] Hoàn tất: 9 datagram đã gửi (3 lần gửi lại), 427 ms
+

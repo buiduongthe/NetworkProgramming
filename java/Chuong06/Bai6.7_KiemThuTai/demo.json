@@ -1,0 +1,11 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "NetUtil.java", "LookupService.java", "ThreadedServer.java", "PoolServer.java", "LoadTest.java"]],
+  "processes": [
+    {"name": "server1", "cmd": ["java", "-cp", "out", "ThreadedServer", "127.0.0.1", "9643", "500", "50"], "background": true, "wait": 1.0},
+    {"name": "load1", "cmd": ["java", "-cp", "out", "LoadTest", "127.0.0.1", "9643", "20", "1,10,100"], "timeout": 60, "wait": 0.3},
+    {"name": "server2", "cmd": ["java", "-cp", "out", "PoolServer", "127.0.0.1", "9644", "8", "16", "50"], "background": true, "wait": 1.0},
+    {"name": "load2", "cmd": ["java", "-cp", "out", "LoadTest", "127.0.0.1", "9644", "20", "1,10,100"], "timeout": 60, "wait": 0.3}
+  ],
+  "titles": {"server1": "Cửa sổ 1 – server mỗi kết nối một luồng", "load1": "Cửa sổ 2 – bộ sinh tải → server 1",
+             "server2": "Cửa sổ 3 – server nhóm 8 luồng, hàng đợi 16", "load2": "Cửa sổ 4 – bộ sinh tải → server 2"}
+}

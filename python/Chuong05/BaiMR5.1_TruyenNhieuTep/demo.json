@@ -1,0 +1,6 @@
+{
+  "processes": [
+    {"name": "demo", "cmd": ["python3", "truyen_client.py", "demo", "127.0.0.1", "41510"], "timeout": 60}
+  ],
+  "titles": {"demo": "Cửa sổ dòng lệnh – demo truyền nhiều tệp (server cục bộ + client, cổng 41510)"}
+}

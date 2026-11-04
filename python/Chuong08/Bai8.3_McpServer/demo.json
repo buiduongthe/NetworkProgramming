@@ -1,0 +1,7 @@
+{
+  "env": {"ALLOWED_NETS": "127.0.0.0/8"},
+  "processes": [
+    {"name": "host", "cmd": ["python3", "mcp_test_client.py", "9831", "9832", "python3", "mcp_server.py"], "timeout": 60}
+  ],
+  "titles": {"host": "Cửa sổ dòng lệnh – client thử nghiệm MCP (ALLOWED_NETS=127.0.0.0/8)"}
+}

@@ -1,0 +1,8 @@
+{
+  "processes": [
+    {"name": "server", "cmd": ["python3", "put_server.py", "127.0.0.1", "9510", "4096"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["python3", "put_client.py", "127.0.0.1", "9510", "du_lieu_thu.bin"], "wait": 0.5},
+    {"name": "client_huy", "cmd": ["python3", "put_client.py", "127.0.0.1", "9510", "du_lieu_thu.bin", "400"], "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client": "Cửa sổ 2 – tải lên đầy đủ", "client_huy": "Cửa sổ 3 – bấm Hủy sau 400 ms"}
+}

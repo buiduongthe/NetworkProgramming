@@ -1,0 +1,8 @@
+{
+  "processes": [
+    {"name": "server", "cmd": ["python3", "lookup_server.py", "127.0.0.1", "9331"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["python3", "lookup_client.py", "127.0.0.1", "9331"], "stdin": "TCP\nĐịnh khung\nXYZ\n"},
+    {"name": "kiem_thu", "cmd": ["python3", "kiem_thu.py", "127.0.0.1", "9331"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client": "Cửa sổ 2 – client", "kiem_thu": "Cửa sổ 3 – client kiểm thử"}
+}

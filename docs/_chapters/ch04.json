@@ -1,0 +1,75 @@
+[
+  {
+    "bai": "Bai4.1_EchoUDP",
+    "ten": "UDP Echo Server và UDP Echo Client có thời gian chờ",
+    "ma_gia": [
+      "4.1",
+      "4.2"
+    ],
+    "muc": "4.2.1",
+    "kiem_thu": {
+      "csharp": "đã chạy",
+      "java": "đã chạy",
+      "python": "đã chạy"
+    },
+    "ghi_chu": "Demo gồm hai client dùng chung một socket server và một client gửi tới cổng không có server (hết thời gian chờ 2 giây)."
+  },
+  {
+    "bai": "Bai4.2_TraCuuUDP",
+    "ten": "Dịch vụ tra cứu thuật ngữ trên UDP có gửi lại",
+    "ma_gia": [
+      "4.3",
+      "4.4"
+    ],
+    "muc": "4.3.1",
+    "kiem_thu": {
+      "csharp": "đã chạy",
+      "java": "đã chạy",
+      "python": "đã chạy"
+    },
+    "ghi_chu": "Server có tham số bỏ qua N datagram đầu tiên (mô phỏng mất gói); demo N = 2 cho thấy gửi lại cùng id với thời gian chờ 500 → 1000 → 2000 ms, và trường hợp hết 4 lần gửi (7,5 giây). Bản Java kèm Json.java tự viết (JDK không có JSON chuẩn)."
+  },
+  {
+    "bai": "Bai4.3_TruyVanDNS",
+    "ten": "Tự tạo và phân tích truy vấn DNS qua UDP",
+    "ma_gia": [
+      "4.5"
+    ],
+    "muc": "4.3.2",
+    "kiem_thu": {
+      "csharp": "đã chạy",
+      "java": "đã chạy",
+      "python": "đã chạy"
+    },
+    "ghi_chu": "Demo dùng DNS server giả lập fake_dns_server.py (Python, dùng chung cho ba ngôn ngữ, bản sao trong mỗi thư mục bài) trả lời A/AAAA cho demo.ltm.local; truy vấn tới 8.8.8.8 (/etc/resolv.conf) trong môi trường biên soạn nhận NXDOMAIN cho mọi tên và được ghi lại đúng như nhận được. Bổ sung kiểm tra chỉ số pos và cờ TC theo đoạn văn sau mã giả. DNS_QUERY nhận server = (ip, cổng), họ địa chỉ của socket theo IP (hỗ trợ IPv6; môi trường demo không có IPv6)."
+  },
+  {
+    "bai": "Bai4.4_DungVaCho",
+    "ten": "Truyền tệp tin cậy trên UDP bằng giao thức dừng và chờ",
+    "ma_gia": [
+      "4.6",
+      "4.7"
+    ],
+    "muc": "4.4.1",
+    "kiem_thu": {
+      "csharp": "đã chạy",
+      "java": "đã chạy",
+      "python": "đã chạy"
+    },
+    "ghi_chu": "RTO theo RFC 6298 (RTO ban đầu 200 ms, tối thiểu 100 ms, MAX_RTO 60000 ms như giáo trình; demo ghi đè SAW_MAX_RTO=2000 để bên nhận chỉ chờ 4 s sau FIN), có mô phỏng mất gói ở cả hai phía (tỉ lệ ngẫu nhiên hoặc danh sách thứ tự); demo mất DATA, mất ACK và mất ACK của FIN, SHA-256 tệp gửi và nhận trùng nhau. Đã kiểm thử thêm chéo ngôn ngữ với tệp 300 KB, mất 10% hai phía."
+  },
+  {
+    "bai": "Bai4.5_CookieChongGiaMao",
+    "ten": "Xác thực địa chỉ nguồn bằng mã thách thức không trạng thái",
+    "ma_gia": [
+      "4.8"
+    ],
+    "muc": "4.6.1",
+    "kiem_thu": {
+      "csharp": "đã chạy",
+      "java": "đã chạy",
+      "python": "đã chạy"
+    },
+    "ghi_chu": "Demo: client chưa có cookie nhận thách thức 401 rồi gửi lại kèm cookie và được phục vụ; phản hồi nhỏ (404) được phục vụ không cần cookie; cookie giả mạo bị từ chối. Client đệm yêu cầu đầu tiên tới 48 byte; cửa sổ 5 gửi datagram thô (13 byte không đệm: thách thức cũng quá lớn nên không trả lời; [1,2]; 1300 byte > MAX_DGRAM) đều bị bỏ im lặng. Giữ kiểm tra phản hồi > MAX_DGRAM (413) của Mã giả 4.3."
+  }
+]

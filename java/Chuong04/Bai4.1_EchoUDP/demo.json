@@ -1,0 +1,10 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "NetUtil.java", "UdpEchoServer.java", "UdpEchoClient.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "UdpEchoServer", "127.0.0.1", "9413"], "background": true, "wait": 1.0},
+    {"name": "client1", "cmd": ["java", "-cp", "out", "UdpEchoClient", "127.0.0.1", "9413"], "stdin": "Xin chào\nLập trình mạng UDP\n"},
+    {"name": "client2", "cmd": ["java", "-cp", "out", "UdpEchoClient", "127.0.0.1", "9413"], "stdin": "Client thứ hai\n"},
+    {"name": "client3", "cmd": ["java", "-cp", "out", "UdpEchoClient", "127.0.0.1", "9419"], "stdin": "Có ai không?\nGửi lần nữa\n"}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client1": "Cửa sổ 2 – client thứ nhất", "client2": "Cửa sổ 3 – client thứ hai", "client3": "Cửa sổ 4 – client, server không chạy (cổng 9419)"}
+}

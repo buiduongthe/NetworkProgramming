@@ -1,0 +1,13 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "mac_dinh", "cmd": ["../../target/release/bai2_1_doc_cau_hinh"]},
+    {"name": "bien_moi_truong", "cmd": ["env", "APP_PORT=9100", "../../target/release/bai2_1_doc_cau_hinh"]},
+    {"name": "tham_so", "cmd": ["env", "APP_PORT=9100", "../../target/release/bai2_1_doc_cau_hinh", "192.168.1.5", "9200"]},
+    {"name": "cong_abc", "cmd": ["../../target/release/bai2_1_doc_cau_hinh", "127.0.0.1", "abc"]},
+    {"name": "cong_70000", "cmd": ["../../target/release/bai2_1_doc_cau_hinh", "127.0.0.1", "70000"]}
+  ],
+  "titles": {"mac_dinh": "1 – mặc định", "bien_moi_truong": "2 – biến môi trường APP_PORT",
+             "tham_so": "3 – tham số dòng lệnh thắng APP_PORT", "cong_abc": "4 – cổng \"abc\"",
+             "cong_70000": "5 – cổng 70000"}
+}

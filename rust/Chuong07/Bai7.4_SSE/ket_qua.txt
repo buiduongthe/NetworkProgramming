@@ -1,0 +1,23 @@
+===== server =====
+$ cargo run -q --release -- server 127.0.0.1 21740
+[server] Đang lắng nghe tại 127.0.0.1:21740
+[server] Client 127.0.0.1:55278 đăng ký luồng: GET /events HTTP/1.1
+[server] Gửi khối 1 (12 byte): ': nhip tim\n\n'
+[server] Gửi khối 2 (13 byte): 'retry: 3000\n\n'
+[server] Gửi khối 3 (49 byte): 'id: 1\nevent: delta\ndata: {"text":"Giao thức"}\n\n'
+[server] Gửi khối 4 (41 byte): 'id: 2\nevent: delta\ndata:{"text":" TCP"}\n\n'
+[server] Gửi khối 5 (45 byte): 'id: 3\ndata: dòng thứ nhất\ndata: dòng th'
+[server] Gửi khối 6 (9 byte): 'ứ hai\n\n'
+[server] Gửi khối 7 (26 byte): 'event: done\ndata: [DONE]\n\n'
+[server] Kết thúc luồng cho 127.0.0.1:55278
+
+===== client =====
+$ cargo run -q --release -- client 127.0.0.1 21740 /events
+[client] HTTP/1.1 200 OK; Content-Type: text/event-stream; charset=utf-8
+[client] Thân dùng chunked: đặt bộ đọc dòng sau lớp giải mã khối
+[client] Sự kiện 'delta': '{"text":"Giao thức"}'
+[client] Sự kiện 'delta': '{"text":" TCP"}'
+[client] Sự kiện 'message': 'dòng thứ nhất\ndòng thứ hai'
+[client] Sự kiện 'done': '[DONE]'
+[client] Server đóng luồng; id cuối = 3, retry = 3000 ms
+

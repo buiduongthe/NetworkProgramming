@@ -1,0 +1,22 @@
+===== ports =====
+$ dotnet run --no-build -c Release -- ports 9543,9551,9557 9545,9548,9553,9559
+[demo] Cổng mở: 9543, 9551, 9557
+[demo] Cổng bị lọc (mô phỏng): 9545, 9548, 9553, 9559
+[demo] Nhấn Ctrl+C để dừng
+[demo] Dừng
+
+===== scan =====
+$ dotnet run --no-build -c Release -- scan 127.0.0.1 9540 9559 10
+[scan] Quét 20 cổng 9540–9559 trên 127.0.0.1, thời gian chờ 1000 ms
+[scan]   cổng 9543: OPEN
+[scan]   cổng 9545: FILTERED
+[scan]   cổng 9548: FILTERED
+[scan]   cổng 9551: OPEN
+[scan]   cổng 9553: FILTERED
+[scan]   cổng 9557: OPEN
+[scan]   cổng 9559: FILTERED
+[scan] Tổng hợp: OPEN=3, CLOSED=13, FILTERED=4
+[scan] Hai lần quét cho cùng kết quả: có
+[scan] Tuần tự   (max_parallel=1):  4.05 s
+[scan] Đồng thời (max_parallel=10): 1.00 s
+

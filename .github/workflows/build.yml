@@ -1,0 +1,100 @@
+# Kiểm tra tự động: biên dịch toàn bộ mã nguồn C#, Java, Python, Rust, Go mỗi khi có thay đổi
+name: build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  csharp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Biên dịch các dự án console (bỏ qua dự án chỉ chạy trên Windows)
+        run: |
+          set -e
+          for p in $(find csharp -name '*.csproj' | sort); do
+            if grep -q -- '-windows' "$p"; then echo "Bỏ qua (Windows): $p"; continue; fi
+            echo "== $p"; dotnet build "$p" -c Release -nologo -v q
+          done
+
+  csharp-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Biên dịch các dự án giao diện Windows
+        shell: pwsh
+        run: |
+          Get-ChildItem csharp -Recurse -Filter *.csproj | Where-Object { Select-String -Path $_.FullName -Pattern '-windows' -Quiet } | ForEach-Object {
+            Write-Host "== $($_.FullName)"; dotnet build $_.FullName -c Release -nologo -v q
+            if ($LASTEXITCODE -ne 0) { exit 1 }
+          }
+
+  java:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Biên dịch từng bài (bài có pom.xml dùng Maven)
+        run: |
+          set -e
+          for d in $(find java -mindepth 2 -maxdepth 2 -type d -name 'Bai*' | sort); do
+            echo "== $d"
+            if [ -f "$d/pom.xml" ]; then (cd "$d" && mvn -q -B package -DskipTests);
+            else mkdir -p "$d/out" && javac -encoding UTF-8 -d "$d/out" $(find "$d" -name '*.java'); fi
+          done
+
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Kiểm tra cú pháp toàn bộ mã Python
+        run: python -m compileall -q python tools
+
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Biên dịch từng gói Cargo (dùng chung rust/target)
+        run: |
+          set -e
+          for m in $(find rust -name Cargo.toml -not -path '*/target/*' | sort); do
+            echo "== $m"; (cd "$(dirname "$m")" && cargo build -q --release --locked)
+          done
+
+  go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+      - name: Biên dịch và go vet module chính (chỉ thư viện chuẩn)
+        working-directory: go
+        run: go vet ./... && go build ./...
+      - name: Cài protoc và plugin Go cho bài gRPC
+        run: |
+          sudo apt-get update && sudo apt-get install -y protobuf-compiler
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.35.2
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+      - name: Sinh mã từ .proto và biên dịch Bài 7.5 gRPC (module riêng)
+        working-directory: go/Chuong07/Bai7.5_gRPC
+        run: |
+          M=github.com/buiduongthe/NetworkProgramming/go/Chuong07/Bai7.5_gRPC
+          protoc -I. --go_out=. --go_opt=module=$M --go_opt=Mtra_cuu.proto=$M/glossaryv1 \
+                 --go-grpc_out=. --go-grpc_opt=module=$M --go-grpc_opt=Mtra_cuu.proto=$M/glossaryv1 tra_cuu.proto
+          go mod tidy && go vet ./... && go build ./...

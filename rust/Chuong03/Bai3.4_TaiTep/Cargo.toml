@@ -1,0 +1,10 @@
+[package]
+name = "bai3_4_tai_tep"
+version = "0.1.0"
+edition = "2021"
+description = "Bài 3.4 – Tải tệp lên server có kiểm tra SHA-256 (Mã giả 3.9, 3.10)"
+publish = false
+
+[dependencies]
+serde_json = { version = "=1.0.143", features = ["preserve_order"] }
+sha2 = "=0.10.9"

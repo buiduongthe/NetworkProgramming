@@ -1,0 +1,20 @@
+===== r1 =====
+$ out/app responder 9200 'Phòng-Lab-A' 31650
+[responder] Phòng-Lab-A, cổng dịch vụ 9200, chờ discover tại cổng 31650
+[responder] discover id=890092 từ 192.0.2.2:37513, trả lời sau 16 ms
+[responder] Dừng
+
+===== r2 =====
+$ out/app responder 9201 'Phòng-Lab-B' 31650
+[responder] Phòng-Lab-B, cổng dịch vụ 9201, chờ discover tại cổng 31650
+[responder] discover id=890092 từ 192.0.2.2:37513, trả lời sau 165 ms
+[responder] Dừng
+
+===== client =====
+$ out/app discover 1000 31650 255.255.255.255
+[client] Phát discover id=890092 tới 255.255.255.255:31650
+[client] Thu thập phản hồi trong 1000 ms
+[client] Tìm thấy 2 server:
+[client]   Phòng-Lab-A tại 192.0.2.2:9200
+[client]   Phòng-Lab-B tại 192.0.2.2:9201
+

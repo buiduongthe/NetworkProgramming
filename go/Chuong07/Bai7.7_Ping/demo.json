@@ -1,0 +1,7 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "ping", "cmd": ["out/app", "127.0.0.1", "4"]}
+  ],
+  "titles": {"ping": "Cửa sổ lệnh (tài khoản root) – ping 127.0.0.1"}
+}

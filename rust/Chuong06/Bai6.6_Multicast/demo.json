@@ -1,0 +1,11 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "l1", "cmd": ["cargo", "run", "-q", "--release", "--", "listener", "0", "21660"], "background": true, "wait": 0.6},
+    {"name": "a1", "cmd": ["cargo", "run", "-q", "--release", "--", "announcer", "9200", "Phòng-Lab-A", "1000", "0", "21660"], "background": true, "wait": 0.3},
+    {"name": "a2", "cmd": ["cargo", "run", "-q", "--release", "--", "announcer", "9201", "Phòng-Lab-B", "1000", "3", "21660"], "background": true, "wait": 0.3},
+    {"name": "l2", "cmd": ["cargo", "run", "-q", "--release", "--", "listener", "7000", "21660"], "timeout": 20}
+  ],
+  "titles": {"l1": "Cửa sổ 1 – listener 1 (nghe mãi)", "a1": "Cửa sổ 2 – announcer Phòng-Lab-A",
+             "a2": "Cửa sổ 3 – announcer Phòng-Lab-B (3 lần)", "l2": "Cửa sổ 4 – listener 2 (nghe 7 giây)"}
+}

@@ -1,0 +1,22 @@
+===== server =====
+$ java -cp out FrameServer 127.0.0.1 9503
+[server] Đang lắng nghe tại 127.0.0.1:9503
+[server] Client kết nối: 127.0.0.1:43460
+[server] Nhận từ 127.0.0.1:43460: {"op":"lookup","term":"TCP"}
+[server] Nhận từ 127.0.0.1:43460: {"op":"lookup","term":"Bất đồng bộ"}
+[server] Nhận từ 127.0.0.1:43460: {"op":"lookup","term":"HTTP"}
+[server] Client 127.0.0.1:43460 đã đóng kết nối
+[server] Dừng server
+
+===== client =====
+$ java -cp out FrameClient 127.0.0.1 9503
+[client] Đã kết nối 127.0.0.1:9503. Nhập thuật ngữ cần tra (Ctrl+D để kết thúc).
+[client] Gửi khung 32 byte, tiêu đề 00 00 00 1C: {"op":"lookup","term":"TCP"}
+[client] TCP: Giao thức truyền tin cậy, hướng kết nối
+[client] Gửi khung 47 byte, tiêu đề 00 00 00 2B: {"op":"lookup","term":"Bất đồng bộ"}
+[client] Bất đồng bộ: Khởi động vào/ra rồi làm việc khác, quay lại khi xong
+[client] Gửi khung 33 byte, tiêu đề 00 00 00 1D: {"op":"lookup","term":"HTTP"}
+[client] Lỗi 404: Không có thuật ngữ
+[client] RECV_JSON_ASYNC bị hủy sau 500 ms (Cancelled); trạng thái khung không xác định nên đóng kết nối
+[client] Đã đóng kết nối
+

@@ -1,0 +1,13 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "-v", "q", "-nologo"]],
+  "processes": [
+    {"name": "mac_dinh", "cmd": ["dotnet", "run", "--no-build", "-c", "Release"]},
+    {"name": "bien_moi_truong", "cmd": ["env", "APP_PORT=9100", "dotnet", "run", "--no-build", "-c", "Release"]},
+    {"name": "tham_so", "cmd": ["env", "APP_PORT=9100", "dotnet", "run", "--no-build", "-c", "Release", "--", "192.168.1.5", "9200"]},
+    {"name": "cong_abc", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "127.0.0.1", "abc"]},
+    {"name": "cong_70000", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "127.0.0.1", "70000"]}
+  ],
+  "titles": {"mac_dinh": "1 – mặc định", "bien_moi_truong": "2 – biến môi trường APP_PORT",
+             "tham_so": "3 – tham số dòng lệnh thắng APP_PORT", "cong_abc": "4 – cổng \"abc\"",
+             "cong_70000": "5 – cổng 70000"}
+}

@@ -1,0 +1,10 @@
+[package]
+name = "bai5_3_giao_dien_bat_dong_bo"
+version = "0.1.0"
+edition = "2021"
+description = "Bài 5.3 – Ứng dụng tra cứu có giao diện bất đồng bộ (Mã giả 5.3, 5.4)"
+publish = false
+
+[dependencies]
+serde_json = { version = "=1.0.143", features = ["preserve_order"] }
+tokio = { version = "=1.47.1", features = ["rt", "macros", "net", "io-util", "time", "sync", "signal", "fs"] }

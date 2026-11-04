@@ -1,0 +1,8 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "-v", "q", "-nologo"]],
+  "processes": [
+    {"name": "ports", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "ports", "9543,9551,9557", "9545,9548,9553,9559"], "background": true, "wait": 2.5},
+    {"name": "scan", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "scan", "127.0.0.1", "9540", "9559", "10"], "timeout": 60}
+  ],
+  "titles": {"ports": "Cửa sổ 1 – cổng minh họa", "scan": "Cửa sổ 2 – quét cổng"}
+}

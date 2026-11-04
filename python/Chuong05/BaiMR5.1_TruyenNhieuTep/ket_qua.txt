@@ -1,0 +1,46 @@
+===== demo =====
+$ python3 truyen_client.py demo 127.0.0.1 41510
+[demo] Server cục bộ tại 127.0.0.1:41510, thư mục tạm /tmp/mr51_172nrqmj
+[demo] Đã tạo 3 tệp thử, mỗi tệp 3 MiB
+
+===== KỊCH BẢN: tải xuống 3 tệp đồng thời, giới hạn phiên 2 MiB/s =====
+[client] Đặt tốc độ phiên = 2.00 MiB/s
+[client] BẮT ĐẦU download tep1.bin
+[client] BẮT ĐẦU download tep2.bin
+[client] BẮT ĐẦU download tep3.bin
+[tiến trình] tep1.bin [######--------------]  33.3%  1.25 MiB/s
+[tiến trình] tep2.bin [##------------------]  12.3%  472.53 KiB/s
+[tiến trình] tep3.bin [#####---------------]  26.6%  1021.83 KiB/s
+[client] TẠM DỪNG tep2.bin (giữ .part)
+[tiến trình] tep1.bin [###########---------]  57.3%  919.74 KiB/s
+[tiến trình] tep3.bin [#########-----------]  46.9%  781.01 KiB/s
+[client] DỪNG tep3.bin (xóa .part)
+
+===== Nâng tốc độ phiên lên 8 MiB/s, tải tiếp tep2, chạy lại tep3 =====
+[client] Đặt tốc độ phiên = 8.00 MiB/s
+[client] TẢI TIẾP tep2.bin
+[client] BẮT ĐẦU download tep2.bin
+[client] BẮT ĐẦU download tep3.bin
+[tiến trình] tep1.bin [###################-]  99.0%  1.56 MiB/s
+[tiến trình] tep2.bin [#####---------------]  28.6%  312.41 KiB/s
+[tiến trình] tep3.bin [##------------------]  10.2%  306.64 MiB/s
+[client] XONG download tep1.bin: 3.00 MiB trong 2.5s (1.20 MiB/s), SHA-256 KHỚP
+[client] XONG download tep2.bin: 3.00 MiB trong 0.7s (4.42 MiB/s), SHA-256 KHỚP
+[client] XONG download tep3.bin: 3.00 MiB trong 0.7s (4.17 MiB/s), SHA-256 KHỚP
+[client] --- Trạng thái ---
+[client]   tep1.bin     download xong     [####################] 100.0%  3.00 MiB/3.00 MiB
+[client]   tep2.bin     download xong     [####################] 100.0%  3.00 MiB/3.00 MiB
+[client]   tep3.bin     download xong     [####################] 100.0%  3.00 MiB/3.00 MiB
+
+===== KỊCH BẢN upload: đẩy tep1 (đã tải) lên server, giới hạn tệp 1 MiB/s =====
+[client] BẮT ĐẦU upload tep1_tai_len.bin, giới hạn tệp 1.00 MiB/s
+[client] XONG upload tep1_tai_len.bin: 3.00 MiB trong 2.9s (1.04 MiB/s), server kiểm SHA-256 KHỚP
+
+===== TỔNG KẾT =====
+[demo] tep1.bin: xong, 3.00 MiB, SHA-256 KHỚP
+[demo] tep2.bin: xong, 3.00 MiB, SHA-256 KHỚP
+[demo] tep3.bin: xong, 3.00 MiB, SHA-256 KHỚP
+[demo] tep1_tai_len.bin: xong, server kiểm SHA-256 KHỚP
+[demo] Server còn giữ: ['tep1.bin', 'tep1_tai_len.bin', 'tep2.bin', 'tep3.bin']
+[demo] Đã dọn thư mục tạm /tmp/mr51_172nrqmj
+

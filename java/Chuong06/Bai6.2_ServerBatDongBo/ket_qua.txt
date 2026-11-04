@@ -1,0 +1,24 @@
+===== server =====
+$ java -cp out AsyncServer 127.0.0.1 9633
+[server] Server bất đồng bộ đang lắng nghe tại 127.0.0.1:9633
+[server] Nhận 127.0.0.1:55178 (tác vụ: 1, luồng: 13)
+[server] Nhận 127.0.0.1:55192 (tác vụ: 2, luồng: 13)
+[server] Nhận 127.0.0.1:55202 (tác vụ: 3, luồng: 13)
+[server] Nhận 127.0.0.1:55210 (tác vụ: 4, luồng: 13)
+[server] Nhận 127.0.0.1:55212 (tác vụ: 5, luồng: 13)
+[server] Kết thúc 127.0.0.1:55178: client đóng kết nối
+[server] Kết thúc 127.0.0.1:55192: client đóng kết nối
+[server] Kết thúc 127.0.0.1:55202: client đóng kết nối
+[server] Kết thúc 127.0.0.1:55210: client đóng kết nối
+[server] Kết thúc 127.0.0.1:55212: client đóng kết nối
+
+===== client =====
+$ java -cp out MultiClient 127.0.0.1 9633 5 1000
+[client] 5 client cách nhau 100 ms, giữ kết nối 1000 ms
+[client 1] t = 38 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 2] t = 105 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 3] t = 206 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 4] t = 307 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 5] t = 407 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client] Hoàn tất sau 1408 ms
+

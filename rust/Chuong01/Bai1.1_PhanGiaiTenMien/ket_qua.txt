@@ -1,0 +1,15 @@
+===== resolve =====
+$ ../../target/release/bai1_1_phan_giai_ten_mien localhost example.com khong-ton-tai.invalid ::1
+[resolve] Phân giải tên: localhost
+  INET   127.0.0.1
+[resolve] localhost -> 1 địa chỉ
+[resolve] Phân giải tên: example.com
+[resolve] Không phân giải được example.com (failed to lookup address information: Name or service not known)
+[resolve] example.com -> 0 địa chỉ
+[resolve] Phân giải tên: khong-ton-tai.invalid
+[resolve] Không phân giải được khong-ton-tai.invalid (failed to lookup address information: Name or service not known)
+[resolve] khong-ton-tai.invalid -> 0 địa chỉ
+[resolve] Phân giải tên: ::1
+  INET6  ::1
+[resolve] ::1 -> 1 địa chỉ
+

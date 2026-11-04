@@ -1,0 +1,14 @@
+===== server =====
+$ python3 echo_server.py 127.0.0.1 9391
+[server] Đang lắng nghe tại 127.0.0.1:9391
+[server] Client kết nối: 127.0.0.1:45524
+[server] Client 127.0.0.1:45524 đã đóng kết nối
+[server] Dừng server
+
+===== client =====
+$ python3 echo_client.py 127.0.0.1 9391
+[client] Đã kết nối 127.0.0.1:9391. Nhập dòng cần gửi (Ctrl+D để kết thúc).
+[client] Gửi: 'Xin chào' -> Nhận: 'Xin chào'
+[client] Gửi: 'Lập trình mạng' -> Nhận: 'Lập trình mạng'
+[client] Đã đóng kết nối
+

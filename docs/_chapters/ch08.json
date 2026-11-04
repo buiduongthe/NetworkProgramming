@@ -1,0 +1,61 @@
+[
+  {
+    "bai": "Bai8.1_GoiLLM",
+    "ten": "Gọi API LLM: truyền luồng SSE, giới hạn tần suất, thử lại",
+    "ma_gia": [
+      "8.1",
+      "8.2"
+    ],
+    "muc": "8.2",
+    "kiem_thu": {
+      "csharp": "đã chạy",
+      "java": "đã chạy",
+      "python": "đã chạy"
+    },
+    "ghi_chu": "Demo dùng mock_llm_server.py (Python stdlib, có trong thư mục bài của cả ba ngôn ngữ): 429 + Retry-After ở lần gọi đầu, ngắt luồng giữa chừng ở lần gọi sau; không gọi dịch vụ LLM thật. Java chưa có thời gian chờ nhàn rỗi giữa hai sự kiện SSE."
+  },
+  {
+    "bai": "Bai8.2_ThungToken",
+    "ten": "Thùng token giới hạn tần suất",
+    "ma_gia": [
+      "8.3"
+    ],
+    "muc": "8.2.4",
+    "kiem_thu": {
+      "csharp": "đã chạy",
+      "java": "đã chạy",
+      "python": "đã chạy"
+    },
+    "ghi_chu": ""
+  },
+  {
+    "bai": "Bai8.3_McpServer",
+    "ten": "MCP server công cụ mạng qua kênh stdio",
+    "ma_gia": [
+      "8.4",
+      "8.5",
+      "8.7"
+    ],
+    "muc": "8.3.5",
+    "kiem_thu": {
+      "csharp": "đã chạy",
+      "java": "đã chạy",
+      "python": "đã chạy"
+    },
+    "ghi_chu": "Demo bằng mcp_test_client.py (Python stdlib) với ALLOWED_NETS=127.0.0.0/8. Java không có socket RAW: ping dùng InetAddress.isReachable, không có TTL."
+  },
+  {
+    "bai": "Bai8.4_TlsChat",
+    "ten": "Bổ sung TLS và xác thực token cho hệ thống chat",
+    "ma_gia": [
+      "8.6"
+    ],
+    "muc": "8.4.5",
+    "kiem_thu": {
+      "csharp": "đã chạy",
+      "java": "đã chạy",
+      "python": "đã chạy"
+    },
+    "ghi_chu": "Chứng chỉ tạo bằng tao_chung_chi.sh (đã chạy); tao_chung_chi.ps1 chưa chạy (không có PowerShell). Lệnh openssl khớp Mục 8.4.5: CA có basicConstraints/keyUsage; chứng chỉ server có SAN, basicConstraints=CA:FALSE, keyUsage, extendedKeyUsage=serverAuth (phần mở rộng truyền qua -extfile)."
+  }
+]

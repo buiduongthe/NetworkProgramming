@@ -1,0 +1,45 @@
+===== server =====
+$ python3 ws_server.py 127.0.0.1 9731
+[server] Đang lắng nghe tại 127.0.0.1:9731
+[server] Bắt tay WebSocket thành công với 127.0.0.1:36034
+[server] Nhận văn bản (9 byte): 'Xin chào'
+[server] Nhận văn bản (21 byte): 'WebSocket hai chiều'
+[server] 127.0.0.1:36034 gửi khung đóng, mã 1000
+[server] Đóng kết nối 127.0.0.1:36034
+[server] 127.0.0.1:36038 GET / HTTP/1.1 -> 400 (không phải yêu cầu WebSocket)
+[server] Đóng kết nối 127.0.0.1:36038
+[server] Bắt tay WebSocket thành công với 127.0.0.1:36052
+[server] Nhận ping: 'nhip-tim' -> gửi pong
+[server] 127.0.0.1:36052 gửi khung đóng, mã 1000
+[server] Đóng kết nối 127.0.0.1:36052
+[server] Bắt tay WebSocket thành công với 127.0.0.1:36068
+[server] Nhận văn bản (300 byte): 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+[server] 127.0.0.1:36068 gửi khung đóng, mã 1000
+[server] Đóng kết nối 127.0.0.1:36068
+[server] Bắt tay WebSocket thành công với 127.0.0.1:36080
+[server] Lỗi giao thức với 127.0.0.1:36080: Khung client phải được che
+[server] Đóng kết nối 127.0.0.1:36080
+[server] Bắt tay WebSocket thành công với 127.0.0.1:36088
+[server] Lỗi giao thức với 127.0.0.1:36088: Khung quá lớn
+[server] Đóng kết nối 127.0.0.1:36088
+[server] 127.0.0.1:36104 GET / HTTP/1.1 -> 400 (không phải yêu cầu WebSocket)
+[server] Đóng kết nối 127.0.0.1:36104
+[server] Dừng server
+
+===== client =====
+$ python3 ws_client.py 127.0.0.1 9731
+[client] Bắt tay thành công: HTTP/1.1 101 Switching Protocols
+[client] Nhận: 'echo: Xin chào'
+[client] Nhận: 'echo: WebSocket hai chiều'
+[client] Server xác nhận đóng, mã 1000
+[client] Đã đóng kết nối
+
+===== kiemthu =====
+$ python3 ws_kiem_thu.py 127.0.0.1 9731
+[kiểm thử] 1. Yêu cầu HTTP thường (không Upgrade) -> HTTP/1.1 400 Bad Request
+[kiểm thử] 2. Ping 'nhip-tim' -> opcode 0xA, dữ liệu 'nhip-tim'
+[kiểm thử] 3. Văn bản 300 byte -> nhận lại 306 byte (opcode 0x1)
+[kiểm thử] 4. Khung không che -> khung đóng, mã 1002
+[kiểm thử] 5. Khung khai báo 2^40 byte -> khung đóng, mã 1009
+[kiểm thử] 6. Sec-WebSocket-Key 'c2hvcnQ=' (5 byte) -> HTTP/1.1 400 Bad Request
+

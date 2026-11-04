@@ -1,0 +1,8 @@
+[package]
+name = "bai7_8_mqtt"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Bắt Ctrl+C để bảng theo dõi gửi DISCONNECT trước khi thoát (thư viện chuẩn không có hàm bắt tín hiệu)
+ctrlc = "=3.4.7"

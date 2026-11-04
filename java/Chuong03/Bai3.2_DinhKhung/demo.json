@@ -1,0 +1,9 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "NetUtil.java", "Framing.java", "FrameServer.java", "FrameClient.java", "LineDemo.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "FrameServer", "127.0.0.1", "9321"], "background": true, "wait": 1.0},
+    {"name": "client", "cmd": ["java", "-cp", "out", "FrameClient", "127.0.0.1", "9321", "200000"], "stdin": "Xin chào\nLập trình mạng\n"},
+    {"name": "line", "cmd": ["java", "-cp", "out", "LineDemo", "127.0.0.1", "9322"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client": "Cửa sổ 2 – client", "line": "Cửa sổ 3 – minh họa READ_LINE"}
+}

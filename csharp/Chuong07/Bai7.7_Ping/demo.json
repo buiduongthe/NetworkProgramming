@@ -1,0 +1,8 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "-v", "q", "-nologo"]],
+  "processes": [
+    {"name": "raw", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "raw", "127.0.0.1", "4"]},
+    {"name": "lop", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "lop", "127.0.0.1", "4"]}
+  ],
+  "titles": {"raw": "Cửa sổ 1 (tài khoản root) – socket RAW", "lop": "Cửa sổ 2 – lớp Ping của .NET"}
+}

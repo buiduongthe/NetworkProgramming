@@ -1,0 +1,8 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "ports", "cmd": ["out/app", "ports", "31523,31531,31537", "31525,31528,31533,31539"], "background": true, "wait": 2.0},
+    {"name": "scan", "cmd": ["out/app", "scan", "127.0.0.1", "31520", "31539", "10"], "timeout": 60}
+  ],
+  "titles": {"ports": "Cửa sổ 1 – cổng minh họa", "scan": "Cửa sổ 2 – quét cổng"}
+}

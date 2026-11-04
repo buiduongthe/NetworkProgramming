@@ -1,0 +1,46 @@
+{
+  "setup": [
+    [
+      "javac",
+      "-encoding",
+      "UTF-8",
+      "-d",
+      "out",
+      "Reader.java",
+      "ChunkedInputStream.java",
+      "SseServer.java",
+      "SseClient.java"
+    ]
+  ],
+  "processes": [
+    {
+      "name": "server",
+      "cmd": [
+        "java",
+        "-cp",
+        "out",
+        "SseServer",
+        "127.0.0.1",
+        "9743"
+      ],
+      "background": true,
+      "wait": 0.8
+    },
+    {
+      "name": "client",
+      "cmd": [
+        "java",
+        "-cp",
+        "out",
+        "SseClient",
+        "127.0.0.1",
+        "9743",
+        "/events"
+      ]
+    }
+  ],
+  "titles": {
+    "server": "Cửa sổ 1 – server SSE",
+    "client": "Cửa sổ 2 – bộ đọc luồng SSE"
+  }
+}

@@ -1,0 +1,102 @@
+[
+  {
+    "bai": "Bai1.1_PhanGiaiTenMien",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Demo: localhost, example.com, khong-ton-tai.invalid, ::1. Môi trường kiểm thử chặn DNS ra Internet nên example.com không phân giải được (no such host); Go dùng bộ phân giải thuần Go, lỗi không có mã EAI_* như Python."
+  },
+  {
+    "bai": "Bai1.2_KiemTraCong",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Demo OPEN (server thử python3 -m http.server), CLOSED, UNRESOLVED và FILTERED (10.255.255.1 cổng 31122, hết thời gian chờ 1000 ms; mạng kiểm thử chỉ tự chấp nhận cổng 80)."
+  },
+  {
+    "bai": "Bai2.1_DocCauHinh",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Demo 5 trường hợp như bản Python: mặc định, APP_PORT=9100, tham số thắng APP_PORT, cổng \"abc\", cổng 70000."
+  },
+  {
+    "bai": "Bai2.2_KetNoiAnToan",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Demo REFUSED, NOT_FOUND, UNREACHABLE (10.255.255.1, 3000 ms) và kết nối thành công tới server thử nghiệm (vai trò server)."
+  },
+  {
+    "bai": "Bai2.3_ClientDNS",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Kết quả giống bản Python: localhost ↔ 127.0.0.1; môi trường không có DNS ngoài nên example.com không phân giải được, 8.8.8.8 không có PTR."
+  },
+  {
+    "bai": "Bai3.1_EchoTCP",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Server tuần tự và client echo; net.Listen không cho chọn backlog 16 (ghi trong README)."
+  },
+  {
+    "bai": "Bai3.2_DinhKhung",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Khung 257 154 byte, SHA-256 hai chiều trùng nhau (trùng cả bản Python); minh họa READ_LINE theo đúng Mã giả 3.5 (có kiểm tra i > max_len)."
+  },
+  {
+    "bai": "Bai3.3_TraCuuThuatNgu",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "8/8 ca kiểm thử đạt; JSON không phải đối tượng nhận 400 \"JSON sai\" theo Mã giả 3.7 (IS_OBJECT); giữ thứ tự khóa glossary.json cho thao tác list."
+  },
+  {
+    "bai": "Bai3.4_TaiTep",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "6/6 ca đạt; kiểm tra IS_INTEGER, IS_HEX(sha256, 64) như Mã giả 3.9; khóa JSON in theo thứ tự chữ cái."
+  },
+  {
+    "bai": "Bai4.1_EchoUDP",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Hai client dùng chung socket server, một client tới cổng không có server (hết thời gian chờ 2 s)."
+  },
+  {
+    "bai": "Bai4.2_TraCuuUDP",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Server bỏ qua 2 datagram đầu; gửi lại 500 → 1000 → 2000 ms; hết 4 lần sau 7,5 s; kích thước datagram trùng bản Python. ConnectionReset kết thúc lần thử (BREAK) như mã giả."
+  },
+  {
+    "bai": "Bai4.3_TruyVanDNS",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Dùng fake_dns_server.py (Python, bản sao chung); 8.8.8.8 trong môi trường kiểm thử trả NXDOMAIN cho mọi tên. Tự cài Punycode (RFC 3492) vì thư viện chuẩn không có IDNA."
+  },
+  {
+    "bai": "Bai4.4_DungVaCho",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Nhật ký trùng từng dòng với bản Python; kiểm thử chéo Go ↔ Python với tệp 300 KB, mất 10% hai phía: SHA-256 trùng."
+  },
+  {
+    "bai": "Bai4.5_CookieChongGiaMao",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Theo Mã giả 4.8 hiện hành: bỏ datagram > MAX_DGRAM, không gửi thách thức nếu vượt MAX_RATIO, client đệm yêu cầu đầu tới 40 byte; thêm vai trò raw minh họa yêu cầu 13 byte bị bỏ im lặng."
+  },
+  {
+    "bai": "Bai5.1_KhungBatDongBo",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Goroutine + context thay async/await; hủy RECV sau 500 ms bằng context.AfterFunc; độ dài khung trùng bản Python."
+  },
+  {
+    "bai": "Bai5.2_QuetCongBatDongBo",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "20 cổng (3 mở, 4 bị lọc mô phỏng bằng backlog 1 qua SyscallConn + listen lại): tuần tự ≈ 4,00 s, đồng thời k = 10 ≈ 1,00 s."
+  },
+  {
+    "bai": "Bai5.3_GiaoDienBatDongBo",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Go không có GUI chuẩn: giao diện web cục bộ (net/http + SSE làm UI_INVOKE, trình xử lý async JavaScript cho Mã giả 5.4); Playwright (Chromium không màn hình) thao tác và chụp ket_qua_gui.png."
+  },
+  {
+    "bai": "Bai5.4_ChatClient",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Kèm server chat tối giản bằng Go; demo hai người dùng, ngắt chủ động và mất kết nối; SEND_MESSAGE có tham số room như Mã giả 5.5."
+  },
+  {
+    "bai": "Bai5.5_TaiTepTienTrinh",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Tệp thử 4 MiB; tải đủ (200) và hủy sau 400 ms (server xóa .part); 100% chỉ báo sau khi nhận 200 như Mã giả 5.6."
+  },
+  {
+    "bai": "Bai5.6_HanChotThuLai",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Ba kịch bản: thử lại thành công ở lần 3, người dùng hủy (không thử lại), REFUSED (không thử lại); RETRY_ASYNC bắt Timeout riêng như Mã giả 5.8."
+  }
+]

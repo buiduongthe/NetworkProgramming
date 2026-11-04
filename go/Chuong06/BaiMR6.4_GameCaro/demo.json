@@ -1,0 +1,19 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "0.0.0.0", "41645", "--kham-pha", "41646", "--ten", "Phòng-Lab-A", "--het-gio-ms", "1000"], "background": true, "wait": 0.6},
+    {"name": "An", "cmd": ["out/app", "choi", "An", "--tim", "41646", "--tao", "ban1", "--bot", "can_bang", "--so-van", "2", "--tre-ms", "60"], "background": true, "wait": 1.2},
+    {"name": "Cuong", "cmd": ["out/app", "choi", "Cuong", "127.0.0.1", "41645", "--tao", "ban2", "--bot", "can_bang", "--tre-ms", "60"], "background": true, "wait": 0.3},
+    {"name": "tim", "cmd": ["out/app", "tim", "41646", "500"], "wait": 0.2},
+    {"name": "Khach", "cmd": ["out/app", "choi", "Khach", "127.0.0.1", "41645", "--xem", "ban1"], "background": true, "wait": 0.3},
+    {"name": "Dung", "cmd": ["out/app", "choi", "Dung", "127.0.0.1", "41645", "--vao", "ban2", "--bot", "im_lang"], "background": true, "wait": 0.3},
+    {"name": "Binh", "cmd": ["out/app", "choi", "Binh", "127.0.0.1", "41645", "--vao", "ban1", "--bot", "tap_su", "--seed", "14", "--thu-loi", "--so-van", "2", "--tre-ms", "60"], "timeout": 30, "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server Caro (mỗi nước tối đa 1000 ms)",
+             "An": "Cửa sổ 2 – An (bot cân bằng, tìm server bằng broadcast)",
+             "Cuong": "Cửa sổ 3 – Cuong (bot, phòng ban2)",
+             "tim": "Cửa sổ 4 – tìm server trong LAN",
+             "Khach": "Cửa sổ 5 – Khach (người xem phòng ban1)",
+             "Dung": "Cửa sổ 6 – Dung (bot im lặng, phòng ban2)",
+             "Binh": "Cửa sổ 7 – Binh (bot tập sự, thử gửi nước sai)"}
+}

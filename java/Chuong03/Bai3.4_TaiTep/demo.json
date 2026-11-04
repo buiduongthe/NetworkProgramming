@@ -1,0 +1,11 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "NetUtil.java", "Framing.java", "PutServer.java", "PutClient.java", "KiemThu.java"],
+            ["python3", "-c", "import shutil; shutil.rmtree('uploads', ignore_errors=True); open('mau.txt', 'w', encoding='utf-8').write(''.join(f'Dòng {i:04d}: Lập trình mạng – tệp mẫu tải lên server\\n' for i in range(3000)))"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "PutServer", "127.0.0.1", "9343"], "background": true, "wait": 1.0},
+    {"name": "client", "cmd": ["java", "-cp", "out", "PutClient", "127.0.0.1", "9343"], "stdin": "put mau.txt\nput khong_co.txt\nTCP\n"},
+    {"name": "kiem_thu", "cmd": ["java", "-cp", "out", "KiemThu", "127.0.0.1", "9343"]},
+    {"name": "thu_muc", "cmd": ["sh", "-c", "ls -1A uploads; sha256sum mau.txt uploads/mau.txt | cut -c1-16,65-"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client": "Cửa sổ 2 – client", "kiem_thu": "Cửa sổ 3 – client kiểm thử", "thu_muc": "Cửa sổ 4 – thư mục tải lên"}
+}

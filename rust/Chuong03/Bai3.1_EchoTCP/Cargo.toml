@@ -1,0 +1,8 @@
+[package]
+name = "bai3_1_echo_tcp"
+version = "0.1.0"
+edition = "2021"
+description = "Bài 3.1 – TCP Echo Server và Echo Client (Mã giả 3.1, 3.2)"
+publish = false
+
+[dependencies]

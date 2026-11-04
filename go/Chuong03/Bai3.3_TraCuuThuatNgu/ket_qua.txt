@@ -1,0 +1,56 @@
+===== server =====
+$ out/app server 127.0.0.1 31330
+[server] Đang lắng nghe tại 127.0.0.1:31330 (22 thuật ngữ)
+[server] Client kết nối: 127.0.0.1:45426
+[server] 127.0.0.1:45426: lookup 'TCP' -> 200
+[server] 127.0.0.1:45426: lookup 'Định khung' -> 200
+[server] 127.0.0.1:45426: lookup 'XYZ' -> 404
+[server] Client 127.0.0.1:45426 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:45438
+[server] 127.0.0.1:45438: lookup 'TCP' -> 200
+[server] 127.0.0.1:45438: lookup 'Bắt tay ba bước' -> 200
+[server] Client 127.0.0.1:45438 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:45440
+[server] 127.0.0.1:45440: lookup 'UDP' -> 200
+[server] Client 127.0.0.1:45440 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:45456
+[server] 127.0.0.1:45456: lookup 'TCP' -> 200
+[server] 127.0.0.1:45456: lookup 'XYZ' -> 404
+[server] Client 127.0.0.1:45456 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:45460
+[server] Lỗi với 127.0.0.1:45460: Khung quá lớn: 4294967295
+[server] Client 127.0.0.1:45460 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:45470
+[server] 127.0.0.1:45470: (JSON sai) -> 400
+[server] 127.0.0.1:45470: list -> 200
+[server] 127.0.0.1:45470: xoa -> 400
+[server] Client 127.0.0.1:45470 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:45484
+[server] Lỗi với 127.0.0.1:45484: Kết nối đóng giữa chừng (đã nhận 14 byte)
+[server] Client 127.0.0.1:45484 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:45490
+[server] 127.0.0.1:45490: lookup 'TCP' -> 200
+[server] Client 127.0.0.1:45490 đã đóng kết nối
+[server] Dừng server
+
+===== client =====
+$ out/app client 127.0.0.1 31330
+[client] Đã kết nối 127.0.0.1:31330. Nhập thuật ngữ cần tra (Ctrl+D để kết thúc).
+[client] TCP: Giao thức vận chuyển hướng kết nối, tin cậy, đúng thứ tự, truyền dòng byte (RFC 9293).
+[client] Định khung: Cách đánh dấu ranh giới thông điệp trên dòng byte TCP.
+[client] Lỗi 404: Không có thuật ngữ ('XYZ')
+[client] Đã đóng kết nối
+
+===== kiem_thu =====
+$ out/app kiemthu 127.0.0.1 31330
+[kiểm thử] Server 127.0.0.1:31330
+[kiểm thử] Ca 1 – thuật ngữ có trong từ điển: ĐẠT (status 200)
+[kiểm thử] Ca 2 – thuật ngữ có dấu: ĐẠT (status 200, term 'Bắt tay ba bước')
+[kiểm thử] Ca 3 – gửi 32 byte từng byte một: ĐẠT (status 200, term 'UDP')
+[kiểm thử] Ca 4 – hai yêu cầu trong một lần SEND: ĐẠT (status 200 rồi 404)
+[kiểm thử] Ca 5 – độ dài 4294967295 > MAX_FRAME: ĐẠT (server đóng kết nối)
+[kiểm thử] Ca 6 – nội dung không phải JSON: ĐẠT (status 400, sau đó list -> 200, 22 thuật ngữ)
+[kiểm thử] Ca bổ sung – thao tác "xoa": ĐẠT (status 400: Sai thao tác)
+[kiểm thử] Ca 7 – đóng giữa khung (14/54 byte): ĐẠT (client mới vẫn được phục vụ, status 200)
+[kiểm thử] Kết quả: 8/8 ca đạt
+

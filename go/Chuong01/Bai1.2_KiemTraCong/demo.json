@@ -1,0 +1,15 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["python3", "-m", "http.server", "31120", "--bind", "127.0.0.1"], "background": true, "wait": 1.0},
+    {"name": "open", "cmd": ["out/app", "localhost", "31120"]},
+    {"name": "closed", "cmd": ["out/app", "localhost", "31121"]},
+    {"name": "unresolved", "cmd": ["out/app", "khong-ton-tai.invalid", "80"]},
+    {"name": "filtered", "cmd": ["out/app", "10.255.255.1", "31122", "1000"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server thử lắng nghe cổng 31120",
+             "open": "Cửa sổ 2 – cổng đang mở",
+             "closed": "Cửa sổ 3 – cổng không có chương trình lắng nghe",
+             "unresolved": "Cửa sổ 4 – tên không phân giải được",
+             "filtered": "Cửa sổ 5 – địa chỉ không phản hồi"}
+}

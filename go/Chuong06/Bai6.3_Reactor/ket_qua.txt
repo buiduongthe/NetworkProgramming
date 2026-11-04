@@ -1,0 +1,22 @@
+===== server =====
+$ out/app server 127.0.0.1 31630
+[server] Reactor một luồng đang lắng nghe tại 127.0.0.1:31630
+[server] Client 127.0.0.1:35672 kết nối (đang mở: 1)
+[server] Client 127.0.0.1:35678 kết nối (đang mở: 2)
+[server] Client 127.0.0.1:35692 kết nối (đang mở: 3)
+[server] Đóng 127.0.0.1:35692: đã echo 1048607 byte, còn mở 2
+[server] Đóng 127.0.0.1:35678: đã echo 1048607 byte, còn mở 1
+[server] Đóng 127.0.0.1:35672: đã echo 1048607 byte, còn mở 0
+[server] Dừng server
+
+===== client =====
+$ out/app client 127.0.0.1 31630 3 1048576
+[client] Mở 3 kết nối đồng thời, mỗi kết nối gửi thêm 1048576 byte
+[client 2] Nhận lại: 'Xin chào reactor từ client 2'
+[client 1] Nhận lại: 'Xin chào reactor từ client 1'
+[client 3] Nhận lại: 'Xin chào reactor từ client 3'
+[client 2] Gửi 1048576 byte, nhận lại 1048576 byte, khớp: có
+[client 3] Gửi 1048576 byte, nhận lại 1048576 byte, khớp: có
+[client 1] Gửi 1048576 byte, nhận lại 1048576 byte, khớp: có
+[client] Hoàn tất sau 12 ms
+

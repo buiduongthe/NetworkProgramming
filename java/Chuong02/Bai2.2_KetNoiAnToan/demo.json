@@ -1,0 +1,13 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "ConfigError.java", "Endpoint.java", "NetError.java", "SafeConnect.java", "TestServer.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "TestServer", "127.0.0.1", "9230"], "background": true, "wait": 1.0},
+    {"name": "refused", "cmd": ["java", "-cp", "out", "SafeConnect", "127.0.0.1", "9231"]},
+    {"name": "not_found", "cmd": ["java", "-cp", "out", "SafeConnect", "khong-ton-tai.invalid", "9230"]},
+    {"name": "timeout", "cmd": ["java", "-cp", "out", "SafeConnect", "10.255.255.1", "9230", "3000"]},
+    {"name": "ok", "cmd": ["java", "-cp", "out", "SafeConnect", "localhost", "9230"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server thử nghiệm", "refused": "2 – cổng đóng trên localhost",
+             "not_found": "3 – tên không tồn tại", "timeout": "4 – địa chỉ không định tuyến được",
+             "ok": "5 – kết nối thành công"}
+}

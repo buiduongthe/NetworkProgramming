@@ -1,0 +1,44 @@
+[
+  {
+    "bai": "BaiMR3.3_GameDoanSo",
+    "chuong": 3,
+    "ngon_ngu": [
+      "python",
+      "go"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "Trò chơi đoán số nhiều người chơi qua TCP: giao thức yêu cầu/phản hồi khung JSON, máy trạng thái, kiểm tra đầu vào, hết giờ, mất kết nối",
+    "ghi_chu": "Demo 1 server + 5 client (người chơi nhập từ tệp, bot chia đôi, bot nghịch gửi 5 loại thông điệp sai, bot im lặng bị hết giờ rồi rời, người đến muộn bị từ chối); seed 2026, LCG chung nên hai bản in giống hệt (trừ cổng nguồn). Đọc thêm: RFC 9293, RFC 8259, RFC 896."
+  },
+  {
+    "bai": "BaiMR4.2_GameDuaXeUDP",
+    "chuong": 4,
+    "ngon_ngu": [
+      "python",
+      "go"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "Đua xe thời gian thực qua UDP: vòng tick 20 Hz có thẩm quyền, đầu vào có số thứ tự và dư thừa, ảnh chụp mới nhất thắng, dự đoán phía client, giả lập mất gói 0 % và 20 %",
+    "ghi_chu": "Hai cuộc đua bot (liều, cẩn thận) trên cùng server: mất 0 % rồi mất 20 % + đảo thứ tự 10 %; mất gói theo hàm băm có hạt giống nên kết quả tái lập được, hai bản giống hệt nhau. Kết quả phụ thuộc mỗi tiến trình không bị dừng > 50 ms. Đọc thêm: RFC 768, RFC 8085, Grigorik 2013 Ch. 3, Fiedler, Gambetta, Bernier 2001."
+  },
+  {
+    "bai": "BaiMR6.4_GameCaro",
+    "chuong": 6,
+    "ngon_ngu": [
+      "python",
+      "go"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "Caro 15×15 nhiều phòng qua TCP: sảnh, tạo/vào/xem phòng, server làm trọng tài, phát nước đi tới người xem, hết giờ mỗi nước, chơi lại; khám phá server bằng UDP broadcast",
+    "ghi_chu": "Demo 1 server + 6 client: tìm server bằng broadcast, hai phòng song song (ban2 thắng do hết giờ), bot thử 3 nước sai bị từ chối, 2 ván bot (thắng sau 27 và 28 nước) với người xem in bàn cờ. Python bật TCP_NODELAY (Go bật sẵn). Đọc thêm: RFC 919, RFC 922, RFC 896, Allis 1994."
+  }
+]

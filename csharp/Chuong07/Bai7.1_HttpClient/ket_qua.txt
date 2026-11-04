@@ -1,0 +1,23 @@
+===== server =====
+$ dotnet run --no-build -c Release -- server 127.0.0.1 9712
+[server] Đang lắng nghe tại 127.0.0.1:9712
+[server] GET /api/v1/terms/TCP HTTP/1.1 -> định khung: Content-Length
+[server] GET /chunked HTTP/1.1 -> định khung: chunked
+[server] GET /dong-ket-noi HTTP/1.1 -> định khung: đóng kết nối
+[server] GET /khong-co HTTP/1.1 -> định khung: Content-Length
+
+===== client =====
+$ dotnet run --no-build -c Release -- client 127.0.0.1 9712 /api/v1/terms/TCP /chunked /dong-ket-noi /khong-co
+[client] GET /api/v1/terms/TCP -> 200
+[client] Định khung thân: Content-Length = 71
+[client] Thân (71 byte): {"term":"TCP","text":"Giao thức vận chuyển hướng kết nối"}
+[client] GET /chunked -> 200
+[client] Định khung thân: Transfer-Encoding = chunked
+[client] Thân (55 byte): Thân phản hồi được chia thành nhiều khối.
+[client] GET /dong-ket-noi -> 200
+[client] Định khung thân: đọc đến khi server đóng kết nối
+[client] Thân (71 byte): Không có Content-Length: client đọc đến khi kết nối đóng.
+[client] GET /khong-co -> 404
+[client] Định khung thân: Content-Length = 55
+[client] Thân (55 byte): {"type":"about:blank","title":"Not Found","status":404}
+

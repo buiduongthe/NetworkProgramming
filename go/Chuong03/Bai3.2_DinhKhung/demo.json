@@ -1,0 +1,9 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "31320"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["out/app", "client", "127.0.0.1", "31320", "200000"], "stdin": "Xin chào\nLập trình mạng\n"},
+    {"name": "line", "cmd": ["out/app", "line", "127.0.0.1", "31321"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client": "Cửa sổ 2 – client", "line": "Cửa sổ 3 – minh họa READ_LINE"}
+}

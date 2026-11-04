@@ -1,0 +1,11 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server", "cmd": ["../../target/release/bai5_4_chat_client", "server", "127.0.0.1", "21540"], "background": true, "wait": 0.8},
+    {"name": "binh", "cmd": ["../../target/release/bai5_4_chat_client", "cli", "Bình", "127.0.0.1", "21540"], "background": true, "wait": 1.0,
+     "stdin": "/cho 2.5\nChào An, mình nghe rõ.\n"},
+    {"name": "an", "cmd": ["../../target/release/bai5_4_chat_client", "cli", "An", "127.0.0.1", "21540"], "wait": 1.0,
+     "stdin": "Xin chào mọi người\n/cho 3\n/quit\n"}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server chat", "binh": "Cửa sổ 2 – Bình", "an": "Cửa sổ 3 – An"}
+}

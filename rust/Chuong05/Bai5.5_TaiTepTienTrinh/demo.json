@@ -1,0 +1,11 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"],
+            ["python3", "-c", "import shutil, os; shutil.rmtree('uploads', ignore_errors=True); os.path.exists('du_lieu_thu.bin') and os.remove('du_lieu_thu.bin')"]],
+  "processes": [
+    {"name": "server", "cmd": ["../../target/release/bai5_5_tai_tep_tien_trinh", "server", "127.0.0.1", "21550", "4096"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["../../target/release/bai5_5_tai_tep_tien_trinh", "client", "127.0.0.1", "21550", "du_lieu_thu.bin"], "wait": 0.5},
+    {"name": "client_huy", "cmd": ["../../target/release/bai5_5_tai_tep_tien_trinh", "client", "127.0.0.1", "21550", "du_lieu_thu.bin", "400"], "wait": 0.5},
+    {"name": "thu_muc", "cmd": ["ls", "-1A", "uploads"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client": "Cửa sổ 2 – tải lên đầy đủ", "client_huy": "Cửa sổ 3 – bấm Hủy sau 400 ms", "thu_muc": "Cửa sổ 4 – thư mục tải lên"}
+}

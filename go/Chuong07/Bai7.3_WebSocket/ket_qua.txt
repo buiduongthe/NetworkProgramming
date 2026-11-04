@@ -1,0 +1,45 @@
+===== server =====
+$ out/app server 127.0.0.1 31730
+[server] Đang lắng nghe tại 127.0.0.1:31730
+[server] Bắt tay WebSocket thành công với 127.0.0.1:51562
+[server] Nhận văn bản (9 byte): 'Xin chào'
+[server] Nhận văn bản (21 byte): 'WebSocket hai chiều'
+[server] 127.0.0.1:51562 gửi khung đóng, mã 1000
+[server] Đóng kết nối 127.0.0.1:51562
+[server] 127.0.0.1:51578 GET / HTTP/1.1 -> 400 (không phải yêu cầu WebSocket)
+[server] Đóng kết nối 127.0.0.1:51578
+[server] Bắt tay WebSocket thành công với 127.0.0.1:51590
+[server] Nhận ping: 'nhip-tim' -> gửi pong
+[server] 127.0.0.1:51590 gửi khung đóng, mã 1000
+[server] Đóng kết nối 127.0.0.1:51590
+[server] Bắt tay WebSocket thành công với 127.0.0.1:51602
+[server] Nhận văn bản (300 byte): 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+[server] 127.0.0.1:51602 gửi khung đóng, mã 1000
+[server] Đóng kết nối 127.0.0.1:51602
+[server] Bắt tay WebSocket thành công với 127.0.0.1:51614
+[server] Lỗi giao thức với 127.0.0.1:51614: Khung client phải được che
+[server] Đóng kết nối 127.0.0.1:51614
+[server] Bắt tay WebSocket thành công với 127.0.0.1:51624
+[server] Lỗi giao thức với 127.0.0.1:51624: Khung quá lớn
+[server] Đóng kết nối 127.0.0.1:51624
+[server] 127.0.0.1:51630 GET / HTTP/1.1 -> 400 (không phải yêu cầu WebSocket)
+[server] Đóng kết nối 127.0.0.1:51630
+[server] Dừng server
+
+===== client =====
+$ out/app client 127.0.0.1 31730
+[client] Bắt tay thành công: HTTP/1.1 101 Switching Protocols
+[client] Nhận: 'echo: Xin chào'
+[client] Nhận: 'echo: WebSocket hai chiều'
+[client] Server xác nhận đóng, mã 1000
+[client] Đã đóng kết nối
+
+===== kiemthu =====
+$ out/app kiemthu 127.0.0.1 31730
+[kiểm thử] 1. Yêu cầu HTTP thường (không Upgrade) -> HTTP/1.1 400 Bad Request
+[kiểm thử] 2. Ping 'nhip-tim' -> opcode 0xA, dữ liệu 'nhip-tim'
+[kiểm thử] 3. Văn bản 300 byte -> nhận lại 306 byte (opcode 0x1)
+[kiểm thử] 4. Khung không che -> khung đóng, mã 1002
+[kiểm thử] 5. Khung khai báo 2^40 byte -> khung đóng, mã 1009
+[kiểm thử] 6. Sec-WebSocket-Key giải mã ra 12 byte (cần 16) -> HTTP/1.1 400 Bad Request
+

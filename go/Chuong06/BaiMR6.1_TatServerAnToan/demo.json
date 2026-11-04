@@ -1,0 +1,18 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "41615", "2000"], "background": true, "wait": 0.8},
+    {"name": "A", "cmd": ["out/app", "khach", "A", "127.0.0.1", "41615", "1500"], "background": true, "wait": 0.1},
+    {"name": "B", "cmd": ["out/app", "khach", "B", "127.0.0.1", "41615", "4000"], "background": true, "wait": 0.1},
+    {"name": "C", "cmd": ["out/app", "khach", "C", "127.0.0.1", "41615", "100"], "background": true, "wait": 0.4},
+    {"name": "quan_tri", "cmd": ["sh", "-c", "echo \"Gửi SIGTERM tới PID $(cat server.pid)\"; kill -TERM $(cat server.pid)"],
+     "show": ["sh", "-c", "kill -TERM $(cat server.pid)"], "wait": 0.3},
+    {"name": "D", "cmd": ["out/app", "khach", "D", "127.0.0.1", "41615", "100"], "wait": 3.0}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server (hạn chờ tắt 2000 ms)",
+             "A": "Cửa sổ 2 – client A (việc 1500 ms)",
+             "B": "Cửa sổ 3 – client B (việc 4000 ms)",
+             "C": "Cửa sổ 4 – client C (việc ngắn rồi rỗi)",
+             "quan_tri": "Cửa sổ 5 – quản trị gửi SIGTERM",
+             "D": "Cửa sổ 6 – client D đến sau khi bắt đầu tắt"}
+}

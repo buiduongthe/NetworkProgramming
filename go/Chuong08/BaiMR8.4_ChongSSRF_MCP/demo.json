@@ -1,0 +1,7 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "host", "cmd": ["python3", "mcp_test_client.py", "41845", "41846", "41847", "out/app"], "timeout": 60}
+  ],
+  "titles": {"host": "Cửa sổ dòng lệnh – client thử nghiệm MCP chống SSRF (META=41845, PUB=41846, REDIR=41847; server Go)"}
+}

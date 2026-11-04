@@ -1,0 +1,8 @@
+[package]
+name = "bai6_3_reactor"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Dồn kênh vào/ra đa nền tảng (epoll trên Linux, kqueue trên macOS, IOCP trên Windows)
+polling = "=3.11.0"

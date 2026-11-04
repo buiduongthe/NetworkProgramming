@@ -1,0 +1,7 @@
+{
+  "processes": [
+    {"name": "ports", "cmd": ["python3", "demo_ports.py", "9523,9531,9537", "9525,9528,9533,9539"], "background": true, "wait": 1.5},
+    {"name": "scan", "cmd": ["python3", "scan_async.py", "127.0.0.1", "9520", "9539", "10"], "timeout": 60}
+  ],
+  "titles": {"ports": "Cửa sổ 1 – cổng minh họa", "scan": "Cửa sổ 2 – quét cổng"}
+}

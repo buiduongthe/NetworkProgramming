@@ -1,0 +1,7 @@
+{
+  "processes": [
+    {"name": "thu_thap", "cmd": ["python3", "bo_thu_thap.py", "127.0.0.1", "41410", "--nhan-roi", "1.5"], "background": true, "wait": 0.8},
+    {"name": "xuat", "cmd": ["python3", "may_xuat.py", "127.0.0.1", "41410", "--so-luong", "100", "--bo-goi", "2"], "wait": 2.5}
+  ],
+  "titles": {"thu_thap": "Cửa sổ 1 – bộ thu thập NetFlow v5 (UDP 41410)", "xuat": "Cửa sổ 2 – máy xuất giả lập (bỏ gói #2)"}
+}

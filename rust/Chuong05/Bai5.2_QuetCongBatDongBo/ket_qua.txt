@@ -1,0 +1,22 @@
+===== ports =====
+$ ../../target/release/bai5_2_quet_cong_bat_dong_bo ports 21521,21524,21527 21522,21525,21528,21529
+[demo] Cổng mở: 21521, 21524, 21527
+[demo] Cổng bị lọc (mô phỏng): 21522, 21525, 21528, 21529
+[demo] Nhấn Ctrl+C để dừng
+[demo] Dừng
+
+===== scan =====
+$ ../../target/release/bai5_2_quet_cong_bat_dong_bo scan 127.0.0.1 21520 21529 10
+[scan] Quét 10 cổng 21520–21529 trên 127.0.0.1, thời gian chờ 1000 ms
+[scan]   cổng 21521: OPEN
+[scan]   cổng 21522: FILTERED
+[scan]   cổng 21524: OPEN
+[scan]   cổng 21525: FILTERED
+[scan]   cổng 21527: OPEN
+[scan]   cổng 21528: FILTERED
+[scan]   cổng 21529: FILTERED
+[scan] Tổng hợp: OPEN=3, CLOSED=3, FILTERED=4
+[scan] Hai lần quét cho cùng kết quả: có
+[scan] Tuần tự   (max_parallel=1):  4.01 s
+[scan] Đồng thời (max_parallel=10): 1.00 s
+

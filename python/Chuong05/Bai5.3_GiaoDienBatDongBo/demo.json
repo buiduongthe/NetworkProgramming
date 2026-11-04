@@ -1,0 +1,8 @@
+{
+  "processes": [
+    {"name": "server", "cmd": ["python3", "lookup_server.py", "127.0.0.1", "9504", "1500"], "background": true, "wait": 0.8},
+    {"name": "gui", "cmd": ["xvfb-run", "-a", "-s", "-screen 0 1280x400x24", "/usr/bin/python3.12", "demo_gui.py", "127.0.0.1", "9504", "9505"],
+     "show": ["xvfb-run", "-a", "python3", "demo_gui.py", "127.0.0.1", "9504", "9505"], "timeout": 40}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "gui": "Cửa sổ 2 – ứng dụng giao diện"}
+}

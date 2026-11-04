@@ -1,0 +1,10 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "-v", "q", "-nologo"]],
+  "processes": [
+    {"name": "r1", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "responder", "9200", "Phòng-Lab-A", "9609"], "background": true, "wait": 1.5},
+    {"name": "r2", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "responder", "9201", "Phòng-Lab-B", "9609"], "background": true, "wait": 1.5},
+    {"name": "client", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "discover", "1000", "9609", "255.255.255.255"], "wait": 0.3}
+  ],
+  "titles": {"r1": "Cửa sổ 1 – responder Phòng-Lab-A", "r2": "Cửa sổ 2 – responder Phòng-Lab-B",
+             "client": "Cửa sổ 3 – client khám phá (broadcast)"}
+}

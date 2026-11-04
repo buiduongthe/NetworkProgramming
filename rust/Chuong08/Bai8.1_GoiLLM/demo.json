@@ -1,0 +1,102 @@
+{
+  "setup": [
+    [
+      "cargo",
+      "build",
+      "-q",
+      "--release"
+    ]
+  ],
+  "env": {
+    "LLM_BASE_URL": "http://127.0.0.1:21810/v1",
+    "LLM_API_KEY": "khoa-thu-nghiem",
+    "LLM_MODEL": "mock-model",
+    "LLM_PRICE_IN": "0.15",
+    "LLM_PRICE_OUT": "0.60"
+  },
+  "processes": [
+    {
+      "name": "mock",
+      "cmd": [
+        "python3",
+        "mock_llm_server.py",
+        "127.0.0.1",
+        "21810",
+        "--fail-first",
+        "1",
+        "--cut-request",
+        "3"
+      ],
+      "background": true,
+      "wait": 0.8
+    },
+    {
+      "name": "mock2",
+      "cmd": [
+        "python3",
+        "mock_llm_server.py",
+        "127.0.0.1",
+        "21811",
+        "--fail-first",
+        "5",
+        "--retry-after",
+        "3"
+      ],
+      "background": true,
+      "wait": 0.8
+    },
+    {
+      "name": "client1",
+      "cmd": [
+        "cargo",
+        "run",
+        "-q",
+        "--release",
+        "--",
+        "So sánh TCP và UDP."
+      ],
+      "timeout": 30
+    },
+    {
+      "name": "client2",
+      "cmd": [
+        "cargo",
+        "run",
+        "-q",
+        "--release",
+        "--",
+        "Giải thích SSE."
+      ],
+      "timeout": 30
+    },
+    {
+      "name": "client3",
+      "cmd": [
+        "sh",
+        "-c",
+        "LLM_BASE_URL=http://127.0.0.1:21811/v1 exec timeout -s INT 1.5 cargo run -q --release -- 'Giải thích MQTT.'"
+      ],
+      "show": [
+        "LLM_BASE_URL=http://127.0.0.1:21811/v1",
+        "timeout",
+        "-s",
+        "INT",
+        "1.5",
+        "cargo",
+        "run",
+        "-q",
+        "--release",
+        "--",
+        "Giải thích MQTT."
+      ],
+      "timeout": 30
+    }
+  ],
+  "titles": {
+    "mock": "Cửa sổ 1 – server giả lập LLM",
+    "client1": "Cửa sổ 2 – gọi lần 1 (gặp 429, thử lại)",
+    "client2": "Cửa sổ 3 – gọi lần 2 (luồng bị ngắt)",
+    "client3": "Cửa sổ 5 – gọi server thứ hai, Ctrl+C sau 1,5 s (hủy khi đang chờ)",
+    "mock2": "Cửa sổ 4 – server giả lập thứ hai (luôn 429, Retry-After 3 s)"
+  }
+}

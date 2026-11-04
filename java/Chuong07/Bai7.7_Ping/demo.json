@@ -1,0 +1,7 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Ping.java"]],
+  "processes": [
+    {"name": "ping", "cmd": ["java", "-cp", "out", "Ping", "127.0.0.1", "4"]}
+  ],
+  "titles": {"ping": "Cửa sổ lệnh (tài khoản root) – ping 127.0.0.1"}
+}

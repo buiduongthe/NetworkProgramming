@@ -1,0 +1,114 @@
+[
+  {
+    "bai": "BaiMR1.1_QuanLyDiaChiIP",
+    "chuong": 1,
+    "ngon_ngu": [
+      "python",
+      "go"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "Quản lý địa chỉ IP (IPAM): chia mạng con VLSM, khối còn trống, kiểm tra chồng lấn, cấp phát",
+    "ghi_chu": "Không dùng mạng; hai bản in kết quả giống hệt nhau. Đọc thêm: Töpke 2023, Ch. 4–5."
+  },
+  {
+    "bai": "BaiMR3.1_ChuyenTiepCong",
+    "chuong": 3,
+    "ngon_ngu": [
+      "python",
+      "go"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "Bộ chuyển tiếp cổng TCP có chuyển tiếp đóng một chiều (half-close)",
+    "ghi_chu": "Tình huống đích không chạy: client thấy RST hoặc EOF tùy thời điểm (lần chạy Python thấy RST, lần chạy Go thấy EOF). Đọc thêm: Sarker 2014, Ch. 3."
+  },
+  {
+    "bai": "BaiMR3.2_TuDongHoaCLI",
+    "chuong": 3,
+    "ngon_ngu": [
+      "python",
+      "go"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "Tự động hóa cấu hình thiết bị qua CLI: đọc tới dấu nhắc, sinh lệnh khác biệt, lũy đẳng, chạy thử",
+    "ghi_chu": "Thiết bị R1 giả lập qua TCP (kiểu Telnet), mỗi ngôn ngữ có bản thiết bị riêng. Đọc thêm: Chou 2023 (MPN), Ch. 2; Töpke 2023, Ch. 3, 6."
+  },
+  {
+    "bai": "BaiMR4.1_ThuThapNetFlow",
+    "chuong": 4,
+    "ngon_ngu": [
+      "python",
+      "go"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "Thu thập và giải mã NetFlow v5 trên UDP, phát hiện mất gói, thống kê lưu lượng",
+    "ghi_chu": "Dữ liệu luồng giả lập bằng LCG hạt giống cố định nên hai bản cho số liệu giống hệt. Đọc thêm: Chou 2023 (MPN), Ch. 8."
+  },
+  {
+    "bai": "BaiMR6.1_TatServerAnToan",
+    "chuong": 6,
+    "ngon_ngu": [
+      "python",
+      "go"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "Tắt server an toàn khi nhận SIGTERM/SIGINT: ngừng nhận, làm nốt, hạn chờ, hủy",
+    "ghi_chu": "Demo gửi SIGTERM bằng kill -TERM $(cat server.pid); bản Python dùng loop.add_signal_handler (chỉ Unix). Đọc thêm: Butcher & Farina 2016, Ch. 2–3."
+  },
+  {
+    "bai": "BaiMR7.1_TaiTiepHTTP",
+    "chuong": 7,
+    "ngon_ngu": [
+      "python",
+      "go"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "Tải tệp HTTP có tải tiếp: Range, If-Range, 206/416, thử lại có lùi thời gian, kiểm tra SHA-256",
+    "ghi_chu": "Server giả lập ngắt kết nối 2 lần sau 100000 byte; bản Go dùng http.ServeContent và panic(http.ErrAbortHandler). Đọc thêm: Butcher & Farina 2016, Ch. 8; Sarker 2014, Ch. 4."
+  },
+  {
+    "bai": "BaiMR8.1_TacTuChanDoan",
+    "chuong": 8,
+    "ngon_ngu": [
+      "python",
+      "go"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "Tác tử AI chẩn đoán mạng bằng gọi công cụ, có lớp kiểm soát (danh mục, lược đồ, chính sách đích, giới hạn vòng)",
+    "ghi_chu": "LLM giả lập mock_llm_cong_cu.py (Python stdlib, dùng cho cả bản Go); không gọi LLM thật, không gửi gói tới 8.8.8.8. Đọc thêm: Chou 2025 (AINC), Ch. 5, 8, 9."
+  },
+  {
+    "bai": "BaiMR8.2_KiemDuyetCauHinhAI",
+    "chuong": 8,
+    "ngon_ngu": [
+      "python",
+      "go"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "Kiểm duyệt cấu hình do LLM sinh: JSON, lược đồ, ngữ nghĩa, chính sách, vòng phản hồi",
+    "ghi_chu": "LLM giả lập mock_llm_cau_hinh.py (Python stdlib, dùng cho cả bản Go). Đọc thêm: Chou 2025 (AINC), Ch. 2, 3, 5; Töpke 2023, Ch. 4."
+  }
+]

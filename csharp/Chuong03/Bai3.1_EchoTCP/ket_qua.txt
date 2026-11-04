@@ -1,0 +1,13 @@
+===== server =====
+$ dotnet run --no-build -c Release -- server 127.0.0.1 9392
+[server] Đang lắng nghe tại 127.0.0.1:9392
+[server] Client kết nối: 127.0.0.1:45896
+[server] Client 127.0.0.1:45896 đã đóng kết nối
+
+===== client =====
+$ dotnet run --no-build -c Release -- client 127.0.0.1 9392
+[client] Đã kết nối 127.0.0.1:9392. Nhập dòng cần gửi (Ctrl+Z/Ctrl+D để kết thúc).
+[client] Gửi: 'Xin chào' -> Nhận: 'Xin chào'
+[client] Gửi: 'Lập trình mạng' -> Nhận: 'Lập trình mạng'
+[client] Đã đóng kết nối
+

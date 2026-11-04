@@ -1,0 +1,10 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "31410"], "background": true, "wait": 0.8},
+    {"name": "client1", "cmd": ["out/app", "client", "127.0.0.1", "31410"], "stdin": "Xin chào\nLập trình mạng UDP\n"},
+    {"name": "client2", "cmd": ["out/app", "client", "127.0.0.1", "31410"], "stdin": "Client thứ hai\n"},
+    {"name": "client3", "cmd": ["out/app", "client", "127.0.0.1", "31419"], "stdin": "Có ai không?\nGửi lần nữa\n"}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client1": "Cửa sổ 2 – client thứ nhất", "client2": "Cửa sổ 3 – client thứ hai", "client3": "Cửa sổ 4 – client, server không chạy (cổng 31419)"}
+}

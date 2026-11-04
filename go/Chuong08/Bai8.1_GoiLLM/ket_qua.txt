@@ -1,0 +1,27 @@
+===== mock =====
+$ python3 mock_llm_server.py 127.0.0.1 31810 --fail-first 1 --cut-request 3
+[mock] Server giả lập LLM tại http://127.0.0.1:31810/v1 (fail-first=1, cut-request=3)
+[mock] #1 POST /v1/chat/completions -> 429 (Retry-After: 1)
+[mock] #2 POST /v1/chat/completions model=mock-model stream=true -> 200
+[mock] #2 đã gửi 30 phần, usage=11/30
+[mock] #3 POST /v1/chat/completions model=mock-model stream=true -> 200 (sẽ ngắt giữa chừng)
+[mock] #3 ngắt kết nối sau 4 phần
+[mock] Dừng server
+
+===== client1 =====
+$ out/app 'So sánh TCP và UDP.'
+[llm] Mô hình mock-model tại http://127.0.0.1:31810/v1
+[llm] Câu hỏi: So sánh TCP và UDP.
+[llm] Lần thử 1/5: HTTP 429 – chờ 1000 ms rồi thử lại
+[llm] Trả lời: TCP là giao thức hướng kết nối, tin cậy và giữ đúng thứ tự; UDP không kết nối, nhẹ và nhanh hơn nhưng không bảo đảm dữ liệu tới nơi.
+[llm] TTFT: 1126 ms, tổng thời gian: 4618 ms
+[llm] usage: prompt_tokens = 11, completion_tokens = 30
+[llm] Chi phí ước tính: 11 × 0.15 + 30 × 0.60 (USD/1 triệu token) = 0.00001965 USD
+
+===== client2 =====
+$ out/app 'Giải thích SSE.'
+[llm] Mô hình mock-model tại http://127.0.0.1:31810/v1
+[llm] Câu hỏi: Giải thích SSE.
+[llm] Trả lời: TCP là giao thức
+[llm] Lỗi: Luồng bị ngắt giữa chừng – không thử lại vì đã hiển thị một phần câu trả lời
+

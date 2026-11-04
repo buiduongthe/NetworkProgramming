@@ -1,0 +1,17 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "sv_vuln", "cmd": ["out/app", "server", "vulnerable", "127.0.0.1", "41835"], "background": true, "wait": 0.6},
+    {"name": "sv_prot", "cmd": ["out/app", "server", "protected", "127.0.0.1", "41836"], "background": true, "wait": 0.6},
+    {"name": "slow_vuln", "cmd": ["out/app", "slow", "127.0.0.1", "41835", "150"], "background": true, "wait": 0.1},
+    {"name": "slow_prot", "cmd": ["out/app", "slow", "127.0.0.1", "41836", "150"], "background": true, "wait": 2.0},
+    {"name": "probe_vuln", "cmd": ["out/app", "probe", "127.0.0.1", "41835"], "wait": 0.3},
+    {"name": "probe_prot", "cmd": ["out/app", "probe", "127.0.0.1", "41836"], "wait": 0.3}
+  ],
+  "titles": {"sv_vuln": "Cửa sổ 1 – server vulnerable (cổng 41835, không hạn tiêu đề)",
+             "sv_prot": "Cửa sổ 2 – server protected (cổng 41836, có phòng thủ)",
+             "slow_vuln": "Cửa sổ 3 – client Slowloris (thí nghiệm) tấn công vulnerable",
+             "slow_prot": "Cửa sổ 4 – client Slowloris (thí nghiệm) tấn công protected",
+             "probe_vuln": "Cửa sổ 5 – probe tới vulnerable (bị nghẽn)",
+             "probe_prot": "Cửa sổ 6 – probe tới protected (vẫn phục vụ)"}
+}

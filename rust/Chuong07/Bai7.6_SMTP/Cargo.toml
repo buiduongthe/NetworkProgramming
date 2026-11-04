@@ -1,0 +1,10 @@
+[package]
+name = "bai7_6_smtp"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# TLS_WRAP (STARTTLS): rustls với bộ mật mã ring, kiểm tra chứng chỉ và tên máy
+rustls = { version = "=0.23.46", default-features = false, features = ["ring", "std", "tls12"] }
+# AUTH PLAIN và tiêu đề Subject mã hóa MIME dùng Base64
+base64 = "=0.22.1"

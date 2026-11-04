@@ -1,0 +1,13 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "PortCheck.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["python3", "-m", "http.server", "9111", "--bind", "127.0.0.1"], "background": true, "wait": 1.0},
+    {"name": "open", "cmd": ["java", "-cp", "out", "PortCheck", "localhost", "9111"]},
+    {"name": "closed", "cmd": ["java", "-cp", "out", "PortCheck", "localhost", "9112"]},
+    {"name": "unresolved", "cmd": ["java", "-cp", "out", "PortCheck", "khong-ton-tai.invalid", "80"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server thử lắng nghe cổng 9111",
+             "open": "Cửa sổ 2 – cổng đang mở",
+             "closed": "Cửa sổ 3 – cổng không có chương trình lắng nghe",
+             "unresolved": "Cửa sổ 4 – tên không phân giải được"}
+}

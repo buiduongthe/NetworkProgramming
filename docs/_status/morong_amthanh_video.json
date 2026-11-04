@@ -1,0 +1,18 @@
+[
+  {
+    "bai": "BaiMR6.2_HoiThoaiAmThanh",
+    "chuong": 6,
+    "ngon_ngu": ["python", "go"],
+    "kiem_thu": {"python": "đã chạy", "go": "đã chạy"},
+    "ten": "Phòng hội thoại âm thanh nhiều client: RTP/UDP, điều khiển JSON/TCP, trộn mix-minus, bộ đệm jitter, dBFS, tắt mic/độ lợi/âm lượng, ghi WAV và phân tích Goertzel",
+    "ghi_chu": "Nguồn âm mặc định là sin tổng hợp (mỗi client một tần số) hoặc tệp WAV; bản Python có tùy chọn micro/loa thật qua sounddevice (chưa thử với thiết bị thật – máy kiểm thử không có PortAudio, đã thử nhánh dự phòng); bản Go không có API âm thanh trong thư viện chuẩn. Phân tích bản ghi của A khớp lý thuyết tới 0,1 dB (−15,1/−9,0/−21,1/−27,1 dBFS); một lần chạy thử bị cạn bộ đệm do lập lịch luồng làm một đoạn thấp hơn ≈ 0,4 dB. Client Python và server Go nối được với nhau (đã thử). Đọc thêm: RFC 3550, 3551, 7667; Goertzel 1958."
+  },
+  {
+    "bai": "BaiMR6.3_HoiThoaiVideo",
+    "chuong": 6,
+    "ngon_ngu": ["python", "go"],
+    "kiem_thu": {"python": "đã chạy", "go": "đã chạy"},
+    "ten": "Phòng hội thoại video nhiều client: khung nén zlib chia mảnh ≤ 1200 byte trên UDP, server ghép lưới (MCU), tắt/bật camera, giới hạn fps/độ phân giải gửi và nhận, chụp lưới PNG",
+    "ghi_chu": "Camera tổng hợp 160×120 (nền sóng chéo + hạt nhiễu, tên và số khung); bản Python có tùy chọn camera thật qua opencv-python (đã thử nhánh dự phòng: có OpenCV nhưng không có camera); bản Go chỉ camera tổng hợp. PNG bản Python viết tay bằng zlib+struct, bản Go dùng image/png. ket_qua_video.png ghép 5 ảnh lưới chụp trước/sau các lệnh. Hai bản cùng giao thức, nối được với nhau (đã thử); zlib BestSpeed của Go cho dung lượng lớn hơn ≈ 20 %. Đọc thêm: RFC 9000 mục 14, RFC 7667, RFC 8085, RFC 1950/1951, PNG W3C."
+  }
+]

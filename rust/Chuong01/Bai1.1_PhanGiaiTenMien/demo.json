@@ -1,0 +1,7 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "resolve", "cmd": ["../../target/release/bai1_1_phan_giai_ten_mien", "localhost", "example.com", "khong-ton-tai.invalid", "::1"]}
+  ],
+  "titles": {"resolve": "Cửa sổ dòng lệnh – phân giải tên miền"}
+}

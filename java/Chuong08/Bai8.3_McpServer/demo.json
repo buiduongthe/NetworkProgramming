@@ -1,0 +1,8 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "NetTools.java", "Validate.java", "McpServer.java"]],
+  "env": {"ALLOWED_NETS": "127.0.0.0/8"},
+  "processes": [
+    {"name": "host", "cmd": ["python3", "mcp_test_client.py", "9833", "9834", "java", "-cp", "out", "McpServer"], "timeout": 60}
+  ],
+  "titles": {"host": "Cửa sổ dòng lệnh – client thử nghiệm MCP (ALLOWED_NETS=127.0.0.0/8)"}
+}

@@ -1,0 +1,13 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "broker", "cmd": ["mosquitto", "-p", "21780"], "background": true, "wait": 1.0},
+    {"name": "dashboard", "cmd": ["cargo", "run", "-q", "--release", "--", "dashboard", "localhost", "21780", "4"], "background": true, "wait": 1.0},
+    {"name": "day1", "cmd": ["cargo", "run", "-q", "--release", "--", "sensor", "day1", "localhost", "21780", "3", "1000"]},
+    {"name": "day2", "cmd": ["cargo", "run", "-q", "--release", "--", "sensor", "day2", "localhost", "21780", "2", "1000", "--mat-ket-noi"], "wait": 3.0},
+    {"name": "dashboard2", "cmd": ["timeout", "-s", "INT", "2", "cargo", "run", "-q", "--release", "--", "dashboard", "localhost", "21780", "60", "dashboard-02"]}
+  ],
+  "titles": {"broker": "Cửa sổ 1 – broker mosquitto", "dashboard": "Cửa sổ 2 – bảng theo dõi (chạy từ đầu)",
+             "day1": "Cửa sổ 3 – cảm biến day1", "day2": "Cửa sổ 4 – cảm biến day2 (mất kết nối)",
+             "dashboard2": "Cửa sổ 5 – bảng thứ hai, đăng ký muộn"}
+}

@@ -1,0 +1,8 @@
+[package]
+name = "bai1_2_kiem_tra_cong"
+version = "0.1.0"
+edition = "2021"
+description = "Bài 1.2 – Kiểm tra trạng thái một cổng TCP (Mã giả 1.2)"
+publish = false
+
+[dependencies]

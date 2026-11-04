@@ -1,0 +1,51 @@
+===== server1 =====
+$ dotnet run --no-build -c Release -- threaded 127.0.0.1 9600 3
+[server] Đang lắng nghe tại 127.0.0.1:9600
+[server] Mỗi kết nối một luồng, MAX_CLIENTS = 3
+[server] Nhận 127.0.0.1:50944, tạo luồng mới (đang phục vụ: 1)
+[server] Nhận 127.0.0.1:50952, tạo luồng mới (đang phục vụ: 2)
+[server] Nhận 127.0.0.1:50954, tạo luồng mới (đang phục vụ: 3)
+[server] Từ chối 127.0.0.1:50968: đã đủ 3 kết nối
+[server] Từ chối 127.0.0.1:50976: đã đủ 3 kết nối
+[server] Client 127.0.0.1:50944 đã đóng kết nối
+[server] Client 127.0.0.1:50952 đã đóng kết nối
+[server] Client 127.0.0.1:50954 đã đóng kết nối
+
+===== client1 =====
+$ dotnet run --no-build -c Release -- client 127.0.0.1 9600 5 1000
+[client] 5 client cách nhau 100 ms, giữ kết nối 1000 ms
+[client 1] t = 98 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 2] t = 102 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 3] t = 202 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 4] t = 310 ms: server đóng kết nối ngay
+[client 5] t = 403 ms: server đóng kết nối ngay
+[client] Hoàn tất sau 1202 ms
+
+===== server2 =====
+$ dotnet run --no-build -c Release -- pool 127.0.0.1 9601 2 1
+[server] Đang lắng nghe tại 127.0.0.1:9601
+[server] Nhóm 2 luồng thợ, hàng đợi 1 chỗ
+[server] Nhận 127.0.0.1:36426
+[server] Luồng thợ 1 phục vụ 127.0.0.1:36426
+[server] Nhận 127.0.0.1:36428
+[server] Luồng thợ 2 phục vụ 127.0.0.1:36428
+[server] Nhận 127.0.0.1:36436
+[server] Nhận 127.0.0.1:36448
+[server] Hàng đợi đầy, trả 503 cho 127.0.0.1:36448
+[server] Nhận 127.0.0.1:36456
+[server] Hàng đợi đầy, trả 503 cho 127.0.0.1:36456
+[server] Client 127.0.0.1:36426 đã đóng kết nối
+[server] Luồng thợ 1 phục vụ 127.0.0.1:36436
+[server] Client 127.0.0.1:36428 đã đóng kết nối
+[server] Client 127.0.0.1:36436 đã đóng kết nối
+
+===== client2 =====
+$ dotnet run --no-build -c Release -- client 127.0.0.1 9601 5 1000
+[client] 5 client cách nhau 100 ms, giữ kết nối 1000 ms
+[client 1] t = 88 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 2] t = 101 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 4] t = 303 ms: bị từ chối 503 – Server bận
+[client 5] t = 403 ms: bị từ chối 503 – Server bận
+[client 3] t = 1089 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client] Hoàn tất sau 2090 ms
+

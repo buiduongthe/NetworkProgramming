@@ -1,0 +1,10 @@
+[package]
+name = "bai5_4_chat_client"
+version = "0.1.0"
+edition = "2021"
+description = "Bài 5.4 – Lớp dịch vụ ChatClient bất đồng bộ (Mã giả 5.5)"
+publish = false
+
+[dependencies]
+serde_json = { version = "=1.0.143", features = ["preserve_order"] }
+tokio = { version = "=1.47.1", features = ["rt", "macros", "net", "io-util", "time", "sync", "signal", "fs"] }

@@ -1,0 +1,59 @@
+{
+  "setup": [
+    [
+      "dotnet",
+      "build",
+      "-c",
+      "Release",
+      "-v",
+      "q",
+      "-nologo"
+    ]
+  ],
+  "processes": [
+    {
+      "name": "server",
+      "cmd": [
+        "dotnet",
+        "run",
+        "--no-build",
+        "-c",
+        "Release",
+        "--",
+        "server",
+        "127.0.0.1",
+        "9722"
+      ],
+      "background": true,
+      "wait": 1.5
+    },
+    {
+      "name": "client",
+      "cmd": [
+        "dotnet",
+        "run",
+        "--no-build",
+        "-c",
+        "Release",
+        "--",
+        "client",
+        "127.0.0.1",
+        "9722"
+      ],
+      "stdin": "GET /api/v1/terms\nGET /api/v1/terms/TCP\nGET /api/v1/terms/Keep%20alive\nGET /api/v1/terms/XYZ\nPOST /api/v1/terms {\"term\":\"QUIC\",\"text\":\"Giao thức vận chuyển trên UDP\"}\nGET /api/v1/terms/QUIC\nDELETE /api/v1/terms/QUIC\nPUT /api/v1/terms/TCP {\"text\":\"x\"}\nGET /api/v2/khac\n"
+    },
+    {
+      "name": "curl",
+      "cmd": [
+        "sh",
+        "curl_demo.sh",
+        "9722"
+      ]
+    }
+  ],
+  "titles": {
+    "server": "Cửa sổ 1 – server REST",
+    "client": "Cửa sổ 2 – client (keep-alive)",
+    "curl": "Cửa sổ 3 – curl"
+  }
+}

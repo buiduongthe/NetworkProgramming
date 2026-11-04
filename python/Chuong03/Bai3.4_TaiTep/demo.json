@@ -1,0 +1,10 @@
+{
+  "setup": [["python3", "-c", "import shutil; shutil.rmtree('uploads', ignore_errors=True); open('mau.txt', 'w', encoding='utf-8').write(''.join(f'Dòng {i:04d}: Lập trình mạng – tệp mẫu tải lên server\\n' for i in range(3000)))"]],
+  "processes": [
+    {"name": "server", "cmd": ["python3", "put_server.py", "127.0.0.1", "9341"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["python3", "put_client.py", "127.0.0.1", "9341"], "stdin": "put mau.txt\nput khong_co.txt\nTCP\n"},
+    {"name": "kiem_thu", "cmd": ["python3", "kiem_thu.py", "127.0.0.1", "9341"]},
+    {"name": "thu_muc", "cmd": ["sh", "-c", "ls -1A uploads; sha256sum mau.txt uploads/mau.txt | cut -c1-16,65-"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client": "Cửa sổ 2 – client", "kiem_thu": "Cửa sổ 3 – client kiểm thử", "thu_muc": "Cửa sổ 4 – thư mục tải lên"}
+}

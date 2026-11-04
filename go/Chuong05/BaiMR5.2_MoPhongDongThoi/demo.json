@@ -1,0 +1,15 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "41525", "200"], "background": true, "wait": 0.8},
+    {"name": "mang", "cmd": ["out/app", "mang", "127.0.0.1", "41525"], "timeout": 60, "wait": 0.5},
+    {"name": "cpu", "cmd": ["out/app", "cpu"], "timeout": 60},
+    {"name": "tron", "cmd": ["out/app", "tron", "127.0.0.1", "41525"], "timeout": 60, "wait": 0.5},
+    {"name": "khoa", "cmd": ["out/app", "khoa"], "timeout": 60}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ thử (trễ 200 ms mỗi yêu cầu)",
+             "mang": "Cửa sổ 2 – 20 yêu cầu mạng, bốn mô hình",
+             "cpu": "Cửa sổ 3 – việc nặng CPU, goroutine",
+             "tron": "Cửa sổ 4 – mạng + CPU, nhóm worker CPU",
+             "khoa": "Cửa sổ 5 – tranh chấp dữ liệu, bế tắc"}
+}

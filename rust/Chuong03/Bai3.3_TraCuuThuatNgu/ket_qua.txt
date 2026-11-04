@@ -1,0 +1,57 @@
+===== server =====
+$ ../../target/release/bai3_3_tra_cuu_thuat_ngu server 127.0.0.1 21330
+[server] Đang lắng nghe tại 127.0.0.1:21330 (22 thuật ngữ)
+[server] Client kết nối: 127.0.0.1:52114
+[server] 127.0.0.1:52114: lookup 'TCP' -> 200
+[server] 127.0.0.1:52114: lookup 'Định khung' -> 200
+[server] 127.0.0.1:52114: lookup 'XYZ' -> 404
+[server] Client 127.0.0.1:52114 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:52126
+[server] 127.0.0.1:52126: lookup 'TCP' -> 200
+[server] 127.0.0.1:52126: lookup 'Bắt tay ba bước' -> 200
+[server] Client 127.0.0.1:52126 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:52132
+[server] 127.0.0.1:52132: lookup 'UDP' -> 200
+[server] Client 127.0.0.1:52132 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:52140
+[server] 127.0.0.1:52140: lookup 'TCP' -> 200
+[server] 127.0.0.1:52140: lookup 'XYZ' -> 404
+[server] Client 127.0.0.1:52140 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:52152
+[server] Lỗi với 127.0.0.1:52152: Khung quá lớn: 4294967295
+[server] Client 127.0.0.1:52152 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:52156
+[server] 127.0.0.1:52156: (JSON sai) -> 400
+[server] 127.0.0.1:52156: list -> 200
+[server] 127.0.0.1:52156: xoa -> 400
+[server] 127.0.0.1:52156: (không phải đối tượng JSON) -> 400
+[server] Client 127.0.0.1:52156 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:52166
+[server] Lỗi với 127.0.0.1:52166: Kết nối đóng giữa chừng (đã nhận 14 byte)
+[server] Client 127.0.0.1:52166 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:52182
+[server] 127.0.0.1:52182: lookup 'TCP' -> 200
+[server] Client 127.0.0.1:52182 đã đóng kết nối
+
+===== client =====
+$ ../../target/release/bai3_3_tra_cuu_thuat_ngu client 127.0.0.1 21330
+[client] Đã kết nối 127.0.0.1:21330. Nhập thuật ngữ cần tra (Ctrl+D để kết thúc).
+[client] TCP: Giao thức vận chuyển hướng kết nối, tin cậy, đúng thứ tự, truyền dòng byte (RFC 9293).
+[client] Định khung: Cách đánh dấu ranh giới thông điệp trên dòng byte TCP.
+[client] Lỗi 404: Không có thuật ngữ ('XYZ')
+[client] Đã đóng kết nối
+
+===== kiem_thu =====
+$ ../../target/release/bai3_3_tra_cuu_thuat_ngu kiemthu 127.0.0.1 21330
+[kiểm thử] Server 127.0.0.1:21330
+[kiểm thử] Ca 1 – thuật ngữ có trong từ điển: ĐẠT (status 200)
+[kiểm thử] Ca 2 – thuật ngữ có dấu: ĐẠT (status 200, term 'Bắt tay ba bước')
+[kiểm thử] Ca 3 – gửi 32 byte từng byte một: ĐẠT (status 200, term 'UDP')
+[kiểm thử] Ca 4 – hai yêu cầu trong một lần SEND: ĐẠT (status 200 rồi 404)
+[kiểm thử] Ca 5 – độ dài 4294967295 > MAX_FRAME: ĐẠT (server đóng kết nối)
+[kiểm thử] Ca 6 – nội dung không phải JSON: ĐẠT (status 400, sau đó list -> 200, 22 thuật ngữ)
+[kiểm thử] Ca bổ sung 1 – thao tác "xoa": ĐẠT (status 400: Sai thao tác)
+[kiểm thử] Ca bổ sung 2 – JSON [1,2] không phải đối tượng: ĐẠT (status 400: JSON sai)
+[kiểm thử] Ca 7 – đóng giữa khung (14/54 byte): ĐẠT (client mới vẫn được phục vụ, status 200)
+[kiểm thử] Kết quả: 9/9 ca đạt
+

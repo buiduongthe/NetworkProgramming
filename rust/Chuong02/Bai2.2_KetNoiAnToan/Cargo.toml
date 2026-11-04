@@ -1,0 +1,8 @@
+[package]
+name = "bai2_2_ket_noi_an_toan"
+version = "0.1.0"
+edition = "2021"
+description = "Bài 2.2 – Kết nối có thời gian chờ và phân loại lỗi (Mã giả 2.2)"
+publish = false
+
+[dependencies]

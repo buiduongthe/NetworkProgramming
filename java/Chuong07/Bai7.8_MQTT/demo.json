@@ -1,0 +1,94 @@
+{
+  "setup": [
+    [
+      "javac",
+      "-encoding",
+      "UTF-8",
+      "-d",
+      "out",
+      "MqttClient.java",
+      "Sensor.java",
+      "Dashboard.java"
+    ]
+  ],
+  "processes": [
+    {
+      "name": "broker",
+      "cmd": [
+        "mosquitto",
+        "-p",
+        "9783"
+      ],
+      "background": true,
+      "wait": 1.0
+    },
+    {
+      "name": "dashboard",
+      "cmd": [
+        "java",
+        "-cp",
+        "out",
+        "Dashboard",
+        "localhost",
+        "9783",
+        "4"
+      ],
+      "background": true,
+      "wait": 1.0
+    },
+    {
+      "name": "day1",
+      "cmd": [
+        "java",
+        "-cp",
+        "out",
+        "Sensor",
+        "day1",
+        "localhost",
+        "9783",
+        "3",
+        "1000"
+      ]
+    },
+    {
+      "name": "day2",
+      "cmd": [
+        "java",
+        "-cp",
+        "out",
+        "Sensor",
+        "day2",
+        "localhost",
+        "9783",
+        "2",
+        "1000",
+        "--mat-ket-noi"
+      ],
+      "wait": 3.0
+    },
+    {
+      "name": "dashboard2",
+      "cmd": [
+        "timeout",
+        "-s",
+        "INT",
+        "2",
+        "java",
+        "-cp",
+        "out",
+        "Dashboard",
+        "localhost",
+        "9783",
+        "60",
+        "dashboard-02"
+      ]
+    }
+  ],
+  "titles": {
+    "broker": "Cửa sổ 1 – broker mosquitto",
+    "dashboard": "Cửa sổ 2 – bảng theo dõi (chạy từ đầu)",
+    "day1": "Cửa sổ 3 – cảm biến day1",
+    "day2": "Cửa sổ 4 – cảm biến day2 (mất kết nối)",
+    "dashboard2": "Cửa sổ 5 – bảng thứ hai, đăng ký muộn"
+  }
+}

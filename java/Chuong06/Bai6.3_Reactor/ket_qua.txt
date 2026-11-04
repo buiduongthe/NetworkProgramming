@@ -1,0 +1,27 @@
+===== server =====
+$ java -cp out ReactorServer 127.0.0.1 9635
+[server] Reactor một luồng đang lắng nghe tại 127.0.0.1:9635, MAX_BUF = 65536
+[server] Client 127.0.0.1:39794 kết nối (đang mở: 1)
+[server] Client 127.0.0.1:39804 kết nối (đang mở: 2)
+[server] Client 127.0.0.1:39810 kết nối (đang mở: 3)
+[server] 127.0.0.1:39794 gửi FIN, còn 3392 byte chờ gửi
+[server] Đóng 127.0.0.1:39794: đã echo 1248607 byte, còn mở 2
+[server] 127.0.0.1:39810 gửi FIN, còn 0 byte chờ gửi
+[server] Đóng 127.0.0.1:39810: đã echo 1248607 byte, còn mở 1
+[server] 127.0.0.1:39804 gửi FIN, còn 3392 byte chờ gửi
+[server] Đóng 127.0.0.1:39804: đã echo 1248607 byte, còn mở 0
+
+===== client =====
+$ java -cp out EchoClients 127.0.0.1 9635 3 1048576
+[client] Mở 3 kết nối đồng thời, mỗi kết nối gửi thêm 1048576 byte
+[client 3] Nhận lại: 'Xin chào reactor từ client 3'
+[client 1] Nhận lại: 'Xin chào reactor từ client 1'
+[client 2] Nhận lại: 'Xin chào reactor từ client 2'
+[client 1] Gửi 1048576 byte, nhận lại 1048576 byte, khớp: có
+[client 2] Gửi 1048576 byte, nhận lại 1048576 byte, khớp: có
+[client 3] Gửi 1048576 byte, nhận lại 1048576 byte, khớp: có
+[client 1] Gửi 200000 byte rồi SHUTDOWN(WRITE), nhận lại 200000 byte trước FIN của server, khớp: có
+[client 2] Gửi 200000 byte rồi SHUTDOWN(WRITE), nhận lại 200000 byte trước FIN của server, khớp: có
+[client 3] Gửi 200000 byte rồi SHUTDOWN(WRITE), nhận lại 200000 byte trước FIN của server, khớp: có
+[client] Hoàn tất sau 205 ms
+

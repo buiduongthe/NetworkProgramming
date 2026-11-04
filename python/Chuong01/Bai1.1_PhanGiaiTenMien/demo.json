@@ -1,0 +1,6 @@
+{
+  "processes": [
+    {"name": "resolve", "cmd": ["python3", "resolve_host.py", "localhost", "example.com", "khong-ton-tai.invalid", "::1"]}
+  ],
+  "titles": {"resolve": "Cửa sổ dòng lệnh – phân giải tên miền"}
+}

@@ -1,0 +1,16 @@
+{
+  "processes": [
+    {"name": "sv_vuln", "cmd": ["python3", "chong_slowloris.py", "server", "vulnerable", "127.0.0.1", "41830"], "background": true, "wait": 0.6},
+    {"name": "sv_prot", "cmd": ["python3", "chong_slowloris.py", "server", "protected", "127.0.0.1", "41831"], "background": true, "wait": 0.6},
+    {"name": "slow_vuln", "cmd": ["python3", "chong_slowloris.py", "slow", "127.0.0.1", "41830", "150"], "background": true, "wait": 0.1},
+    {"name": "slow_prot", "cmd": ["python3", "chong_slowloris.py", "slow", "127.0.0.1", "41831", "150"], "background": true, "wait": 2.0},
+    {"name": "probe_vuln", "cmd": ["python3", "chong_slowloris.py", "probe", "127.0.0.1", "41830"], "wait": 0.3},
+    {"name": "probe_prot", "cmd": ["python3", "chong_slowloris.py", "probe", "127.0.0.1", "41831"], "wait": 0.3}
+  ],
+  "titles": {"sv_vuln": "Cửa sổ 1 – server vulnerable (cổng 41830, không hạn tiêu đề)",
+             "sv_prot": "Cửa sổ 2 – server protected (cổng 41831, có phòng thủ)",
+             "slow_vuln": "Cửa sổ 3 – client Slowloris (thí nghiệm) tấn công vulnerable",
+             "slow_prot": "Cửa sổ 4 – client Slowloris (thí nghiệm) tấn công protected",
+             "probe_vuln": "Cửa sổ 5 – probe tới vulnerable (bị nghẽn)",
+             "probe_prot": "Cửa sổ 6 – probe tới protected (vẫn phục vụ)"}
+}

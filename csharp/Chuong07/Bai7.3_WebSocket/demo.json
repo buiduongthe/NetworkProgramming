@@ -1,0 +1,65 @@
+{
+  "setup": [
+    [
+      "dotnet",
+      "build",
+      "-c",
+      "Release",
+      "-v",
+      "q",
+      "-nologo"
+    ]
+  ],
+  "processes": [
+    {
+      "name": "server",
+      "cmd": [
+        "dotnet",
+        "run",
+        "--no-build",
+        "-c",
+        "Release",
+        "--",
+        "server",
+        "127.0.0.1",
+        "9732"
+      ],
+      "background": true,
+      "wait": 1.5
+    },
+    {
+      "name": "client",
+      "cmd": [
+        "dotnet",
+        "run",
+        "--no-build",
+        "-c",
+        "Release",
+        "--",
+        "client",
+        "127.0.0.1",
+        "9732"
+      ],
+      "stdin": "Xin chào\nWebSocket hai chiều\n"
+    },
+    {
+      "name": "kiemthu",
+      "cmd": [
+        "dotnet",
+        "run",
+        "--no-build",
+        "-c",
+        "Release",
+        "--",
+        "kiemthu",
+        "127.0.0.1",
+        "9732"
+      ]
+    }
+  ],
+  "titles": {
+    "server": "Cửa sổ 1 – server WebSocket",
+    "client": "Cửa sổ 2 – client",
+    "kiemthu": "Cửa sổ 3 – kiểm thử khung"
+  }
+}

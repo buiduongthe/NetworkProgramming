@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Tra cứu thuật ngữ – Bài 5.3</title>
+<style>
+  body { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 14px; background: #f5f5f5; margin: 0; }
+  #win { width: 584px; background: #d9d9d9; padding: 10px 14px; margin: 8px; border: 1px solid #bbb; }
+  .row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+  label { width: 80px; }
+  input { font: inherit; padding: 2px 4px; }
+  button { font: inherit; width: 110px; padding: 4px; }
+  #txtResult { background: white; border: 1px inset #999; height: 52px; padding: 4px 6px; margin: 8px 0; }
+  #bar { display: flex; justify-content: space-between; color: #222; }
+  #lblClock { color: #555; }
+</style>
+</head>
+<body>
+<div id="win">
+  <div class="row">
+    <label>Máy chủ:</label><input id="txtHost" size="16">
+    <span style="margin-left:24px">Cổng:</span><input id="txtPort" size="6">
+    <button id="btnConnect">Kết nối</button>
+  </div>
+  <div class="row">
+    <label>Thuật ngữ:</label><input id="txtTerm" size="38">
+    <button id="btnLookup" disabled>Tra cứu</button>
+  </div>
+  <div id="txtResult"></div>
+  <div id="bar"><span id="lblStatus">Chưa kết nối</span><span id="lblClock"></span></div>
+</div>
+<script>
+// Toàn bộ mã JavaScript chạy trên luồng giao diện duy nhất của trang (vòng lặp sự kiện của trình duyệt).
+const $ = id => document.getElementById(id);
+const params = new URLSearchParams(location.search);
+$("txtHost").value = params.get("host") || "127.0.0.1";
+$("txtPort").value = params.get("port") || "9100";
+
+// Đồng hồ: cập nhật mỗi 100 ms, chứng tỏ giao diện không đứng hình khi chờ mạng.
+let ticks = 0;
+setInterval(() => { ticks++; $("lblClock").textContent = "Đồng hồ giao diện: " + (ticks / 10).toFixed(1) + " s"; }, 100);
+
+// Các thủ tục mà goroutine nền được phép yêu cầu qua UI_INVOKE.
+const UI = {
+  showStatus: text => { $("lblStatus").textContent = text; },
+  setEnabled: (id, on) => { $(id).disabled = !on; },
+};
+// UI_INVOKE phía nhận: mỗi sự kiện SSE là một cặp (thủ tục, tham số), được thực hiện trên luồng giao diện.
+const events = new EventSource("/events");
+events.onmessage = e => { const m = JSON.parse(e.data); UI[m.proc](...m.args); };
+
+// Mã giả 5.3 – ON_CONNECT_CLICK (trên luồng giao diện): tắt nút, giao việc kết nối cho goroutine nền.
+$("btnConnect").onclick = () => {
+  $("btnConnect").disabled = true;
+  fetch("/api/connect", { method: "POST", body: new URLSearchParams({ host: $("txtHost").value, port: $("txtPort").value }) });
+};
+
+// Mã giả 5.4 – ASYNC PROCEDURE ON_LOOKUP_CLICK: trình xử lý sự kiện bất đồng bộ.
+$("btnLookup").onclick = async () => {
+  $("btnLookup").disabled = true;                       // chống bấm lặp
+  $("lblStatus").textContent = "Đang tra cứu...";
+  try {
+    const r = await fetch("/api/lookup", { method: "POST", body: new URLSearchParams({ term: $("txtTerm").value }) });
+    const resp = await r.json();                        // AWAIT: luồng giao diện rảnh trong lúc chờ
+    if (!r.ok) throw new Error(resp.loi);               // NetError, ProtocolError từ phía Go
+    if (resp.status === 200) $("txtResult").textContent = resp.text;   // đã ở luồng giao diện
+    else $("txtResult").textContent = "(" + resp.status + ") " + resp.error;
+    $("lblStatus").textContent = "Xong";
+  } catch (e) {
+    $("lblStatus").textContent = "Lỗi: " + e.message;
+  } finally {
+    $("btnLookup").disabled = false;
+  }
+};
+
+// Đóng cửa sổ: báo cho chương trình Go hủy tín hiệu ct và đóng kết nối (Mục 5.3.5).
+addEventListener("pagehide", () => navigator.sendBeacon("/api/close"));
+</script>
+</body>
+</html>

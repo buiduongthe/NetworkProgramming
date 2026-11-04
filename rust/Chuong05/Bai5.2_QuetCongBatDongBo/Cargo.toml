@@ -1,0 +1,9 @@
+[package]
+name = "bai5_2_quet_cong_bat_dong_bo"
+version = "0.1.0"
+edition = "2021"
+description = "Bài 5.2 – Kiểm tra nhiều cổng đồng thời có giới hạn (Mã giả 5.2)"
+publish = false
+
+[dependencies]
+tokio = { version = "=1.47.1", features = ["rt", "macros", "net", "io-util", "time", "sync", "signal", "fs"] }

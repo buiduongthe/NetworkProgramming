@@ -1,0 +1,78 @@
+===== server =====
+$ python3 smtp_server_thu.py 127.0.0.1 9763
+[server thử] SMTP tại 127.0.0.1:9763 (bắt buộc STARTTLS, AUTH sau TLS)
+[server thử] AUTH PLAIN của 'sinhvien': thành công
+[server thử] Thư từ sinhvien@example.com tới giangvien@example.com (473 byte):
+[server thử]   | From: <sinhvien@example.com>
+[server thử]   | To: <giangvien@example.com>
+[server thử]   | Subject: =?utf-8?B?VGjGsCB0aOG7rSBuZ2hp4buHbSBCw6BpIDcuNg==?=
+[server thử]   | Date: Wed, 04 Nov 2026 20:20:53 +0000
+[server thử]   | Message-ID: <1793823653@client.example>
+[server thử]   | MIME-Version: 1.0
+[server thử]   | Content-Type: text/plain; charset=utf-8
+[server thử]   | Content-Transfer-Encoding: 8bit
+[server thử]   | 
+[server thử]   | Xin chào, đây là thư gửi bằng phiên SMTP tự cài đặt.
+[server thử]   | .Dòng này bắt đầu bằng dấu chấm (được DOT_STUFF thêm một dấu chấm).
+[server thử]   | Hết thư.
+[server thử] AUTH PLAIN của 'sinhvien': sai thông tin
+[server thử] Dừng server
+
+===== client =====
+$ java -cp out SmtpClient localhost 9763 cert.pem
+[client] S: 220 smtp.thu.local Python SMTP 1.4.6
+[client] C: EHLO client.example
+[client] S: 250-smtp.thu.local
+[client] S: 250-SIZE 33554432
+[client] S: 250-8BITMIME
+[client] S: 250-SMTPUTF8
+[client] S: 250-STARTTLS
+[client] S: 250 HELP
+[client] C: STARTTLS
+[client] S: 220 Ready to start TLS
+[client] Đã thiết lập TLSv1.3, chứng chỉ server hợp lệ cho 'localhost'
+[client] C: EHLO client.example
+[client] S: 250-smtp.thu.local
+[client] S: 250-SIZE 33554432
+[client] S: 250-8BITMIME
+[client] S: 250-SMTPUTF8
+[client] S: 250-AUTH LOGIN PLAIN
+[client] S: 250 HELP
+[client] C: AUTH PLAIN ****
+[client] S: 235 2.7.0 Authentication successful
+[client] C: MAIL FROM:<sinhvien@example.com>
+[client] S: 250 OK
+[client] C: RCPT TO:<giangvien@example.com>
+[client] S: 250 OK
+[client] C: DATA
+[client] S: 354 End data with <CR><LF>.<CR><LF>
+[client] C: <nội dung thư 472 byte> + dòng '.'
+[client] S: 250 OK: thư đã được nhận
+[client] C: QUIT
+[client] S: 221 Bye
+[client] Gửi thư thành công
+
+===== client_sai =====
+$ SMTP_PASS=sai-mat-khau java -cp out SmtpClient localhost 9763 cert.pem
+[client] S: 220 smtp.thu.local Python SMTP 1.4.6
+[client] C: EHLO client.example
+[client] S: 250-smtp.thu.local
+[client] S: 250-SIZE 33554432
+[client] S: 250-8BITMIME
+[client] S: 250-SMTPUTF8
+[client] S: 250-STARTTLS
+[client] S: 250 HELP
+[client] C: STARTTLS
+[client] S: 220 Ready to start TLS
+[client] Đã thiết lập TLSv1.3, chứng chỉ server hợp lệ cho 'localhost'
+[client] C: EHLO client.example
+[client] S: 250-smtp.thu.local
+[client] S: 250-SIZE 33554432
+[client] S: 250-8BITMIME
+[client] S: 250-SMTPUTF8
+[client] S: 250-AUTH LOGIN PLAIN
+[client] S: 250 HELP
+[client] C: AUTH PLAIN ****
+[client] S: 535 5.7.8 Authentication credentials invalid
+[client] Lỗi SMTP: 535 5.7.8 Authentication credentials invalid
+

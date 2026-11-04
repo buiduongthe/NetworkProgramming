@@ -1,0 +1,13 @@
+[package]
+name = "bai8_1_goi_llm"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# JSON của yêu cầu và của từng sự kiện SSE
+serde_json = "=1.0.154"
+# HTTPS_POST khi LLM_BASE_URL là https://: TLS (bộ mật mã ring) và kho chứng chỉ của hệ điều hành
+rustls = { version = "=0.23.46", default-features = false, features = ["ring", "std", "tls12"] }
+rustls-native-certs = "=0.8.5"
+# Ctrl+C là tín hiệu hủy ct của CALL_LLM (thư viện chuẩn không có hàm bắt tín hiệu)
+ctrlc = "=3.4.7"

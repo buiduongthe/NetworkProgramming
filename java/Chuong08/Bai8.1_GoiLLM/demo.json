@@ -1,0 +1,10 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "NetError.java", "Bucket.java", "LlmStream.java", "LlmClient.java"]],
+  "env": {"LLM_BASE_URL": "http://127.0.0.1:9802/v1", "LLM_API_KEY": "khoa-thu-nghiem", "LLM_MODEL": "mock-model", "LLM_PRICE_IN": "0.15", "LLM_PRICE_OUT": "0.60"},
+  "processes": [
+    {"name": "mock", "cmd": ["python3", "mock_llm_server.py", "127.0.0.1", "9802", "--fail-first", "1", "--cut-request", "3"], "background": true, "wait": 0.8},
+    {"name": "client1", "cmd": ["java", "-cp", "out", "LlmClient", "So sánh TCP và UDP."], "timeout": 30},
+    {"name": "client2", "cmd": ["java", "-cp", "out", "LlmClient", "Giải thích SSE."], "timeout": 30}
+  ],
+  "titles": {"mock": "Cửa sổ 1 – server giả lập LLM", "client1": "Cửa sổ 2 – gọi lần 1 (gặp 429, thử lại)", "client2": "Cửa sổ 3 – gọi lần 2 (luồng bị ngắt)"}
+}

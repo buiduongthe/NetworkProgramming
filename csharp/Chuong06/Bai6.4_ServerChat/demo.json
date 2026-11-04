@@ -1,0 +1,13 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "-v", "q", "-nologo"]],
+  "processes": [
+    {"name": "server", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "server", "127.0.0.1", "9607"], "background": true, "wait": 1.5},
+    {"name": "an", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "client", "127.0.0.1", "9607", "An"], "stdin": "/join lop\n", "background": true, "wait": 1.5},
+    {"name": "binh", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "client", "127.0.0.1", "9607", "Bình"], "stdin": "/join lop\nChào cả lớp!\n", "background": true, "wait": 1.5},
+    {"name": "chi", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "client", "127.0.0.1", "9607", "Chi"], "stdin": "/join lop\nXin chào An và Bình\n/pm An Tin riêng gửi An\n/pm Dung Có ai tên Dung không?\n/leave lop\nCòn ai trong phòng không?\n/ping\n", "wait": 0.3},
+    {"name": "an2", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "client", "127.0.0.1", "9607", "An"], "wait": 0.3},
+    {"name": "bad", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "client", "127.0.0.1", "9607", "Tên sai!"], "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server chat", "an": "Cửa sổ 2 – client An", "binh": "Cửa sổ 3 – client Bình",
+             "chi": "Cửa sổ 4 – client Chi", "an2": "Cửa sổ 5 – client trùng tên An", "bad": "Cửa sổ 6 – client tên sai"}
+}

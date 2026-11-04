@@ -1,0 +1,6 @@
+{
+  "TCP": "Truyền tin cậy, hướng kết nối",
+  "UDP": "Giao thức datagram, không kết nối",
+  "IP": "Giao thức chuyển gói tin giữa các mạng",
+  "DNS": "Hệ thống phân giải tên miền thành địa chỉ IP"
+}

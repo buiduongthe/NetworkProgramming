@@ -1,0 +1,24 @@
+===== server =====
+$ dotnet run --no-build -c Release -- server 127.0.0.1 9603
+[server] Server bất đồng bộ đang lắng nghe tại 127.0.0.1:9603
+[server] Nhận 127.0.0.1:44426 (tác vụ: 1, luồng: 15)
+[server] Nhận 127.0.0.1:44438 (tác vụ: 2, luồng: 15)
+[server] Nhận 127.0.0.1:44454 (tác vụ: 3, luồng: 15)
+[server] Nhận 127.0.0.1:44466 (tác vụ: 4, luồng: 15)
+[server] Nhận 127.0.0.1:44482 (tác vụ: 5, luồng: 15)
+[server] Kết thúc 127.0.0.1:44426: client đóng kết nối
+[server] Kết thúc 127.0.0.1:44438: client đóng kết nối
+[server] Kết thúc 127.0.0.1:44454: client đóng kết nối
+[server] Kết thúc 127.0.0.1:44466: client đóng kết nối
+[server] Kết thúc 127.0.0.1:44482: client đóng kết nối
+
+===== client =====
+$ dotnet run --no-build -c Release -- client 127.0.0.1 9603 5 1000
+[client] 5 client cách nhau 100 ms, giữ kết nối 1000 ms
+[client 1] t = 106 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 2] t = 107 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 3] t = 206 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 4] t = 308 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 5] t = 409 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client] Hoàn tất sau 1409 ms
+

@@ -1,0 +1,8 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server", "cmd": ["../../target/release/bai5_1_khung_bat_dong_bo", "server", "127.0.0.1", "21510"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["../../target/release/bai5_1_khung_bat_dong_bo", "client", "127.0.0.1", "21510"], "stdin": "TCP\nBất đồng bộ\nHTTP\n"}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client": "Cửa sổ 2 – client"}
+}

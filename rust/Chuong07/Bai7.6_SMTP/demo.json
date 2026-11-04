@@ -1,0 +1,12 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"], ["sh", "tao_chung_chi.sh"]],
+  "env": {"SMTP_USER": "sinhvien", "SMTP_PASS": "matkhau-thu"},
+  "processes": [
+    {"name": "server", "cmd": ["python3", "smtp_server_thu.py", "127.0.0.1", "21760"], "background": true, "wait": 2.0},
+    {"name": "client", "cmd": ["cargo", "run", "-q", "--release", "--", "localhost", "21760", "ca.pem"]},
+    {"name": "client_sai", "cmd": ["sh", "-c", "SMTP_PASS=sai-mat-khau exec cargo run -q --release -- localhost 21760 ca.pem"],
+     "show": ["SMTP_PASS=sai-mat-khau", "cargo", "run", "-q", "--release", "--", "localhost", "21760", "ca.pem"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server SMTP thử (aiosmtpd)", "client": "Cửa sổ 2 – client SMTP",
+             "client_sai": "Cửa sổ 3 – client, sai mật khẩu"}
+}

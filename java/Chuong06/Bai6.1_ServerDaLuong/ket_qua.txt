@@ -1,0 +1,51 @@
+===== server1 =====
+$ java -cp out ThreadedServer 127.0.0.1 9630 3
+[server] Đang lắng nghe tại 127.0.0.1:9630
+[server] Mỗi kết nối một luồng, MAX_CLIENTS = 3
+[server] Nhận 127.0.0.1:53712, tạo luồng mới (đang phục vụ: 1)
+[server] Nhận 127.0.0.1:53714, tạo luồng mới (đang phục vụ: 2)
+[server] Nhận 127.0.0.1:53724, tạo luồng mới (đang phục vụ: 3)
+[server] Từ chối 127.0.0.1:53738: đã đủ 3 kết nối
+[server] Từ chối 127.0.0.1:53754: đã đủ 3 kết nối
+[server] Client 127.0.0.1:53712 đã đóng kết nối
+[server] Client 127.0.0.1:53714 đã đóng kết nối
+[server] Client 127.0.0.1:53724 đã đóng kết nối
+
+===== client1 =====
+$ java -cp out MultiClient 127.0.0.1 9630 5 1000
+[client] 5 client cách nhau 100 ms, giữ kết nối 1000 ms
+[client 1] t = 32 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 2] t = 106 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 3] t = 206 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 4] t = 315 ms: server đóng kết nối ngay
+[client 5] t = 406 ms: server đóng kết nối ngay
+[client] Hoàn tất sau 1207 ms
+
+===== server2 =====
+$ java -cp out PoolServer 127.0.0.1 9631 2 1
+[server] Đang lắng nghe tại 127.0.0.1:9631
+[server] Nhóm 2 luồng thợ, hàng đợi 1 chỗ
+[server] Nhận 127.0.0.1:40854
+[server] Luồng thợ 1 phục vụ 127.0.0.1:40854
+[server] Nhận 127.0.0.1:40870
+[server] Luồng thợ 2 phục vụ 127.0.0.1:40870
+[server] Nhận 127.0.0.1:40878
+[server] Nhận 127.0.0.1:40888
+[server] Hàng đợi đầy, trả 503 cho 127.0.0.1:40888
+[server] Nhận 127.0.0.1:40898
+[server] Hàng đợi đầy, trả 503 cho 127.0.0.1:40898
+[server] Client 127.0.0.1:40854 đã đóng kết nối
+[server] Luồng thợ 1 phục vụ 127.0.0.1:40878
+[server] Client 127.0.0.1:40870 đã đóng kết nối
+[server] Client 127.0.0.1:40878 đã đóng kết nối
+
+===== client2 =====
+$ java -cp out MultiClient 127.0.0.1 9631 5 1000
+[client] 5 client cách nhau 100 ms, giữ kết nối 1000 ms
+[client 1] t = 47 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 2] t = 106 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 4] t = 308 ms: bị từ chối 503 – Server bận
+[client 5] t = 409 ms: bị từ chối 503 – Server bận
+[client 3] t = 1074 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client] Hoàn tất sau 2074 ms
+

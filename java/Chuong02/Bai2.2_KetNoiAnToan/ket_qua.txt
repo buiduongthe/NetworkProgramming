@@ -1,0 +1,29 @@
+===== server =====
+$ java -cp out TestServer 127.0.0.1 9230
+[server] Đang lắng nghe tại 127.0.0.1:9230
+[server] Client kết nối: 127.0.0.1:48448
+
+===== refused =====
+$ java -cp out SafeConnect 127.0.0.1 9231
+[client] Kết nối tới 127.0.0.1:9231, thời gian chờ 3000 ms
+[client] NetError REFUSED, thử lại: không, sau 30 ms
+[client] Nguyên nhân: ConnectException: Connection refused
+
+===== not_found =====
+$ java -cp out SafeConnect khong-ton-tai.invalid 9230
+[client] Kết nối tới khong-ton-tai.invalid:9230, thời gian chờ 3000 ms
+[client] NetError NOT_FOUND, thử lại: không, sau 27 ms
+[client] Nguyên nhân: UnknownHostException: khong-ton-tai.invalid: Name or service not known
+
+===== timeout =====
+$ java -cp out SafeConnect 10.255.255.1 9230 3000
+[client] Kết nối tới 10.255.255.1:9230, thời gian chờ 3000 ms
+[client] NetError UNREACHABLE, thử lại: có, sau 3013 ms
+[client] Nguyên nhân: SocketTimeoutException: Connect timed out
+
+===== ok =====
+$ java -cp out SafeConnect localhost 9230
+[client] Kết nối tới localhost:9230, thời gian chờ 3000 ms
+[client] Thành công: 127.0.0.1:48448 -> 127.0.0.1:9230, sau 18 ms
+[client] Đã đóng kết nối
+

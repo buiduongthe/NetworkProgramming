@@ -1,0 +1,9 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "NetUtil.java", "Framing.java", "LookupServer.java", "LookupClient.java", "KiemThu.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "LookupServer", "127.0.0.1", "9333"], "background": true, "wait": 1.0},
+    {"name": "client", "cmd": ["java", "-cp", "out", "LookupClient", "127.0.0.1", "9333"], "stdin": "TCP\nĐịnh khung\nXYZ\n"},
+    {"name": "kiem_thu", "cmd": ["java", "-cp", "out", "KiemThu", "127.0.0.1", "9333"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client": "Cửa sổ 2 – client", "kiem_thu": "Cửa sổ 3 – client kiểm thử"}
+}

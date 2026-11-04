@@ -1,0 +1,15 @@
+[package]
+name = "bai7_5_grpc"
+version = "0.1.0"
+edition = "2021"
+
+# NGOẠI LỆ thư viện (như mọi ngôn ngữ của bài): gRPC cần bộ sinh mã Protocol Buffers
+[dependencies]
+tonic = "=0.12.3"                  # gRPC trên HTTP/2
+prost = "=0.13.5"                  # mã hóa Protocol Buffers
+tokio = { version = "=1.54.1", features = ["rt-multi-thread", "macros", "time", "sync", "signal"] }
+tokio-stream = "=0.1.17"           # bọc hàng đợi mpsc thành luồng cho Watch
+
+[build-dependencies]
+tonic-build = "=0.12.3"            # sinh mã từ tra_cuu.proto khi biên dịch
+protoc-bin-vendored = "=3.1.0"     # trình biên dịch protoc đóng gói sẵn, không cần cài riêng

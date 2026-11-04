@@ -1,0 +1,18 @@
+===== r1 =====
+$ cargo run -q --release -- responder 9200 'Phòng-Lab-A' 21650
+[responder] Phòng-Lab-A, cổng dịch vụ 9200, chờ discover tại cổng 21650
+[responder] discover id=692719 từ 192.0.2.2:47535, trả lời sau 148 ms
+
+===== r2 =====
+$ cargo run -q --release -- responder 9201 'Phòng-Lab-B' 21650
+[responder] Phòng-Lab-B, cổng dịch vụ 9201, chờ discover tại cổng 21650
+[responder] discover id=692719 từ 192.0.2.2:47535, trả lời sau 79 ms
+
+===== client =====
+$ cargo run -q --release -- discover 1000 21650 255.255.255.255
+[client] Phát discover id=692719 tới 255.255.255.255:21650
+[client] Thu thập phản hồi trong 1000 ms
+[client] Tìm thấy 2 server:
+[client]   Phòng-Lab-B tại 192.0.2.2:9201
+[client]   Phòng-Lab-A tại 192.0.2.2:9200
+

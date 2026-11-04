@@ -1,0 +1,8 @@
+[package]
+name = "bai8_2_thung_token"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# ASYNC_LOCK (tokio::sync::Mutex), DELAY_ASYNC (tokio::time::sleep), nhiều tác vụ đồng thời
+tokio = { version = "=1.54.1", features = ["rt-multi-thread", "macros", "time", "sync"] }

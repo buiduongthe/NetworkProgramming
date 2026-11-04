@@ -1,0 +1,32 @@
+===== server1 =====
+$ out/app threaded 127.0.0.1 31670 500 50
+[server] Đang lắng nghe tại 127.0.0.1:31670
+[server] Mỗi kết nối một luồng, MAX_CLIENTS = 500, độ trễ 50 ms
+[server] Dừng server
+
+===== load1 =====
+$ out/app load 127.0.0.1 31670 20 1,10,100
+[load] Server 127.0.0.1:31670, 20 yêu cầu/client, vòng kín
+[load] client     OK   lỗi  yc/giây     p50     p95     p99
+[load]      1     20     0     19.7    50.6    50.7    51.4
+[load]     10    200     0    196.8    50.7    51.1    51.4
+[load]    100   2000     0   1909.2    51.5    52.7    61.8
+[load] OK: số yêu cầu thành công; lỗi: số lần lỗi (phản hồi khác 200, lỗi kết nối)
+[load] p50, p95, p99: phân vị độ trễ, tính bằng ms
+
+===== server2 =====
+$ out/app pool 127.0.0.1 31671 8 16 50
+[server] Đang lắng nghe tại 127.0.0.1:31671
+[server] Nhóm 8 luồng thợ, hàng đợi 16 chỗ, độ trễ 50 ms
+[server] Dừng server
+
+===== load2 =====
+$ out/app load 127.0.0.1 31671 20 1,10,100
+[load] Server 127.0.0.1:31671, 20 yêu cầu/client, vòng kín
+[load] client     OK   lỗi  yc/giây     p50     p95     p99
+[load]      1     20     0     19.7    50.7    50.8    50.8
+[load]     10    200     0     98.7    50.7    50.9    51.0
+[load]    100    480    76    157.6    50.7    51.1  2079.2
+[load] OK: số yêu cầu thành công; lỗi: số lần lỗi (phản hồi khác 200, lỗi kết nối)
+[load] p50, p95, p99: phân vị độ trễ, tính bằng ms
+

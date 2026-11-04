@@ -1,0 +1,17 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "env": {"DEVICE_USER": "admin", "DEVICE_PASSWORD": "lab123"},
+  "processes": [
+    {"name": "thiet_bi", "cmd": ["out/app", "thietbi", "127.0.0.1", "41325"], "background": true, "wait": 0.8},
+    {"name": "chay_thu", "cmd": ["out/app", "tudong", "127.0.0.1", "41325", "muc_tieu.json", "--thu"]},
+    {"name": "ap_dung", "cmd": ["out/app", "tudong", "127.0.0.1", "41325", "muc_tieu.json"]},
+    {"name": "lan_hai", "cmd": ["out/app", "tudong", "127.0.0.1", "41325", "muc_tieu.json"]},
+    {"name": "sai_mk", "cmd": ["env", "DEVICE_PASSWORD=sai-mat-khau", "out/app", "tudong", "127.0.0.1", "41325", "muc_tieu.json"],
+     "show": ["DEVICE_PASSWORD=sai-mat-khau", "out/app", "tudong", "127.0.0.1", "41325", "muc_tieu.json"], "wait": 0.5}
+  ],
+  "titles": {"thiet_bi": "Cửa sổ 1 – thiết bị mô phỏng R1 (cổng 41325)",
+             "chay_thu": "Cửa sổ 2 – chạy thử (--thu), chỉ in lệnh",
+             "ap_dung": "Cửa sổ 3 – áp dụng cấu hình",
+             "lan_hai": "Cửa sổ 4 – chạy lại, lũy đẳng",
+             "sai_mk": "Cửa sổ 5 – sai mật khẩu"}
+}

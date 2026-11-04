@@ -1,0 +1,8 @@
+{
+  "processes": [
+    {"name": "server", "cmd": ["python3", "frame_server.py", "127.0.0.1", "9301"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["python3", "frame_client.py", "127.0.0.1", "9301", "200000"], "stdin": "Xin chào\nLập trình mạng\n"},
+    {"name": "line", "cmd": ["python3", "line_demo.py", "127.0.0.1", "9302"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client": "Cửa sổ 2 – client", "line": "Cửa sổ 3 – minh họa READ_LINE"}
+}

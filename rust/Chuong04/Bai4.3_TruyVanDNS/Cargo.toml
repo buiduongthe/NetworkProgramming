@@ -1,0 +1,9 @@
+[package]
+name = "bai4_3_truy_van_dns"
+version = "0.1.0"
+edition = "2021"
+description = "Bài 4.3 – Tự tạo và phân tích truy vấn DNS qua UDP (Mã giả 4.5)"
+publish = false
+
+[dependencies]
+getrandom = "=0.3.3"

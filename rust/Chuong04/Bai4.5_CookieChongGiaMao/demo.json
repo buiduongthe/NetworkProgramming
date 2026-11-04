@@ -1,0 +1,10 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server", "cmd": ["../../target/release/bai4_5_cookie_chong_gia_mao", "server", "127.0.0.1", "21450"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["../../target/release/bai4_5_cookie_chong_gia_mao", "client", "127.0.0.1", "21450"], "stdin": "UDP\nQUIC\n"},
+    {"name": "client2", "cmd": ["../../target/release/bai4_5_cookie_chong_gia_mao", "client", "127.0.0.1", "21450"], "stdin": "XYZ\n"},
+    {"name": "client3", "cmd": ["../../target/release/bai4_5_cookie_chong_gia_mao", "client", "127.0.0.1", "21450", "deadbeef"], "stdin": "UDP\n"}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server có mã thách thức", "client": "Cửa sổ 2 – client chưa có cookie", "client2": "Cửa sổ 3 – client mới, phản hồi nhỏ", "client3": "Cửa sổ 4 – client dùng cookie giả mạo"}
+}

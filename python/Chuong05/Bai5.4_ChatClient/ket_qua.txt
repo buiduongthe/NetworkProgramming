@@ -1,0 +1,32 @@
+===== server =====
+$ python3 chat_server.py 127.0.0.1 9507
+[server] Đang lắng nghe tại 127.0.0.1:9507
+[server] Bình đã kết nối
+[server] An đã kết nối
+[server] An: Xin chào mọi người
+[server] Bình: Chào An, mình nghe rõ.
+[server] An đã rời phòng
+[server] Bình đã rời phòng
+[server] Dừng server
+
+===== binh =====
+$ python3 chat_cli.py 'Bình' 127.0.0.1 9507
+[Bình] Trạng thái: connected
+[Bình] Server chào mừng; đang trực tuyến: Bình
+[Bình] (hệ thống) Bình đã vào phòng
+[Bình] (hệ thống) An đã vào phòng
+[Bình] An: Xin chào mọi người
+[Bình] Bình: Chào An, mình nghe rõ.
+[Bình] (hệ thống) An đã rời phòng
+[Bình] Trạng thái: lost: Kết nối đã đóng (đã nhận 0 byte)
+[Bình] Đã ngắt kết nối
+
+===== an =====
+$ python3 chat_cli.py An 127.0.0.1 9507
+[An] Trạng thái: connected
+[An] Server chào mừng; đang trực tuyến: Bình, An
+[An] (hệ thống) An đã vào phòng
+[An] An: Xin chào mọi người
+[An] Bình: Chào An, mình nghe rõ.
+[An] Đã ngắt kết nối
+

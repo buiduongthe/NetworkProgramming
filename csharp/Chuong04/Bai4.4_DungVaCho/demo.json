@@ -1,0 +1,11 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "-v", "q", "-nologo"]],
+  "env": {"SAW_MAX_RTO": "2000"},
+  "processes": [
+    {"name": "recv", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "recv", "127.0.0.1", "9442", "tep_nhan.txt", "4,7"],
+     "show": ["SAW_MAX_RTO=2000", "dotnet", "run", "--no-build", "-c", "Release", "--", "recv", "127.0.0.1", "9442", "tep_nhan.txt", "4,7"], "background": true, "wait": 1.5},
+    {"name": "send", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "send", "tep_mau.txt", "127.0.0.1", "9442", "3"],
+     "show": ["SAW_MAX_RTO=2000", "dotnet", "run", "--no-build", "-c", "Release", "--", "send", "tep_mau.txt", "127.0.0.1", "9442", "3"], "wait": 5.0}
+  ],
+  "titles": {"recv": "Cửa sổ 1 – bên nhận (mất ACK thứ 4 và 7)", "send": "Cửa sổ 2 – bên gửi (mất DATA thứ 3)"}
+}

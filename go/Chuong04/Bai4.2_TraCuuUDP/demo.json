@@ -1,0 +1,9 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "31420", "2"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["out/app", "client", "127.0.0.1", "31420"], "stdin": "UDP\nQUIC\nXYZ\n"},
+    {"name": "client2", "cmd": ["out/app", "client", "127.0.0.1", "31429"], "stdin": "TCP\n", "timeout": 20}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server (bỏ qua 2 datagram đầu tiên)", "client": "Cửa sổ 2 – client", "client2": "Cửa sổ 3 – client, server không chạy (cổng 31429)"}
+}

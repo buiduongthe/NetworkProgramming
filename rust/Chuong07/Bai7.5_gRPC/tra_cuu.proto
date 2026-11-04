@@ -1,0 +1,23 @@
+// Bài 7.5 – Hợp đồng dịch vụ tra cứu thuật ngữ (Mục 7.4.2, Giáo trình Lập trình mạng).
+// Tệp dùng chung, nội dung giống nhau ở cả ba ngôn ngữ (C#, Java, Python);
+// các dòng option chỉ có tác dụng với trình sinh mã của ngôn ngữ tương ứng.
+syntax = "proto3";
+package glossary.v1;
+
+option csharp_namespace = "Glossary.V1";
+option java_package = "glossary.v1";
+option java_multiple_files = true;
+
+message LookupRequest { string term = 1; }
+message Term {
+  string term = 1; string text = 2; repeated string tags = 3;
+}
+message WatchRequest { string prefix = 1; }
+message ImportSummary { int32 added = 1; int32 rejected = 2; }
+
+service Glossary {
+  rpc Lookup (LookupRequest) returns (Term);          // unary
+  rpc Watch (WatchRequest) returns (stream Term);     // luồng từ server
+  rpc Import (stream Term) returns (ImportSummary);   // luồng từ client
+  rpc Sync (stream Term) returns (stream Term);       // hai chiều
+}

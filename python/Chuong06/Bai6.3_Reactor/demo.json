@@ -1,0 +1,7 @@
+{
+  "processes": [
+    {"name": "server", "cmd": ["python3", "reactor_server.py", "127.0.0.1", "9665"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["python3", "echo_clients.py", "127.0.0.1", "9665", "3", "1048576"], "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server reactor một luồng", "client": "Cửa sổ 2 – 3 client echo đồng thời"}
+}

@@ -1,0 +1,10 @@
+[package]
+name = "bai8_3_mcp_server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# JSON-RPC 2.0; preserve_order giữ thứ tự khóa của thông điệp như bản Python
+serde_json = { version = "=1.0.154", features = ["preserve_order"] }
+# Socket RAW ICMP cho công cụ ping (thư viện chuẩn không tạo được)
+socket2 = { version = "=0.6.5", features = ["all"] }

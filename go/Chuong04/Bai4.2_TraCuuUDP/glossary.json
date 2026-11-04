@@ -1,0 +1,7 @@
+{
+  "TCP": "Transmission Control Protocol – giao thức vận chuyển hướng kết nối, tin cậy, đúng thứ tự",
+  "UDP": "User Datagram Protocol – giao thức vận chuyển không kết nối, tiêu đề 8 byte, bảo toàn ranh giới thông điệp",
+  "DNS": "Domain Name System – hệ thống phân giải tên miền thành địa chỉ IP",
+  "RTT": "Round-Trip Time – thời gian khứ hồi giữa lúc gửi gói tin và lúc nhận phản hồi",
+  "QUIC": "Giao thức vận chuyển chạy trên UDP, tích hợp TLS 1.3, nền tảng của HTTP/3"
+}

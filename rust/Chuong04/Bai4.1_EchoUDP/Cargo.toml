@@ -1,0 +1,8 @@
+[package]
+name = "bai4_1_echo_udp"
+version = "0.1.0"
+edition = "2021"
+description = "Bài 4.1 – UDP Echo Server và UDP Echo Client có thời gian chờ (Mã giả 4.1, 4.2)"
+publish = false
+
+[dependencies]

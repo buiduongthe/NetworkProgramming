@@ -1,0 +1,10 @@
+[package]
+name = "bai6_5_kham_pha_broadcast"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Tùy chọn socket mà thư viện chuẩn chưa có (REUSEADDR trước BIND)
+socket2 = "=0.6.5"
+# JSON cho yêu cầu discover và phản hồi
+serde_json = { version = "=1.0.154", features = ["preserve_order"] }

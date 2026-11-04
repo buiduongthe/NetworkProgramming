@@ -1,0 +1,11 @@
+[package]
+name = "bai5_5_tai_tep_tien_trinh"
+version = "0.1.0"
+edition = "2021"
+description = "Bài 5.5 – Tải tệp bất đồng bộ có báo cáo tiến trình và hủy (Mã giả 5.6)"
+publish = false
+
+[dependencies]
+serde_json = { version = "=1.0.143", features = ["preserve_order"] }
+tokio = { version = "=1.47.1", features = ["rt", "macros", "net", "io-util", "time", "sync", "signal", "fs"] }
+sha2 = "=0.10.9"

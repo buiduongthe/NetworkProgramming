@@ -1,0 +1,8 @@
+[package]
+name = "bai1_1_phan_giai_ten_mien"
+version = "0.1.0"
+edition = "2021"
+description = "Bài 1.1 – Phân giải tên miền thành danh sách địa chỉ (Mã giả 1.1)"
+publish = false
+
+[dependencies]

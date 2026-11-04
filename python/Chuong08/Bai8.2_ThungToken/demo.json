@@ -1,0 +1,6 @@
+{
+  "processes": [
+    {"name": "bucket", "cmd": ["python3", "thung_token.py", "10", "2", "14", "2"], "timeout": 30}
+  ],
+  "titles": {"bucket": "Cửa sổ dòng lệnh – thùng token C = 10, R = 2"}
+}

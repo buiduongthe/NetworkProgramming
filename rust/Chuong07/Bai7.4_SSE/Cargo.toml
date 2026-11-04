@@ -1,0 +1,7 @@
+[package]
+name = "bai7_4_sse"
+version = "0.1.0"
+edition = "2021"
+
+# Chỉ dùng thư viện chuẩn
+[dependencies]

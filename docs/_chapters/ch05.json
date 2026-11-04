@@ -1,0 +1,88 @@
+[
+  {
+    "bai": "Bai5.1_KhungBatDongBo",
+    "ten": "Các hàm gửi, nhận khung JSON bất đồng bộ",
+    "ma_gia": [
+      "5.1"
+    ],
+    "muc": "5.2.4",
+    "kiem_thu": {
+      "csharp": "đã chạy",
+      "java": "đã chạy",
+      "python": "đã chạy"
+    },
+    "ghi_chu": "Kèm server/client tra cứu minh họa (nghiệp vụ Mã giả 3.7, 3.8) và một lần hủy lời gọi nhận sau 500 ms. Java dùng luồng ảo, ct là CompletableFuture<Void>; Json.java tự viết."
+  },
+  {
+    "bai": "Bai5.2_QuetCongBatDongBo",
+    "ten": "Kiểm tra nhiều cổng đồng thời có giới hạn",
+    "ma_gia": [
+      "5.2"
+    ],
+    "muc": "5.2.5",
+    "kiem_thu": {
+      "csharp": "đã chạy",
+      "java": "đã chạy",
+      "python": "đã chạy"
+    },
+    "ghi_chu": "20 cổng trên 127.0.0.1 (3 mở, 4 bị lọc mô phỏng bằng hàng đợi backlog đầy trên Linux): tuần tự ≈ 4 s, đồng thời k = 10 ≈ 1 s ở cả ba ngôn ngữ."
+  },
+  {
+    "bai": "Bai5.3_GiaoDienBatDongBo",
+    "ten": "Ứng dụng tra cứu có giao diện bất đồng bộ",
+    "ma_gia": [
+      "5.3",
+      "5.4"
+    ],
+    "muc": "5.3.2",
+    "kiem_thu": {
+      "csharp": "chưa chạy – WinForms cần Windows (net10.0-windows không biên dịch được trên Linux); KhungJson.cs, LookupServer.cs đã biên dịch thử",
+      "java": "đã chạy",
+      "python": "đã chạy"
+    },
+    "ghi_chu": "Python Tkinter (Python 3.12 + python3-tk), Java Swing chạy dưới xvfb-run; ảnh cửa sổ thật ở ket_qua_gui.png (ket_qua.png là nhật ký do tools/demo.py vẽ)."
+  },
+  {
+    "bai": "Bai5.4_ChatClient",
+    "ten": "Lớp dịch vụ ChatClient bất đồng bộ",
+    "ma_gia": [
+      "5.5"
+    ],
+    "muc": "5.3.3",
+    "kiem_thu": {
+      "csharp": "đã chạy",
+      "java": "đã chạy",
+      "python": "đã chạy"
+    },
+    "ghi_chu": "Kèm server chat tối giản viết bằng cùng ngôn ngữ (một phòng, hello/welcome, msg, sys, ping) và giao diện dòng lệnh; demo hai người dùng, ngắt chủ động và mất kết nối."
+  },
+  {
+    "bai": "Bai5.5_TaiTepTienTrinh",
+    "ten": "Tải tệp bất đồng bộ có báo cáo tiến trình và hủy",
+    "ma_gia": [
+      "5.6"
+    ],
+    "muc": "5.3.4",
+    "kiem_thu": {
+      "csharp": "đã chạy",
+      "java": "đã chạy",
+      "python": "đã chạy"
+    },
+    "ghi_chu": "Kèm server nhận tệp (Mã giả 3.9) giới hạn tốc độ đọc 4096 KiB/s; tệp thử 4 MiB tự tạo; một lần tải đủ (200) và một lần hủy sau 400 ms (server xóa .part). Demo đặt SO_SNDBUF/SO_RCVBUF 64 KiB để tiến trình phản ánh đúng."
+  },
+  {
+    "bai": "Bai5.6_HanChotThuLai",
+    "ten": "Hạn chót, hủy và thử lại có lùi thời gian",
+    "ma_gia": [
+      "5.7",
+      "5.8"
+    ],
+    "muc": "5.4.2",
+    "kiem_thu": {
+      "csharp": "đã chạy",
+      "java": "đã chạy",
+      "python": "đã chạy"
+    },
+    "ghi_chu": "Server cố ý trả lời chậm (yêu cầu #1) và 503 retry_after 300 ms (yêu cầu #2); ba kịch bản: thử lại thành công ở lần 3, người dùng hủy (không thử lại), REFUSED (không thử lại). Mục 5.4.3 cho Mã giả 5.8."
+  }
+]

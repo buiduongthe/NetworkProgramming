@@ -1,0 +1,97 @@
+[
+  {
+    "bai": "Bai6.1_ServerDaLuong",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Goroutine cho mỗi kết nối, atomic.Int64 làm ATOMIC_COUNTER, kênh có bộ đệm làm BLOCKING_QUEUE (select default = try_put); idleConn đặt lại hạn chót trước mỗi RECV. Demo MAX_CLIENTS = 3 và nhóm 2 luồng, hàng đợi 1; cổng 31610, 31611."
+  },
+  {
+    "bai": "Bai6.2_ServerBatDongBo",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Tác vụ bất đồng bộ = goroutine (Go không có async/await, netpoller epoll); số luồng HĐH đếm bằng pprof threadcreate, không tăng theo số client; cổng 31620."
+  },
+  {
+    "bai": "Bai6.3_Reactor",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Vòng SELECT tường minh bằng syscall.Select/FdSet (chỉ Linux, có tệp thay thế báo không hỗ trợ cho HĐH khác); theo mã giả mới: MAX_BUF = 65536, tập closing (nhận FIN thì gửi nốt rồi mới đóng); client half-close (CloseWrite) sau khi gửi 1 MiB, 3 client khớp dữ liệu; cổng 31630."
+  },
+  {
+    "bai": "Bai6.4_ServerChat",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Hộp thư đi là kênh 256 chỗ, close(kênh) = outbox.close(), Client có cờ closed chống gửi vào kênh đã đóng; regexp \\p{L} thay \\w (\\w của Go chỉ ASCII); demo 5 client 404, 403, 409, 400; đã thử thêm với -race; cổng 31640."
+  },
+  {
+    "bai": "Bai6.5_KhamPhaBroadcast",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "SO_BROADCAST, SO_REUSEADDR qua net.ListenConfig.Control (setsockopt theo HĐH); broadcast 255.255.255.255 hoạt động; hai responder cùng máy; cổng 31650."
+  },
+  {
+    "bai": "Bai6.6_Multicast",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "net.ListenMulticastUDP (REUSEADDR + BIND + ADD_MEMBERSHIP, gắn vào địa chỉ nhóm thay cho 0.0.0.0); TTL/LOOP qua SyscallConn; dịch vụ dừng phát bị xóa sau ttl_ms; cổng 31660."
+  },
+  {
+    "bai": "Bai6.7_KiemThuTai",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Bộ sinh tải đặt tên load_gen.go (tránh hậu tố _test.go); theo mã giả mới: errors là ATOMIC_COUNTER, status ≠ 200 → errors++ rồi BREAK (client dừng), lỗi kết nối → errors++ và kết thúc client; mỗi kết nối một luồng ≈ 20 × n yc/s; nhóm 8 luồng + hàng đợi 16: 76/100 client bị 503 (76 lỗi), p99 ≈ 2 s; cổng 31670, 31671."
+  },
+  {
+    "bai": "Bai7.1_HttpClient",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Không dùng net/http; Reader trên io.Reader; READ_HEADERS báo ConnectionClosed khi NULL (mã giả mới); ba kiểu định khung và 404 giống bản Python; cổng 31710."
+  },
+  {
+    "bai": "Bai7.2_RestServer",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "bufio.Reader làm Reader; Content-Length int64, n < 0 hoặc > MAX_BODY → 413, READ_HEADERS lỗi khi NULL, 204 không thân (mã giả mới); DICT có khóa Mutex và KEYS giữ thứ tự; 9 yêu cầu keep-alive và curl_demo.sh (200, 501, 413); cổng 31720."
+  },
+  {
+    "bai": "Bai7.3_WebSocket",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Bắt tay và khung WebSocket tự viết; từ chối Sec-WebSocket-Key không giải mã ra 16 byte (mã giả mới); kiểm thử 6 ca: 400, ping/pong, 16 bit, 1002, 1009, khóa 12 byte → 400; cổng 31730."
+  },
+  {
+    "bai": "Bai7.4_SSE",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "ChunkedSource cài đặt io.Reader, đặt Reader dòng phía sau; READ_HEADERS lỗi khi NULL (kế thừa 7.1 mới); sự kiện cắt giữa dòng qua hai khối được ghép đúng; cổng 31740."
+  },
+  {
+    "bai": "Bai7.5_gRPC",
+    "kiem_thu": "chưa chạy",
+    "ghi_chu": "Mô-đun Go riêng (go.mod lồng) cần google.golang.org/grpc v1.68.1, protobuf v1.35.2: proxy.golang.org không phân giải được, GOPROXY=direct bị chặn (google.golang.org trả Forbidden); không có protoc-gen-go/protoc-gen-go-grpc nên chưa sinh glossaryv1/, chưa biên dịch. README ghi lệnh protoc với tham số M (giữ nguyên tra_cuu.proto)."
+  },
+  {
+    "bai": "Bai7.6_SMTP",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Client tự cài đặt SMTP_REPLY/CMD/SEND_MAIL trên socket + crypto/tls (net/smtp chỉ nêu trong README); SMTP_REPLY theo mã giả mới (NULL/len < 3 → ProtocolError, '250' trơn là dòng cuối); server SMTP thử viết bằng Go thay aiosmtpd; demo thêm ca sai mật khẩu (535) và ca không tin cậy chứng chỉ; cổng 31760."
+  },
+  {
+    "bai": "Bai7.7_Ping",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "net.ListenPacket(\"ip4:icmp\") + ReadMsgIP (ReadFrom của Go cắt tiêu đề IPv4, không đọc được TTL); một hạn chót chung đặt sau SENDTO (mã giả mới); chạy bằng root, đã thử tài khoản nobody báo cần quyền quản trị."
+  },
+  {
+    "bai": "Bai7.8_MQTT",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Client MQTT 5.0 tối giản tự viết như các bản khác (không phải 3.1.1); Mosquitto 2.0.18 chấp nhận p5; di chúc, tin giữ lại, PINGREQ, DISCONNECT khi Ctrl+C; cổng 31780."
+  },
+  {
+    "bai": "Bai8.1_GoiLLM",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "net/http + bufio đọc SSE; CALL_LLM(req, on_token, ct) với context (Ctrl+C hủy), RETRY_ASYNC thử lại cả Timeout, chờ hủy được (mã giả mới, đã thử thủ công); demo dùng mock_llm_server.py dùng chung: 429 + Retry-After rồi thử lại, luồng bị ngắt không thử lại; không gọi LLM thật; cổng 31810."
+  },
+  {
+    "bai": "Bai8.2_ThungToken",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "sync.Mutex làm ASYNC_LOCK, chờ ngoài khóa; 2 goroutine, C = 10, R = 2: yêu cầu 11–14 tại 0,5/1,0/1,5/2,0 s khớp lý thuyết."
+  },
+  {
+    "bai": "Bai8.3_McpServer",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "JSON-RPC qua stdio; theo mã giả mới: VALIDATE_NAME nhận IP (kể cả ::1) trước, CALL_TOOL bắt cả ResolveError, Timeout (đã thử thủ công); json.RawMessage giữ id, UseNumber phân biệt 22 với 22.0; demo bằng mcp_test_client.py dùng chung, ALLOWED_NETS=127.0.0.0/8, cổng 31830, 31831."
+  },
+  {
+    "bai": "Bai8.4_TlsChat",
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "crypto/tls (TLS 1.3, TLS_AES_128_GCM_SHA256), khóa PEM không mật khẩu (TLS_KEY_PASS chỉ dùng cho chat.p12 của C#/Java); JWT HS256 tự viết, vai trò token cấp token; demo tin cậy CA, không tin cậy CA, sai aud (401); tao_chung_chi.ps1 chưa chạy; cổng 31840."
+  }
+]

@@ -1,0 +1,117 @@
+# Danh mục bài và ánh xạ với mã giả trong giáo trình
+
+Tổng số: 39 bài × 5 ngôn ngữ = 195 phiên bản; 191 phiên bản đã chạy và có ảnh kết quả thực thi.
+Ký hiệu: ✔ đã chạy trong môi trường kiểm thử; ○ chưa chạy (xem lý do bên dưới). Mỗi ô là liên kết tới thư mục bài.
+Giáo trình chỉ dẫn chiếu bản C#, Java, Python; bản Rust, Go là phần bổ sung của kho mã.
+
+### Chương 1. Tổng quan về lập trình mạng trong thời đại AI
+
+| Bài | Nội dung | Mã giả | Mục | C# | Java | Python | Rust | Go |
+|---|---|---|---|:-:|:-:|:-:|:-:|:-:|
+| `Bai1.1_PhanGiaiTenMien` | Phân giải tên miền thành danh sách địa chỉ | 1.1 | 1.2.3 | [✔](../csharp/Chuong01/Bai1.1_PhanGiaiTenMien/) | [✔](../java/Chuong01/Bai1.1_PhanGiaiTenMien/) | [✔](../python/Chuong01/Bai1.1_PhanGiaiTenMien/) | [✔](../rust/Chuong01/Bai1.1_PhanGiaiTenMien/) | [✔](../go/Chuong01/Bai1.1_PhanGiaiTenMien/) |
+| `Bai1.2_KiemTraCong` | Kiểm tra trạng thái một cổng TCP | 1.2 | 1.2.5 | [✔](../csharp/Chuong01/Bai1.2_KiemTraCong/) | [✔](../java/Chuong01/Bai1.2_KiemTraCong/) | [✔](../python/Chuong01/Bai1.2_KiemTraCong/) | [✔](../rust/Chuong01/Bai1.2_KiemTraCong/) | [✔](../go/Chuong01/Bai1.2_KiemTraCong/) |
+
+### Chương 2. Công cụ, môi trường lập trình mạng và trợ lý lập trình AI
+
+| Bài | Nội dung | Mã giả | Mục | C# | Java | Python | Rust | Go |
+|---|---|---|---|:-:|:-:|:-:|:-:|:-:|
+| `Bai2.1_DocCauHinh` | Đọc cấu hình địa chỉ và cổng (tham số dòng lệnh, biến môi trường) | 2.1 | 2.1.3 | [✔](../csharp/Chuong02/Bai2.1_DocCauHinh/) | [✔](../java/Chuong02/Bai2.1_DocCauHinh/) | [✔](../python/Chuong02/Bai2.1_DocCauHinh/) | [✔](../rust/Chuong02/Bai2.1_DocCauHinh/) | [✔](../go/Chuong02/Bai2.1_DocCauHinh/) |
+| `Bai2.2_KetNoiAnToan` | Kết nối có thời gian chờ và phân loại lỗi | 2.2 | 2.2.3 | [✔](../csharp/Chuong02/Bai2.2_KetNoiAnToan/) | [✔](../java/Chuong02/Bai2.2_KetNoiAnToan/) | [✔](../python/Chuong02/Bai2.2_KetNoiAnToan/) | [✔](../rust/Chuong02/Bai2.2_KetNoiAnToan/) | [✔](../go/Chuong02/Bai2.2_KetNoiAnToan/) |
+| `Bai2.3_ClientDNS` | Client tra cứu DNS dùng bộ phân giải của hệ điều hành | 2.3 | 2.5 | [✔](../csharp/Chuong02/Bai2.3_ClientDNS/) | [✔](../java/Chuong02/Bai2.3_ClientDNS/) | [✔](../python/Chuong02/Bai2.3_ClientDNS/) | [✔](../rust/Chuong02/Bai2.3_ClientDNS/) | [✔](../go/Chuong02/Bai2.3_ClientDNS/) |
+
+### Chương 3. Lập trình socket TCP Client/Server
+
+| Bài | Nội dung | Mã giả | Mục | C# | Java | Python | Rust | Go |
+|---|---|---|---|:-:|:-:|:-:|:-:|:-:|
+| `Bai3.1_EchoTCP` | TCP Echo Server và Echo Client | 3.1, 3.2 | 3.2 | [✔](../csharp/Chuong03/Bai3.1_EchoTCP/) | [✔](../java/Chuong03/Bai3.1_EchoTCP/) | [✔](../python/Chuong03/Bai3.1_EchoTCP/) | [✔](../rust/Chuong03/Bai3.1_EchoTCP/) | [✔](../go/Chuong03/Bai3.1_EchoTCP/) |
+| `Bai3.2_DinhKhung` | Thư viện định khung thông điệp (SEND_ALL, RECV_EXACT, READ_LINE, khung JSON) | 3.3, 3.4, 3.5, 3.6 | 3.4 | [✔](../csharp/Chuong03/Bai3.2_DinhKhung/) | [✔](../java/Chuong03/Bai3.2_DinhKhung/) | [✔](../python/Chuong03/Bai3.2_DinhKhung/) | [✔](../rust/Chuong03/Bai3.2_DinhKhung/) | [✔](../go/Chuong03/Bai3.2_DinhKhung/) |
+| `Bai3.3_TraCuuThuatNgu` | Dịch vụ tra cứu thuật ngữ dùng JSON | 3.7, 3.8 | 3.5.1 | [✔](../csharp/Chuong03/Bai3.3_TraCuuThuatNgu/) | [✔](../java/Chuong03/Bai3.3_TraCuuThuatNgu/) | [✔](../python/Chuong03/Bai3.3_TraCuuThuatNgu/) | [✔](../rust/Chuong03/Bai3.3_TraCuuThuatNgu/) | [✔](../go/Chuong03/Bai3.3_TraCuuThuatNgu/) |
+| `Bai3.4_TaiTep` | Tải tệp lên server có kiểm tra SHA-256 | 3.9, 3.10 | 3.5.2 | [✔](../csharp/Chuong03/Bai3.4_TaiTep/) | [✔](../java/Chuong03/Bai3.4_TaiTep/) | [✔](../python/Chuong03/Bai3.4_TaiTep/) | [✔](../rust/Chuong03/Bai3.4_TaiTep/) | [✔](../go/Chuong03/Bai3.4_TaiTep/) |
+
+### Chương 4. Lập trình socket UDP Client/Server
+
+| Bài | Nội dung | Mã giả | Mục | C# | Java | Python | Rust | Go |
+|---|---|---|---|:-:|:-:|:-:|:-:|:-:|
+| `Bai4.1_EchoUDP` | UDP Echo Server và UDP Echo Client có thời gian chờ | 4.1, 4.2 | 4.2.1 | [✔](../csharp/Chuong04/Bai4.1_EchoUDP/) | [✔](../java/Chuong04/Bai4.1_EchoUDP/) | [✔](../python/Chuong04/Bai4.1_EchoUDP/) | [✔](../rust/Chuong04/Bai4.1_EchoUDP/) | [✔](../go/Chuong04/Bai4.1_EchoUDP/) |
+| `Bai4.2_TraCuuUDP` | Dịch vụ tra cứu thuật ngữ trên UDP có gửi lại | 4.3, 4.4 | 4.3.1 | [✔](../csharp/Chuong04/Bai4.2_TraCuuUDP/) | [✔](../java/Chuong04/Bai4.2_TraCuuUDP/) | [✔](../python/Chuong04/Bai4.2_TraCuuUDP/) | [✔](../rust/Chuong04/Bai4.2_TraCuuUDP/) | [✔](../go/Chuong04/Bai4.2_TraCuuUDP/) |
+| `Bai4.3_TruyVanDNS` | Tự tạo và phân tích truy vấn DNS qua UDP | 4.5 | 4.3.2 | [✔](../csharp/Chuong04/Bai4.3_TruyVanDNS/) | [✔](../java/Chuong04/Bai4.3_TruyVanDNS/) | [✔](../python/Chuong04/Bai4.3_TruyVanDNS/) | [✔](../rust/Chuong04/Bai4.3_TruyVanDNS/) | [✔](../go/Chuong04/Bai4.3_TruyVanDNS/) |
+| `Bai4.4_DungVaCho` | Truyền tệp tin cậy trên UDP bằng giao thức dừng và chờ | 4.6, 4.7 | 4.4.1 | [✔](../csharp/Chuong04/Bai4.4_DungVaCho/) | [✔](../java/Chuong04/Bai4.4_DungVaCho/) | [✔](../python/Chuong04/Bai4.4_DungVaCho/) | [✔](../rust/Chuong04/Bai4.4_DungVaCho/) | [✔](../go/Chuong04/Bai4.4_DungVaCho/) |
+| `Bai4.5_CookieChongGiaMao` | Xác thực địa chỉ nguồn bằng mã thách thức không trạng thái | 4.8 | 4.6.1 | [✔](../csharp/Chuong04/Bai4.5_CookieChongGiaMao/) | [✔](../java/Chuong04/Bai4.5_CookieChongGiaMao/) | [✔](../python/Chuong04/Bai4.5_CookieChongGiaMao/) | [✔](../rust/Chuong04/Bai4.5_CookieChongGiaMao/) | [✔](../go/Chuong04/Bai4.5_CookieChongGiaMao/) |
+
+### Chương 5. Lập trình bất đồng bộ – Ứng dụng mạng có giao diện
+
+| Bài | Nội dung | Mã giả | Mục | C# | Java | Python | Rust | Go |
+|---|---|---|---|:-:|:-:|:-:|:-:|:-:|
+| `Bai5.1_KhungBatDongBo` | Các hàm gửi, nhận khung JSON bất đồng bộ | 5.1 | 5.2.4 | [✔](../csharp/Chuong05/Bai5.1_KhungBatDongBo/) | [✔](../java/Chuong05/Bai5.1_KhungBatDongBo/) | [✔](../python/Chuong05/Bai5.1_KhungBatDongBo/) | [✔](../rust/Chuong05/Bai5.1_KhungBatDongBo/) | [✔](../go/Chuong05/Bai5.1_KhungBatDongBo/) |
+| `Bai5.2_QuetCongBatDongBo` | Kiểm tra nhiều cổng đồng thời có giới hạn | 5.2 | 5.2.5 | [✔](../csharp/Chuong05/Bai5.2_QuetCongBatDongBo/) | [✔](../java/Chuong05/Bai5.2_QuetCongBatDongBo/) | [✔](../python/Chuong05/Bai5.2_QuetCongBatDongBo/) | [✔](../rust/Chuong05/Bai5.2_QuetCongBatDongBo/) | [✔](../go/Chuong05/Bai5.2_QuetCongBatDongBo/) |
+| `Bai5.3_GiaoDienBatDongBo` | Ứng dụng tra cứu có giao diện bất đồng bộ | 5.3, 5.4 | 5.3.2 | [○](../csharp/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](../java/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](../python/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](../rust/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](../go/Chuong05/Bai5.3_GiaoDienBatDongBo/) |
+| `Bai5.4_ChatClient` | Lớp dịch vụ ChatClient bất đồng bộ | 5.5 | 5.3.3 | [✔](../csharp/Chuong05/Bai5.4_ChatClient/) | [✔](../java/Chuong05/Bai5.4_ChatClient/) | [✔](../python/Chuong05/Bai5.4_ChatClient/) | [✔](../rust/Chuong05/Bai5.4_ChatClient/) | [✔](../go/Chuong05/Bai5.4_ChatClient/) |
+| `Bai5.5_TaiTepTienTrinh` | Tải tệp bất đồng bộ có báo cáo tiến trình và hủy | 5.6 | 5.3.4 | [✔](../csharp/Chuong05/Bai5.5_TaiTepTienTrinh/) | [✔](../java/Chuong05/Bai5.5_TaiTepTienTrinh/) | [✔](../python/Chuong05/Bai5.5_TaiTepTienTrinh/) | [✔](../rust/Chuong05/Bai5.5_TaiTepTienTrinh/) | [✔](../go/Chuong05/Bai5.5_TaiTepTienTrinh/) |
+| `Bai5.6_HanChotThuLai` | Hạn chót, hủy và thử lại có lùi thời gian | 5.7, 5.8 | 5.4.2 | [✔](../csharp/Chuong05/Bai5.6_HanChotThuLai/) | [✔](../java/Chuong05/Bai5.6_HanChotThuLai/) | [✔](../python/Chuong05/Bai5.6_HanChotThuLai/) | [✔](../rust/Chuong05/Bai5.6_HanChotThuLai/) | [✔](../go/Chuong05/Bai5.6_HanChotThuLai/) |
+
+### Chương 6. Mô hình Multi-Client Server – Broadcast và Multicast
+
+| Bài | Nội dung | Mã giả | Mục | C# | Java | Python | Rust | Go |
+|---|---|---|---|:-:|:-:|:-:|:-:|:-:|
+| `Bai6.1_ServerDaLuong` | Server tra cứu đa luồng và server nhóm luồng | 6.1, 6.2 | 6.2.1, 6.2.2 | [✔](../csharp/Chuong06/Bai6.1_ServerDaLuong/) | [✔](../java/Chuong06/Bai6.1_ServerDaLuong/) | [✔](../python/Chuong06/Bai6.1_ServerDaLuong/) | [✔](../rust/Chuong06/Bai6.1_ServerDaLuong/) | [✔](../go/Chuong06/Bai6.1_ServerDaLuong/) |
+| `Bai6.2_ServerBatDongBo` | Server tra cứu bất đồng bộ | 6.3 | 6.2.3 | [✔](../csharp/Chuong06/Bai6.2_ServerBatDongBo/) | [✔](../java/Chuong06/Bai6.2_ServerBatDongBo/) | [✔](../python/Chuong06/Bai6.2_ServerBatDongBo/) | [✔](../rust/Chuong06/Bai6.2_ServerBatDongBo/) | [✔](../go/Chuong06/Bai6.2_ServerBatDongBo/) |
+| `Bai6.3_Reactor` | Server echo một luồng theo mô hình reactor | 6.4 | 6.2.4 | [✔](../csharp/Chuong06/Bai6.3_Reactor/) | [✔](../java/Chuong06/Bai6.3_Reactor/) | [✔](../python/Chuong06/Bai6.3_Reactor/) | [✔](../rust/Chuong06/Bai6.3_Reactor/) | [✔](../go/Chuong06/Bai6.3_Reactor/) |
+| `Bai6.4_ServerChat` | Server chat nhiều phòng | 6.5, 6.6 | 6.3 | [✔](../csharp/Chuong06/Bai6.4_ServerChat/) | [✔](../java/Chuong06/Bai6.4_ServerChat/) | [✔](../python/Chuong06/Bai6.4_ServerChat/) | [✔](../rust/Chuong06/Bai6.4_ServerChat/) | [✔](../go/Chuong06/Bai6.4_ServerChat/) |
+| `Bai6.5_KhamPhaBroadcast` | Khám phá server trong LAN bằng broadcast | 6.7 | 6.4.2 | [✔](../csharp/Chuong06/Bai6.5_KhamPhaBroadcast/) | [✔](../java/Chuong06/Bai6.5_KhamPhaBroadcast/) | [✔](../python/Chuong06/Bai6.5_KhamPhaBroadcast/) | [✔](../rust/Chuong06/Bai6.5_KhamPhaBroadcast/) | [✔](../go/Chuong06/Bai6.5_KhamPhaBroadcast/) |
+| `Bai6.6_Multicast` | Phát và nhận thông báo dịch vụ qua multicast | 6.8 | 6.4.3 | [✔](../csharp/Chuong06/Bai6.6_Multicast/) | [✔](../java/Chuong06/Bai6.6_Multicast/) | [✔](../python/Chuong06/Bai6.6_Multicast/) | [✔](../rust/Chuong06/Bai6.6_Multicast/) | [✔](../go/Chuong06/Bai6.6_Multicast/) |
+| `Bai6.7_KiemThuTai` | Kiểm thử tải: thông lượng và phân vị độ trễ | 6.9 | 6.5.1 | [✔](../csharp/Chuong06/Bai6.7_KiemThuTai/) | [✔](../java/Chuong06/Bai6.7_KiemThuTai/) | [✔](../python/Chuong06/Bai6.7_KiemThuTai/) | [✔](../rust/Chuong06/Bai6.7_KiemThuTai/) | [✔](../go/Chuong06/Bai6.7_KiemThuTai/) |
+
+### Chương 7. Giao thức tầng ứng dụng và dịch vụ mạng hiện đại
+
+| Bài | Nội dung | Mã giả | Mục | C# | Java | Python | Rust | Go |
+|---|---|---|---|:-:|:-:|:-:|:-:|:-:|
+| `Bai7.1_HttpClient` | Client HTTP/1.1 tối giản trên socket TCP | 7.1 | 7.2.1 | [✔](../csharp/Chuong07/Bai7.1_HttpClient/) | [✔](../java/Chuong07/Bai7.1_HttpClient/) | [✔](../python/Chuong07/Bai7.1_HttpClient/) | [✔](../rust/Chuong07/Bai7.1_HttpClient/) | [✔](../go/Chuong07/Bai7.1_HttpClient/) |
+| `Bai7.2_RestServer` | Server REST tối giản trên HTTP/1.1 | 7.2 | 7.2.3 | [✔](../csharp/Chuong07/Bai7.2_RestServer/) | [✔](../java/Chuong07/Bai7.2_RestServer/) | [✔](../python/Chuong07/Bai7.2_RestServer/) | [✔](../rust/Chuong07/Bai7.2_RestServer/) | [✔](../go/Chuong07/Bai7.2_RestServer/) |
+| `Bai7.3_WebSocket` | Server WebSocket tối giản và client thử | 7.3, 7.4 | 7.3.2 | [✔](../csharp/Chuong07/Bai7.3_WebSocket/) | [✔](../java/Chuong07/Bai7.3_WebSocket/) | [✔](../python/Chuong07/Bai7.3_WebSocket/) | [✔](../rust/Chuong07/Bai7.3_WebSocket/) | [✔](../go/Chuong07/Bai7.3_WebSocket/) |
+| `Bai7.4_SSE` | Bộ đọc luồng Server-Sent Events và server SSE nhỏ | 7.5 | 7.3.3 | [✔](../csharp/Chuong07/Bai7.4_SSE/) | [✔](../java/Chuong07/Bai7.4_SSE/) | [✔](../python/Chuong07/Bai7.4_SSE/) | [✔](../rust/Chuong07/Bai7.4_SSE/) | [✔](../go/Chuong07/Bai7.4_SSE/) |
+| `Bai7.5_gRPC` | Dịch vụ gRPC tra cứu thuật ngữ (Lookup, Watch) | 7.6 | 7.4.3 | [○](../csharp/Chuong07/Bai7.5_gRPC/) | [○](../java/Chuong07/Bai7.5_gRPC/) | [✔](../python/Chuong07/Bai7.5_gRPC/) | [✔](../rust/Chuong07/Bai7.5_gRPC/) | [○](../go/Chuong07/Bai7.5_gRPC/) |
+| `Bai7.6_SMTP` | Phiên gửi thư SMTP có STARTTLS và AUTH PLAIN | 7.7 | 7.5.1 | [✔](../csharp/Chuong07/Bai7.6_SMTP/) | [✔](../java/Chuong07/Bai7.6_SMTP/) | [✔](../python/Chuong07/Bai7.6_SMTP/) | [✔](../rust/Chuong07/Bai7.6_SMTP/) | [✔](../go/Chuong07/Bai7.6_SMTP/) |
+| `Bai7.7_Ping` | Gửi ICMP Echo Request và đo thời gian khứ hồi | 7.8 | 7.5.3 | [✔](../csharp/Chuong07/Bai7.7_Ping/) | [✔](../java/Chuong07/Bai7.7_Ping/) | [✔](../python/Chuong07/Bai7.7_Ping/) | [✔](../rust/Chuong07/Bai7.7_Ping/) | [✔](../go/Chuong07/Bai7.7_Ping/) |
+| `Bai7.8_MQTT` | Thiết bị cảm biến và bảng theo dõi dùng MQTT | 7.9 | 7.5.5 | [✔](../csharp/Chuong07/Bai7.8_MQTT/) | [✔](../java/Chuong07/Bai7.8_MQTT/) | [✔](../python/Chuong07/Bai7.8_MQTT/) | [✔](../rust/Chuong07/Bai7.8_MQTT/) | [✔](../go/Chuong07/Bai7.8_MQTT/) |
+
+### Chương 8. Lập trình mạng cho ứng dụng AI và an toàn bảo mật
+
+| Bài | Nội dung | Mã giả | Mục | C# | Java | Python | Rust | Go |
+|---|---|---|---|:-:|:-:|:-:|:-:|:-:|
+| `Bai8.1_GoiLLM` | Gọi API LLM: truyền luồng SSE, giới hạn tần suất, thử lại | 8.1, 8.2 | 8.2 | [✔](../csharp/Chuong08/Bai8.1_GoiLLM/) | [✔](../java/Chuong08/Bai8.1_GoiLLM/) | [✔](../python/Chuong08/Bai8.1_GoiLLM/) | [✔](../rust/Chuong08/Bai8.1_GoiLLM/) | [✔](../go/Chuong08/Bai8.1_GoiLLM/) |
+| `Bai8.2_ThungToken` | Thùng token giới hạn tần suất | 8.3 | 8.2.4 | [✔](../csharp/Chuong08/Bai8.2_ThungToken/) | [✔](../java/Chuong08/Bai8.2_ThungToken/) | [✔](../python/Chuong08/Bai8.2_ThungToken/) | [✔](../rust/Chuong08/Bai8.2_ThungToken/) | [✔](../go/Chuong08/Bai8.2_ThungToken/) |
+| `Bai8.3_McpServer` | MCP server công cụ mạng qua kênh stdio | 8.4, 8.5, 8.7 | 8.3.5 | [✔](../csharp/Chuong08/Bai8.3_McpServer/) | [✔](../java/Chuong08/Bai8.3_McpServer/) | [✔](../python/Chuong08/Bai8.3_McpServer/) | [✔](../rust/Chuong08/Bai8.3_McpServer/) | [✔](../go/Chuong08/Bai8.3_McpServer/) |
+| `Bai8.4_TlsChat` | Bổ sung TLS và xác thực token cho hệ thống chat | 8.6 | 8.4.5 | [✔](../csharp/Chuong08/Bai8.4_TlsChat/) | [✔](../java/Chuong08/Bai8.4_TlsChat/) | [✔](../python/Chuong08/Bai8.4_TlsChat/) | [✔](../rust/Chuong08/Bai8.4_TlsChat/) | [✔](../go/Chuong08/Bai8.4_TlsChat/) |
+
+## Bài mở rộng (không có trong giáo trình)
+
+Xem [BaiMoRong.md](BaiMoRong.md).
+
+| Bài | Nội dung | Chương liên quan | Ngôn ngữ |
+|---|---|:-:|---|
+| `BaiMR1.1_QuanLyDiaChiIP` | Quản lý địa chỉ IP (IPAM): chia mạng con VLSM, khối còn trống, kiểm tra chồng lấn, cấp phát | 1 | [Python](../python/Chuong01/BaiMR1.1_QuanLyDiaChiIP/), [Go](../go/Chuong01/BaiMR1.1_QuanLyDiaChiIP/) |
+| `BaiMR1.2_MoPhongGiaoThuc` | Mô phỏng sự kiện rời rạc các giao thức và kiểu truyền: TCP (bắt tay, cwnd, gửi lại nhanh, RTO, FIN), UDP, unicast, broadcast, multicast/IGMP, anycast; hoạt hình HTML | 1 | [Python](../python/Chuong01/BaiMR1.2_MoPhongGiaoThuc/), [Go](../go/Chuong01/BaiMR1.2_MoPhongGiaoThuc/) |
+| `BaiMR3.1_ChuyenTiepCong` | Bộ chuyển tiếp cổng TCP có chuyển tiếp đóng một chiều (half-close) | 3 | [Python](../python/Chuong03/BaiMR3.1_ChuyenTiepCong/), [Go](../go/Chuong03/BaiMR3.1_ChuyenTiepCong/) |
+| `BaiMR3.2_TuDongHoaCLI` | Tự động hóa cấu hình thiết bị qua CLI: đọc tới dấu nhắc, sinh lệnh khác biệt, lũy đẳng, chạy thử | 3 | [Python](../python/Chuong03/BaiMR3.2_TuDongHoaCLI/), [Go](../go/Chuong03/BaiMR3.2_TuDongHoaCLI/) |
+| `BaiMR3.3_GameDoanSo` | Trò chơi đoán số nhiều người chơi qua TCP: giao thức yêu cầu/phản hồi khung JSON, máy trạng thái, kiểm tra đầu vào, hết giờ, mất kết nối | 3 | [Python](../python/Chuong03/BaiMR3.3_GameDoanSo/), [Go](../go/Chuong03/BaiMR3.3_GameDoanSo/) |
+| `BaiMR4.1_ThuThapNetFlow` | Thu thập và giải mã NetFlow v5 trên UDP, phát hiện mất gói, thống kê lưu lượng | 4 | [Python](../python/Chuong04/BaiMR4.1_ThuThapNetFlow/), [Go](../go/Chuong04/BaiMR4.1_ThuThapNetFlow/) |
+| `BaiMR4.2_GameDuaXeUDP` | Đua xe thời gian thực qua UDP: vòng tick 20 Hz có thẩm quyền, đầu vào có số thứ tự và dư thừa, ảnh chụp mới nhất thắng, dự đoán phía client, giả lập mất gói 0 % và 20 % | 4 | [Python](../python/Chuong04/BaiMR4.2_GameDuaXeUDP/), [Go](../go/Chuong04/BaiMR4.2_GameDuaXeUDP/) |
+| `BaiMR5.1_TruyenNhieuTep` | Truyền nhiều tệp đồng thời: start/pause/resume/stop, giới hạn tốc độ (thùng token) theo phiên và theo tệp, tải tiếp bằng offset + SHA-256 | 5 | [Python](../python/Chuong05/BaiMR5.1_TruyenNhieuTep/), [Go](../go/Chuong05/BaiMR5.1_TruyenNhieuTep/) |
+| `BaiMR5.2_MoPhongDongThoi` | So sánh mô hình đồng thời trên cùng khối việc (20 yêu cầu mạng 200 ms, việc CPU, mạng + CPU): tuần tự, luồng/goroutine, nhóm luồng/worker, asyncio/kênh, nhóm tiến trình; biểu đồ Gantt văn bản; GIL; tranh chấp dữ liệu, bế tắc | 5 | [Python](../python/Chuong05/BaiMR5.2_MoPhongDongThoi/), [Go](../go/Chuong05/BaiMR5.2_MoPhongDongThoi/) |
+| `BaiMR5.3_GiaoDienDaTacVu` | Giao diện luôn phản hồi khi nhiều tác vụ mạng chạy song song: tải HTTP có tiến trình, kiểm tra cổng, tra cứu tên UDP, hủy từng tác vụ/hủy tất cả, giới hạn đồng thời đổi được; nút “làm sai” chặn luồng giao diện và đo khoảng nghỉ giữa hai nhịp đồng hồ | 5 | [Python](../python/Chuong05/BaiMR5.3_GiaoDienDaTacVu/), [Go](../go/Chuong05/BaiMR5.3_GiaoDienDaTacVu/) |
+| `BaiMR6.1_TatServerAnToan` | Tắt server an toàn khi nhận SIGTERM/SIGINT: ngừng nhận, làm nốt, hạn chờ, hủy | 6 | [Python](../python/Chuong06/BaiMR6.1_TatServerAnToan/), [Go](../go/Chuong06/BaiMR6.1_TatServerAnToan/) |
+| `BaiMR6.2_HoiThoaiAmThanh` | Phòng hội thoại âm thanh nhiều client: RTP/UDP, điều khiển JSON/TCP, trộn mix-minus, bộ đệm jitter, dBFS, tắt mic/độ lợi/âm lượng, ghi WAV và phân tích Goertzel | 6 | [Python](../python/Chuong06/BaiMR6.2_HoiThoaiAmThanh/), [Go](../go/Chuong06/BaiMR6.2_HoiThoaiAmThanh/) |
+| `BaiMR6.3_HoiThoaiVideo` | Phòng hội thoại video nhiều client: khung nén zlib chia mảnh ≤ 1200 byte trên UDP, server ghép lưới (MCU), tắt/bật camera, giới hạn fps/độ phân giải gửi và nhận, chụp lưới PNG | 6 | [Python](../python/Chuong06/BaiMR6.3_HoiThoaiVideo/), [Go](../go/Chuong06/BaiMR6.3_HoiThoaiVideo/) |
+| `BaiMR6.4_GameCaro` | Caro 15×15 nhiều phòng qua TCP: sảnh, tạo/vào/xem phòng, server làm trọng tài, phát nước đi tới người xem, hết giờ mỗi nước, chơi lại; khám phá server bằng UDP broadcast | 6 | [Python](../python/Chuong06/BaiMR6.4_GameCaro/), [Go](../go/Chuong06/BaiMR6.4_GameCaro/) |
+| `BaiMR7.1_TaiTiepHTTP` | Tải tệp HTTP có tải tiếp: Range, If-Range, 206/416, thử lại có lùi thời gian, kiểm tra SHA-256 | 7 | [Python](../python/Chuong07/BaiMR7.1_TaiTiepHTTP/), [Go](../go/Chuong07/BaiMR7.1_TaiTiepHTTP/) |
+| `BaiMR8.1_TacTuChanDoan` | Tác tử AI chẩn đoán mạng bằng gọi công cụ, có lớp kiểm soát (danh mục, lược đồ, chính sách đích, giới hạn vòng) | 8 | [Python](../python/Chuong08/BaiMR8.1_TacTuChanDoan/), [Go](../go/Chuong08/BaiMR8.1_TacTuChanDoan/) |
+| `BaiMR8.2_KiemDuyetCauHinhAI` | Kiểm duyệt cấu hình do LLM sinh: JSON, lược đồ, ngữ nghĩa, chính sách, vòng phản hồi | 8 | [Python](../python/Chuong08/BaiMR8.2_KiemDuyetCauHinhAI/), [Go](../go/Chuong08/BaiMR8.2_KiemDuyetCauHinhAI/) |
+| `BaiMR8.3_ChongSlowloris` | Phòng thủ tấn công từ chối dịch vụ mức ứng dụng kiểu Slowloris: hạn đọc tiêu đề, hạn rỗi, cỡ tiêu đề tối đa, giới hạn kết nối theo IP, trần toàn cục (503) | 8 | [Python](../python/Chuong08/BaiMR8.3_ChongSlowloris/), [Go](../go/Chuong08/BaiMR8.3_ChongSlowloris/) |
+| `BaiMR8.4_ChongSSRF_MCP` | Chống SSRF trong công cụ MCP fetch_url: allowlist giao thức, chặn dải nội bộ/loopback/link-local/metadata, phân giải một lần + nối đúng IP (chống DNS rebinding), kiểm lại mọi chặng chuyển hướng, giới hạn kích thước/thời gian/số hop, gỡ thông tin đăng nhập | 8 | [Python](../python/Chuong08/BaiMR8.4_ChongSSRF_MCP/), [Go](../go/Chuong08/BaiMR8.4_ChongSSRF_MCP/) |
+
+## Phiên bản chưa chạy trong môi trường kiểm thử
+
+- `csharp/Chuong05/Bai5.3_GiaoDienBatDongBo` (C#): chưa chạy – WinForms cần Windows (net10.0-windows không biên dịch được trên Linux); KhungJson.cs, LookupServer.cs đã biên dịch thử
+- `csharp/Chuong07/Bai7.5_gRPC` (C#): chưa chạy – cần NuGet (Grpc.AspNetCore, Grpc.Net.Client, Google.Protobuf, Grpc.Tools)
+- `java/Chuong07/Bai7.5_gRPC` (Java): chưa chạy – cần Maven Central (grpc-java 1.68.1, protoc 3.25.5)
+- `go/Chuong07/Bai7.5_gRPC` (Go): chưa chạy: Mô-đun Go riêng (go.mod lồng) cần google.golang.org/grpc v1.68.1, protobuf v1.35.2: proxy.golang.org không phân giải được, GOPROXY=direct bị chặn (google.golang.org trả Forbidden); không có protoc-gen-go/protoc-gen-go-grpc nên chưa sinh glossaryv1/, chưa biên dịch. README ghi lệnh protoc với tham số M (giữ nguyên tra_cuu.proto).

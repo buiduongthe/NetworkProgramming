@@ -1,0 +1,11 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "Khung.java", "ChatClient.java", "ChatServer.java", "ChatCli.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "ChatServer", "127.0.0.1", "9509"], "background": true, "wait": 1.0},
+    {"name": "binh", "cmd": ["java", "-cp", "out", "ChatCli", "Bình", "127.0.0.1", "9509"], "background": true, "wait": 1.2,
+     "stdin": "/cho 2.5\nChào An, mình nghe rõ.\n"},
+    {"name": "an", "cmd": ["java", "-cp", "out", "ChatCli", "An", "127.0.0.1", "9509"], "wait": 1.0,
+     "stdin": "Xin chào mọi người\n/cho 3\n/quit\n"}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server chat", "binh": "Cửa sổ 2 – Bình", "an": "Cửa sổ 3 – An"}
+}

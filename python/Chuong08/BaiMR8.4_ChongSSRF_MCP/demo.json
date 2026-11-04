@@ -1,0 +1,6 @@
+{
+  "processes": [
+    {"name": "host", "cmd": ["python3", "mcp_test_client.py", "41840", "41841", "41842"], "timeout": 60}
+  ],
+  "titles": {"host": "Cửa sổ dòng lệnh – client thử nghiệm MCP chống SSRF (META=41840, PUB=41841, REDIR=41842)"}
+}

@@ -1,0 +1,16 @@
+{
+  "processes": [
+    {"name": "server", "cmd": ["python3", "server_doan_so.py", "127.0.0.1", "41330", "--so-nguoi", "4", "--het-gio-ms", "1500", "--seed", "2026", "--so-van", "1"], "background": true, "wait": 0.6},
+    {"name": "Binh", "cmd": ["python3", "nguoi_choi.py", "Binh", "127.0.0.1", "41330", "--bot", "chia_doi", "--nghi-ms", "200"], "background": true, "wait": 0.3},
+    {"name": "Cuong", "cmd": ["python3", "nguoi_choi.py", "Cuong", "127.0.0.1", "41330", "--bot", "nghich", "--nghi-ms", "200"], "background": true, "wait": 0.3},
+    {"name": "An", "cmd": ["python3", "nguoi_choi.py", "An", "127.0.0.1", "41330"], "stdin": "abc\n40\n39\n", "background": true, "wait": 0.3},
+    {"name": "Dung", "cmd": ["python3", "nguoi_choi.py", "Dung", "127.0.0.1", "41330", "--bot", "im_lang"], "background": true, "wait": 0.8},
+    {"name": "Em", "cmd": ["python3", "nguoi_choi.py", "Em", "127.0.0.1", "41330", "--bot", "chia_doi"], "wait": 3.0}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server (cần 4 người, mỗi lượt 1500 ms, seed 2026)",
+             "Binh": "Cửa sổ 2 – Binh (bot chia đôi)",
+             "Cuong": "Cửa sổ 3 – Cuong (bot nghịch – gửi thông điệp sai)",
+             "An": "Cửa sổ 4 – An (người chơi, nhập từ bàn phím)",
+             "Dung": "Cửa sổ 5 – Dung (bot im lặng – hết giờ rồi rời)",
+             "Em": "Cửa sổ 6 – Em (đến muộn khi ván đang chơi)"}
+}

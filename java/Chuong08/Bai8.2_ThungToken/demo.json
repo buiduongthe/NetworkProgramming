@@ -1,0 +1,7 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Bucket.java", "ThungToken.java"]],
+  "processes": [
+    {"name": "bucket", "cmd": ["java", "-cp", "out", "ThungToken", "10", "2", "14", "2"], "timeout": 30}
+  ],
+  "titles": {"bucket": "Cửa sổ dòng lệnh – thùng token C = 10, R = 2"}
+}

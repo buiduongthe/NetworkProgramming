@@ -1,0 +1,58 @@
+{
+  "setup": [
+    [
+      "javac",
+      "-encoding",
+      "UTF-8",
+      "-d",
+      "out",
+      "Reader.java",
+      "WsServer.java",
+      "WsClient.java",
+      "WsKiemThu.java"
+    ]
+  ],
+  "processes": [
+    {
+      "name": "server",
+      "cmd": [
+        "java",
+        "-cp",
+        "out",
+        "WsServer",
+        "127.0.0.1",
+        "9733"
+      ],
+      "background": true,
+      "wait": 0.8
+    },
+    {
+      "name": "client",
+      "cmd": [
+        "java",
+        "-cp",
+        "out",
+        "WsClient",
+        "127.0.0.1",
+        "9733"
+      ],
+      "stdin": "Xin chào\nWebSocket hai chiều\n"
+    },
+    {
+      "name": "kiemthu",
+      "cmd": [
+        "java",
+        "-cp",
+        "out",
+        "WsKiemThu",
+        "127.0.0.1",
+        "9733"
+      ]
+    }
+  ],
+  "titles": {
+    "server": "Cửa sổ 1 – server WebSocket",
+    "client": "Cửa sổ 2 – client",
+    "kiemthu": "Cửa sổ 3 – kiểm thử khung"
+  }
+}

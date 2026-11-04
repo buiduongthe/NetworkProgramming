@@ -1,0 +1,9 @@
+[package]
+name = "bai4_4_dung_va_cho"
+version = "0.1.0"
+edition = "2021"
+description = "Bài 4.4 – Truyền tệp tin cậy trên UDP bằng giao thức dừng và chờ (Mã giả 4.6, 4.7)"
+publish = false
+
+[dependencies]
+sha2 = "=0.10.9"

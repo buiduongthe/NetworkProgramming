@@ -1,0 +1,61 @@
+# ===== Tệp sinh ra khi biên dịch, chạy thử – không đưa lên kho =====
+
+# .NET (C#)
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+# Java
+out/
+*.class
+*.jar
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+
+# Rust (thư mục build dùng chung rust/target)
+target/
+**/*.rs.bk
+
+# Go
+**/out/
+*.exe
+*.test
+# mã sinh từ .proto của Bài 7.5 (CI tự sinh lại bằng protoc)
+go/Chuong07/Bai7.5_gRPC/glossaryv1/
+
+# Dữ liệu sinh ra khi chạy demo
+uploads/
+downloads/
+*.part
+*.tmp
+*.wav
+.log_*.txt
+
+# Khóa, chứng chỉ thử nghiệm (sinh lại bằng tao_chung_chi.sh) – không bao giờ đưa lên kho
+*.key
+*.pem
+*.crt
+*.csr
+*.srl
+*.p12
+*.pfx
+.env
+
+# IDE và hệ điều hành
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Tệp tiện ích cục bộ trên máy tác giả
+PUSH_LEN_GITHUB.bat

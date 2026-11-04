@@ -1,0 +1,11 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "l1", "cmd": ["out/app", "listener", "0", "31660"], "background": true, "wait": 0.5},
+    {"name": "a1", "cmd": ["out/app", "announcer", "9200", "Phòng-Lab-A", "1000", "0", "31660"], "background": true, "wait": 0.3},
+    {"name": "a2", "cmd": ["out/app", "announcer", "9201", "Phòng-Lab-B", "1000", "3", "31660"], "background": true, "wait": 0.3},
+    {"name": "l2", "cmd": ["out/app", "listener", "7000", "31660"], "timeout": 20}
+  ],
+  "titles": {"l1": "Cửa sổ 1 – listener 1 (nghe mãi)", "a1": "Cửa sổ 2 – announcer Phòng-Lab-A",
+             "a2": "Cửa sổ 3 – announcer Phòng-Lab-B (3 lần)", "l2": "Cửa sổ 4 – listener 2 (nghe 7 giây)"}
+}

@@ -1,0 +1,14 @@
+===== ping =====
+$ out/app 127.0.0.1 4
+[ping] PING 127.0.0.1: 4 gói Echo Request, dữ liệu 32 byte, chờ tối đa 1000 ms
+[ping] Tiêu đề ICMP gửi đi: 08 00 3B 54 03 48 00 01 (kiểu, mã, checksum, id, seq)
+[ping]   bỏ qua gói ICMP kiểu 8 (không phải Echo Reply của tiến trình này)
+[ping] Trả lời từ 127.0.0.1: seq=1 ttl=64 thời gian=0.040 ms
+[ping]   bỏ qua gói ICMP kiểu 8 (không phải Echo Reply của tiến trình này)
+[ping] Trả lời từ 127.0.0.1: seq=2 ttl=64 thời gian=0.406 ms
+[ping]   bỏ qua gói ICMP kiểu 8 (không phải Echo Reply của tiến trình này)
+[ping] Trả lời từ 127.0.0.1: seq=3 ttl=64 thời gian=0.070 ms
+[ping]   bỏ qua gói ICMP kiểu 8 (không phải Echo Reply của tiến trình này)
+[ping] Trả lời từ 127.0.0.1: seq=4 ttl=64 thời gian=0.076 ms
+[ping] Đã gửi 4, nhận 4, mất 0%; RTT trung bình 0.148 ms
+

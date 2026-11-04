@@ -1,0 +1,134 @@
+===== server =====
+$ python3 may_chu_tre.py 127.0.0.1 41520 200
+[server] lắng nghe 127.0.0.1:41520, mỗi yêu cầu trễ 200 ms
+[server] đợt  1: 20 yêu cầu, đồng thời tối đa  1
+[server] đợt  2: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  3: 20 yêu cầu, đồng thời tối đa  5
+[server] đợt  4: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  5: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  6: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  7: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  8: 20 yêu cầu, đồng thời tối đa 20
+[server] dừng; đã phục vụ 160 yêu cầu
+
+===== mang =====
+$ python3 dong_thoi.py mang 127.0.0.1 41520
+Khối việc: 20 yêu cầu mạng, mỗi yêu cầu máy chủ trễ 200 ms
+
+1. tuần tự: 4.08 s
+  chính       |AABBBCCDDDEEFFGGGHHIIJJJKKKLLMMNNNOOPPQQQRRSSSTT|
+2. mỗi tác vụ một luồng: 0.21 s
+  luồng-1     |AAA                                             |
+  luồng-2     |BBB                                             |
+  luồng-3     |CCC                                             |
+  luồng-4     |DDD                                             |
+  luồng-5     |EEE                                             |
+  luồng-6     |FFF                                             |
+  luồng-7     |GGG                                             |
+  luồng-8     |HHH                                             |
+  … và 12 luồng khác, mỗi luồng chạy 1 tác vụ
+3. nhóm luồng (5 luồng): 0.81 s
+  luồng-1     |AAGGGKKRRR                                      |
+  luồng-2     |BBFFFLLQQQ                                      |
+  luồng-3     |CCHHHOOSSS                                      |
+  luồng-4     |DDIIIMMPPP                                      |
+  luồng-5     |EEJJJNNTTT                                      |
+4. asyncio (1 luồng): 0.20 s
+  vòng lặp    |**A                                             |
+               0                                           4.1 s
+
+  Mô hình                        Thời gian  Tăng tốc
+  1. tuần tự                        4.08 s      1.0×
+  2. mỗi tác vụ một luồng           0.21 s     19.5×
+  3. nhóm luồng (5 luồng)           0.81 s      5.0×
+  4. asyncio (1 luồng)              0.20 s     19.9×
+
+Nhận xét: việc chờ I/O không tốn CPU, nên luồng hay coroutine đều chồng
+  được thời gian chờ; asyncio làm được trên một luồng duy nhất (*).
+
+===== cpu =====
+$ python3 dong_thoi.py cpu
+Khối việc: 8 tác vụ CPU thuần Python, mỗi tác vụ ≈ 100 ms
+Máy có 2 CPU; GIL đang bật
+
+1. tuần tự: 0.81 s
+  chính       |AAAABBBBCCCCDDDDDDEEEEEFFFFGGGGGHHHHH           |
+2. nhóm luồng (4 luồng): 1.07 s
+  luồng-1     |AAAAAAAAAAAAAAAAAAAAAAAAAEEEEEEEEEEEEEEEE       |
+  luồng-2     |BBBBBBBBBBBBBBBBBBBBBBBBBBBBFFFFFFFFFFFFFFFFF   |
+  luồng-3     |CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCHHHHHHHHHHHHHHHHH|
+  luồng-4     |  DDDDDDDDDDDDDDDDDDDDDDDDDDDDDGGGGGGGGGGGGGGGGG|
+3. nhóm tiến trình (2 t.trình): 0.47 s
+  tiến trình-1|AAAAACCCCEEEEEGGGGGG                            |
+  tiến trình-2|BBBBBBBBDDDDFFFFHHHHH                           |
+               0                                           1.1 s
+
+  Mô hình                        Thời gian  Tăng tốc
+  1. tuần tự                        0.81 s      1.0×
+  2. nhóm luồng (4 luồng)           1.07 s      0.8×
+  3. nhóm tiến trình (2 t.trình)    0.47 s      1.7×
+
+Nhận xét: với GIL, mỗi lúc chỉ một luồng chạy mã Python, nên nhóm luồng
+  không nhanh hơn tuần tự (mỗi tác vụ bị kéo dài vì phải chia lượt);
+  nhóm tiến trình có GIL riêng cho từng tiến trình nên chạy song song
+  thật trên nhiều CPU.
+
+===== tron =====
+$ python3 dong_thoi.py tron 127.0.0.1 41520
+Khối việc: 20 tác vụ = yêu cầu mạng 200 ms + xử lý CPU ≈ 30 ms
+Đo thêm độ trễ vòng lặp sự kiện: coroutine "nhịp tim" ngủ 10 ms và
+  đo xem thực tế bị đánh thức muộn bao nhiêu (trễ lớn = ứng dụng đứng).
+
+A. CPU ngay trong vòng lặp: 0.86 s
+  vòng lặp    |*******************************************TT   |
+B. asyncio.to_thread: 0.86 s
+  vòng lặp    |**********************************              |
+  luồng-1     |          AAABBBBGGGGGGGGGGG OOOOOOOOOSSSSSSS   |
+  luồng-2     |            CCCC EEEEEEEEE LLLLLLLLRRRRRRR      |
+  luồng-3     |            DDDDD  FFFFFFF   NNNNNNNNNNNTTTT    |
+  luồng-4     |                 IIIIIIIIII MMMMMMQQQQQQQ       |
+  luồng-5     |                  JJJJJJJ  KKKKKKKKKKKKK        |
+  luồng-6     |                   HHHHHHHHH       PPPPPPPP     |
+C. run_in_executor, 2 luồng: 0.93 s
+  vòng lặp    |********************                            |
+  luồng-1     |          AAAAA DDDDGGGGGGJJJJLLMMNNNPPPPPRRRRTT|
+  luồng-2     |           BBBCCCEEEFFFHHHIIKKKKKKKOOOOQQQQQSSS |
+D. run_in_executor, 2 t.trình: 0.56 s
+  vòng lặp    |***********                                     |
+  tiến trình-2|          AAADFFHHJLLNNPPRRTT                   |
+  tiến trình-1|          BBCCEEGIIKKMOOQQSS                    |
+               0                                           0.9 s
+
+  Mô hình                        Thời gian  Trễ vòng lặp
+  A. CPU ngay trong vòng lặp        0.86 s        651 ms
+  B. asyncio.to_thread              0.86 s        325 ms
+  C. run_in_executor, 2 luồng       0.93 s        164 ms
+  D. run_in_executor, 2 t.trình     0.56 s          4 ms
+
+Nhận xét: A – xử lý CPU chặn vòng lặp sự kiện, nhịp tim trễ hàng trăm
+  ms. B, C – đẩy CPU sang luồng khác thì vòng lặp được chạy xen, nhưng
+  vì GIL nên CPU vẫn tuần tự, và càng nhiều luồng tranh GIL (B dùng
+  nhóm mặc định 6 luồng) thì vòng lặp càng chờ lâu. D – tiến trình
+  riêng: vòng lặp thông suốt và CPU chạy song song.
+
+===== khoa =====
+$ python3 dong_thoi.py khoa
+Tranh chấp dữ liệu: 4 luồng × 5000 lần "đọc – nhường CPU – ghi"
+  lên một biến đếm chung (kết quả đúng phải là 20000).
+  không khóa      :   5002 / 20000 → mất 14998 lần cộng (0.36 s)
+  có khóa (Lock)  :  20000 / 20000 → đúng (1.54 s)
+
+Bế tắc (deadlock): T1 chuyển X→Y, T2 chuyển Y→X, mỗi luồng cần cả
+  hai khóa; số dư ban đầu X = 100, Y = 100.
+  T1 giữ khóa X, chờ khóa Y
+  T2 giữ khóa Y, chờ khóa X
+  T1: chờ Y quá 0,5 s → nghi bế tắc, nhả X, bỏ cuộc
+  T2: đã chuyển 5 từ Y sang X
+  Số dư: X = 105, Y = 95 (tổng 200)
+Cách tránh: mọi luồng lấy khóa theo cùng thứ tự (X trước, Y sau):
+  T1 giữ khóa X, chờ khóa Y
+  T1: đã chuyển 10 từ X sang Y
+  T2 giữ khóa X, chờ khóa Y
+  T2: đã chuyển 5 từ Y sang X
+  Số dư: X = 100, Y = 100 (tổng 200)
+

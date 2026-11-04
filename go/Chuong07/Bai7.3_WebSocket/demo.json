@@ -1,0 +1,9 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "31730"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["out/app", "client", "127.0.0.1", "31730"], "stdin": "Xin chào\nWebSocket hai chiều\n"},
+    {"name": "kiemthu", "cmd": ["out/app", "kiemthu", "127.0.0.1", "31730"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server WebSocket", "client": "Cửa sổ 2 – client", "kiemthu": "Cửa sổ 3 – kiểm thử khung"}
+}

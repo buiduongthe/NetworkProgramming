@@ -1,0 +1,7 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "resolve", "cmd": ["out/app", "localhost", "example.com", "khong-ton-tai.invalid", "::1"]}
+  ],
+  "titles": {"resolve": "Cửa sổ dòng lệnh – phân giải tên miền"}
+}

@@ -1,0 +1,8 @@
+{
+  "processes": [
+    {"name": "server", "cmd": ["python3", "ws_server.py", "127.0.0.1", "9731"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["python3", "ws_client.py", "127.0.0.1", "9731"], "stdin": "Xin chào\nWebSocket hai chiều\n"},
+    {"name": "kiemthu", "cmd": ["python3", "ws_kiem_thu.py", "127.0.0.1", "9731"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server WebSocket", "client": "Cửa sổ 2 – client", "kiemthu": "Cửa sổ 3 – kiểm thử khung"}
+}

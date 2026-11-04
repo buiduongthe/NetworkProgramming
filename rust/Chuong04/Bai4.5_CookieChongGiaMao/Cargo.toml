@@ -1,0 +1,11 @@
+[package]
+name = "bai4_5_cookie_chong_gia_mao"
+version = "0.1.0"
+edition = "2021"
+description = "Bài 4.5 – Xác thực địa chỉ nguồn bằng mã thách thức không trạng thái (Mã giả 4.8)"
+publish = false
+
+[dependencies]
+getrandom = "=0.3.3"
+serde_json = { version = "=1.0.143", features = ["preserve_order"] }
+sha2 = "=0.10.9"

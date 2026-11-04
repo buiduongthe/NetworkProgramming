@@ -1,0 +1,26 @@
+===== server =====
+$ python3 -m http.server 9101 --bind 127.0.0.1
+Serving HTTP on 127.0.0.1 port 9101 (http://127.0.0.1:9101/) ...
+
+Keyboard interrupt received, exiting.
+
+===== open =====
+$ python3 port_check.py localhost 9101
+[port-check] Kiểm tra localhost:9101 (thời gian chờ 2000 ms)
+  INET   127.0.0.1
+[port-check] 127.0.0.1 cổng 9101: kết nối thành công
+[port-check] Kết quả: localhost:9101 -> OPEN
+
+===== closed =====
+$ python3 port_check.py localhost 9102
+[port-check] Kiểm tra localhost:9102 (thời gian chờ 2000 ms)
+  INET   127.0.0.1
+[port-check] 127.0.0.1 cổng 9102: bị từ chối (RST)
+[port-check] Kết quả: localhost:9102 -> CLOSED
+
+===== unresolved =====
+$ python3 port_check.py khong-ton-tai.invalid 80
+[port-check] Kiểm tra khong-ton-tai.invalid:80 (thời gian chờ 2000 ms)
+[port-check] Không phân giải được khong-ton-tai.invalid (mã lỗi -2: Name or service not known)
+[port-check] Kết quả: khong-ton-tai.invalid:80 -> UNRESOLVED
+

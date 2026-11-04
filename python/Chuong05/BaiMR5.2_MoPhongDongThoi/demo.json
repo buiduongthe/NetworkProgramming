@@ -1,0 +1,14 @@
+{
+  "processes": [
+    {"name": "server", "cmd": ["python3", "may_chu_tre.py", "127.0.0.1", "41520", "200"], "background": true, "wait": 0.8},
+    {"name": "mang", "cmd": ["python3", "dong_thoi.py", "mang", "127.0.0.1", "41520"], "timeout": 60, "wait": 0.5},
+    {"name": "cpu", "cmd": ["python3", "dong_thoi.py", "cpu"], "timeout": 60},
+    {"name": "tron", "cmd": ["python3", "dong_thoi.py", "tron", "127.0.0.1", "41520"], "timeout": 60, "wait": 0.5},
+    {"name": "khoa", "cmd": ["python3", "dong_thoi.py", "khoa"], "timeout": 60}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ thử (trễ 200 ms mỗi yêu cầu)",
+             "mang": "Cửa sổ 2 – 20 yêu cầu mạng, bốn mô hình",
+             "cpu": "Cửa sổ 3 – việc nặng CPU và GIL",
+             "tron": "Cửa sổ 4 – mạng + CPU, asyncio và nhóm thực thi",
+             "khoa": "Cửa sổ 5 – tranh chấp dữ liệu, bế tắc"}
+}

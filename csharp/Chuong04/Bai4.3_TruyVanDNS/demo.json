@@ -1,0 +1,11 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "-v", "q", "-nologo"]],
+  "processes": [
+    {"name": "dns", "cmd": ["python3", "fake_dns_server.py", "127.0.0.1", "9432"], "background": true, "wait": 0.8},
+    {"name": "a", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "127.0.0.1", "demo.ltm.local", "A", "9432"]},
+    {"name": "aaaa", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "127.0.0.1", "demo.ltm.local", "AAAA", "9432"]},
+    {"name": "nx", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "127.0.0.1", "khong-co.ltm.local", "A", "9432"]},
+    {"name": "sys", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "8.8.8.8", "example.com", "A"]}
+  ],
+  "titles": {"dns": "Cửa sổ 1 – DNS server giả lập (Python)", "a": "Cửa sổ 2 – truy vấn A", "aaaa": "Cửa sổ 3 – truy vấn AAAA", "nx": "Cửa sổ 4 – tên không tồn tại", "sys": "Cửa sổ 5 – DNS trong /etc/resolv.conf (8.8.8.8)"}
+}

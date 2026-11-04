@@ -1,0 +1,11 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "-v", "q", "-nologo"]],
+  "processes": [
+    {"name": "server1", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "threaded", "127.0.0.1", "9613", "500", "50"], "background": true, "wait": 1.5},
+    {"name": "load1", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "load", "127.0.0.1", "9613", "20", "1,10,100"], "timeout": 60, "wait": 0.3},
+    {"name": "server2", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "pool", "127.0.0.1", "9614", "8", "16", "50"], "background": true, "wait": 1.5},
+    {"name": "load2", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "load", "127.0.0.1", "9614", "20", "1,10,100"], "timeout": 60, "wait": 0.3}
+  ],
+  "titles": {"server1": "Cửa sổ 1 – server mỗi kết nối một luồng", "load1": "Cửa sổ 2 – bộ sinh tải → server 1",
+             "server2": "Cửa sổ 3 – server nhóm 8 luồng, hàng đợi 16", "load2": "Cửa sổ 4 – bộ sinh tải → server 2"}
+}

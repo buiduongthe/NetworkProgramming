@@ -1,0 +1,12 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "env": {"TLS_KEY_PASS": "matkhau-lab", "CHAT_JWT_KEY": "khoa-ky-jwt-cua-phong-lab-0123456789", "TLS_CERT": "certs/chat.crt", "TLS_KEY": "certs/chat.key"},
+  "processes": [
+    {"name": "chuanbi", "cmd": ["bash", "-c", "bash tao_chung_chi.sh && cargo run -q --release -- token an certs/an.jwt && cargo run -q --release -- token binh certs/binh_email.jwt email"]},
+    {"name": "server", "cmd": ["cargo", "run", "-q", "--release", "--", "server", "127.0.0.1", "21840"], "background": true, "wait": 1.0},
+    {"name": "tin_cay", "cmd": ["cargo", "run", "-q", "--release", "--", "client", "localhost", "21840", "certs/an.jwt", "certs/ca.crt"], "stdin": "Xin chào qua TLS\nTin nhắn đã được mã hóa\n"},
+    {"name": "khong_tin_cay", "cmd": ["cargo", "run", "-q", "--release", "--", "client", "localhost", "21840", "certs/an.jwt"], "stdin": "Xin chào\n"},
+    {"name": "sai_token", "cmd": ["cargo", "run", "-q", "--release", "--", "client", "localhost", "21840", "certs/binh_email.jwt", "certs/ca.crt"], "stdin": "Xin chào\n"}
+  ],
+  "titles": {"chuanbi": "Cửa sổ 1 – tạo chứng chỉ, cấp token", "server": "Cửa sổ 2 – server chat TLS", "tin_cay": "Cửa sổ 3 – client tin cậy CA, token đúng", "khong_tin_cay": "Cửa sổ 4 – client không tin cậy CA", "sai_token": "Cửa sổ 5 – token cấp cho dịch vụ khác"}
+}

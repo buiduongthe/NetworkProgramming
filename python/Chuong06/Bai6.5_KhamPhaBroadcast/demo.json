@@ -1,0 +1,9 @@
+{
+  "processes": [
+    {"name": "r1", "cmd": ["python3", "responder.py", "9200", "Phòng-Lab-A", "9669"], "background": true, "wait": 0.6},
+    {"name": "r2", "cmd": ["python3", "responder.py", "9201", "Phòng-Lab-B", "9669"], "background": true, "wait": 0.6},
+    {"name": "client", "cmd": ["python3", "discover.py", "1000", "9669", "255.255.255.255"], "wait": 0.3}
+  ],
+  "titles": {"r1": "Cửa sổ 1 – responder Phòng-Lab-A", "r2": "Cửa sổ 2 – responder Phòng-Lab-B",
+             "client": "Cửa sổ 3 – client khám phá (broadcast)"}
+}

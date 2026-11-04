@@ -1,0 +1,10 @@
+[package]
+name = "bai6_2_server_bat_dong_bo"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Môi trường chạy bất đồng bộ (ASYNC/AWAIT): mạng, hẹn giờ, bắt Ctrl+C
+tokio = { version = "=1.54.1", features = ["rt-multi-thread", "macros", "net", "io-util", "time", "signal"] }
+# JSON cho khung tin nhắn (Mã giả 3.6); preserve_order giữ thứ tự khóa như từ điển Python
+serde_json = { version = "=1.0.154", features = ["preserve_order"] }

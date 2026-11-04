@@ -1,0 +1,30 @@
+===== server1 =====
+$ dotnet run --no-build -c Release -- threaded 127.0.0.1 9613 500 50
+[server] Đang lắng nghe tại 127.0.0.1:9613
+[server] Mỗi kết nối một luồng, MAX_CLIENTS = 500, độ trễ 50 ms
+
+===== load1 =====
+$ dotnet run --no-build -c Release -- load 127.0.0.1 9613 20 1,10,100
+[load] Server 127.0.0.1:9613, 20 yêu cầu/client, vòng kín
+[load] client     OK   lỗi  yc/giây     p50     p95     p99
+[load]      1     20     0     18.4    51.0    56.0    74.2
+[load]     10    200     0    195.9    50.5    53.4    54.4
+[load]    100   2000     0   1928.5    50.3    56.7    71.8
+[load] OK: số yêu cầu thành công; lỗi: số client gặp lỗi (bị từ chối, mất kết nối, mã ≠ 200)
+[load] p50, p95, p99: phân vị độ trễ, tính bằng ms
+
+===== server2 =====
+$ dotnet run --no-build -c Release -- pool 127.0.0.1 9614 8 16 50
+[server] Đang lắng nghe tại 127.0.0.1:9614
+[server] Nhóm 8 luồng thợ, hàng đợi 16 chỗ, độ trễ 50 ms
+
+===== load2 =====
+$ dotnet run --no-build -c Release -- load 127.0.0.1 9614 20 1,10,100
+[load] Server 127.0.0.1:9614, 20 yêu cầu/client, vòng kín
+[load] client     OK   lỗi  yc/giây     p50     p95     p99
+[load]      1     20     0     18.4    50.8    53.3    80.1
+[load]     10    200     0     98.7    50.5    51.9    53.5
+[load]    100    480    76    158.0    50.5    51.3  2074.5
+[load] OK: số yêu cầu thành công; lỗi: số client gặp lỗi (bị từ chối, mất kết nối, mã ≠ 200)
+[load] p50, p95, p99: phân vị độ trễ, tính bằng ms
+

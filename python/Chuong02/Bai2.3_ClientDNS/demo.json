@@ -1,0 +1,7 @@
+{
+  "processes": [
+    {"name": "khong_tham_so", "cmd": ["python3", "dns_client.py"]},
+    {"name": "tra_cuu", "cmd": ["python3", "dns_client.py", "localhost", "127.0.0.1", "::1", "example.com", "8.8.8.8", "khong-ton-tai.invalid"]}
+  ],
+  "titles": {"khong_tham_so": "1 – không tham số", "tra_cuu": "2 – tra cứu xuôi và ngược"}
+}

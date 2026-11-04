@@ -1,0 +1,14 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "env": {"LLM_BASE_URL": "http://127.0.0.1:41815/v1", "LLM_API_KEY": "khoa-thu-nghiem", "LLM_MODEL": "mock-model"},
+  "processes": [
+    {"name": "mock", "cmd": ["python3", "mock_llm_cong_cu.py", "127.0.0.1", "41815"], "background": true, "wait": 0.8},
+    {"name": "dich_vu", "cmd": ["python3", "-m", "http.server", "41816", "--bind", "127.0.0.1"], "background": true, "wait": 0.8},
+    {"name": "hoi1", "cmd": ["out/app", "Vì sao không mở được dịch vụ web trên localhost cổng 41816 và 41817?"]},
+    {"name": "hoi2", "cmd": ["out/app", "Kiểm tra cổng 53 của 8.8.8.8 rồi khởi động lại dịch vụ DNS giúp tôi"]}
+  ],
+  "titles": {"mock": "Cửa sổ 1 – LLM giả lập có gọi công cụ (41815)",
+             "dich_vu": "Cửa sổ 2 – dịch vụ web thử (41816)",
+             "hoi1": "Cửa sổ 3 – tác tử chẩn đoán cổng trên localhost",
+             "hoi2": "Cửa sổ 4 – yêu cầu vượt quyền bị chặn"}
+}

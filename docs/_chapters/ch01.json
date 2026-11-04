@@ -1,0 +1,8 @@
+[
+  {"bai": "Bai1.1_PhanGiaiTenMien", "ten": "Phân giải tên miền thành danh sách địa chỉ", "ma_gia": ["1.1"], "muc": "1.2.3",
+   "kiem_thu": {"csharp": "đã chạy", "java": "đã chạy", "python": "đã chạy"},
+   "ghi_chu": "Demo: localhost, example.com, khong-ton-tai.invalid, ::1. Môi trường kiểm thử chặn DNS ra Internet nên example.com cho kết quả không phân giải được (ghi đúng kết quả thật); tệp hosts chỉ có 127.0.0.1 cho localhost."},
+  {"bai": "Bai1.2_KiemTraCong", "ten": "Kiểm tra trạng thái một cổng TCP", "ma_gia": ["1.2"], "muc": "1.2.5",
+   "kiem_thu": {"csharp": "đã chạy", "java": "đã chạy", "python": "đã chạy"},
+   "ghi_chu": "Demo OPEN (server thử python3 -m http.server), CLOSED, UNRESOLVED. FILTERED không minh họa được: mạng ảo của môi trường kiểm thử chấp nhận ngay mọi kết nối TCP ra ngoài máy."}
+]

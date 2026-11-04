@@ -1,0 +1,11 @@
+[package]
+name = "bai7_3_websocket"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Môi trường chạy bất đồng bộ cho server (mỗi kết nối một tác vụ, như Mã giả 6.3)
+tokio = { version = "=1.54.1", features = ["rt-multi-thread", "macros", "net", "io-util", "signal"] }
+# Sec-WebSocket-Accept = Base64(SHA-1(khóa + GUID)); khung WebSocket tự viết
+sha1 = "=0.10.6"
+base64 = "=0.22.1"

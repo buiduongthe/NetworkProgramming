@@ -1,0 +1,11 @@
+{
+  "processes": [
+    {"name": "server", "cmd": ["python3", "udp_cookie_server.py", "127.0.0.1", "9451"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["python3", "udp_cookie_client.py", "127.0.0.1", "9451"], "stdin": "UDP\nQUIC\n"},
+    {"name": "client2", "cmd": ["python3", "udp_cookie_client.py", "127.0.0.1", "9451"], "stdin": "XYZ\n"},
+    {"name": "client3", "cmd": ["python3", "udp_cookie_client.py", "127.0.0.1", "9451", "deadbeef"], "stdin": "UDP\n"},
+    {"name": "raw", "cmd": ["python3", "-c", "import socket\ns = socket.socket(socket.AF_INET, socket.SOCK_DGRAM); s.settimeout(1)\nfor d in (b'{\"op\":\"list\"}', b'[1,2]', b'x' * 1300):\n    s.sendto(d, ('127.0.0.1', 9451))\n    try: print(f'[thử] Gửi {len(d)} byte -> nhận {len(s.recv(65535))} byte')\n    except TimeoutError: print(f'[thử] Gửi {len(d)} byte -> không có phản hồi sau 1 s')\n"],
+     "show": ["python3", "-c", "<gửi 3 datagram thô: {\"op\":\"list\"} 13 byte, [1,2], 1300 byte>"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server có mã thách thức", "client": "Cửa sổ 2 – client chưa có cookie", "client2": "Cửa sổ 3 – client mới, phản hồi nhỏ", "client3": "Cửa sổ 4 – client dùng cookie giả mạo", "raw": "Cửa sổ 5 – datagram thô không đệm, sai định dạng, quá lớn"}
+}

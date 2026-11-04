@@ -1,0 +1,8 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "31740"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["out/app", "client", "127.0.0.1", "31740", "/events"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server SSE", "client": "Cửa sổ 2 – bộ đọc luồng SSE"}
+}

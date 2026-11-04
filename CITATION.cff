@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "Khi sử dụng kho mã này, đề nghị trích dẫn theo thông tin dưới đây."
+title: "NetworkProgramming: Mã nguồn minh họa Giáo trình Lập trình mạng (C#, Java, Python, Rust, Go)"
+version: 1.1.0
+date-released: 2026-11-04
+license: MIT
+repository-code: "https://github.com/buiduongthe/NetworkProgramming"
+authors:
+  - family-names: "Bùi"
+    given-names: "Dương Thế"
+    email: "buiduongthe@gmail.com"
+    affiliation: "Trường Đại học Giao thông vận tải Thành phố Hồ Chí Minh"
+keywords:
+  - network programming
+  - socket
+  - TCP
+  - UDP
+  - C#
+  - Java
+  - Python
+  - Rust
+  - Go
+  - education

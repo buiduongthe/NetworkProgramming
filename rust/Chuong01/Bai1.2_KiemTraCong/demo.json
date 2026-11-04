@@ -1,0 +1,15 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server", "cmd": ["python3", "-m", "http.server", "21120", "--bind", "127.0.0.1"], "background": true, "wait": 1.0},
+    {"name": "open", "cmd": ["../../target/release/bai1_2_kiem_tra_cong", "localhost", "21120"]},
+    {"name": "closed", "cmd": ["../../target/release/bai1_2_kiem_tra_cong", "localhost", "21121"]},
+    {"name": "unresolved", "cmd": ["../../target/release/bai1_2_kiem_tra_cong", "khong-ton-tai.invalid", "80"]},
+    {"name": "filtered", "cmd": ["../../target/release/bai1_2_kiem_tra_cong", "10.255.255.1", "21122"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server thử lắng nghe cổng 21120",
+             "open": "Cửa sổ 2 – cổng đang mở",
+             "closed": "Cửa sổ 3 – cổng không có chương trình lắng nghe",
+             "unresolved": "Cửa sổ 4 – tên không phân giải được",
+             "filtered": "Cửa sổ 5 – địa chỉ không phản hồi (10.255.255.1)"}
+}

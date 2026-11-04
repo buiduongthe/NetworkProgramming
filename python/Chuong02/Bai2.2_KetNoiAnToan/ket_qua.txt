@@ -1,0 +1,30 @@
+===== server =====
+$ python3 test_server.py 127.0.0.1 9210
+[server] Đang lắng nghe tại 127.0.0.1:9210
+[server] Client kết nối: 127.0.0.1:51136
+[server] Dừng server
+
+===== refused =====
+$ python3 safe_connect.py 127.0.0.1 9211
+[client] Kết nối tới 127.0.0.1:9211, thời gian chờ 3000 ms
+[client] NetError REFUSED, thử lại: không, sau 5 ms
+[client] Nguyên nhân: ConnectionRefusedError: [Errno 111] Connection refused
+
+===== not_found =====
+$ python3 safe_connect.py khong-ton-tai.invalid 9210
+[client] Kết nối tới khong-ton-tai.invalid:9210, thời gian chờ 3000 ms
+[client] NetError NOT_FOUND, thử lại: không, sau 3 ms
+[client] Nguyên nhân: gaierror: [Errno -2] Name or service not known
+
+===== timeout =====
+$ python3 safe_connect.py 10.255.255.1 9210 3000
+[client] Kết nối tới 10.255.255.1:9210, thời gian chờ 3000 ms
+[client] NetError UNREACHABLE, thử lại: có, sau 3005 ms
+[client] Nguyên nhân: TimeoutError: timed out
+
+===== ok =====
+$ python3 safe_connect.py localhost 9210
+[client] Kết nối tới localhost:9210, thời gian chờ 3000 ms
+[client] Thành công: 127.0.0.1:51136 -> 127.0.0.1:9210, sau 3 ms
+[client] Đã đóng kết nối
+

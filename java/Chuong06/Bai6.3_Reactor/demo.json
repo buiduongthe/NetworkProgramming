@@ -1,0 +1,8 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "NetUtil.java", "ReactorServer.java", "EchoClients.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "ReactorServer", "127.0.0.1", "9635"], "background": true, "wait": 1.0},
+    {"name": "client", "cmd": ["java", "-cp", "out", "EchoClients", "127.0.0.1", "9635", "3", "1048576"], "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server reactor một luồng", "client": "Cửa sổ 2 – 3 client echo đồng thời"}
+}

@@ -1,0 +1,39 @@
+===== dich =====
+$ out/app dich 127.0.0.1 41316
+[dich] Server chữ hoa lắng nghe tại 127.0.0.1:41316
+[dich] 127.0.0.1:51252 gửi 29 byte, trả 29 byte chữ hoa
+[dich] 127.0.0.1:51262 gửi 360000 byte, trả 360000 byte chữ hoa
+[dich] Dừng server
+
+===== chuyen_tiep =====
+$ out/app chuyentiep 127.0.0.1 41315 127.0.0.1 41316
+[chuyen-tiep] 127.0.0.1:41315 -> 127.0.0.1:41316
+[chuyen-tiep] #1 127.0.0.1:51804 <-> đích 127.0.0.1:41316
+[chuyen-tiep] #1 xong: lên 29 byte, xuống 29 byte
+[chuyen-tiep] #2 127.0.0.1:51816 <-> đích 127.0.0.1:41316
+[chuyen-tiep] #2 xong: lên 360000 byte, xuống 360000 byte
+[chuyen-tiep] Dừng
+
+===== chuyen_tiep_hong =====
+$ out/app chuyentiep 127.0.0.1 41317 127.0.0.1 41318
+[chuyen-tiep] 127.0.0.1:41317 -> 127.0.0.1:41318
+[chuyen-tiep] #1 127.0.0.1:39328: không nối được đích 127.0.0.1:41318 (Connection refused)
+[chuyen-tiep] Dừng
+
+===== client_nho =====
+$ out/app client 127.0.0.1 41315 'Xin chào lập trình mạng'
+[client] Gửi 29 byte, nhận 29 byte
+[client] Phản hồi: 'XIN CHÀO LẬP TRÌNH MẠNG'
+[client] So khớp với bản chữ hoa: KHỚP
+
+===== client_lon =====
+$ out/app client 127.0.0.1 41315 'dữ liệu lớn ' 20000
+[client] Gửi 360000 byte, nhận 360000 byte
+[client] Phản hồi: 'DỮ LIỆU LỚN DỮ LIỆU LỚN DỮ LIỆU LỚN DỮ L'...
+[client] So khớp với bản chữ hoa: KHỚP
+
+===== client_hong =====
+$ out/app client 127.0.0.1 41317 'Có ai không?'
+[client] Gửi 14 byte, nhận 0 byte
+[client] Kết nối bị đóng mà không có dữ liệu trả về
+

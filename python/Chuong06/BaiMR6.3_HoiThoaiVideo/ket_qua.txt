@@ -1,0 +1,158 @@
+===== server =====
+$ python3 server_video.py 127.0.0.1 41630 41631
+[server] TCP 127.0.0.1:41630 điều khiển; UDP :41631 video
+[server] Khung 160x120 RGB 57600 B, nén zlib, mảnh ≤ 1200 B
+[server] #1 B vào phòng từ 127.0.0.1:44684
+[server]   => B vào phòng
+[server] #1 B đăng ký UDP 127.0.0.1:50843
+[server] #2 C vào phòng từ 127.0.0.1:44688
+[server]   => C vào phòng
+[server] #2 C đăng ký UDP 127.0.0.1:48494
+[server] #3 A vào phòng từ 127.0.0.1:44700
+[server]   => A vào phòng
+[server] #3 A đăng ký UDP 127.0.0.1:52852
+[server] t=2.8s > tat_camera tat_ca
+[server]   => server tắt camera tất cả
+[server] C xin bật camera -> từ chối (server đang tắt)
+[server] t=3.9s > bat_camera tat_ca
+[server]   => server bật camera tất cả
+[server] t=3.9s > do_phan_giai C 4
+[server]   => server đặt độ phân giải C = 1/4
+[server] t=3.9s > fps_toi_da B 2
+[server]   => server giới hạn B gửi tối đa 2 fps
+[server]   => B tự tắt camera
+[server] t=5.4s > bat_camera tat_ca
+[server]   => server bật camera tất cả (B vẫn tự tắt)
+[server] A chọn nhận 10 fps, độ phân giải 1/2
+[server] A chọn nhận 5 fps, độ phân giải 1/2
+[server] t=7.6s > trang_thai
+[server] Trạng thái: 3 client, fps chung 10
+[server]                      giới hạn vào        ra (lưới)
+[server]  #  tên camera       fps 1/n  fps  kbit  fps  kbit
+[server]  1  B   tắt (tự tắt)   2   1    0     0   10   924
+[server]  2  C   mở            10   4   10    46   10   924
+[server]  3  A   mở            10   1   10   575    6   299
+[server] #3 A rời phòng
+[server]   => A rời phòng
+[server] #1 B rời phòng
+[server]   => B rời phòng
+[server] #2 C rời phòng
+[server]   => C rời phòng
+[server] Dừng server (Ctrl+C)
+[server] Tổng kết luồng vào (từ client tới server):
+[server]  #  tên mảnh khung hỏng mảnh mất  bỏ:tắt vượt fps
+[server]         nhận    đủ        mất hẳn
+[server]  1  B    140    21    3    4    0      0      0
+[server]  2  C    190    76    0    0    0      0      1
+[server]  3  A    445    64    0    0    0      0      1
+
+===== B =====
+$ python3 khach_video.py B 127.0.0.1 41630 --thoi-gian 8.5 --mat-goi 0.02
+[khach B] Vào phòng, mã 1; camera tổng hợp 160x120, 10 fps
+[khach B] Camera: mở, gửi tối đa 10 fps, 1/1
+[khach B] Nhận: 10 fps, độ phân giải 1/1
+[khach B] Sự kiện: B vào phòng
+[khach B] Mỗi giây: fps và kbit/s gửi | nhận, số mảnh mất
+[khach B] Sự kiện: C vào phòng
+[khach B] Sự kiện: A vào phòng
+[khach B]  1s gửi 11 fps  604 | nhận 11 fps  1387, mất 0
+[khach B] Camera: tắt (server), gửi tối đa 10 fps, 1/1
+[khach B] Sự kiện: server tắt camera tất cả
+[khach B]  2s gửi  9 fps  498 | nhận 10 fps  1770, mất 0
+[khach B]  3s gửi  0 fps    0 | nhận 10 fps   260, mất 0
+[khach B] Camera: mở, gửi tối đa 10 fps, 1/1
+[khach B] Sự kiện: server bật camera tất cả
+[khach B] Sự kiện: server đặt độ phân giải C = 1/4
+[khach B] Camera: mở, gửi tối đa 2 fps, 1/1
+[khach B] Sự kiện: server giới hạn B gửi tối đa 2 fps
+[khach B]  4s gửi  3 fps  167 | nhận 10 fps  1328, mất 0
+[khach B] > tat_camera
+[khach B] Camera: tắt (tự tắt), gửi tối đa 2 fps, 1/1
+[khach B] Sự kiện: B tự tắt camera
+[khach B] Camera: tắt (tự tắt), gửi tối đa 2 fps, 1/1
+[khach B] Sự kiện: server bật camera tất cả (B vẫn tự tắt)
+[khach B]  5s gửi  1 fps   56 | nhận 10 fps  1063, mất 0
+[khach B]  6s gửi  0 fps    0 | nhận 10 fps   930, mất 0
+[khach B]  7s gửi  0 fps    0 | nhận 10 fps   914, mất 0
+[khach B] Sự kiện: A rời phòng
+[khach B]  8s gửi  0 fps    0 | nhận 10 fps   787, mất 0
+[khach B] Kết thúc sau 8.5 s
+[khach B] Gửi 24 khung = 144 mảnh, giả lập mất 4 mảnh
+[khach B] Nhận 86 khung đủ, hỏng 0, mất hẳn 0, mảnh mất 0
+
+===== C =====
+$ python3 khach_video.py C 127.0.0.1 41630 --thoi-gian 8.5
+[khach C] Vào phòng, mã 2; camera tổng hợp 160x120, 10 fps
+[khach C] Camera: mở, gửi tối đa 10 fps, 1/1
+[khach C] Nhận: 10 fps, độ phân giải 1/1
+[khach C] Sự kiện: C vào phòng
+[khach C] Mỗi giây: fps và kbit/s gửi | nhận, số mảnh mất
+[khach C] Sự kiện: A vào phòng
+[khach C]  1s gửi 11 fps  639 | nhận 11 fps  1697, mất 0
+[khach C] Camera: tắt (server), gửi tối đa 10 fps, 1/1
+[khach C] Sự kiện: server tắt camera tất cả
+[khach C]  2s gửi  7 fps  410 | nhận 10 fps  1469, mất 0
+[khach C] > bat_camera
+[khach C] Bị từ chối: server đang tắt camera của bạn
+[khach C] Camera: mở, gửi tối đa 10 fps, 1/1
+[khach C] Sự kiện: server bật camera tất cả
+[khach C] Camera: mở, gửi tối đa 10 fps, 1/4
+[khach C] Sự kiện: server đặt độ phân giải C = 1/4
+[khach C] Sự kiện: server giới hạn B gửi tối đa 2 fps
+[khach C]  3s gửi  3 fps   68 | nhận 10 fps   412, mất 0
+[khach C]  4s gửi 10 fps   48 | nhận 10 fps  1404, mất 0
+[khach C] Sự kiện: B tự tắt camera
+[khach C] Camera: mở, gửi tối đa 10 fps, 1/4
+[khach C] Sự kiện: server bật camera tất cả (B vẫn tự tắt)
+[khach C]  5s gửi 10 fps   47 | nhận 10 fps   969, mất 0
+[khach C]  6s gửi 10 fps   46 | nhận 10 fps   924, mất 0
+[khach C]  7s gửi 10 fps   46 | nhận 10 fps   915, mất 0
+[khach C] Sự kiện: A rời phòng
+[khach C]  8s gửi 10 fps   46 | nhận 10 fps   663, mất 0
+[khach C] Sự kiện: B rời phòng
+[khach C] Kết thúc sau 8.5 s
+[khach C] Gửi 76 khung = 190 mảnh, giả lập mất 0 mảnh
+[khach C] Nhận 86 khung đủ, hỏng 0, mất hẳn 0, mảnh mất 0
+
+===== A =====
+$ python3 khach_video.py A 127.0.0.1 41630 --thoi-gian 7.3 --ghep ket_qua_video.png
+[khach A] Vào phòng, mã 3; camera tổng hợp 160x120, 10 fps
+[khach A] Camera: mở, gửi tối đa 10 fps, 1/1
+[khach A] Nhận: 10 fps, độ phân giải 1/1
+[khach A] Sự kiện: A vào phòng
+[khach A] Mỗi giây: fps và kbit/s gửi | nhận, số mảnh mất
+[khach A]  1s gửi 11 fps  641 | nhận 11 fps  1942, mất 0
+[khach A] > chup 1. BAN DAU: 3 CAMERA BAT, 10 FPS
+[khach A] Đã chụp out/chup_1.png (320x240)
+[khach A] Camera: tắt (server), gửi tối đa 10 fps, 1/1
+[khach A] Sự kiện: server tắt camera tất cả
+[khach A]  2s gửi  5 fps  291 | nhận 10 fps  1166, mất 0
+[khach A] > chup 2. SERVER TAT CAMERA TAT CA
+[khach A] Đã chụp out/chup_2.png (320x240)
+[khach A] Camera: mở, gửi tối đa 10 fps, 1/1
+[khach A] Sự kiện: server bật camera tất cả
+[khach A] Sự kiện: server đặt độ phân giải C = 1/4
+[khach A] Sự kiện: server giới hạn B gửi tối đa 2 fps
+[khach A]  3s gửi  5 fps  292 | nhận 10 fps   641, mất 0
+[khach A] > chup 3. SERVER: C DO PHAN GIAI 1/4, B TOI DA 2 FPS
+[khach A] Đã chụp out/chup_3.png (320x240)
+[khach A] Sự kiện: B tự tắt camera
+[khach A]  4s gửi 10 fps  583 | nhận 10 fps  1361, mất 0
+[khach A] Camera: mở, gửi tối đa 10 fps, 1/1
+[khach A] Sự kiện: server bật camera tất cả (B vẫn tự tắt)
+[khach A] > chup 4. B TU TAT; SERVER BAT TAT CA NHUNG B VAN TAT
+[khach A] Đã chụp out/chup_4.png (320x240)
+[khach A] > nhan_do_phan_giai 2
+[khach A] > nhan_fps 5
+[khach A] Nhận: 10 fps, độ phân giải 1/2
+[khach A] Nhận: 5 fps, độ phân giải 1/2
+[khach A]  5s gửi 10 fps  572 | nhận 10 fps   919, mất 0
+[khach A] > chup 5. A TU CHON NHAN 1/2, 5 FPS
+[khach A] Đã chụp out/chup_5.png (160x120)
+[khach A]  6s gửi 10 fps  576 | nhận  5 fps   141, mất 0
+[khach A]  7s gửi 10 fps  571 | nhận  5 fps   140, mất 0
+[khach A] Kết thúc sau 7.3 s
+[khach A] Gửi 64 khung = 445 mảnh, giả lập mất 0 mảnh
+[khach A] Nhận 63 khung đủ, hỏng 0, mất hẳn 0, mảnh mất 0
+[khach A] Đã ghép 5 ảnh chụp vào ket_qua_video.png (688x710)
+

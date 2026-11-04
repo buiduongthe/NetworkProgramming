@@ -1,0 +1,44 @@
+[
+  {
+    "bai": "BaiMR5.1_TruyenNhieuTep",
+    "chuong": 5,
+    "ngon_ngu": [
+      "python",
+      "go"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "Truyền nhiều tệp đồng thời: start/pause/resume/stop, giới hạn tốc độ (thùng token) theo phiên và theo tệp, tải tiếp bằng offset + SHA-256",
+    "ghi_chu": "Một kết nối TCP mỗi lượt (khung JSON có tiền tố độ dài + luồng byte). Demo tạo 3 tệp 3 MiB trong thư mục tạm rồi dọn sạch; hai bản in thông điệp giống nhau. Đọc thêm: RFC 9110 §14, RFC 6234."
+  },
+  {
+    "bai": "BaiMR8.3_ChongSlowloris",
+    "chuong": 8,
+    "ngon_ngu": [
+      "python",
+      "go"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "Phòng thủ tấn công từ chối dịch vụ mức ứng dụng kiểu Slowloris: hạn đọc tiêu đề, hạn rỗi, cỡ tiêu đề tối đa, giới hạn kết nối theo IP, trần toàn cục (503)",
+    "ghi_chu": "So sánh server vulnerable/protected; client thí nghiệm chỉ nhắm loopback (127.0.0.0/8). Probe tới vulnerable THẤT BẠI (nghẽn), tới protected THÀNH CÔNG. Nhấn mạnh phòng thủ và đạo đức. Đọc thêm: RFC 9112, OWASP Slow HTTP DoS."
+  },
+  {
+    "bai": "BaiMR8.4_ChongSSRF_MCP",
+    "chuong": 8,
+    "ngon_ngu": [
+      "python",
+      "go"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "Chống SSRF trong công cụ MCP fetch_url: allowlist giao thức, chặn dải nội bộ/loopback/link-local/metadata, phân giải một lần + nối đúng IP (chống DNS rebinding), kiểm lại mọi chặng chuyển hướng, giới hạn kích thước/thời gian/số hop, gỡ thông tin đăng nhập",
+    "ghi_chu": "Nối tiếp Bài 8.3 (JSON-RPC 2.0 qua stdio). So sánh fetch_url_naive (lộ bí mật nội bộ) với fetch_url_safe (chặn). Chạy offline bằng bảng phân giải/dial tiêm qua biến môi trường; coi 203.0.113.0/24 (TEST-NET-3) là đích công khai hợp lệ của demo. Bản Go dùng chung client thử nghiệm Python như Bài 8.3. Đọc thêm: OWASP SSRF Prevention, RFC 5737, RFC 3927."
+  }
+]

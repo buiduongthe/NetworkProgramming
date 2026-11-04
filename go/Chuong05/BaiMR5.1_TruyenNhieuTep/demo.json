@@ -1,0 +1,7 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "demo", "cmd": ["out/app", "demo", "127.0.0.1", "41515"], "timeout": 60}
+  ],
+  "titles": {"demo": "Cửa sổ dòng lệnh – demo truyền nhiều tệp (server cục bộ + client, cổng 41515)"}
+}

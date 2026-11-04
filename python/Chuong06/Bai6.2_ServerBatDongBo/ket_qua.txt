@@ -1,0 +1,25 @@
+===== server =====
+$ python3 async_server.py 127.0.0.1 9663
+[server] Server bất đồng bộ đang lắng nghe tại 127.0.0.1:9663
+[server] Nhận 127.0.0.1:50688 (tác vụ: 1, luồng: 1)
+[server] Nhận 127.0.0.1:42876 (tác vụ: 2, luồng: 1)
+[server] Nhận 127.0.0.1:42880 (tác vụ: 3, luồng: 1)
+[server] Nhận 127.0.0.1:42896 (tác vụ: 4, luồng: 1)
+[server] Nhận 127.0.0.1:42904 (tác vụ: 5, luồng: 1)
+[server] Kết thúc 127.0.0.1:50688: client đóng kết nối
+[server] Kết thúc 127.0.0.1:42876: client đóng kết nối
+[server] Kết thúc 127.0.0.1:42880: client đóng kết nối
+[server] Kết thúc 127.0.0.1:42896: client đóng kết nối
+[server] Kết thúc 127.0.0.1:42904: client đóng kết nối
+[server] Dừng server
+
+===== client =====
+$ python3 multi_client.py 127.0.0.1 9663 5 1000
+[client] 5 client cách nhau 100 ms, giữ kết nối 1000 ms
+[client 1] t = 4 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 2] t = 104 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 3] t = 203 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 4] t = 303 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 5] t = 404 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client] Hoàn tất sau 1404 ms
+

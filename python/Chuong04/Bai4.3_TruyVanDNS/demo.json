@@ -1,0 +1,10 @@
+{
+  "processes": [
+    {"name": "dns", "cmd": ["python3", "fake_dns_server.py", "127.0.0.1", "9431"], "background": true, "wait": 0.8},
+    {"name": "a", "cmd": ["python3", "dns_query.py", "127.0.0.1", "demo.ltm.local", "A", "9431"]},
+    {"name": "aaaa", "cmd": ["python3", "dns_query.py", "127.0.0.1", "demo.ltm.local", "AAAA", "9431"]},
+    {"name": "nx", "cmd": ["python3", "dns_query.py", "127.0.0.1", "khong-co.ltm.local", "A", "9431"]},
+    {"name": "sys", "cmd": ["python3", "dns_query.py", "8.8.8.8", "example.com", "A"]}
+  ],
+  "titles": {"dns": "Cửa sổ 1 – DNS server giả lập (Python)", "a": "Cửa sổ 2 – truy vấn A", "aaaa": "Cửa sổ 3 – truy vấn AAAA", "nx": "Cửa sổ 4 – tên không tồn tại", "sys": "Cửa sổ 5 – DNS trong /etc/resolv.conf (8.8.8.8)"}
+}

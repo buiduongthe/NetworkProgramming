@@ -1,0 +1,9 @@
+{
+  "processes": [
+    {"name": "server", "cmd": ["python3", "udp_echo_server.py", "127.0.0.1", "9411"], "background": true, "wait": 0.8},
+    {"name": "client1", "cmd": ["python3", "udp_echo_client.py", "127.0.0.1", "9411"], "stdin": "Xin chào\nLập trình mạng UDP\n"},
+    {"name": "client2", "cmd": ["python3", "udp_echo_client.py", "127.0.0.1", "9411"], "stdin": "Client thứ hai\n"},
+    {"name": "client3", "cmd": ["python3", "udp_echo_client.py", "127.0.0.1", "9419"], "stdin": "Có ai không?\nGửi lần nữa\n"}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "client1": "Cửa sổ 2 – client thứ nhất", "client2": "Cửa sổ 3 – client thứ hai", "client3": "Cửa sổ 4 – client, server không chạy (cổng 9419)"}
+}

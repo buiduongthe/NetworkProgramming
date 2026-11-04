@@ -1,0 +1,8 @@
+[package]
+name = "bai2_1_doc_cau_hinh"
+version = "0.1.0"
+edition = "2021"
+description = "Bài 2.1 – Đọc cấu hình địa chỉ và cổng (Mã giả 2.1)"
+publish = false
+
+[dependencies]

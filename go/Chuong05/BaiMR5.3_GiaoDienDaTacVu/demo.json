@@ -1,0 +1,11 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "41535"], "background": true, "wait": 0.8},
+    {"name": "ui", "cmd": ["out/app", "ui", "127.0.0.1", "41539", "127.0.0.1", "41535"], "background": true, "wait": 0.8},
+    {"name": "browser", "cmd": ["python3", "chup_giao_dien.py", "41539"], "timeout": 90, "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ thử (HTTP, DNS giả lập, cổng mở)",
+             "ui": "Cửa sổ 2 – chương trình giao diện (Go, SSE)",
+             "browser": "Cửa sổ 3 – trình duyệt do Playwright điều khiển"}
+}

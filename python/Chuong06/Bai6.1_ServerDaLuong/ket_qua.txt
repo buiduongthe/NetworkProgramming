@@ -1,0 +1,53 @@
+===== server1 =====
+$ python3 thread_server.py 127.0.0.1 9660 3
+[server] Đang lắng nghe tại 127.0.0.1:9660
+[server] Mỗi kết nối một luồng, MAX_CLIENTS = 3
+[server] Nhận 127.0.0.1:54738, tạo luồng mới (đang phục vụ: 1)
+[server] Nhận 127.0.0.1:54744, tạo luồng mới (đang phục vụ: 2)
+[server] Nhận 127.0.0.1:54750, tạo luồng mới (đang phục vụ: 3)
+[server] Từ chối 127.0.0.1:54760: đã đủ 3 kết nối
+[server] Từ chối 127.0.0.1:54770: đã đủ 3 kết nối
+[server] Client 127.0.0.1:54738 đã đóng kết nối
+[server] Client 127.0.0.1:54744 đã đóng kết nối
+[server] Client 127.0.0.1:54750 đã đóng kết nối
+[server] Dừng server
+
+===== client1 =====
+$ python3 multi_client.py 127.0.0.1 9660 5 1000
+[client] 5 client cách nhau 100 ms, giữ kết nối 1000 ms
+[client 1] t = 3 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 2] t = 102 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 3] t = 203 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 4] t = 303 ms: server đóng kết nối ngay
+[client 5] t = 404 ms: server đóng kết nối ngay
+[client] Hoàn tất sau 1203 ms
+
+===== server2 =====
+$ python3 pool_server.py 127.0.0.1 9661 2 1
+[server] Đang lắng nghe tại 127.0.0.1:9661
+[server] Nhóm 2 luồng thợ, hàng đợi 1 chỗ
+[server] Nhận 127.0.0.1:54804
+[server] Luồng thợ 1 phục vụ 127.0.0.1:54804
+[server] Nhận 127.0.0.1:54812
+[server] Luồng thợ 2 phục vụ 127.0.0.1:54812
+[server] Nhận 127.0.0.1:54818
+[server] Nhận 127.0.0.1:54820
+[server] Hàng đợi đầy, trả 503 cho 127.0.0.1:54820
+[server] Nhận 127.0.0.1:54828
+[server] Hàng đợi đầy, trả 503 cho 127.0.0.1:54828
+[server] Client 127.0.0.1:54804 đã đóng kết nối
+[server] Luồng thợ 1 phục vụ 127.0.0.1:54818
+[server] Client 127.0.0.1:54812 đã đóng kết nối
+[server] Client 127.0.0.1:54818 đã đóng kết nối
+[server] Dừng server
+
+===== client2 =====
+$ python3 multi_client.py 127.0.0.1 9661 5 1000
+[client] 5 client cách nhau 100 ms, giữ kết nối 1000 ms
+[client 1] t = 3 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 2] t = 102 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 4] t = 303 ms: bị từ chối 503 – Server bận
+[client 5] t = 403 ms: bị từ chối 503 – Server bận
+[client 3] t = 1003 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client] Hoàn tất sau 2004 ms
+

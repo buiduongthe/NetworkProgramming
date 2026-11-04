@@ -1,0 +1,10 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "r1", "cmd": ["cargo", "run", "-q", "--release", "--", "responder", "9200", "Phòng-Lab-A", "21650"], "background": true, "wait": 0.8},
+    {"name": "r2", "cmd": ["cargo", "run", "-q", "--release", "--", "responder", "9201", "Phòng-Lab-B", "21650"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["cargo", "run", "-q", "--release", "--", "discover", "1000", "21650", "255.255.255.255"], "wait": 0.3}
+  ],
+  "titles": {"r1": "Cửa sổ 1 – responder Phòng-Lab-A", "r2": "Cửa sổ 2 – responder Phòng-Lab-B",
+             "client": "Cửa sổ 3 – client khám phá (broadcast)"}
+}

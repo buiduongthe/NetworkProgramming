@@ -1,0 +1,17 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "dich", "cmd": ["out/app", "dich", "127.0.0.1", "41316"], "background": true, "wait": 0.6},
+    {"name": "chuyen_tiep", "cmd": ["out/app", "chuyentiep", "127.0.0.1", "41315", "127.0.0.1", "41316"], "background": true, "wait": 0.6},
+    {"name": "chuyen_tiep_hong", "cmd": ["out/app", "chuyentiep", "127.0.0.1", "41317", "127.0.0.1", "41318"], "background": true, "wait": 0.6},
+    {"name": "client_nho", "cmd": ["out/app", "client", "127.0.0.1", "41315", "Xin chào lập trình mạng"]},
+    {"name": "client_lon", "cmd": ["out/app", "client", "127.0.0.1", "41315", "dữ liệu lớn ", "20000"]},
+    {"name": "client_hong", "cmd": ["out/app", "client", "127.0.0.1", "41317", "Có ai không?"], "wait": 0.5}
+  ],
+  "titles": {"dich": "Cửa sổ 1 – server đích (chữ hoa) cổng 41316",
+             "chuyen_tiep": "Cửa sổ 2 – chuyển tiếp 41315 -> 41316",
+             "chuyen_tiep_hong": "Cửa sổ 3 – chuyển tiếp 41317 -> 41318 (không có đích)",
+             "client_nho": "Cửa sổ 4 – client gửi chuỗi ngắn qua 41315",
+             "client_lon": "Cửa sổ 5 – client gửi 360 000 byte qua 41315",
+             "client_hong": "Cửa sổ 6 – client nối 41317 (đích không chạy)"}
+}

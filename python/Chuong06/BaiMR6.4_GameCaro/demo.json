@@ -1,0 +1,18 @@
+{
+  "processes": [
+    {"name": "server", "cmd": ["python3", "server_caro.py", "0.0.0.0", "41640", "--kham-pha", "41641", "--ten", "Phòng-Lab-A", "--het-gio-ms", "1000"], "background": true, "wait": 0.6},
+    {"name": "An", "cmd": ["python3", "nguoi_choi.py", "An", "--tim", "41641", "--tao", "ban1", "--bot", "can_bang", "--so-van", "2", "--tre-ms", "60"], "background": true, "wait": 1.2},
+    {"name": "Cuong", "cmd": ["python3", "nguoi_choi.py", "Cuong", "127.0.0.1", "41640", "--tao", "ban2", "--bot", "can_bang", "--tre-ms", "60"], "background": true, "wait": 0.3},
+    {"name": "tim", "cmd": ["python3", "tim_server.py", "41641", "500"], "wait": 0.2},
+    {"name": "Khach", "cmd": ["python3", "nguoi_choi.py", "Khach", "127.0.0.1", "41640", "--xem", "ban1"], "background": true, "wait": 0.3},
+    {"name": "Dung", "cmd": ["python3", "nguoi_choi.py", "Dung", "127.0.0.1", "41640", "--vao", "ban2", "--bot", "im_lang"], "background": true, "wait": 0.3},
+    {"name": "Binh", "cmd": ["python3", "nguoi_choi.py", "Binh", "127.0.0.1", "41640", "--vao", "ban1", "--bot", "tap_su", "--seed", "14", "--thu-loi", "--so-van", "2", "--tre-ms", "60"], "timeout": 30, "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server Caro (mỗi nước tối đa 1000 ms)",
+             "An": "Cửa sổ 2 – An (bot cân bằng, tìm server bằng broadcast)",
+             "Cuong": "Cửa sổ 3 – Cuong (bot, phòng ban2)",
+             "tim": "Cửa sổ 4 – tìm server trong LAN",
+             "Khach": "Cửa sổ 5 – Khach (người xem phòng ban1)",
+             "Dung": "Cửa sổ 6 – Dung (bot im lặng, phòng ban2)",
+             "Binh": "Cửa sổ 7 – Binh (bot tập sự, thử gửi nước sai)"}
+}

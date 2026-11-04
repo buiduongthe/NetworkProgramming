@@ -1,0 +1,11 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "-v", "q", "-nologo"]],
+  "processes": [
+    {"name": "server", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "server", "127.0.0.1", "9508"], "background": true, "wait": 1.5},
+    {"name": "binh", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "cli", "Bình", "127.0.0.1", "9508"], "background": true, "wait": 1.5,
+     "stdin": "/cho 2.5\nChào An, mình nghe rõ.\n"},
+    {"name": "an", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "cli", "An", "127.0.0.1", "9508"], "wait": 1.0,
+     "stdin": "Xin chào mọi người\n/cho 3\n/quit\n"}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server chat", "binh": "Cửa sổ 2 – Bình", "an": "Cửa sổ 3 – An"}
+}

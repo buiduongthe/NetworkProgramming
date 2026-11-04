@@ -1,0 +1,57 @@
+===== server =====
+$ dotnet run --no-build -c Release -- server 127.0.0.1 9332
+[server] Đang lắng nghe tại 127.0.0.1:9332 (22 thuật ngữ)
+[server] Client kết nối: 127.0.0.1:39272
+[server] 127.0.0.1:39272: lookup 'TCP' -> 200
+[server] 127.0.0.1:39272: lookup 'Định khung' -> 200
+[server] 127.0.0.1:39272: lookup 'XYZ' -> 404
+[server] Client 127.0.0.1:39272 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:39274
+[server] 127.0.0.1:39274: lookup 'TCP' -> 200
+[server] 127.0.0.1:39274: lookup 'Bắt tay ba bước' -> 200
+[server] Client 127.0.0.1:39274 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:39280
+[server] 127.0.0.1:39280: lookup 'UDP' -> 200
+[server] Client 127.0.0.1:39280 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:39294
+[server] 127.0.0.1:39294: lookup 'TCP' -> 200
+[server] 127.0.0.1:39294: lookup 'XYZ' -> 404
+[server] Client 127.0.0.1:39294 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:39304
+[server] Lỗi với 127.0.0.1:39304: Khung quá lớn: 4294967295
+[server] Client 127.0.0.1:39304 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:39314
+[server] 127.0.0.1:39314: (JSON sai) -> 400
+[server] 127.0.0.1:39314: list -> 200
+[server] 127.0.0.1:39314: xoa -> 400
+[server] 127.0.0.1:39314: (không phải đối tượng) -> 400
+[server] Client 127.0.0.1:39314 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:39330
+[server] Lỗi với 127.0.0.1:39330: Kết nối đóng giữa chừng (đã nhận 14 byte)
+[server] Client 127.0.0.1:39330 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:39346
+[server] 127.0.0.1:39346: lookup 'TCP' -> 200
+[server] Client 127.0.0.1:39346 đã đóng kết nối
+
+===== client =====
+$ dotnet run --no-build -c Release -- client 127.0.0.1 9332
+[client] Đã kết nối 127.0.0.1:9332. Nhập thuật ngữ cần tra (Ctrl+Z/Ctrl+D để kết thúc).
+[client] TCP: Giao thức vận chuyển hướng kết nối, tin cậy, đúng thứ tự, truyền dòng byte (RFC 9293).
+[client] Định khung: Cách đánh dấu ranh giới thông điệp trên dòng byte TCP.
+[client] Lỗi 404: Không có thuật ngữ ('XYZ')
+[client] Đã đóng kết nối
+
+===== kiem_thu =====
+$ dotnet run --no-build -c Release -- kiemthu 127.0.0.1 9332
+[kiểm thử] Server 127.0.0.1:9332
+[kiểm thử] Ca 1 – thuật ngữ có trong từ điển: ĐẠT (status 200)
+[kiểm thử] Ca 2 – thuật ngữ có dấu: ĐẠT (status 200, term 'Bắt tay ba bước')
+[kiểm thử] Ca 3 – gửi 32 byte từng byte một: ĐẠT (status 200, term 'UDP')
+[kiểm thử] Ca 4 – hai yêu cầu trong một lần SEND: ĐẠT (status 200 rồi 404)
+[kiểm thử] Ca 5 – độ dài 4294967295 > MAX_FRAME: ĐẠT (server đóng kết nối)
+[kiểm thử] Ca 6 – nội dung không phải JSON: ĐẠT (status 400, sau đó list -> 200, 22 thuật ngữ)
+[kiểm thử] Ca bổ sung – thao tác "xoa": ĐẠT (status 400: Sai thao tác)
+[kiểm thử] Ca bổ sung – JSON là mảng [1,2]: ĐẠT (status 400: JSON sai)
+[kiểm thử] Ca 7 – đóng giữa khung (14/54 byte): ĐẠT (client mới vẫn được phục vụ, status 200)
+[kiểm thử] Kết quả: 9/9 ca đạt
+

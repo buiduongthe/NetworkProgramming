@@ -1,0 +1,12 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "-v", "q", "-nologo"]],
+  "env": {"TLS_KEY_PASS": "matkhau-lab", "CHAT_JWT_KEY": "khoa-ky-jwt-cua-phong-lab-0123456789", "TLS_CERT": "certs/chat.p12"},
+  "processes": [
+    {"name": "chuanbi", "cmd": ["bash", "-c", "bash tao_chung_chi.sh && dotnet run --no-build -c Release -- token an certs/an.jwt && dotnet run --no-build -c Release -- token binh certs/binh_email.jwt email"]},
+    {"name": "server", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "server", "127.0.0.1", "9843"], "background": true, "wait": 1.5},
+    {"name": "tin_cay", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "client", "localhost", "9843", "certs/an.jwt", "certs/ca.crt"], "stdin": "Xin chào qua TLS\nTin nhắn đã được mã hóa\n"},
+    {"name": "khong_tin_cay", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "client", "localhost", "9843", "certs/an.jwt"], "stdin": "Xin chào\n"},
+    {"name": "sai_token", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "client", "localhost", "9843", "certs/binh_email.jwt", "certs/ca.crt"], "stdin": "Xin chào\n"}
+  ],
+  "titles": {"chuanbi": "Cửa sổ 1 – tạo chứng chỉ, cấp token", "server": "Cửa sổ 2 – server chat TLS", "tin_cay": "Cửa sổ 3 – client tin cậy CA, token đúng", "khong_tin_cay": "Cửa sổ 4 – client không tin cậy CA", "sai_token": "Cửa sổ 5 – token cấp cho dịch vụ khác"}
+}

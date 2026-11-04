@@ -1,0 +1,8 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "thu_thap", "cmd": ["out/app", "thuthap", "127.0.0.1", "41415", "1.5"], "background": true, "wait": 0.8},
+    {"name": "xuat", "cmd": ["out/app", "xuat", "127.0.0.1", "41415", "100", "2"], "wait": 2.5}
+  ],
+  "titles": {"thu_thap": "Cửa sổ 1 – bộ thu thập NetFlow v5 (UDP 41415)", "xuat": "Cửa sổ 2 – máy xuất giả lập (bỏ gói #2)"}
+}

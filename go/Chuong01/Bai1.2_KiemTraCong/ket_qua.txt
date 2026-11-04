@@ -1,0 +1,33 @@
+===== server =====
+$ python3 -m http.server 31120 --bind 127.0.0.1
+Serving HTTP on 127.0.0.1 port 31120 (http://127.0.0.1:31120/) ...
+
+Keyboard interrupt received, exiting.
+
+===== open =====
+$ out/app localhost 31120
+[port-check] Kiểm tra localhost:31120 (thời gian chờ 2000 ms)
+  INET   127.0.0.1
+[port-check] 127.0.0.1 cổng 31120: kết nối thành công
+[port-check] Kết quả: localhost:31120 -> OPEN
+
+===== closed =====
+$ out/app localhost 31121
+[port-check] Kiểm tra localhost:31121 (thời gian chờ 2000 ms)
+  INET   127.0.0.1
+[port-check] 127.0.0.1 cổng 31121: bị từ chối (RST)
+[port-check] Kết quả: localhost:31121 -> CLOSED
+
+===== unresolved =====
+$ out/app khong-ton-tai.invalid 80
+[port-check] Kiểm tra khong-ton-tai.invalid:80 (thời gian chờ 2000 ms)
+[port-check] Không phân giải được khong-ton-tai.invalid (lỗi: no such host)
+[port-check] Kết quả: khong-ton-tai.invalid:80 -> UNRESOLVED
+
+===== filtered =====
+$ out/app 10.255.255.1 31122 1000
+[port-check] Kiểm tra 10.255.255.1:31122 (thời gian chờ 1000 ms)
+  INET   10.255.255.1
+[port-check] 10.255.255.1 cổng 31122: hết thời gian chờ
+[port-check] Kết quả: 10.255.255.1:31122 -> FILTERED
+

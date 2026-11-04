@@ -1,0 +1,10 @@
+[package]
+name = "bai6_4_server_chat"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Môi trường chạy bất đồng bộ: mạng, hẹn giờ, hàng đợi (mpsc), tín hiệu (watch), đọc bàn phím, Ctrl+C
+tokio = { version = "=1.54.1", features = ["rt-multi-thread", "macros", "net", "io-util", "io-std", "time", "sync", "signal"] }
+# JSON cho khung tin nhắn (Mã giả 3.6); preserve_order giữ thứ tự khóa như từ điển Python
+serde_json = { version = "=1.0.154", features = ["preserve_order"] }

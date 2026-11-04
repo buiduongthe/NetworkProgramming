@@ -1,0 +1,7 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "ResolveHost.java"]],
+  "processes": [
+    {"name": "resolve", "cmd": ["java", "-cp", "out", "ResolveHost", "localhost", "example.com", "khong-ton-tai.invalid", "::1"]}
+  ],
+  "titles": {"resolve": "Cửa sổ dòng lệnh – phân giải tên miền"}
+}

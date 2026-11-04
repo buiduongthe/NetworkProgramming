@@ -1,0 +1,13 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server", "cmd": ["../../target/release/bai2_2_ket_noi_an_toan", "server", "127.0.0.1", "21220"], "background": true, "wait": 0.8},
+    {"name": "refused", "cmd": ["../../target/release/bai2_2_ket_noi_an_toan", "client", "127.0.0.1", "21221"]},
+    {"name": "not_found", "cmd": ["../../target/release/bai2_2_ket_noi_an_toan", "client", "khong-ton-tai.invalid", "21220"]},
+    {"name": "timeout", "cmd": ["../../target/release/bai2_2_ket_noi_an_toan", "client", "10.255.255.1", "21220", "3000"]},
+    {"name": "ok", "cmd": ["../../target/release/bai2_2_ket_noi_an_toan", "client", "localhost", "21220"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server thử nghiệm", "refused": "2 – cổng đóng trên localhost",
+             "not_found": "3 – tên không tồn tại", "timeout": "4 – địa chỉ không định tuyến được",
+             "ok": "5 – kết nối thành công"}
+}

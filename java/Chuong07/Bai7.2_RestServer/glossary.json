@@ -1,0 +1,6 @@
+{
+  "TCP": "Giao thức vận chuyển hướng kết nối",
+  "UDP": "Giao thức vận chuyển không kết nối",
+  "HTTP": "Giao thức yêu cầu–phản hồi tầng ứng dụng",
+  "Keep alive": "Giữ kết nối TCP cho nhiều yêu cầu liên tiếp"
+}

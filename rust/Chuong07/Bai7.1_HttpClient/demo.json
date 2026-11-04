@@ -1,0 +1,8 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server", "cmd": ["cargo", "run", "-q", "--release", "--", "server", "127.0.0.1", "21710"], "background": true, "wait": 1.0},
+    {"name": "client", "cmd": ["cargo", "run", "-q", "--release", "--", "client", "127.0.0.1", "21710", "/api/v1/terms/TCP", "/chunked", "/dong-ket-noi", "/khong-co"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server thử", "client": "Cửa sổ 2 – client HTTP/1.1"}
+}

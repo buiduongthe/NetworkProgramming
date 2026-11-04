@@ -1,0 +1,8 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server", "cmd": ["../../target/release/bai5_3_giao_dien_bat_dong_bo", "server", "127.0.0.1", "21530", "1500"], "background": true, "wait": 0.8},
+    {"name": "gui", "cmd": ["../../target/release/bai5_3_giao_dien_bat_dong_bo", "demo", "127.0.0.1", "21530", "21531"], "timeout": 40}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server", "gui": "Cửa sổ 2 – ứng dụng giao diện (kịch bản tự động)"}
+}

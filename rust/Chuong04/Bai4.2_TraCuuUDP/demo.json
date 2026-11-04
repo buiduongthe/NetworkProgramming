@@ -1,0 +1,9 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server", "cmd": ["../../target/release/bai4_2_tra_cuu_udp", "server", "127.0.0.1", "21420", "2"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["../../target/release/bai4_2_tra_cuu_udp", "client", "127.0.0.1", "21420"], "stdin": "UDP\nQUIC\nXYZ\n"},
+    {"name": "client2", "cmd": ["../../target/release/bai4_2_tra_cuu_udp", "client", "127.0.0.1", "21429"], "stdin": "TCP\n", "timeout": 20}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server (bỏ qua 2 datagram đầu tiên)", "client": "Cửa sổ 2 – client", "client2": "Cửa sổ 3 – client, server không chạy (cổng 21429)"}
+}

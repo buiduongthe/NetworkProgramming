@@ -1,0 +1,18 @@
+===== r1 =====
+$ dotnet run --no-build -c Release -- responder 9200 'Phòng-Lab-A' 9609
+[responder] Phòng-Lab-A, cổng dịch vụ 9200, chờ discover tại cổng 9609
+[responder] discover id=347237 từ 192.0.2.2:46448, trả lời sau 198 ms
+
+===== r2 =====
+$ dotnet run --no-build -c Release -- responder 9201 'Phòng-Lab-B' 9609
+[responder] Phòng-Lab-B, cổng dịch vụ 9201, chờ discover tại cổng 9609
+[responder] discover id=347237 từ 192.0.2.2:46448, trả lời sau 74 ms
+
+===== client =====
+$ dotnet run --no-build -c Release -- discover 1000 9609 255.255.255.255
+[client] Phát discover id=347237 tới 255.255.255.255:9609
+[client] Thu thập phản hồi trong 1000 ms
+[client] Tìm thấy 2 server:
+[client]   Phòng-Lab-B tại 192.0.2.2:9201
+[client]   Phòng-Lab-A tại 192.0.2.2:9200
+

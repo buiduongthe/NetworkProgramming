@@ -1,0 +1,33 @@
+===== server =====
+$ out/app server 127.0.0.1 31530 1500
+[server] Đang lắng nghe tại 127.0.0.1:31530, độ trễ giả lập 1500 ms
+[server] Client kết nối: 127.0.0.1:37498
+[server] Nhận từ 127.0.0.1:37498: {"op":"lookup","term":"TCP"}
+[server] Client 127.0.0.1:37498 đã đóng kết nối
+[server] Dừng server
+
+===== gui =====
+$ out/app gui 127.0.0.1 31530 31532
+[gui] Mở trình duyệt tại http://127.0.0.1:31532/?host=127.0.0.1&port=31530
+[gui] Bấm Kết nối 127.0.0.1:31531: giao cho goroutine nền
+[gui] CONNECT_WORKER: lỗi REFUSED
+[gui]   UI_INVOKE(showStatus, ["Lỗi: REFUSED"])
+[gui]   UI_INVOKE(setEnabled, ["btnConnect",true])
+[gui] Bấm Kết nối 127.0.0.1:31530: giao cho goroutine nền
+[gui] CONNECT_WORKER: đã kết nối 127.0.0.1:31530
+[gui]   UI_INVOKE(showStatus, ["Đã kết nối"])
+[gui]   UI_INVOKE(setEnabled, ["btnLookup",true])
+[gui] Bấm Tra cứu: gửi {"op":"lookup","term":"TCP"}
+[gui] Nhận phản hồi: {"status":200,"term":"TCP","text":"Giao thức truyền tin cậy, hướng kết nối"}
+[gui] Cửa sổ đóng: hủy ct, đóng kết nối
+[gui] Dừng giao diện
+
+===== browser =====
+$ python3 chup_giao_dien.py 31532 31530 31531
+[trình duyệt] Kết nối cổng 31531: Lỗi: REFUSED
+[trình duyệt] Kết nối cổng 31530: Đã kết nối
+[trình duyệt] Đang chờ phản hồi: trạng thái 'Đang tra cứu...', nút Tra cứu disabled
+[trình duyệt] Kết quả: Giao thức truyền tin cậy, hướng kết nối – trạng thái 'Xong'
+[trình duyệt] Trong lúc chờ, đồng hồ giao diện được vẽ lại 16 lần (không đứng hình)
+[trình duyệt] Đã chụp cửa sổ: ket_qua_gui.png
+

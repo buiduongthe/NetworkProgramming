@@ -1,0 +1,44 @@
+[
+  {
+    "bai": "BaiMR1.2_MoPhongGiaoThuc",
+    "chuong": 1,
+    "ngon_ngu": [
+      "python",
+      "go"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "Mô phỏng sự kiện rời rạc các giao thức và kiểu truyền: TCP (bắt tay, cwnd, gửi lại nhanh, RTO, FIN), UDP, unicast, broadcast, multicast/IGMP, anycast; hoạt hình HTML",
+    "ghi_chu": "Không mở socket; tất định theo seed (xorshift32 tự viết) – bản Python và Go in kết quả trùng từng ký tự (đã so sánh với nhiều seed và --loss). Hoạt hình mo_phong.html (JavaScript thuần, không CDN) do chương trình sinh, chụp bằng Playwright thành ket_qua_gui.png. TCP rút gọn theo Reno: RTO cố định 100 ms, không thổi phồng cwnd khi khôi phục nhanh. Đọc thêm: RFC 9293, 5681, 6298, 768, 919, 1112, 2236, 4541, 4786; Grigorik 2013, Ch. 2–3."
+  },
+  {
+    "bai": "BaiMR5.2_MoPhongDongThoi",
+    "chuong": 5,
+    "ngon_ngu": [
+      "python",
+      "go"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "So sánh mô hình đồng thời trên cùng khối việc (20 yêu cầu mạng 200 ms, việc CPU, mạng + CPU): tuần tự, luồng/goroutine, nhóm luồng/worker, asyncio/kênh, nhóm tiến trình; biểu đồ Gantt văn bản; GIL; tranh chấp dữ liệu, bế tắc",
+    "ghi_chu": "Thời gian đo thật nên thay đổi nhẹ giữa các lần chạy (máy kiểm thử 2 CPU). Python: nhóm luồng không nhanh hơn với việc CPU (GIL), nhóm tiến trình ≈ 1,7×; CPU trong vòng lặp asyncio làm nhịp tim trễ 651 ms, to_thread 325 ms, 2 luồng 164 ms, tiến trình 4 ms. Go: goroutine ≈ 2× trên 2 CPU, trễ lập lịch ≤ 13 ms kể cả GOMAXPROCS = 1; go run -race phát hiện tranh chấp. Cổng 41520 (Python), 41525 (Go). Đọc thêm: tài liệu asyncio, concurrent.futures, PEP 703; Effective Go, Go Memory Model; Töpke 2023, Ch. 8; Butcher & Farina 2016, Ch. 3."
+  },
+  {
+    "bai": "BaiMR5.3_GiaoDienDaTacVu",
+    "chuong": 5,
+    "ngon_ngu": [
+      "python",
+      "go"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "Giao diện luôn phản hồi khi nhiều tác vụ mạng chạy song song: tải HTTP có tiến trình, kiểm tra cổng, tra cứu tên UDP, hủy từng tác vụ/hủy tất cả, giới hạn đồng thời đổi được; nút “làm sai” chặn luồng giao diện và đo khoảng nghỉ giữa hai nhịp đồng hồ",
+    "ghi_chu": "Python: Tkinter chạy bằng /usr/bin/python3.12 (Tk 8.6) dưới xvfb-run, kịch bản --demo bấm nút bằng after(), chụp bằng ImageMagick import; nhịp tối đa 24 ms khi chạy song song so với 1213 ms khi chặn luồng GUI. Go: giao diện web cục bộ (net/http + SSE, goroutine + context, bộ giới hạn FIFO), nút làm sai dùng XMLHttpRequest đồng bộ; Playwright chụp; 31 ms so với 1229 ms. Cổng 41530–41533 (Python), 41535–41539 (Go). Đọc thêm: tài liệu tkinter (Threading model), queue, context; WHATWG Server-sent events; RFC 9110."
+  }
+]

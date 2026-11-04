@@ -1,0 +1,9 @@
+[package]
+name = "bai2_3_client_dns"
+version = "0.1.0"
+edition = "2021"
+description = "Bài 2.3 – Client tra cứu DNS dùng bộ phân giải của hệ điều hành (Mã giả 2.3)"
+publish = false
+
+[dependencies]
+dns-lookup = "=2.1.0"

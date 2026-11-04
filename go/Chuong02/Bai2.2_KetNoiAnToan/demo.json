@@ -1,0 +1,13 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "31220"], "background": true, "wait": 0.8},
+    {"name": "refused", "cmd": ["out/app", "client", "127.0.0.1", "31221"]},
+    {"name": "not_found", "cmd": ["out/app", "client", "khong-ton-tai.invalid", "31220"]},
+    {"name": "timeout", "cmd": ["out/app", "client", "10.255.255.1", "31220", "3000"]},
+    {"name": "ok", "cmd": ["out/app", "client", "localhost", "31220"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server thử nghiệm", "refused": "2 – cổng đóng trên localhost",
+             "not_found": "3 – tên không tồn tại", "timeout": "4 – địa chỉ không định tuyến được",
+             "ok": "5 – kết nối thành công"}
+}

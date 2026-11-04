@@ -1,0 +1,9 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "NetUtil.java", "Json.java", "UdpLookupServer.java", "UdpLookupClient.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "UdpLookupServer", "127.0.0.1", "9423", "2"], "background": true, "wait": 1.0},
+    {"name": "client", "cmd": ["java", "-cp", "out", "UdpLookupClient", "127.0.0.1", "9423"], "stdin": "UDP\nQUIC\nXYZ\n"},
+    {"name": "client2", "cmd": ["java", "-cp", "out", "UdpLookupClient", "127.0.0.1", "9429"], "stdin": "TCP\n", "timeout": 20}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server (bỏ qua 2 datagram đầu tiên)", "client": "Cửa sổ 2 – client", "client2": "Cửa sổ 3 – client, server không chạy (cổng 9429)"}
+}

@@ -1,0 +1,6 @@
+{
+  "processes": [
+    {"name": "ping", "cmd": ["python3", "ping.py", "127.0.0.1", "4"]}
+  ],
+  "titles": {"ping": "Cửa sổ lệnh (tài khoản root) – ping 127.0.0.1"}
+}

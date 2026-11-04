@@ -1,0 +1,45 @@
+===== chuanbi =====
+$ bash -c 'bash tao_chung_chi.sh && python3 jwt_hs256.py an certs/an.jwt && python3 jwt_hs256.py binh certs/binh_email.jwt email'
+[cert] Đã tạo certs/ca.crt, certs/chat.crt, certs/chat.key, certs/chat.p12
+[cert]   subject=CN = chat.lab.local
+[cert]   issuer=CN = Lab CA
+[cert]   X509v3 Subject Alternative Name: 
+[cert]       DNS:chat.lab.local, DNS:localhost, IP Address:127.0.0.1
+[token] Đã cấp token sub=an, aud=chat, iss=auth.lab.local, hết hạn sau 3600 s -> certs/an.jwt
+[token] Đã cấp token sub=binh, aud=email, iss=auth.lab.local, hết hạn sau 3600 s -> certs/binh_email.jwt
+
+===== server =====
+$ python3 tls_chat_server.py 127.0.0.1 9841
+[server] Đang lắng nghe (TLS ≥ 1.2) tại 127.0.0.1:9841
+[server] Bắt tay TLS thành công 127.0.0.1:47364: TLSv1.3, TLS_AES_256_GCM_SHA384
+[server] an đăng nhập từ 127.0.0.1:47364 (tên lấy từ claim sub)
+[server] an rời phiên
+[server] Bắt tay TLS lỗi 127.0.0.1:47380: ConnectionResetError
+[server] Bắt tay TLS thành công 127.0.0.1:47396: TLSv1.3, TLS_AES_256_GCM_SHA384
+[server] Từ chối 127.0.0.1:47396: 401 Token không hợp lệ: aud không đúng
+[server] Dừng server
+
+===== tin_cay =====
+$ python3 tls_chat_client.py localhost 9841 certs/an.jwt certs/ca.crt
+[client] Tin cậy: CA trong certs/ca.crt; token: certs/an.jwt
+[client] Đã kết nối TLS tới localhost:9841: TLSv1.3, TLS_AES_256_GCM_SHA384
+[client] Chứng chỉ server CN=chat.lab.local hợp lệ, tên 'localhost' khớp SAN
+[client] Server chấp nhận: tên = an (từ token), trực tuyến: an
+[client] * an đã vào phòng chung
+[client] [chung] an: Xin chào qua TLS
+[client] [chung] an: Tin nhắn đã được mã hóa
+[client] Đã ngắt kết nối
+
+===== khong_tin_cay =====
+$ python3 tls_chat_client.py localhost 9841 certs/an.jwt
+[client] Tin cậy: kho chứng chỉ của hệ điều hành; token: certs/an.jwt
+[client] Bắt tay TLS thất bại: unable to get local issuer certificate
+
+===== sai_token =====
+$ python3 tls_chat_client.py localhost 9841 certs/binh_email.jwt certs/ca.crt
+[client] Tin cậy: CA trong certs/ca.crt; token: certs/binh_email.jwt
+[client] Đã kết nối TLS tới localhost:9841: TLSv1.3, TLS_AES_256_GCM_SHA384
+[client] Chứng chỉ server CN=chat.lab.local hợp lệ, tên 'localhost' khớp SAN
+[client] Lỗi từ server: 401 Token không hợp lệ: aud không đúng
+[client] Server đã đóng kết nối
+

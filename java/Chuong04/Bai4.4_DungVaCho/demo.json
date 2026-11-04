@@ -1,0 +1,11 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "SawCommon.java", "SawSend.java", "SawRecv.java"]],
+  "env": {"SAW_MAX_RTO": "2000"},
+  "processes": [
+    {"name": "recv", "cmd": ["java", "-cp", "out", "SawRecv", "127.0.0.1", "9443", "tep_nhan.txt", "4,7"],
+     "show": ["SAW_MAX_RTO=2000", "java", "-cp", "out", "SawRecv", "127.0.0.1", "9443", "tep_nhan.txt", "4,7"], "background": true, "wait": 1.0},
+    {"name": "send", "cmd": ["java", "-cp", "out", "SawSend", "tep_mau.txt", "127.0.0.1", "9443", "3"],
+     "show": ["SAW_MAX_RTO=2000", "java", "-cp", "out", "SawSend", "tep_mau.txt", "127.0.0.1", "9443", "3"], "wait": 5.0}
+  ],
+  "titles": {"recv": "Cửa sổ 1 – bên nhận (mất ACK thứ 4 và 7)", "send": "Cửa sổ 2 – bên gửi (mất DATA thứ 3)"}
+}

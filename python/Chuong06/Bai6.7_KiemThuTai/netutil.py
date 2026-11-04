@@ -1,0 +1,94 @@
+"""Bài 6.7 – Các thủ tục kế thừa dùng chung cho các server đi kèm (chép gọn từ Chương 2 và Chương 3).
+
+- parse_endpoint: Mã giả 2.1 (Mục 2.1.3)
+- safe_connect:   Mã giả 2.2 (rút gọn, Mục 2.2)
+- recv_exact:     Mã giả 3.4 (Mục 3.4.3)
+- send_json, recv_json: Mã giả 3.6 (khung tiền tố độ dài 4 byte + JSON UTF-8)
+"""
+import json
+import os
+import socket
+import struct
+import sys
+
+MAX_FRAME = 1048576                      # Mã giả 3.6: 1 MiB
+
+
+class ConnectionClosed(Exception):
+    """Đối tác đóng kết nối; received = số byte của khung đang nhận dở."""
+    def __init__(self, received):
+        super().__init__(f"Kết nối bị đóng sau {received} byte")
+        self.received = received
+
+
+class ProtocolError(Exception):
+    """Vi phạm định dạng khung (ví dụ khung quá lớn)."""
+
+
+def parse_endpoint(args, default_host, default_port):
+    """Mã giả 2.1: tham số dòng lệnh > biến môi trường APP_HOST/APP_PORT > mặc định."""
+    host = os.environ.get("APP_HOST", default_host)
+    port = os.environ.get("APP_PORT", default_port)
+    if len(args) >= 1:
+        host = args[0]
+    if len(args) >= 2:
+        port = args[1]
+    try:
+        port = int(port)
+    except ValueError:
+        sys.exit(f"Cổng phải là số nguyên: {port}")
+    if not 1 <= port <= 65535:
+        sys.exit(f"Cổng không hợp lệ: {port}")
+    return host, port
+
+
+def int_arg(args, i, default):
+    """Đọc tham số nguyên thứ i (nếu có), ngược lại dùng giá trị mặc định."""
+    return int(args[i]) if len(args) > i else default
+
+
+def safe_connect(host, port, timeout_ms):
+    """Mã giả 2.2 (rút gọn): thử lần lượt các địa chỉ, có thời gian chờ kết nối."""
+    last_error = None
+    for family, socktype, proto, _, addr in socket.getaddrinfo(host, port, type=socket.SOCK_STREAM):
+        s = socket.socket(family, socktype, proto)
+        s.settimeout(timeout_ms / 1000)
+        try:
+            s.connect(addr)
+            return s
+        except OSError as e:
+            last_error = e
+            s.close()
+    raise ConnectionError(f"Không kết nối được {host}:{port}: {last_error}")
+
+
+def recv_exact(s, n):
+    """Mã giả 3.4: gọi RECV lặp lại đến khi đủ n byte."""
+    buf = b""
+    while len(buf) < n:
+        chunk = s.recv(n - len(buf))
+        if not chunk:
+            raise ConnectionClosed(len(buf))
+        buf += chunk
+    return buf
+
+
+def send_json(s, obj):
+    """Mã giả 3.6, SEND_JSON: đối tượng → JSON → UTF-8 → khung 4 byte độ dài (big-endian)."""
+    payload = json.dumps(obj, ensure_ascii=False).encode("utf-8")
+    s.sendall(struct.pack("!I", len(payload)) + payload)        # SEND_ALL
+
+
+def recv_json(s):
+    """Mã giả 3.6, RECV_JSON (gồm RECV_FRAME). JSON sai gây ValueError."""
+    (n,) = struct.unpack("!I", recv_exact(s, 4))
+    if n > MAX_FRAME:
+        raise ProtocolError(f"Khung quá lớn: {n}")
+    try:
+        data = recv_exact(s, n)
+    except ConnectionClosed as e:                                # đã nhận xong tiêu đề
+        raise ConnectionClosed(4 + e.received)
+    obj = json.loads(data.decode("utf-8"))
+    if not isinstance(obj, dict):
+        raise ValueError("Thông điệp không phải đối tượng JSON")
+    return obj

@@ -1,0 +1,57 @@
+===== server =====
+$ java -cp out LookupServer 127.0.0.1 9333
+[server] Đang lắng nghe tại 127.0.0.1:9333 (22 thuật ngữ)
+[server] Client kết nối: 127.0.0.1:47318
+[server] 127.0.0.1:47318: lookup 'TCP' -> 200
+[server] 127.0.0.1:47318: lookup 'Định khung' -> 200
+[server] 127.0.0.1:47318: lookup 'XYZ' -> 404
+[server] Client 127.0.0.1:47318 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:47334
+[server] 127.0.0.1:47334: lookup 'TCP' -> 200
+[server] 127.0.0.1:47334: lookup 'Bắt tay ba bước' -> 200
+[server] Client 127.0.0.1:47334 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:47336
+[server] 127.0.0.1:47336: lookup 'UDP' -> 200
+[server] Client 127.0.0.1:47336 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:39612
+[server] 127.0.0.1:39612: lookup 'TCP' -> 200
+[server] 127.0.0.1:39612: lookup 'XYZ' -> 404
+[server] Client 127.0.0.1:39612 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:39624
+[server] Lỗi với 127.0.0.1:39624: Khung quá lớn: 4294967295
+[server] Client 127.0.0.1:39624 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:39630
+[server] 127.0.0.1:39630: (JSON sai) -> 400
+[server] 127.0.0.1:39630: list -> 200
+[server] 127.0.0.1:39630: xoa -> 400
+[server] 127.0.0.1:39630: (không phải đối tượng) -> 400
+[server] Client 127.0.0.1:39630 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:39634
+[server] Lỗi với 127.0.0.1:39634: Kết nối đóng giữa chừng (đã nhận 14 byte)
+[server] Client 127.0.0.1:39634 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:39648
+[server] 127.0.0.1:39648: lookup 'TCP' -> 200
+[server] Client 127.0.0.1:39648 đã đóng kết nối
+
+===== client =====
+$ java -cp out LookupClient 127.0.0.1 9333
+[client] Đã kết nối 127.0.0.1:9333. Nhập thuật ngữ cần tra (Ctrl+Z/Ctrl+D để kết thúc).
+[client] TCP: Giao thức vận chuyển hướng kết nối, tin cậy, đúng thứ tự, truyền dòng byte (RFC 9293).
+[client] Định khung: Cách đánh dấu ranh giới thông điệp trên dòng byte TCP.
+[client] Lỗi 404: Không có thuật ngữ ('XYZ')
+[client] Đã đóng kết nối
+
+===== kiem_thu =====
+$ java -cp out KiemThu 127.0.0.1 9333
+[kiểm thử] Server 127.0.0.1:9333
+[kiểm thử] Ca 1 – thuật ngữ có trong từ điển: ĐẠT (status 200)
+[kiểm thử] Ca 2 – thuật ngữ có dấu: ĐẠT (status 200, term 'Bắt tay ba bước')
+[kiểm thử] Ca 3 – gửi 32 byte từng byte một: ĐẠT (status 200, term 'UDP')
+[kiểm thử] Ca 4 – hai yêu cầu trong một lần SEND: ĐẠT (status 200 rồi 404)
+[kiểm thử] Ca 5 – độ dài 4294967295 > MAX_FRAME: ĐẠT (server đóng kết nối)
+[kiểm thử] Ca 6 – nội dung không phải JSON: ĐẠT (status 400, sau đó list -> 200, 22 thuật ngữ)
+[kiểm thử] Ca bổ sung – thao tác "xoa": ĐẠT (status 400: Sai thao tác)
+[kiểm thử] Ca bổ sung – JSON là mảng [1,2]: ĐẠT (status 400: JSON sai)
+[kiểm thử] Ca 7 – đóng giữa khung (14/54 byte): ĐẠT (client mới vẫn được phục vụ, status 200)
+[kiểm thử] Kết quả: 9/9 ca đạt
+

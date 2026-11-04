@@ -1,0 +1,8 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "31620"], "background": true, "wait": 0.8},
+    {"name": "client", "cmd": ["out/app", "client", "127.0.0.1", "31620", "5", "1000"], "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server bất đồng bộ", "client": "Cửa sổ 2 – 5 client đồng thời"}
+}

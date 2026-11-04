@@ -1,0 +1,8 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "-v", "q", "-nologo"]],
+  "processes": [
+    {"name": "server", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "server", "127.0.0.1", "9712"], "background": true, "wait": 1.5},
+    {"name": "client", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "client", "127.0.0.1", "9712", "/api/v1/terms/TCP", "/chunked", "/dong-ket-noi", "/khong-co"]}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server thử", "client": "Cửa sổ 2 – client HTTP/1.1"}
+}
