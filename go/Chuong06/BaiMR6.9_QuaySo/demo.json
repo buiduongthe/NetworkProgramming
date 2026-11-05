@@ -1,0 +1,24 @@
+{
+  "env": {"LANGUAGE": "vi"},
+  "setup": [["go", "build", "-o", "out/app", "."],
+            ["go", "-C", "gui", "mod", "tidy"],
+            ["go", "-C", "gui", "build", "-o", "../out/app_gui", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "41735", "--p", "0.05"], "background": true, "wait": 0.8},
+    {"name": "mp", "cmd": ["out/app", "mo_phong", "127.0.0.1", "41735", "--n", "6000", "--so-sanh"], "timeout": 120, "wait": 0.3},
+    {"name": "mp2", "cmd": ["out/app", "mo_phong", "127.0.0.1", "41735", "--n", "100000", "--k", "400", "--che-do", "khong_khoa", "--dat-lai"], "timeout": 120, "wait": 0.3},
+    {"name": "mp3", "cmd": ["out/app", "mo_phong", "127.0.0.1", "41735", "--n", "100000", "--k", "400", "--che-do", "khoa", "--dat-lai"], "timeout": 120, "wait": 0.3},
+    {"name": "qt", "cmd": ["out/app", "khach", "127.0.0.1", "41735", "dat_lai", "so_qua=1", "p=1"], "timeout": 10, "wait": 0.1},
+    {"name": "A", "cmd": ["out/app", "quay_so", "An", "127.0.0.1", "41735"], "stdin": "quay\n", "timeout": 10, "wait": 0.1},
+    {"name": "B", "cmd": ["out/app", "quay_so", "Bình", "127.0.0.1", "41735"], "stdin": "quay x2\n@1 gui_lai 1\n", "timeout": 10, "wait": 0.5},
+    {"name": "gui", "cmd": ["xvfb-run", "-a", "-s", "-screen 0 2600x1700x24", "out/app_gui", "demo_gui", "127.0.0.1", "41737"], "show": ["xvfb-run", "-a", "out/app_gui", "demo_gui", "127.0.0.1", "41737"], "timeout": 150}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ quay số (khoa, p = 1/20)",
+             "mp": "Cửa sổ 2 – mô phỏng 6000 người, so sánh 4 chế độ",
+             "mp2": "Cửa sổ 3 – 100 000 người trên 400 kết nối, khong_khoa",
+             "mp3": "Cửa sổ 4 – 100 000 người trên 400 kết nối, khoa",
+             "qt": "Cửa sổ 5 – quản trị (1 món quà, p = 1)",
+             "A": "Cửa sổ 6 – An quay",
+             "B": "Cửa sổ 7 – Bình bấm đúp rồi gửi lại ma_yc 1",
+             "gui": "Cửa sổ 8 – ứng dụng giao diện (máy chủ + 3 vòng quay)"}
+}
