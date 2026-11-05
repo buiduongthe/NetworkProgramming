@@ -9,9 +9,12 @@ namespace BaiMR5_3;
 // Cửa sổ WinForms: giao diện luôn phản hồi khi nhiều tác vụ mạng chạy song song.
 // Quy tắc vàng của lập trình giao diện: CHỈ luồng giao diện được chạm vào điều khiển, và luồng giao diện
 // KHÔNG BAO GIỜ được chờ mạng. Bản C# dùng cách được khuyến nghị trên .NET (Mục 5.3.2, cách 2):
-//   - mỗi tác vụ là một hàm async chạy trên luồng giao diện; khi await thao tác mạng, luồng giao diện
-//     được trả lại để vẽ đồng hồ, xử lý nút; SynchronizationContext của WinForms đưa phần tiếp theo về
-//     luồng giao diện nên mã gán trực tiếp vào điều khiển (không cần hàng đợi như bản Python);
+//   - phần điều phối mỗi tác vụ (RunTask: xin lượt, cập nhật hàng, báo kết quả) là hàm async trên luồng
+//     giao diện; SynchronizationContext của WinForms đưa phần tiếp theo về luồng giao diện nên mã gán trực
+//     tiếp vào điều khiển (không cần hàng đợi như bản Python);
+//   - phần mạng chạy bằng await Task.Run(...) trên thread pool: đoạn ĐỒNG BỘ đầu tiên của một hàm async
+//     chạy trên luồng gọi nó, và lần gọi HttpClient đầu tiên (khởi tạo + biên dịch JIT) mất hàng trăm ms –
+//     để trên luồng giao diện thì cửa sổ khựng ngay lần bấm đầu (đo được 733 ms trước khi sửa);
 //   - tiến trình báo qua Progress<T>, hủy qua CancellationTokenSource của từng tác vụ;
 //   - bộ giới hạn đồng thời (Limiter) đổi được bằng thanh trượt khi đang chạy;
 //   - đồng hồ và hoạt hình chạy bằng System.Windows.Forms.Timer 20 ms; khoảng cách thật giữa hai nhịp được
@@ -254,7 +257,9 @@ class UngDung : Form
         try
         {
             t.Status.Text = "đang chạy…";
-            Finish(t, await job(progress, t.Cts.Token));
+            // Task.Run: toàn bộ phần mạng (kể cả đoạn đồng bộ trước await đầu tiên) chạy trên thread pool;
+            // tiến trình vẫn về luồng giao diện qua Progress<T>, kết quả về sau await như cũ.
+            Finish(t, await Task.Run(() => job(progress, t.Cts.Token)));
         }
         catch (OperationCanceledException)
         {

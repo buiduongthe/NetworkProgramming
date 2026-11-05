@@ -4,7 +4,7 @@ using System.Text;
 namespace BaiMR5_3;
 
 // Các tác vụ mạng và bộ giới hạn đồng thời – KHÔNG dùng WinForms (biên dịch, kiểm thử được độc lập).
-// Mọi tác vụ là hàm async: khi chờ mạng, luồng giao diện được trả lại để vẽ đồng hồ, xử lý nút.
+// Mọi tác vụ là hàm async, được giao diện gọi qua Task.Run nên chạy trên thread pool, không chiếm luồng giao diện.
 // Tiến trình được báo qua IProgress<(phần_trăm, chữ)>: đối tượng Progress<T> tạo trên luồng giao diện
 // tự đưa mỗi lần báo về luồng giao diện (qua SynchronizationContext), nên tác vụ không chạm vào điều khiển.
 // Hủy theo kiểu hợp tác: CancellationToken được truyền xuống mọi lời gọi mạng.
