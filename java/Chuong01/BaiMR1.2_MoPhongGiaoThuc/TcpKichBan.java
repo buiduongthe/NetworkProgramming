@@ -109,6 +109,7 @@ final class TcpKichBan {
     void start() {
         state = "SYN_SENT";
         out(c, s, "SYN seq=0", "SYN", 0, 0, 0, false);
+        arm();                                             // SYN cũng có thể mất: hết giờ thì gửi lại (RFC 9293 §3.8.1)
     }
 
     void sendData() {
@@ -142,6 +143,13 @@ final class TcpKichBan {
 
     void timeout(int g) {
         if (g != gen) return;                              // bộ hẹn giờ này đã bị hủy/khởi động lại
+        if (state.equals("SYN_SENT")) {                    // chưa nhận SYN+ACK: gửi lại SYN, RTO gấp đôi
+            event("HẾT GIỜ RTO=" + (rto / 1000) + " ms: chưa có SYN+ACK, gửi lại SYN");
+            rto = Math.min(rto * 2, 800_000);
+            out(c, s, "SYN seq=0 gửi lại", "SYN", 0, 0, 0, false);
+            arm();
+            return;
+        }
         timeouts++;
         ssthresh = Math.max((nxt - una) / 2, 2 * MSS);
         setCwnd(MSS);
@@ -183,7 +191,13 @@ final class TcpKichBan {
         }
         switch (f) {                                       // ---- phía khách H1
             case "SYNACK" -> {
+                if (!state.equals("SYN_SENT")) {           // SYN+ACK trùng (do SYN được gửi lại)
+                    pktRow(p, net.now, "trùng, bỏ qua", false);
+                    return;
+                }
                 pktRow(p, net.now, "", false);
+                stopTimer();
+                rto = 100_000;
                 state = "SYN_SENT2";
                 out(c, s, "ACK ack=1", "ACK", 0, 1, 0, false);
                 tData0 = net.now;
@@ -261,6 +275,11 @@ final class TcpKichBan {
         long dur = tDone - tData0;
         System.out.println();
         System.out.printf("Tóm tắt TCP: %d đoạn (%d byte), truyền %d lần, gửi lại %d%n", total / MSS, total, tx, retx);
+        if (tDone == 0) {                                  // chưa truyền xong: không có thời gian, thông lượng để tính
+            System.out.printf("  (%d lần gửi lại nhanh, %d lần hết giờ); chưa truyền xong dữ liệu,%n", fast, timeouts);
+            System.out.println("  nên không tính thời gian và thông lượng.");
+            return;
+        }
         System.out.printf("  (%d lần gửi lại nhanh, %d lần hết giờ); xong sau %s ms,%n", fast, timeouts, Mang.fmtT(dur));
         System.out.printf("  thông lượng ≈ %d kbit/s (liên kết chậm nhất 10 Mbit/s,%n", (long) total * 8 * 1000 / dur);
         System.out.println("  RTT ≈ 26 ms): cửa sổ nhỏ và mất gói làm thông lượng thấp hơn");

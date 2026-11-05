@@ -766,6 +766,11 @@ impl App for MayChu {
 /// Chạy một mô hình máy chủ trên `net`, in nhật ký và báo cáo; trả về dữ liệu hoạt hình.
 pub fn chay(net: &mut Net, mode: &'static str) -> Map<String, Value> {
     net.hop_trace = false;
+    if net.link_mut("R2", "R3").loss != 0 {
+        // mất yêu cầu thì không bao giờ có trả lời: mô hình không xét
+        println!("--loss bị bỏ qua: kịch bản máy chủ giả định mạng không mất gói");
+        net.link_mut("R2", "R3").loss = 0;
+    }
     println!("6 yêu cầu tới {SERVER}, mỗi yêu cầu: đọc CSDL {} ms (chờ I/O)", IO_US / MS);
     println!("  + xử lý {} ms CPU; máy chủ có {SO_LOI} lõi CPU", CPU_US / MS);
     let mut m = MayChu::new(mode);

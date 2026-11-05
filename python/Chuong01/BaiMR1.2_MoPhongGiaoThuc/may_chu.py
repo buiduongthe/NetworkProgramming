@@ -450,6 +450,10 @@ class MayChu:
 def chay(net, mode):
     """Chạy một mô hình máy chủ trên `net`, in nhật ký và báo cáo; trả về dữ liệu hoạt hình."""
     net.hop_trace = False
+    L = net.links[("R2", "R3")]
+    if L.loss:                     # mất yêu cầu thì không bao giờ có trả lời: mô hình không xét
+        print("--loss bị bỏ qua: kịch bản máy chủ giả định mạng không mất gói")
+        L.loss = 0
     print(f"6 yêu cầu tới {SERVER}, mỗi yêu cầu: đọc CSDL {IO_US // MS} ms (chờ I/O)")
     print(f"  + xử lý {CPU_US // MS} ms CPU; máy chủ có {SO_LOI} lõi CPU")
     m = MayChu(net, mode)

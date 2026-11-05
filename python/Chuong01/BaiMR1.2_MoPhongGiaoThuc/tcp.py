@@ -87,6 +87,7 @@ class TcpScenario:
     def start(self):
         self.state = "SYN_SENT"
         self.out(self.c, self.s, "SYN seq=0", "SYN")
+        self.arm()                           # SYN cũng có thể mất: hết giờ thì gửi lại (RFC 9293 §3.8.1)
 
     def send_data(self):
         while self.nxt <= self.total and self.nxt - self.una + MSS <= self.cwnd:
@@ -117,6 +118,12 @@ class TcpScenario:
     def timeout(self, g):
         if g != self.gen:
             return                           # bộ hẹn giờ này đã bị hủy/khởi động lại
+        if self.state == "SYN_SENT":         # chưa nhận SYN+ACK: gửi lại SYN, RTO gấp đôi
+            self.event(f"HẾT GIỜ RTO={self.rto // 1000} ms: chưa có SYN+ACK, gửi lại SYN")
+            self.rto = min(self.rto * 2, 800_000)
+            self.out(self.c, self.s, "SYN seq=0 gửi lại", "SYN")
+            self.arm()
+            return
         self.timeouts += 1
         flight = self.nxt - self.una
         self.ssthresh = max(flight // 2, 2 * MSS)
@@ -159,7 +166,12 @@ class TcpScenario:
             return
         # ---- phía khách H1
         if f == "SYNACK":
+            if self.state != "SYN_SENT":                     # SYN+ACK trùng (do SYN được gửi lại)
+                self.pkt_row(pkt, d.now, "trùng, bỏ qua")
+                return
             self.pkt_row(pkt, d.now, "")
+            self.stop_timer()
+            self.rto = 100_000
             self.state = "SYN_SENT2"
             self.out(self.c, self.s, "ACK ack=1", "ACK", ack=1)
             self.t_data0 = d.now
@@ -228,6 +240,11 @@ class TcpScenario:
         print()
         print(f"Tóm tắt TCP: {self.total // MSS} đoạn ({self.total} byte), truyền {self.tx} lần,"
               f" gửi lại {self.retx}")
+        if self.t_done == 0:                 # chưa truyền xong: không có thời gian, thông lượng để tính
+            print(f"  ({self.fast} lần gửi lại nhanh, {self.timeouts} lần hết giờ);"
+                  f" chưa truyền xong dữ liệu,")
+            print("  nên không tính thời gian và thông lượng.")
+            return
         print(f"  ({self.fast} lần gửi lại nhanh, {self.timeouts} lần hết giờ);"
               f" xong sau {fmt_t(dur)} ms,")
         print(f"  thông lượng ≈ {self.total * 8 * 1000 // dur} kbit/s"

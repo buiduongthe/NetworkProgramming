@@ -149,6 +149,7 @@ impl TcpScenario {
     pub fn start(&mut self, net: &mut Net) {
         self.state = "SYN_SENT";
         self.out(net, self.c, self.s, "SYN seq=0", "SYN", 0, 0, 0, false);
+        self.arm(net); // SYN cũng có thể mất: hết giờ thì gửi lại (RFC 9293 §3.8.1)
     }
 
     fn send_data(&mut self, net: &mut Net) {
@@ -185,6 +186,15 @@ impl TcpScenario {
     fn timeout(&mut self, net: &mut Net, g: u64) {
         if g != self.gen {
             return; // bộ hẹn giờ này đã bị hủy/khởi động lại
+        }
+        if self.state == "SYN_SENT" {
+            // chưa nhận SYN+ACK: gửi lại SYN, RTO gấp đôi
+            let text = format!("HẾT GIỜ RTO={} ms: chưa có SYN+ACK, gửi lại SYN", self.rto / 1000);
+            self.event_row(net, text);
+            self.rto = (self.rto * 2).min(800_000);
+            self.out(net, self.c, self.s, "SYN seq=0 gửi lại", "SYN", 0, 0, 0, false);
+            self.arm(net);
+            return;
         }
         self.timeouts += 1;
         let flight = self.nxt - self.una;
@@ -268,8 +278,14 @@ impl TcpScenario {
         let dur = self.t_done - self.t_data0;
         println!();
         println!("Tóm tắt TCP: {} đoạn ({} byte), truyền {} lần, gửi lại {}", self.total / MSS, self.total, self.tx, self.retx);
+        if self.t_done == 0 {
+            // chưa truyền xong: không có thời gian, thông lượng để tính
+            println!("  ({} lần gửi lại nhanh, {} lần hết giờ); chưa truyền xong dữ liệu,", self.fast, self.timeouts);
+            println!("  nên không tính thời gian và thông lượng.");
+            return;
+        }
         println!("  ({} lần gửi lại nhanh, {} lần hết giờ); xong sau {} ms,", self.fast, self.timeouts, fmt_t(dur));
-        println!("  thông lượng ≈ {} kbit/s (liên kết chậm nhất 10 Mbit/s,", self.total * 8 * 1000 / dur.max(1));
+        println!("  thông lượng ≈ {} kbit/s (liên kết chậm nhất 10 Mbit/s,", self.total * 8 * 1000 / dur);
         println!("  RTT ≈ 26 ms): cửa sổ nhỏ và mất gói làm thông lượng thấp hơn");
         println!("  nhiều so với băng thông.");
     }
@@ -352,7 +368,14 @@ impl App for TcpScenario {
         // ---- phía khách H1
         match f {
             "SYNACK" => {
+                if self.state != "SYN_SENT" {
+                    // SYN+ACK trùng (do SYN được gửi lại)
+                    self.pkt_row(net, pkt, now, "trùng, bỏ qua", false);
+                    return;
+                }
                 self.pkt_row(net, pkt, now, "", false);
+                self.stop_timer();
+                self.rto = 100_000;
                 self.state = "SYN_SENT2";
                 self.out(net, self.c, self.s, "ACK ack=1", "ACK", 0, 1, 0, false);
                 self.t_data0 = now;

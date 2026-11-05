@@ -112,6 +112,8 @@ Năm bản C#, Java, Python, Rust, Go cho kết quả trùng từng ký tự (c�
 - Thông tin thành viên multicast được trao đổi giữa các router một cách lý tưởng (thực tế dùng PIM); switch có IGMP snooping (RFC 4541), nếu không có thì switch gửi tràn multicast như quảng bá.
 - Anycast trong bài chọn theo chi phí định tuyến nội bộ; trên Internet, anycast thường được thực hiện bằng BGP (RFC 4786).
 - `--loss` áp dụng cho cả hai chiều của liên kết R2–R3. Thời gian in ra là thời điểm gói **tới** nút (µs làm tròn xuống 0,1 ms).
+- SYN cũng có thể mất (ví dụ `tcp --seed 3 --loss 0.3`): bên gửi gửi lại SYN khi hết giờ, RTO gấp đôi mỗi lần (RFC 9293 §3.8.1, RFC 6298 §5); SYN+ACK trùng do SYN được gửi lại thì bỏ qua. Nếu dữ liệu chưa truyền xong, bản tóm tắt không tính thời gian và thông lượng. Các gói điều khiển FIN/ACK cuối không được gửi lại (đã đơn giản hóa).
+- Kịch bản máy chủ bỏ qua `--loss` (in thông báo): mô hình giả định mạng không mất gói, vì một yêu cầu bị mất sẽ không bao giờ được trả lời.
 - Mô hình máy chủ đã đơn giản hóa: lõi CPU cấp theo thứ tự đến và không chia lát thời gian (không preemption), chuyển ngữ cảnh tốn 0 ms, đoạn găng chỉ tính thời gian giữ khóa, việc rất ngắn trên vòng lặp tốn 0 ms; thời gian tạo luồng, đọc CSDL, xử lý CPU là hằng số (đổi ở đầu `may_chu.py`). Số đo thật trên máy (GIL, luồng ảo, tokio…) xem MR5.2, MR5.4, MR5.5.
 - Kiểm thử: Linux, Python 3.13.18; ảnh hoạt hình chụp bằng Playwright (Chromium không màn hình).
 

@@ -647,6 +647,10 @@ func (m *MayChu) data(rd *runData) {
 // chayMayChu – chạy một mô hình máy chủ trên `n`, in nhật ký và báo cáo; ghi dữ liệu hoạt hình vào rd.
 func chayMayChu(n *Net, mode string, rd *runData) {
 	n.hopTrace = false
+	if l := n.links[[2]string{"R2", "R3"}]; l.Loss != 0 { // mất yêu cầu thì không bao giờ có trả lời: mô hình không xét
+		fmt.Println("--loss bị bỏ qua: kịch bản máy chủ giả định mạng không mất gói")
+		l.Loss = 0
+	}
 	fmt.Printf("6 yêu cầu tới %s, mỗi yêu cầu: đọc CSDL %d ms (chờ I/O)\n", server, ioUS/MS)
 	fmt.Printf("  + xử lý %d ms CPU; máy chủ có %d lõi CPU\n", cpuUS/MS, soLoi)
 	m := NewMayChu(n, mode)

@@ -106,6 +106,7 @@ class TcpScenario
     {
         state = "SYN_SENT";
         Out(c, s, "SYN seq=0", "SYN");
+        Arm();                                // SYN cũng có thể mất: hết giờ thì gửi lại (RFC 9293 §3.8.1)
     }
 
     void SendData()
@@ -142,6 +143,14 @@ class TcpScenario
     void Timeout(long g)
     {
         if (g != gen) return;                 // bộ hẹn giờ này đã bị hủy/khởi động lại
+        if (state == "SYN_SENT")              // chưa nhận SYN+ACK: gửi lại SYN, RTO gấp đôi
+        {
+            Event($"HẾT GIỜ RTO={rto / 1000} ms: chưa có SYN+ACK, gửi lại SYN");
+            rto = Math.Min(rto * 2, 800_000);
+            Out(c, s, "SYN seq=0 gửi lại", "SYN");
+            Arm();
+            return;
+        }
         timeouts++;
         long flight = nxt - una;
         ssthresh = Math.Max(flight / 2, 2 * Mss);
@@ -194,7 +203,14 @@ class TcpScenario
         // ---- phía khách H1
         if (f == "SYNACK")
         {
+            if (state != "SYN_SENT")          // SYN+ACK trùng (do SYN được gửi lại)
+            {
+                PktRow(pkt, net.Now, "trùng, bỏ qua");
+                return;
+            }
             PktRow(pkt, net.Now, "");
+            StopTimer();
+            rto = 100_000;
             state = "SYN_SENT2";
             Out(c, s, "ACK ack=1", "ACK", ack: 1);
             tData0 = net.Now;
@@ -276,6 +292,12 @@ class TcpScenario
         long dur = tDone - tData0;
         Console.WriteLine();
         Console.WriteLine($"Tóm tắt TCP: {total / Mss} đoạn ({total} byte), truyền {tx} lần, gửi lại {retx}");
+        if (tDone == 0)                       // chưa truyền xong: không có thời gian, thông lượng để tính
+        {
+            Console.WriteLine($"  ({fast} lần gửi lại nhanh, {timeouts} lần hết giờ); chưa truyền xong dữ liệu,");
+            Console.WriteLine("  nên không tính thời gian và thông lượng.");
+            return;
+        }
         Console.WriteLine($"  ({fast} lần gửi lại nhanh, {timeouts} lần hết giờ); xong sau {Fmt.T(dur)} ms,");
         Console.WriteLine($"  thông lượng ≈ {total * 8 * 1000 / dur} kbit/s (liên kết chậm nhất 10 Mbit/s,");
         Console.WriteLine("  RTT ≈ 26 ms): cửa sổ nhỏ và mất gói làm thông lượng thấp hơn");

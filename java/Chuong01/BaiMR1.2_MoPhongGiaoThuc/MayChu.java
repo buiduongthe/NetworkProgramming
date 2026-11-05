@@ -597,6 +597,11 @@ final class MayChu {
     /** Chạy một mô hình máy chủ trên `net`, in nhật ký và báo cáo; trả về dữ liệu hoạt hình. */
     static Map<String, Object> chay(Mang net, String mode) {
         net.hopTrace = false;
+        Mang.Link L = net.link("R2", "R3");
+        if (L.loss != 0) {                   // mất yêu cầu thì không bao giờ có trả lời: mô hình không xét
+            System.out.println("--loss bị bỏ qua: kịch bản máy chủ giả định mạng không mất gói");
+            L.loss = 0;
+        }
         System.out.println("6 yêu cầu tới " + SERVER + ", mỗi yêu cầu: đọc CSDL " + IO_US / MS + " ms (chờ I/O)");
         System.out.println("  + xử lý " + CPU_US / MS + " ms CPU; máy chủ có " + SO_LOI + " lõi CPU");
         MayChu m = new MayChu(net, mode);

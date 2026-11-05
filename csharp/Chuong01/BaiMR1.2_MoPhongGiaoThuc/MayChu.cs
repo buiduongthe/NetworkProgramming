@@ -612,6 +612,12 @@ class MayChu
     public static Dictionary<string, object> Chay(Net net, string mode)
     {
         net.HopTrace = false;
+        var L = net.L[("R2", "R3")];
+        if (L.Loss != 0)                     // mất yêu cầu thì không bao giờ có trả lời: mô hình không xét
+        {
+            Console.WriteLine("--loss bị bỏ qua: kịch bản máy chủ giả định mạng không mất gói");
+            L.Loss = 0;
+        }
         Console.WriteLine($"6 yêu cầu tới {Server}, mỗi yêu cầu: đọc CSDL {IoUs / Ms} ms (chờ I/O)");
         Console.WriteLine($"  + xử lý {CpuUs / Ms} ms CPU; máy chủ có {SoLoi} lõi CPU");
         var m = new MayChu(net, mode);

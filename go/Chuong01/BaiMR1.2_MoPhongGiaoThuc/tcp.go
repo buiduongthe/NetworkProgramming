@@ -155,6 +155,7 @@ func (sc *TcpScenario) out(frm, to, label, flags string, seq, ack, length int, d
 func (sc *TcpScenario) Start() {
 	sc.state = "SYN_SENT"
 	sc.out(sc.c, sc.s, "SYN seq=0", "SYN", 0, 0, 0, false)
+	sc.arm() // SYN cũng có thể mất: hết giờ thì gửi lại (RFC 9293 §3.8.1)
 }
 
 func (sc *TcpScenario) sendData() {
@@ -191,6 +192,13 @@ func (sc *TcpScenario) stopTimer() {
 func (sc *TcpScenario) timeout(g int) {
 	if g != sc.gen {
 		return // bộ hẹn giờ này đã bị hủy/khởi động lại
+	}
+	if sc.state == "SYN_SENT" { // chưa nhận SYN+ACK: gửi lại SYN, RTO gấp đôi
+		sc.event(fmt.Sprintf("HẾT GIỜ RTO=%d ms: chưa có SYN+ACK, gửi lại SYN", sc.rto/1000))
+		sc.rto = min(sc.rto*2, 800_000)
+		sc.out(sc.c, sc.s, "SYN seq=0 gửi lại", "SYN", 0, 0, 0, false)
+		sc.arm()
+		return
 	}
 	sc.timeouts++
 	sc.ssthresh = max((sc.nxt-sc.una)/2, 2*MSS)
@@ -238,7 +246,13 @@ func (sc *TcpScenario) deliver(node string, p *Packet) {
 	}
 	switch f { // ---- phía khách H1
 	case "SYNACK":
+		if sc.state != "SYN_SENT" { // SYN+ACK trùng (do SYN được gửi lại)
+			sc.pktRow(p, d.now, "trùng, bỏ qua", false)
+			return
+		}
 		sc.pktRow(p, d.now, "", false)
+		sc.stopTimer()
+		sc.rto = 100_000
 		sc.state = "SYN_SENT2"
 		sc.out(sc.c, sc.s, "ACK ack=1", "ACK", 0, 1, 0, false)
 		sc.tData0 = d.now
@@ -318,6 +332,11 @@ func (sc *TcpScenario) Report() {
 	dur := sc.tDone - sc.tData0
 	fmt.Println()
 	fmt.Printf("Tóm tắt TCP: %d đoạn (%d byte), truyền %d lần, gửi lại %d\n", sc.total/MSS, sc.total, sc.tx, sc.retx)
+	if sc.tDone == 0 { // chưa truyền xong: không có thời gian, thông lượng để tính
+		fmt.Printf("  (%d lần gửi lại nhanh, %d lần hết giờ); chưa truyền xong dữ liệu,\n", sc.fast, sc.timeouts)
+		fmt.Println("  nên không tính thời gian và thông lượng.")
+		return
+	}
 	fmt.Printf("  (%d lần gửi lại nhanh, %d lần hết giờ); xong sau %s ms,\n", sc.fast, sc.timeouts, fmtT(dur))
 	fmt.Printf("  thông lượng ≈ %d kbit/s (liên kết chậm nhất 10 Mbit/s,\n", int64(sc.total)*8*1000/dur)
 	fmt.Println("  RTT ≈ 26 ms): cửa sổ nhỏ và mất gói làm thông lượng thấp hơn")
