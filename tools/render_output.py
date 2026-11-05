@@ -63,6 +63,8 @@ def main():
             out.paste(i, (x, y)); x += i.width + 12
         y += max(i.height for i in r) + 12
     out.save(a.out)
+    if os.path.getsize(a.out) > 900 * 1024:    # ảnh rất dài: lưu bảng màu 256 màu để tệp dưới 1 MB
+        out.quantize(colors=256, method=Image.Quantize.MEDIANCUT).save(a.out, optimize=True)
     print('Đã ghi', a.out)
 
 

@@ -120,6 +120,7 @@ class Net:
         self.mroute = {}         # nhóm -> danh sách switch (LAN) có thành viên (router biết)
         self.member = {n: [] for n in self.order}  # host -> các nhóm đã tham gia
         self.hop_trace = True    # in từng bước chuyển (tắt với TCP/UDP cho gọn)
+        self.quiet = False       # không in nhật ký (dùng khi chỉ cần chỉ số, ví dụ lệnh so_sanh)
         self.on_deliver = None   # hàm(node, pkt) – tầng ứng dụng của kịch bản
         self.on_loss = None      # hàm(pkt, a, b) – kịch bản được báo khi mất gói
         self.hops, self.notes = [], []   # dữ liệu cho hoạt hình HTML
@@ -138,7 +139,8 @@ class Net:
             fn()
 
     def log(self, text, node=""):
-        print(f"{fmt_t(self.now):>7} ms  {text}")
+        if not self.quiet:
+            print(f"{fmt_t(self.now):>7} ms  {text}")
         self.notes.append([self.now, node, text])
 
     # ---------- định tuyến: Dijkstra từ mọi nút ----------

@@ -6,7 +6,9 @@ sự kiện rời rạc (mang.py): không mở socket, không cần quyền qu�
 
 Cách dùng:
     python3 mo_phong.py <kịch_bản> [--seed N] [--loss P] [--doan N] [--mat 20,20] [--html tệp.html]
-    kịch_bản: tcp | udp | unicast | broadcast | multicast | anycast | tat_ca
+    kịch_bản: tcp | udp | unicast | broadcast | multicast | anycast            (giao thức, kiểu truyền)
+              dong_bo | da_luong | nhom_luong | bat_dong_bo | phoi_hop   (bên trong máy chủ)
+              so_sanh (bảng so sánh 5 mô hình máy chủ) | tat_ca
     --seed  hạt giống bộ sinh ngẫu nhiên (mặc định 7)
     --loss  xác suất mất gói trên liên kết R2–R3, 0..1 (mặc định: 0; UDP: 0.2)
     --doan  số đoạn dữ liệu TCP (mặc định 40)
@@ -18,6 +20,7 @@ import json
 import os
 
 import kich_ban
+import may_chu
 from mang import LINKS, NODES, Net
 from tcp import MSS, TcpScenario
 
@@ -28,6 +31,7 @@ TITLES = {
     "broadcast": "Broadcast – gửi tràn trong LAN, dừng ở router",
     "multicast": "Multicast – IGMP, chỉ giao cho thành viên nhóm",
     "anycast": "Anycast – máy phục vụ gần nhất, dự phòng khi hỏng",
+    **may_chu.TITLES,
 }
 ORDER = list(TITLES)
 
@@ -40,6 +44,11 @@ def run_one(name, a):
     if loss_set:
         net.links[("R2", "R3")].loss = int(a.loss * 1000 + 0.5)
     extra = {}
+    if name in may_chu.TITLES:
+        extra = may_chu.chay(net, name)
+        print()
+        return {"id": name, "title": TITLES[name], "hops": net.hops, "notes": net.notes,
+                "changes": net.changes, **extra}
     if name == "tcp":
         drops = [int(x) for x in a.mat.split(",") if x.strip()]
         print(f"Truyền {a.doan} đoạn × {MSS} byte từ H1 tới H5; ép mất đoạn: "
@@ -75,13 +84,16 @@ def write_html(path, runs):
 
 def main():
     ap = argparse.ArgumentParser(description="Mô phỏng giao thức mạng theo sự kiện rời rạc")
-    ap.add_argument("kich_ban", choices=ORDER + ["tat_ca"])
+    ap.add_argument("kich_ban", choices=ORDER + ["so_sanh", "tat_ca"])
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--loss", type=float, default=-1)
     ap.add_argument("--doan", type=int, default=40)
     ap.add_argument("--mat", default="20,20")
     ap.add_argument("--html", default="")
     a = ap.parse_args()
+    if a.kich_ban == "so_sanh":
+        may_chu.so_sanh([(m, may_chu.chi_so(Net(a.seed), m)) for m in may_chu.TITLES])
+        return
     names = ORDER if a.kich_ban == "tat_ca" else [a.kich_ban]
     runs = [run_one(n, a) for n in names]
     if a.html:
