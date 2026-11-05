@@ -101,6 +101,7 @@ java -cp out XemGui B 127.0.0.1 43652
 - **Windows:** chỉ cần JDK 21 (`winget install -e --id Microsoft.OpenJDK.21`); ffmpeg cho camera thật và tệp video: `winget install -e --id Gyan.FFmpeg` (mở lại cửa sổ dòng lệnh để `ffmpeg` có trong PATH). Micro/loa dùng `javax.sound.sampled` có sẵn trong JDK. Cho phép ứng dụng desktop dùng camera/micro trong *Settings → Privacy & security*.
 - **Linux:** `sudo apt install openjdk-21-jdk ffmpeg`. **macOS:** `brew install openjdk@21 ffmpeg`.
 - Chạy riêng từng cửa sổ (không qua `DemoGui`): mọi dòng nhật ký và cứ 5 giây một dòng số liệu (tiếng nhận/mất, mức dBFS, loa; khung I/P, đứng hình, lệch, trễ; kbit/s vào/ra) cũng in ra dòng lệnh với tiền tố `[server]`, `[phat P]`, `[xem A]`, chuyển hướng được vào tệp (`java -cp out XemGui A … > xem_A.txt`) để kiểm tra khi thử thiết bị thật.
+- Ô Micro của máy phát mặc định chọn **micro thật đầu tiên** tìm thấy (máy không có micro thì là micro giả lập); kịch bản `DemoGui` tự chọn micro giả lập.
 - Thiết bị thật chỉ được mở khi bấm PHÁT. Muốn máy khác nối vào: máy chủ nghe IP card mạng (hoặc `0.0.0.0`) và mở tường lửa cho hai cổng.
 - Kịch bản tự động (Linux): `xvfb-run -a -s "-screen 0 2000x1400x24" java -cp out DemoGui 127.0.0.1 43652 43653`.
 

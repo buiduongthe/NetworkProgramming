@@ -112,6 +112,7 @@ dotnet run -c Release -- xem_gui A 127.0.0.1 42652
 dotnet run -c Release -- xem_gui B 127.0.0.1 42652
 ```
 - Cho phép ứng dụng desktop dùng camera/micro trong *Settings → Privacy & security*. Thiết bị thật chỉ được mở khi bấm PHÁT. Muốn máy khác nối vào: máy chủ nghe IP card mạng (hoặc `0.0.0.0`) và mở tường lửa cho hai cổng.
+- Ô Micro của máy phát mặc định chọn **micro thật đầu tiên** tìm thấy (máy không có micro thì là micro giả lập); kịch bản `demo` tự chọn micro giả lập.
 - Chạy riêng từng cửa sổ (không qua `demo`): mọi dòng nhật ký (tiền tố `[server]`, `[phat P]`, `[xem A]`) và cứ 5 giây một dòng số liệu (tiếng nhận/mất, mức dBFS, loa; khung I/P, đứng hình, lệch, trễ; kbit/s vào/ra) cũng in ra dòng lệnh, chuyển hướng được vào tệp (`dotnet run -c Release -- xem_gui A … > xem_A.txt`) để kiểm tra khi thử thiết bị thật.
 - Kịch bản tự động (từ thư mục gốc kho): `powershell -NoProfile -ExecutionPolicy Bypass -File tools\demo_windows.ps1 csharp\Chuong06\BaiMR6.5_PhatTrucTiep\GiaoDien` – chạy `demo 127.0.0.1 42652 42653 ..\ket_qua_gui.png`.
 - **Linux/macOS:** WinForms chỉ chạy trên Windows; phần lõi (`MayChuPhat`, `MayPhat`, `NguoiXem`, `Camera.cs`, `TepVideo.cs`) là .NET thuần và chạy được trên Linux (bản dòng lệnh dùng đúng các lớp này); trên Linux `winmm.dll` không có nên mọi micro là giả lập.

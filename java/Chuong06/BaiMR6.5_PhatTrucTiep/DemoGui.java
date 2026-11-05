@@ -137,6 +137,7 @@ public class DemoGui {
         log("1. Server: bấm START SERVER");
         lam(() -> sv.btnStart.doClick());
         log("2. P: Kết nối; camera giả lập (clapper), micro giả lập");
+        lam(() -> p.cboMic.setSelectedIndex(p.dsMic.size() - 1));   // kịch bản luôn dùng micro giả lập (mặc định là micro thật)
         lam(() -> p.btnKetNoi.doClick());
         cho(() -> p.btnPhat.isEnabled());
         log("   P bấm PHÁT (10 fps, GOP 20)");

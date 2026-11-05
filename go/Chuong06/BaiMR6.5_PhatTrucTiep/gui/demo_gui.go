@@ -80,7 +80,10 @@ func chayDemo(a fyne.App, host string, tcp, udp int, anhRa string) {
 		logDemo("1. Server: bấm START SERVER")
 		lam(func() { bam(s.batDau) })
 		logDemo("2. P: Kết nối; camera giả lập (clapper), micro giả lập")
-		lam(func() { bam(p.ketNoi) })
+		lam(func() { // kịch bản luôn dùng micro giả lập (mặc định là micro thật); chọn cùng lượt với Kết nối
+			p.chonMic.SetSelected(tenMicGia)
+			bam(p.ketNoi)
+		})
 		if !choDen(func() bool { return !p.phat.Disabled() }) {
 			return
 		}

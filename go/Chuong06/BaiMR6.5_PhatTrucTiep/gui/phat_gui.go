@@ -160,6 +160,11 @@ func moCuaSoPhat(a fyne.App, ten, host string, cong int) *cuaSoPhat {
 			p.dsCam, p.dsMic, p.micThat = append(c, p.dsCam...), append(m, p.dsMic...), mic
 			p.chonCam.SetOptions(tenNguon(p.dsCam))
 			p.chonMic.SetOptions(tenNguon(p.dsMic))
+			// Mặc định: micro thật đầu tiên tìm thấy (nếu ô Micro còn để giả lập và chưa kết nối);
+			// máy không có micro -> giữ micro giả lập (mục cuối)
+			if len(m) > 0 && p.lop == nil && p.chonMic.Selected == tenMicGia {
+				p.chonMic.SetSelected(m[0].ten)
+			}
 		})
 	}()
 	go p.henGio()

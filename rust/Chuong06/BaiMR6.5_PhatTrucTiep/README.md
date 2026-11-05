@@ -99,6 +99,7 @@ $B xem_gui B 127.0.0.1 44652
 - **Windows:** cần Rust bản MSVC (`rustup`, Visual Studio Build Tools – "Desktop development with C++") như các bài Rust khác; ffmpeg: `winget install -e --id Gyan.FFmpeg` (mở lại cửa sổ dòng lệnh để PATH có `ffmpeg`); micro/loa dùng WASAPI qua `cpal`, không cài thêm gì. Cho phép ứng dụng desktop dùng camera/micro trong *Settings → Privacy & security*.
 - **Linux:** `sudo apt install ffmpeg libasound2-dev pkg-config` (ALSA cho `cpal`), thư viện OpenGL/X11 của máy. **macOS:** `brew install ffmpeg`.
 - Chạy riêng từng cửa sổ (không qua `demo_gui`): mọi dòng nhật ký (kèm giờ và tiền tố `[server]`, `[phat P]`, `[xem A]`) và cứ 5 giây một dòng số liệu (tiếng nhận/mất, mức dBFS, loa; khung I/P, đứng hình, lệch, trễ; kbit/s vào/ra) cũng in ra dòng lệnh, chuyển hướng được vào tệp (`$B xem_gui A … > xem_A.txt`) để kiểm tra khi thử thiết bị thật. Máy phát ghi "Camera: …", "Micro: …" (nguồn đang dùng) khi bấm PHÁT.
+- Ô Micro của máy phát mặc định chọn **micro thật đầu tiên** tìm thấy (máy không có micro thì là micro giả lập); kịch bản `demo_gui` tự chọn micro giả lập.
 - Thiết bị thật chỉ được mở khi bấm PHÁT. Muốn máy khác nối vào: máy chủ nghe IP card mạng (hoặc `0.0.0.0`) và mở tường lửa cho hai cổng.
 - Kịch bản tự động (Linux): `xvfb-run -a -s "-screen 0 2000x1400x24" $B demo_gui 127.0.0.1 44652 44653`.
 

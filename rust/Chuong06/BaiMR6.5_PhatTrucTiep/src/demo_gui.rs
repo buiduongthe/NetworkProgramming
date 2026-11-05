@@ -106,6 +106,7 @@ impl DemoApp {
                 log("1. Server: bấm START SERVER");
                 self.sv.bam_start();
                 log("2. P: Kết nối; camera giả lập (clapper), micro giả lập");
+                self.p.chon_mic = self.p.ds_mic.len() - 1; // kịch bản luôn dùng micro giả lập (mặc định là micro thật)
                 self.p.bam_ket_noi();
                 self.cho_khi(|d| d.p.da_ket_noi_gui);
             }

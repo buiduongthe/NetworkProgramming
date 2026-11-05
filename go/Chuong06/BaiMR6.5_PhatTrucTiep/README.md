@@ -100,6 +100,7 @@ out/app_gui xem_gui B 127.0.0.1 41657
 - **Windows:** Go 1.24+; gcc cho cgo (Fyne cần): `winget install -e --id BrechtSanders.WinLibs.POSIX.UCRT` (mở lại terminal), `go env -w CGO_ENABLED=1`; ffmpeg/ffplay: `winget install -e --id Gyan.FFmpeg`. Cho phép ứng dụng desktop dùng camera/micro trong *Settings → Privacy & security*.
 - **Linux:** `sudo apt install gcc libgl1-mesa-dev xorg-dev ffmpeg`. **macOS:** Xcode Command Line Tools, `brew install ffmpeg`.
 - Chạy riêng từng cửa sổ (không qua `demo_gui`): mọi dòng nhật ký (tiền tố `[server]`, `[phat P]`, `[xem A]`) và cứ 5 giây một dòng số liệu (tiếng nhận/mất, mức dBFS, loa; khung I/P, đứng hình, lệch, trễ; kbit/s vào/ra) cũng in ra dòng lệnh, chuyển hướng được vào tệp (`out/app_gui xem_gui A … > xem_A.txt`). Khi bấm PHÁT, máy phát ghi "Camera: …", "Micro: …" (nguồn đang dùng thật hay giả lập).
+- Ô Micro của máy phát mặc định chọn **micro thật đầu tiên** tìm thấy (máy không có micro thì là micro giả lập); kịch bản `demo_gui` tự chọn micro giả lập.
 - Thiết bị thật chỉ được mở khi bấm PHÁT. Muốn máy khác nối vào: máy chủ nghe IP card mạng (hoặc `0.0.0.0`) và mở tường lửa cho hai cổng.
 - Kịch bản tự động (Linux): `xvfb-run -a -s "-screen 0 2000x1400x24" out/app_gui demo_gui 127.0.0.1 41657 41658 ket_qua_gui.png`.
 

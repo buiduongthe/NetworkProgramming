@@ -88,7 +88,9 @@ public class PhatGui {
         if (ff) dsMic.add(new String[] {TepVideo.TEP, TepVideo.TEN_MIC});
         dsMic.add(new String[] {null, ThietBiAmThanh.TEN_GIA_LAP});
         for (String[] x : dsMic) cboMic.addItem(x[1]);
-        cboMic.setSelectedIndex(dsMic.size() - 1);
+        // Mặc định: micro thật đầu tiên tìm thấy; máy không có micro -> micro giả lập (mục cuối)
+        String mic0 = dsMic.get(0)[0];
+        cboMic.setSelectedIndex(mic0 != null && !TepVideo.TEP.equals(mic0) ? 0 : dsMic.size() - 1);
         Dimension co = new Dimension(290, cboCam.getPreferredSize().height);
         cboCam.setPreferredSize(co);
         cboMic.setPreferredSize(co);

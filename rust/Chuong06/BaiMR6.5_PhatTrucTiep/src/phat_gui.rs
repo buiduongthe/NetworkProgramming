@@ -165,7 +165,8 @@ impl PhatApp {
             lop: None,
             chon_cam: ds_cam.len() - 1,
             ds_cam,
-            chon_mic: ds_mic.len() - 1,
+            // Mặc định: micro thật đầu tiên tìm thấy; máy không có micro -> micro giả lập (mục cuối)
+            chon_mic: if matches!(ds_mic[0].0, MaMic::That(_)) { 0 } else { ds_mic.len() - 1 },
             ds_mic,
             fps: FPS_MAC_DINH,
             gop: GOP_MAC_DINH,

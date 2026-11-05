@@ -64,7 +64,8 @@ sealed class FormPhat : Form
         DsMic.Add(("gia_lap", "Micro giả lập (440 Hz + bíp mỗi giây)"));
         CboMic = GD.Chon(76, 48, 260);
         CboMic.Items.AddRange(DsMic.Select(c => (object)c.Ten).ToArray());
-        CboMic.SelectedIndex = DsMic.Count - 1;
+        // Mặc định: micro thật đầu tiên tìm thấy; máy không có micro -> micro giả lập (mục cuối)
+        CboMic.SelectedIndex = DsMic[0].Ma is not (TepVideo.Tep or "gia_lap") ? 0 : DsMic.Count - 1;
         NumFps = GD.So(76, 76, 1, 30, Chung.FpsMacDinh);
         NumGop = GD.So(240, 76, 1, 300, Chung.GopMacDinh);
         TxtTep = GD.O("", 76, 104, 230);

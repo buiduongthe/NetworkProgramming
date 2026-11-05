@@ -95,6 +95,7 @@ static class DemoGui
         Log("1. Server: bấm START SERVER");
         sv.BtnStart.PerformClick();
         Log("2. P: Kết nối; camera giả lập (clapper), micro giả lập");
+        p.CboMic.SelectedIndex = p.DsMic.Count - 1;          // kịch bản luôn dùng micro giả lập (mặc định là micro thật)
         p.BtnKetNoi.PerformClick();
         await Cho(() => p.BtnPhat.Enabled);
         Log("   P bấm PHÁT (10 fps, GOP 20)");
