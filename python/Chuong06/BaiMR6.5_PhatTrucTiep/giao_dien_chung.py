@@ -103,9 +103,10 @@ class ThongKeDinhKy:
         self.ten, self.chu_ky, self.han = ten, chu_ky, time.monotonic() + chu_ky
 
     def in_neu_den_han(self, tao_dong):
-        if not NhatKy.in_ra or time.monotonic() < self.han:
+        bay_gio = time.monotonic()
+        if not NhatKy.in_ra or bay_gio < self.han:
             return
-        self.han += self.chu_ky
+        self.han = bay_gio + self.chu_ky              # không "đuổi bù" các chu kỳ đã lỡ (lúc chưa phát)
         print(f"{time.strftime('%H:%M:%S')} [{self.ten}] {tao_dong()}", flush=True)
 
 

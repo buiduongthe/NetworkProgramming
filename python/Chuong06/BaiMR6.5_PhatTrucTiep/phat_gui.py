@@ -233,11 +233,14 @@ class CuaSoPhat:
         self.chon_mic.configure(state="disabled")
 
     def _doi_camera(self, _su_kien=None):
-        """Chọn camera "Tệp video" -> micro tự chuyển sang tiếng của tệp (đổi lại được)."""
+        """Chọn camera "Tệp video" -> micro tự chuyển sang tiếng của tệp (đổi lại được); bỏ "Tệp video"
+        mà micro còn là tiếng của tệp -> micro về thiết bị đầu tiên trong danh sách (micro thật nếu có)."""
+        ma_mic = [m for m, _ in self.ds_mic]
         if self.ds_cam[self.chon_cam.current()][0] == TEP:
-            for i, (ma, _) in enumerate(self.ds_mic):
-                if ma == TEP:
-                    self.chon_mic.current(i)
+            if TEP in ma_mic:
+                self.chon_mic.current(ma_mic.index(TEP))
+        elif self.ds_mic[self.chon_mic.current()][0] == TEP:
+            self.chon_mic.current(0)
 
     def chon_tep(self):
         duong = filedialog.askopenfilename(title="Chọn tệp video", filetypes=[
