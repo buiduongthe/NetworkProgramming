@@ -4,7 +4,7 @@
 |---|---|
 | Loại | **Bài mở rộng** – không có trong giáo trình, không có mã giả tương ứng |
 | Liên hệ với giáo trình | Chương 6: Bài 6.1 (server đa luồng), Bài 6.4 (server chat nhiều client); Chương 4: Bài 4.1 (UDP); Chương 3: Bài 3.2 (định khung thông điệp) |
-| Thư viện | Thư viện chuẩn: `socket`, `threading`, `struct`, `array`, `wave`, `json`, `math`. Tùy chọn: `sounddevice` (micro/loa thật) |
+| Thư viện | Thư viện chuẩn: `socket`, `threading`, `struct`, `array`, `wave`, `json`, `math`; bản giao diện thêm `tkinter`. Tùy chọn: `sounddevice` (micro/loa thật) |
 | Bản ngôn ngữ khác | [C#](../../../csharp/Chuong06/BaiMR6.2_HoiThoaiAmThanh/), [Java](../../../java/Chuong06/BaiMR6.2_HoiThoaiAmThanh/), [Rust](../../../rust/Chuong06/BaiMR6.2_HoiThoaiAmThanh/), [Go](../../../go/Chuong06/BaiMR6.2_HoiThoaiAmThanh/) |
 
 ## Mục tiêu
@@ -38,7 +38,13 @@ Xây dựng một "phòng họp thoại" thu nhỏ: n client nối tới một s
 - `server_am_thanh.py` – server: kênh TCP (mỗi client một luồng), luồng nhận UDP, luồng trộn 20 ms, bảng điều khiển đọc stdin.
 - `khach_am_thanh.py` – client: nguồn âm (sin / WAV / micro thật), vòng 20 ms thu–gửi–nhận–phát, ghi WAV và tệp mốc sự kiện `*_moc.json`.
 - `phan_tich_wav.py` – chia bản ghi theo mốc sự kiện, đo mức từng âm bằng Goertzel, kiểm tra mix-minus.
-- `demo.json`, `ket_qua.txt`, `ket_qua.png` – kịch bản minh họa và kết quả thực thi thật.
+- Bản giao diện (Tkinter):
+  - `phong_am_thanh.py` – lõi server dạng lớp `PhongAmThanh` (cùng giao thức, cùng 6 quy tắc; Start/Stop nhiều lần; micro và "tai nghe" của server; thông điệp thêm `do_loi`).
+  - `thiet_bi_am_thanh.py` – liệt kê/mở micro, loa thật qua `sounddevice`; micro giả lập (sin) khi không có.
+  - `giao_dien_chung.py` – hàng đợi luồng nền → luồng giao diện, thanh đo mức dBFS, ô nhật ký, gom sự kiện kéo thanh trượt.
+  - `server_gui.py` – cửa sổ "Bảng điều khiển âm thanh"; `khach_gui.py` – lớp `KetNoiAmThanh` (mạng + âm thanh) và cửa sổ client.
+  - `demo_gui.py` – kịch bản tự bấm nút, đo mức từng âm, chụp cửa sổ thành `ket_qua_gui.png`.
+- `demo.json`, `ket_qua.txt`, `ket_qua.png` – kịch bản minh họa và kết quả thực thi thật (bản dòng lệnh + bản giao diện); `ket_qua_gui.png` – ảnh chụp các cửa sổ giao diện.
 
 ## Cách chạy
 Trong thư mục bài (Windows: `python` hoặc `py` thay cho `python3`):
@@ -57,6 +63,49 @@ Tùy chọn client: `--wav tệp.wav` (nguồn là tệp WAV 16 bit mono 16 kHz,
 
 Tái lập kết quả từ thư mục gốc của kho: `python3 tools/demo.py python/Chuong06/BaiMR6.2_HoiThoaiAmThanh`.
 
+## Ứng dụng giao diện
+![Ứng dụng giao diện](ket_qua_gui.png)
+
+Ảnh trên là lần chạy thật của `demo_gui.py` (Linux, Xvfb, Python 3.12 + Tk 8.6, **thiết bị giả lập** – máy chạy không có micro/loa): server (trên) đã khóa mic B, đặt độ lợi C = 200 % (C hiện "Server Vol: 200%"); A tự giảm âm lượng nghe còn 50 %; B xin bật mic lại và bị từ chối.
+
+**Server – "Bảng điều khiển âm thanh"** (`server_gui.py`): nhóm *Kết nối* (IP, cổng TCP/UDP, Start/Stop Server); *Điều khiển chung* (Mở mic tất cả = gỡ khóa, Tắt mic tất cả = khóa, Âm lượng chung 0–200 %); *Micro của server* (chọn thiết bị thật hoặc "Giả lập (sin 330 Hz)", Start/Stop Mic, Mic Volume, thanh đo mức); *Nghe* (phát ra loa server tổng tiếng các client, không gồm tiếng của chính server). Mỗi client một hàng: mã/tên, trạng thái mic (mở / tự tắt / bị khóa), thanh đo mức vào (dBFS, 10 lần/s), nút Khóa/Gỡ khóa, thanh độ lợi 0–200 %, âm lượng nghe client báo lên, số gói mất và jitter. Dưới cùng là nhật ký sự kiện.
+
+**Client** (`khach_gui.py`): *Kết nối* (IP, cổng, tên, Connect/Disconnect); *Nhận âm thanh* (âm lượng nghe 0–200 %, Start/Stop Audio = phát/không phát ra loa, nhãn "Server Vol: xx%", thanh đo mức tiếng nhận); *Micro* (thiết bị thật hoặc "Giả lập (sin 440 Hz)", Start/Stop Mic, Mic Volume, thanh đo mức); dòng trạng thái và danh sách sự kiện.
+
+Tiếng của server là một nguồn nữa trong bộ trộn với mã `SSRC_SERVER = 0`: mọi client nghe thấy, còn loa server phát `T − tiếng_server` (mix-minus cho chính server). Giao thức chỉ **thêm** một thông điệp (client cũ bỏ qua loại lạ, nên vẫn chạy chéo với bản dòng lệnh và các ngôn ngữ khác):
+
+| Chiều | Thông điệp | Khi nào |
+|---|---|---|
+| server → client | `{"loai": "do_loi", "gia_tri": g}` | một lần ngay sau `chao`, và mỗi khi server đổi độ lợi đầu vào của client đó; client hiện "Server Vol: g×100 %" |
+
+Server dòng lệnh `server_am_thanh.py` không gửi `do_loi`; client giao diện nối vào đó hiện "Server Vol: --". Client giao diện vừa kết nối mà chưa bấm Start Mic thì gửi `tu_tat_mic` (server mặc định coi mic mở); Start Mic gửi `tu_bat_mic` và có thể bị từ chối (quy tắc 2).
+
+### Cách chạy
+```bash
+python3 server_gui.py 127.0.0.1 41620 41621            # cửa sổ server
+python3 khach_gui.py A 127.0.0.1 41620 --tan-so 440    # mỗi client một cửa sổ (tên, host, cổng TCP)
+python3 khach_gui.py B 127.0.0.1 41620 --tan-so 620
+```
+- **Windows:** dùng `py` hoặc `python` (bản cài từ python.org đã có Tkinter). Micro/loa thật: `py -m pip install sounddevice` (gói đã kèm PortAudio cho Windows và macOS). Cho phép ứng dụng dùng micro trong *Settings → Privacy & security → Microphone*.
+- **Linux:** cần Tkinter (`sudo apt install python3-tk`) và PortAudio (`sudo apt install libportaudio2`), rồi `pip install sounddevice`.
+- Không cài `sounddevice` (hoặc thiếu PortAudio, hoặc máy không có thiết bị): danh sách chỉ có mục "Giả lập", phát loa bị bỏ qua nhưng vẫn đo mức – chương trình vẫn chạy đầy đủ. Muốn nghe thật nên đeo tai nghe (không có khử vọng).
+- Chọn thiết bị: danh sách lấy từ host API mặc định của PortAudio (`0: Microphone Array …`), mục cuối là nguồn giả lập. **Micro thật chỉ được mở khi bấm Start Mic**, không bao giờ tự bật lúc khởi động; dòng chỉ báo dưới nhóm Micro ghi rõ `THẬT – <tên thiết bị>` hay `GIẢ LẬP – sin … Hz`. Nếu mở thiết bị thật lỗi, chương trình báo và chuyển sang giả lập.
+- Mặc định server nghe `127.0.0.1`; muốn máy khác trong mạng LAN nối vào thì nhập địa chỉ IP của card mạng (hoặc `0.0.0.0`) và mở tường lửa cho hai cổng.
+- Kịch bản tự động (Linux): `xvfb-run -a -s "-screen 0 1600x1250x24" python3 demo_gui.py 127.0.0.1 41625 41626`.
+
+### Sơ đồ luồng
+```
+ luồng giao diện (Tk mainloop)        luồng mạng (lõi)                    luồng PortAudio
+ ─────────────────────────────        ─────────────────────               ───────────────
+ bấm nút ──gọi phương thức──▶  PhongAmThanh / KetNoiAmThanh                 micro: callback
+                               ├ chờ kết nối TCP, mỗi client 1 luồng       ──queue──▶ vòng 20 ms
+ root.after(50): đọc hàng đợi ◀─bao(...)── nhật ký, sự kiện               loa: callback
+ root.after(100): anh_chup()  ◀──đọc dưới khóa── mức dBFS, trạng thái     ◀──queue── vòng 20 ms
+                               ├ nhận UDP → bộ đệm jitter
+                               └ vòng 20 ms: trộn / thu – gửi / nhận – phát
+```
+Quy tắc: **chỉ luồng giao diện chạm vào điều khiển Tk**. Luồng nền không gọi widget; chúng đưa `(hàm, tham số)` vào `HangDoiGiaoDien` (một `queue.Queue`), luồng giao diện lấy ra mỗi 50 ms bằng `root.after`; số liệu hay đổi (mức dBFS) được luồng giao diện tự đọc 10 lần/s. Việc có thể chờ lâu (`connect`, dừng server và chờ luồng nền kết thúc) chạy trên luồng phụ, xong mới báo về – cửa sổ không bao giờ "đứng hình". Thanh trượt độ lợi/âm lượng được gom (`TreHoan`, 200 ms) để kéo một lần chỉ gửi một thông điệp TCP.
+
 ## Kết quả thực thi
 ![Kết quả thực thi](ket_qua.png)
 
@@ -73,20 +122,34 @@ Kịch bản: B (620 Hz), C (880 Hz), A (440 Hz, giả lập mất 5 % gói gử
 
 Âm 440 Hz của chính A vắng ở mọi đoạn – mix-minus đúng. Server đếm được số gói mất trong luồng của A đúng bằng số gói A giả lập làm rơi, các khung thiếu được thay bằng khoảng lặng. Jitter trên máy cục bộ chỉ khoảng 0,1–0,5 ms; các client không cạn bộ đệm (3 khung) lần nào trong lần chạy này. Nếu một nhịp bị hệ điều hành lập lịch trễ làm bộ đệm cạn, đoạn chứa lần cạn đó có thêm vài chục ms im lặng và đo thấp hơn vài phần mười dB (một lần chạy thử đo được −21,5 thay vì −21,1 dBFS). Mức nghe in mỗi giây là trung bình của cả giây nên thay đổi dần qua các mốc; bảng phân tích bỏ 0,15 s đầu mỗi đoạn để loại độ trễ (≈ 80 ms: bộ đệm jitter + một nhịp trộn).
 
+**Bản giao diện** (cửa sổ cuối trong `ket_qua.png`, chạy thật dưới Xvfb trên Linux, Python 3.12, mọi micro/loa là giả lập; `sounddevice` 0.5.6 nạp được nhưng máy không có thiết bị nên tự chuyển "chỉ đo mức"). `demo_gui.py` đo mức từng âm trong 1 s cuối mà mỗi bên nghe được (Goertzel):
+
+| Người nghe | server 330 Hz (Mic Volume 50 %) | A 440 | B 620 | C 880 |
+|---|---|---|---|---|
+| Lần 1 – mọi mic mở: client A | −21,1 | vắng | −15,1 | −15,1 |
+| Lần 1: loa server | vắng | −15,1 | −15,1 | −15,1 |
+| Lần 2 – khóa B, độ lợi C = 2, A nghe 50 %: client A | −27,1 | vắng | vắng | −15,1 |
+| Lần 2: client B | −21,1 | −15,1 | vắng | −9,0 |
+| Lần 2: loa server | vắng | −15,1 | vắng | −9,0 |
+
+Đúng lý thuyết: Mic Volume 50 % → −6,0 dB; độ lợi 2 → +6,0 dB; âm lượng nghe 50 % → −6,0 dB; mỗi người không nghe chính mình, loa server không phát tiếng server. B xin bật mic khi bị khóa nhận "Bị từ chối: server đang khóa mic của bạn"; Stop Server làm cả ba client báo "Mất kết nối". Micro/loa thật (nhánh `MicThat`, `LoaThat`) chưa được kiểm thử vì máy chạy demo không có thiết bị âm thanh.
+
 ## Ghi chú
 - Thời gian và số gói có thể chênh vài đơn vị giữa các lần chạy (lịch luồng của hệ điều hành); mức dBFS trong bảng phân tích ổn định tới 0,1 dB.
 - Luồng trộn chạy theo đồng hồ của server, luồng gửi theo đồng hồ của từng client; trên máy thật hai đồng hồ trôi lệch nhau (clock drift) nên bộ đệm sẽ dần đầy hoặc cạn – hệ thống thực tế co giãn nhẹ âm thanh để bù.
 - Hệ thống thực tế nén âm thanh (Opus, RFC 6716 – khoảng 16–32 kbit/s cho thoại), mã hóa và xác thực gói (SRTP, RFC 3711), khử vọng, tự động cân bằng mức; bài giữ PCM không nén để dễ quan sát. Không có SRTP, bất kỳ ai trên đường truyền đều nghe được và có thể giả gói với SSRC của người khác – kiểm tra địa chỉ nguồn chỉ là lớp phòng vệ tối thiểu.
 - Python 3.13 không còn mô-đun `audioop`; bài tự tính dBFS, trộn và cắt ngọn bằng Python thuần (đủ nhanh cho vài client).
 - Giao thức giống hệt bản Go: client Python nối được vào server Go và ngược lại (đã thử).
-- Kiểm thử: Linux, Python 3.13.18 (không có thiết bị âm thanh; `--mic` chỉ được thử nhánh dự phòng khi thiếu PortAudio).
+- Kiểm thử: Linux, Python 3.13.18 (không có thiết bị âm thanh; `--mic` chỉ được thử nhánh dự phòng khi thiếu PortAudio). Bản giao diện: Python 3.12.3 + Tk 8.6 dưới Xvfb; đã thử chéo lõi server giao diện với `khach_am_thanh.py` và lõi client giao diện với `server_am_thanh.py`.
 
 ## Bài tập gợi ý
 1. Đổi `--dem` của client thành 1 và chạy kèm `--mat-goi 0.1`; đếm số lần cạn bộ đệm và nghe thử bản ghi. Giải thích sự đánh đổi giữa độ trễ và độ ổn định.
 2. Đặt `do_loi C 5`: quan sát số mẫu cắt ngọn trong `trang_thai`/tổng kết và đo hài bậc 3 (2640 Hz) bằng `phan_tich_wav.py ... 2640:H3`. Cài đặt giới hạn mềm (soft limiter) thay cho cắt cứng.
 3. Thay phát khoảng lặng khi mất gói bằng lặp lại khung trước (packet loss concealment) và so sánh mức đo được của âm bị mất gói.
 4. Thêm lệnh server `chi_nghe <tên>` (chế độ người nghe) và lệnh client `xin_phat_bieu` (giơ tay) – server duyệt rồi mới gỡ khóa.
-5. Nâng cao: thêm gói báo cáo kiểu RTCP (RFC 3550 mục 6.4) để mỗi client định kỳ báo cho server tỉ lệ mất và jitter của luồng mình nhận; server hiển thị trong `trang_thai`.
+5. Giao diện: thêm vào hàng của mỗi client trên server nút "Nghe riêng" – loa server chỉ phát tiếng client đó (solo); chỉ sửa `PhongAmThanh._vong_tron` và `server_gui.py`, không đổi giao thức.
+6. Giao diện: client vẽ thêm một "dao động ký" (Canvas, 320 mẫu gần nhất) cạnh thanh đo mức; giải thích vì sao phải lấy dữ liệu dưới khóa và vẽ bằng `root.after` thay vì vẽ từ vòng 20 ms.
+7. Nâng cao: thêm gói báo cáo kiểu RTCP (RFC 3550 mục 6.4) để mỗi client định kỳ báo cho server tỉ lệ mất và jitter của luồng mình nhận; server hiển thị trong `trang_thai`.
 
 ## Đọc thêm
 - RFC 3550 – *RTP: A Transport Protocol for Real-Time Applications* (header RTP mục 5.1; ước lượng jitter mục 6.4.1; tính số gói mất phụ lục A.3).

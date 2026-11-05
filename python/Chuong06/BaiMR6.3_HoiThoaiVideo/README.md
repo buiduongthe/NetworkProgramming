@@ -4,7 +4,7 @@
 |---|---|
 | Loại | **Bài mở rộng** – không có trong giáo trình, không có mã giả tương ứng |
 | Liên hệ với giáo trình | Bài mở rộng MR6.2 (hội thoại âm thanh); Chương 6: Bài 6.1 (server đa luồng), Bài 6.4 (server chat); Chương 4: Bài 4.1 (UDP); Chương 3: Bài 3.2 (định khung thông điệp) |
-| Thư viện | Thư viện chuẩn: `socket`, `threading`, `struct`, `zlib`, `json`. Tùy chọn: `opencv-python` (camera thật) |
+| Thư viện | Thư viện chuẩn: `socket`, `threading`, `struct`, `zlib`, `json`; bản giao diện thêm `tkinter`, `subprocess`. Camera thật: công cụ `ffmpeg` (bản giao diện) hoặc `opencv-python` (bản dòng lệnh, `--camera`) |
 | Bản ngôn ngữ khác | [C#](../../../csharp/Chuong06/BaiMR6.3_HoiThoaiVideo/), [Java](../../../java/Chuong06/BaiMR6.3_HoiThoaiVideo/), [Rust](../../../rust/Chuong06/BaiMR6.3_HoiThoaiVideo/), [Go](../../../go/Chuong06/BaiMR6.3_HoiThoaiVideo/) |
 
 ## Mục tiêu
@@ -35,7 +35,13 @@ Cùng ý tưởng với MR6.2 nhưng cho hình ảnh: n client gửi khung hình
 - `chung.py` – header datagram, `chia_manh`, `GhepKhung`, phông chữ bitmap 5×7, tô/vẽ chữ, thu nhỏ/phóng to, `CameraTongHop`, `giai_nen`, `ghi_png` (PNG viết tay).
 - `server_video.py` – server: kênh TCP, luồng nhận UDP (ghép mảnh, kiểm tra quyền, vẽ ô), luồng ghép lưới và gửi theo hạn của từng người nhận, bảng điều khiển.
 - `khach_video.py` – client: vòng gửi theo fps cho phép, luồng nhận lưới, lệnh `chup`, ghép ảnh chụp (`--ghep`).
-- `demo.json`, `ket_qua.txt`, `ket_qua.png` – kịch bản và kết quả thực thi thật; `ket_qua_video.png` – 5 ảnh lưới do client A chụp trong lần chạy đó.
+- Bản giao diện (Tkinter):
+  - `phong_video.py` – lõi server dạng lớp `PhongVideo` (cùng giao thức, cùng 6 quy tắc, dùng lại `ghep_luoi` của `server_video.py`; Start/Stop nhiều lần).
+  - `camera.py` – liệt kê camera và thu khung qua tiến trình `ffmpeg` (ống stdout, khung RGB 160×120), mẫu thử `testsrc`, camera giả lập.
+  - `giao_dien_chung.py` – hàng đợi luồng nền → luồng giao diện, RGB → `PhotoImage` (PPM), ô nhật ký.
+  - `server_gui.py` – cửa sổ "Camera Server" (lưới 4×4); `khach_gui.py` – lớp `KetNoiVideo` (mạng + camera) và cửa sổ "Camera Client".
+  - `demo_gui.py` – kịch bản tự bấm nút, in fps/kbit/s, chụp cửa sổ thành `ket_qua_gui.png`.
+- `demo.json`, `ket_qua.txt`, `ket_qua.png` – kịch bản và kết quả thực thi thật (bản dòng lệnh + bản giao diện); `ket_qua_video.png` – 5 ảnh lưới do client A chụp trong lần chạy đó; `ket_qua_gui.png` – ảnh chụp các cửa sổ giao diện.
 
 ## Cách chạy
 Trong thư mục bài (Windows: `python` hoặc `py` thay cho `python3`):
@@ -53,6 +59,44 @@ Tùy chọn client: `--fps 10` (tốc độ khung camera), `--mat-goi 0.02` (gi�
 
 Tái lập kết quả từ thư mục gốc của kho: `python3 tools/demo.py python/Chuong06/BaiMR6.3_HoiThoaiVideo`.
 
+## Ứng dụng giao diện
+![Ứng dụng giao diện](ket_qua_gui.png)
+
+Ảnh trên là lần chạy thật của `demo_gui.py` (Linux, Xvfb, Python 3.12 + Tk 8.6, ffmpeg 6.1; **không có webcam**): A, B dùng "Camera giả lập", C dùng "Mẫu thử ffmpeg (testsrc)" – đi đúng đường camera thật (tiến trình ffmpeg → ống → khung RGB) nhưng nguồn là ảnh mẫu. Server đã tắt camera của B (chấm đỏ, ô "TAT CAMERA (SERVER)"), giới hạn C 5 fps và độ phân giải 1/2 (ô C thành ô vuông 2×2); A chọn nhận lưới 1/2, 5 fps (lưới 160×120 phóng to); B bấm START lại và bị từ chối.
+
+**Server – "Camera Server"** (`server_gui.py`): lưới 4×4 ô, mỗi client một ô (hình mới nhất server nhận, tên, fps nhận, chấm đỏ khi camera tắt; bấm vào ô để chọn client). Khung phải: IP, cổng, START SERVER/STOP SERVER; danh sách client; với client đang chọn: Tắt/Bật camera (khóa của server), FPS gửi tối đa 1–15, độ phân giải gửi 1/1, 1/2, 1/4; FPS chung; nhật ký. Thanh trạng thái: số client, tổng kbit/s vào/ra.
+
+**Client – "Camera Client"** (`khach_gui.py`): *Kết nối server* (IP, cổng, tên, Kết nối/Ngắt kết nối); *Camera* (danh sách camera thật + "Mẫu thử ffmpeg (testsrc)" + "Camera giả lập", START/CANCEL = tự bật/tắt camera, chỉ báo THẬT/MẪU THỬ/GIẢ LẬP và tham số server cho phép); khung xem trước camera của mình (đúng độ phân giải đang gửi); khung "Lưới nhận từ server" (fps nhận, độ phân giải nhận 1/1, 1/2); thanh trạng thái ("Đang truyền dữ liệu camera…", fps gửi, kbit/s gửi/nhận).
+
+Giao thức **không đổi** – bản giao diện chạy chéo với bản dòng lệnh và các ngôn ngữ khác. Client vừa kết nối mà chưa bấm START thì gửi `tu_tat_camera`; START mở camera rồi gửi `tu_bat_camera` (server có thể từ chối – quy tắc 2); CANCEL gửi `tu_tat_camera` và dừng ffmpeg.
+
+### Cách chạy
+```bash
+python3 server_gui.py 127.0.0.1 41630 41631      # cửa sổ server
+python3 khach_gui.py A 127.0.0.1 41630           # mỗi client một cửa sổ (tên, host, cổng TCP)
+python3 khach_gui.py B 127.0.0.1 41630
+```
+- **Windows:** `py server_gui.py …` (Python từ python.org đã có Tkinter). Cài ffmpeg: `winget install -e --id Gyan.FFmpeg`, mở cửa sổ dòng lệnh mới để `ffmpeg` có trong PATH. Camera được liệt kê bằng `ffmpeg -hide_banner -list_devices true -f dshow -i dummy` và thu bằng `-f dshow -i video="Tên camera"`. Cho phép ứng dụng desktop dùng camera trong *Settings → Privacy & security → Camera*.
+- **Linux:** `sudo apt install python3-tk ffmpeg`; camera là `/dev/video*` (`-f v4l2`), người dùng cần thuộc nhóm `video`. **macOS:** `brew install ffmpeg`; camera qua `-f avfoundation`.
+- Lệnh thu cụ thể (xem `camera.lenh_ffmpeg`): `ffmpeg -f <dshow|v4l2|avfoundation> -i <camera> -vf scale=160:120,fps=15 -pix_fmt rgb24 -f rawvideo pipe:1`; mỗi khung đúng 57 600 byte, luồng đọc chỉ giữ khung mới nhất, vòng gửi lấy theo fps server cho phép rồi thu nhỏ – nén – chia mảnh như bản dòng lệnh.
+- Không có ffmpeg: danh sách chỉ còn "Camera giả lập" (khung tổng hợp của `chung.CameraTongHop`). Camera thật **chỉ được mở khi bấm START**, không tự bật lúc khởi động. ffmpeg báo lỗi (camera bận, sai tên…) thì dòng chỉ báo chuyển thành "Camera lỗi: …".
+- Mặc định server nghe `127.0.0.1`; muốn máy khác nối vào thì nhập IP card mạng (hoặc `0.0.0.0`) và mở tường lửa cho hai cổng.
+- Kịch bản tự động (Linux): `xvfb-run -a -s "-screen 0 2200x1200x24" python3 demo_gui.py 127.0.0.1 41635 41636`.
+
+### Sơ đồ luồng
+```
+ luồng giao diện (Tk mainloop)       luồng mạng (lõi)                       tiến trình ffmpeg
+ ─────────────────────────────       ────────────────                       ─────────────────
+ bấm nút ──gọi phương thức──▶  PhongVideo / KetNoiVideo                     camera → RGB thô
+                               ├ TCP: mỗi client một luồng                        │ ống stdout
+ root.after(50): hàng đợi    ◀─bao(...)── nhật ký, sự kiện              luồng đọc ống: giữ khung mới nhất
+ root.after(100): anh_chup() ◀─đọc dưới khóa── ô hình, khung xem trước,         │
+   → PhotoImage(PPM) → Canvas     lưới nhận, fps, kbit/s               vòng gửi: thu nhỏ → zlib → mảnh → UDP
+                               ├ nhận UDP → ghép mảnh → giải nén
+                               └ server: ghép lưới, nén, gửi theo fps của từng người nhận
+```
+Quy tắc: **chỉ luồng giao diện chạm vào điều khiển Tk** (kể cả tạo `PhotoImage`). Luồng nền chỉ ghi khung mới nhất vào đối tượng lõi dưới khóa; cứ 100 ms luồng giao diện đọc và vẽ – server chỉ tạo lại ảnh của ô vừa đổi. `connect` và dừng server (chờ luồng nền kết thúc) chạy trên luồng phụ nên cửa sổ không "đứng hình". Ảnh hiển thị không cần thư viện ngoài: `b"P6 160 120 255\n" + rgb` là một ảnh PPM mà `tk.PhotoImage(data=…, format="PPM")` đọc được, `zoom(2)` phóng to.
+
 ## Kết quả thực thi
 ![Kết quả thực thi](ket_qua.png)
 
@@ -68,19 +112,22 @@ Tái lập kết quả từ thư mục gốc của kho: `python3 tools/demo.py p
 
 Luồng của B giả lập mất 2 % mảnh: server đếm được khung hỏng và mảnh mất (bảng tổng kết), các khung đó bị bỏ, lưới vẫn hiện khung đủ gần nhất của B.
 
+**Bản giao diện** (cửa sổ cuối trong `ket_qua.png`, chạy thật dưới Xvfb trên Linux): khi cả ba camera bật ở 10 fps, server nhận A ≈ 560, B ≈ 590 kbit/s (khung tổng hợp có hạt nhiễu) và C ≈ 234 kbit/s (ảnh mẫu testsrc ít chi tiết, nén tốt hơn), gửi lại mỗi người lưới 320×240 ở 10 fps ≈ 1430 kbit/s. Sau các lệnh: B 0 fps (server bỏ khung, client B ngừng gửi); C còn 5 fps, ≈ 46 kbit/s (1/4 số điểm ảnh × 1/2 số khung); lưới A nhận còn 160×120, 5 fps, ≈ 145 kbit/s. Không mất mảnh nào trên máy cục bộ. Camera thật qua ffmpeg (`dshow`/`v4l2`/`avfoundation`) chưa được kiểm thử vì máy chạy demo không có webcam; đường đọc ống ffmpeg đã được kiểm thử bằng nguồn `testsrc`.
+
 ## Ghi chú
 - Số fps/kbit/s đo theo cửa sổ 1 giây không thẳng hàng với thời điểm lệnh, nên giây chuyển tiếp có giá trị trung gian; ở 5 fps một cửa sổ có thể đếm được 5 hoặc 6 khung.
 - Nén zlib không mất dữ liệu kém xa codec video thật: H.264/VP8/AV1 nén có mất dữ liệu và chỉ gửi phần thay đổi giữa các khung (nén liên khung), đạt chất lượng tương đương ở vài chục kbit/s cho khung nhỏ như thế này. Video thật còn cần SRTP để mã hóa, điều khiển tắc nghẽn để tự giảm tốc khi mạng nghẽn, và đồng bộ hình–tiếng theo nhãn thời gian.
 - Python ghép lưới và nén lại cho từng người nhận mỗi khung; với nhiều client hơn, CPU server sẽ là nút thắt – đó chính là lý do hệ thống lớn dùng SFU.
 - Giao thức (header, JSON, zlib) giống hệt bản Go: client Python nối được vào server Go và ngược lại (đã thử). Bản Go nén zlib mức `BestSpeed` cho dung lượng lớn hơn một chút so với `zlib.compress(…, 1)` của Python.
-- Kiểm thử: Linux, Python 3.13.18.
+- Kiểm thử: Linux, Python 3.13.18. Bản giao diện: Python 3.12.3 + Tk 8.6 dưới Xvfb, ffmpeg 6.1.1.
 
 ## Bài tập gợi ý
 1. Thêm `fps_chung 3` vào kịch bản server và quan sát fps nhận của mọi client; giải thích vì sao `nhan_fps 30` của client vẫn không vượt được giới hạn này.
 2. Chạy client với `--mat-goi 0.1`: tính xác suất một khung 6 mảnh đến đủ (0,9⁶ ≈ 53 %) và so sánh với số khung hỏng server đếm được. Vì sao khung lớn chịu mất gói kém hơn?
 3. Bỏ ô của chính người nhận khỏi lưới (giống mix-minus) và đo băng thông tiết kiệm được.
-4. Hiển thị video trực tiếp: Tkinter `PhotoImage` nhận dữ liệu PPM (`P6` + header + RGB thô) – cập nhật ảnh mỗi khi nhận khung lưới mới.
-5. Nâng cao: chuyển server sang kiến trúc SFU – chuyển tiếp nguyên mảnh của từng người, client tự ghép lưới; giới hạn fps nhận bằng cách server bỏ cả khung (mọi mảnh có cùng số khung). So sánh CPU server và độ trễ với bản MCU.
+4. Giao diện: thêm vào cửa sổ server nút "Chụp lưới" lưu lưới 4×4 đang hiển thị thành PNG bằng `chung.ghi_png` (dữ liệu lấy từ `anh_chup()`, không đọc lại từ widget).
+5. Giao diện: client hiện thêm biểu đồ kbit/s gửi trong 30 s gần nhất (Canvas, cập nhật mỗi giây bằng `root.after`); thử đổi độ phân giải gửi ở server và quan sát bước nhảy.
+6. Nâng cao: chuyển server sang kiến trúc SFU – chuyển tiếp nguyên mảnh của từng người, client tự ghép lưới; giới hạn fps nhận bằng cách server bỏ cả khung (mọi mảnh có cùng số khung). So sánh CPU server và độ trễ với bản MCU.
 
 ## Đọc thêm
 - RFC 9000 – *QUIC: A UDP-Based Multiplexed and Secure Transport*, mục 14 (kích thước datagram 1200 byte).
