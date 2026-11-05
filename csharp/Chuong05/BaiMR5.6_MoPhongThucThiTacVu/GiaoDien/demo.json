@@ -1,0 +1,9 @@
+{
+  "nen_tang": "windows",
+  "ghi_chu": "WinForms chỉ chạy trên Windows: chạy bằng tools/demo_windows.ps1 với thư mục csharp\\Chuong05\\BaiMR5.6_MoPhongThucThiTacVu\\GiaoDien; ảnh ghi ra thư mục bài (..\\ket_qua_gui.png); ảnh nhật ký dựng từ .log_gui.txt bằng tools/render_output.py",
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "gui", "cmd": ["bin\\Release\\net10.0-windows\\BaiMR5.6_GiaoDien.exe", "demo", "..\\ket_qua_gui.png"], "timeout": 60}
+  ],
+  "titles": {"gui": "Cửa sổ 7 – ứng dụng WinForms, kịch bản demo (Windows)"}
+}

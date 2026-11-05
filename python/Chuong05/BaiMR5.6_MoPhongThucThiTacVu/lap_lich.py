@@ -72,7 +72,7 @@ def tao_viec(ts):
         n = ts.d[i]
         c1, io = n // 4, n // 2
         c2 = n - c1 - io
-        buoc = [["cpu", c1], ["io", io], ["chia" if ts.chia and i == 0 else "cpu", c2]]
+        buoc = [["cpu", c1], ["io", io], ["chia" if ts.chia and i == 0 and c2 >= 2 else "cpu", c2]]   # < 2 nhịp: không chia được
         dep = ["T1", "T2"] if ts.phu_thuoc and i == 2 else []
         ds.append(Viec(f"T{i + 1}", [b for b in buoc if b[1] > 0], 0, 0, dep))
     if ts.khan:
