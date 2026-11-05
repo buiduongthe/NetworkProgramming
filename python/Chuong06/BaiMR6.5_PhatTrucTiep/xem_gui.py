@@ -13,7 +13,7 @@ import threading
 import tkinter as tk
 
 from chung import CAO, DO_SAU_MAC_DINH, RONG, ghi_png
-from giao_dien_chung import (DO, NEN, XANH_DUONG, XANH_LA, HangDoiGiaoDien, NhatKy, ThanhMuc, anh_tk,
+from giao_dien_chung import (DO, NEN, XANH_DUONG, XANH_LA, HangDoiGiaoDien, NhatKy, ThanhMuc, ThongKeDinhKy, anh_tk,
                              chu_ms, khung_nhom, nhan, nut, o_nhap)
 from nguoi_xem import NguoiXem, anh_chup
 from thiet_bi_am_thanh import mo_loa, nap_sounddevice
@@ -111,6 +111,7 @@ class CuaSoXem:
         g = khung_nhom(root, "Nhật ký")
         g.pack(fill="x", padx=6, pady=4)
         self.nhat_ky = NhatKy(g, cao=5, rong=70, ten=f"xem {ten}")
+        self.dinh_ky = ThongKeDinhKy(f"xem {ten}")
         self.nhat_ky.pack(fill="x")
         self.thanh_tt = tk.Label(root, text="Trạng thái: chưa kết nối", anchor="w", relief="sunken", bg="white")
         self.thanh_tt.pack(fill="x", padx=6, pady=(0, 6))
@@ -227,6 +228,12 @@ class CuaSoXem:
         if lop:
             tt = lop.trang_thai()
             self.thanh.dat(tt["muc_am"])
+            self.dinh_ky.in_neu_den_han(lambda: (
+                f"tiếng {tt['goi_am']} gói, mất {tt['mat_am']}, mức {tt['muc_am']:.0f} dBFS,"
+                f" loa {'BẬT' if self.loa is not None and self.bien_loa.get() else 'tắt'}"
+                f" | hình I {tt['khung_i']} P {tt['khung_p']}, đứng {tt['dung_hinh']},"
+                f" lệch {chu_ms(tt['lech_hien'], True)}, trễ {chu_ms(tt['tre_hien'])}"
+                f" | đồng bộ {'BẬT' if tt['dong_bo'] else 'TẮT'}")) if tt["da_ket_noi"] else None
             g = tt["giai_doan"][-1]
             self.nhan_tk["tre"].configure(text=chu_ms(tt["tre_hien"]))
             self.nhan_tk["lech"].configure(text=chu_ms(tt["lech_hien"], True),

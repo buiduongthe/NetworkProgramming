@@ -16,7 +16,7 @@ from tkinter import filedialog, ttk
 
 from camera import GIA_LAP, MAU_THU, co_ffmpeg, liet_ke_camera, mo_camera
 from chung import CAO, FPS_MAC_DINH, GOP_MAC_DINH, RONG
-from giao_dien_chung import (DO, NEN, XANH_DUONG, XANH_LA, HangDoiGiaoDien, NhatKy, ThanhMuc, anh_tk,
+from giao_dien_chung import (DO, NEN, XANH_DUONG, XANH_LA, HangDoiGiaoDien, NhatKy, ThanhMuc, ThongKeDinhKy, anh_tk,
                              khung_nhom, nhan, nut, o_nhap)
 from may_phat import MayPhat
 from tep_video import TEP, mo_tep, tao_tep_mau
@@ -138,6 +138,7 @@ class CuaSoPhat:
         g = khung_nhom(root, "Nhật ký")
         g.pack(fill="x", padx=6, pady=4)
         self.nhat_ky = NhatKy(g, cao=5, rong=80, ten=f"phat {ten}")
+        self.dinh_ky = ThongKeDinhKy(f"phat {ten}")
         self.nhat_ky.pack(fill="x")
         self.thanh_tt = tk.Label(root, text="Trạng thái: chưa kết nối", anchor="w", relief="sunken", bg="white")
         self.thanh_tt.pack(fill="x", padx=6, pady=(0, 6))
@@ -221,6 +222,8 @@ class CuaSoPhat:
             if loi:
                 self.nhat_ky.ghi(loi)
         lop.bat_dau_phat(cam, mic, fps, gop)
+        self.nhat_ky.ghi(f"Camera: {cam.mo_ta}")
+        self.nhat_ky.ghi(f"Micro: {mic.mo_ta}")
         self.chi_bao.configure(text=f"Camera: {cam.mo_ta} | Micro: {mic.mo_ta}",
                                fg="#006000" if cam.that or mic.that else "#8a4b00")
         self.nut_phat.configure(state="disabled")
@@ -302,6 +305,10 @@ class CuaSoPhat:
         if lop:
             tt = lop.trang_thai()
             self.thanh_mic.dat(tt["muc_mic"])
+            if tt["dang_phat"]:
+                self.dinh_ky.in_neu_den_han(lambda: (
+                    f"I {tt['so_i']} P {tt['so_p']} | hình {tt['kbps_hinh']:.0f} tiếng {tt['kbps_am']:.0f} kbit/s"
+                    f" | mic {tt['muc_mic']:.0f} dBFS | PLI {tt['pli_nhan']} | {len(tt['nguoi_xem'])} người xem"))
             x = tt["xem_truoc"]
             if x is not None and x[3] != self.ts_da_ve and tt["dang_phat"]:
                 self.anh = anh_tk(x[2], x[0], x[1], 2)

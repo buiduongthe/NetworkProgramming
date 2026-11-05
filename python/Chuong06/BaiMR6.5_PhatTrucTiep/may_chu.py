@@ -32,6 +32,7 @@ class Khach:
         self.udp = None                      # địa chỉ UDP đã đăng ký
         self.am_thanh = self.video = True    # đăng ký nhận (người xem)
         self.luc_chao = time.monotonic()
+        self.luc_moc = self.luc_chao         # mốc đo khung I đầu: lúc vào, hoặc lúc bắt đầu phát nếu muộn hơn
         self.can_bo_dem = False              # chờ luồng UDP gửi bộ đệm GOP cho riêng người này
         self.goi_ra = self.byte_ra = 0
         self.dem_byte = 0                    # cửa sổ 1 giây
@@ -235,6 +236,10 @@ class MayChuPhat:
                          f" GOP {tin.get('gop')}, {tin.get('tan_so_mau')} Hz")
                 if not self.dang_phat:
                     self.dang_phat = True
+                    bay_gio = time.monotonic()
+                    for x in self._ds_nguoi_xem():          # người vào trước lúc phát: đo từ lúc phát
+                        if x.khung_dau_ms is None:
+                            x.luc_moc = bay_gio
                     self._su_kien(f"{k.ten} bắt đầu phát")
             elif loai == "dong_ho":
                 self.dong_ho = tin
@@ -326,7 +331,7 @@ class MayChuPhat:
                 so_p = len({g[4:8] for g in goi if g[1] == LOAI_P})
                 self.bao(f"{k.ten}: gửi bộ đệm GOP {len(goi)} gói (I #{so_i} + {so_p} P)")
                 if k.khung_dau_ms is None:
-                    k.khung_dau_ms = (time.monotonic() - k.luc_chao) * 1000
+                    k.khung_dau_ms = (time.monotonic() - k.luc_moc) * 1000
                     k.nguon_dau = "bộ đệm"
                     self.bao(f"{k.ten}: khung I đầu sau {k.khung_dau_ms:.0f} ms (bộ đệm)")
 
@@ -373,7 +378,7 @@ class MayChuPhat:
             k.byte_ra += len(goi)
             k.dem_byte += len(goi)
             if video and loai == LOAI_I and k.khung_dau_ms is None:
-                k.khung_dau_ms = (bay_gio - k.luc_chao) * 1000
+                k.khung_dau_ms = (bay_gio - k.luc_moc) * 1000
                 k.nguon_dau = "trực tiếp"
                 self.bao(f"{k.ten}: khung I đầu sau {k.khung_dau_ms:.0f} ms (trực tiếp)")
         self.goi_ra += len(ra)

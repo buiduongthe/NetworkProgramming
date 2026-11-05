@@ -12,7 +12,7 @@ import tkinter as tk
 from tkinter import ttk
 
 from chung import CAO, RONG
-from giao_dien_chung import (CAM, DO, NEN, XANH_LA, HangDoiGiaoDien, NhatKy, anh_tk, khung_nhom, nhan,
+from giao_dien_chung import (CAM, DO, NEN, XANH_LA, HangDoiGiaoDien, NhatKy, ThongKeDinhKy, anh_tk, khung_nhom, nhan,
                              nut, o_nhap)
 from may_chu import MayChuPhat
 
@@ -98,6 +98,7 @@ class CuaSoServer:
         g = khung_nhom(root, "Nhật ký")
         g.pack(fill="x", padx=6, pady=4)
         self.nhat_ky = NhatKy(g, cao=7, rong=110, ten="server")
+        self.dinh_ky = ThongKeDinhKy("server")
         self.nhat_ky.pack(fill="x")
         self.thanh_tt = tk.Label(root, text="Trạng thái: server chưa chạy", anchor="w", relief="sunken", bg="white")
         self.thanh_tt.pack(fill="x", padx=6, pady=(0, 6))
@@ -143,6 +144,10 @@ class CuaSoServer:
     def cap_nhat(self):
         tt = self.lop.trang_thai()
         if self.lop.chay:
+            self.dinh_ky.in_neu_den_han(lambda: (
+                f"vào {tt['kbps_vao']:.0f} kbit/s (tiếng {tt['kbps_vao_am']:.0f}, hình {tt['kbps_vao_hinh']:.0f}),"
+                f" ra {tt['kbps_ra']:.0f}, hệ số {tt['he_so']:.2f}, {'đang phát' if tt['dang_phat'] else 'chưa phát'};"
+                + "".join(f" {x['ten']} {x['nhan']} {x['kbps']:.0f}" for x in tt["nguoi_xem"])))
             self.nhan_vao.configure(text=f"Vào: {tt['kbps_vao']:.0f} kbit/s (tiếng {tt['kbps_vao_am']:.0f},"
                                          f" hình {tt['kbps_vao_hinh']:.0f})")
             self.nhan_ra.configure(text=f"Ra: {tt['kbps_ra']:.0f} kbit/s tới {len(tt['nguoi_xem'])} người xem")

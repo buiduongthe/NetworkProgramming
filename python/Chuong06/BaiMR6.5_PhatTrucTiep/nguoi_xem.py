@@ -54,6 +54,8 @@ class NguoiXem:
 
     def _lam_moi_thong_ke(self):
         self.luc_chao = time.monotonic()
+        self.luc_moc = self.luc_chao                      # mốc đo khung đầu: lúc vào, hoặc lúc máy phát
+        self.cho_phat = False                             # bắt đầu phát nếu khi vào chưa có ai phát
         self.goi_am = self.byte_nhan = self.khung_i = self.khung_p = self.khung_hien = 0
         self.dung_hinh = self.pli_gui = self.bo_cu = 0
         self.mat_cu = self.hong_cu = self.bo_p_cu = 0     # số đếm của các phiên phát trước
@@ -107,6 +109,7 @@ class NguoiXem:
             self.rng = random.Random(self.ma)
             self._lam_moi_phien()
             self._lam_moi_thong_ke()
+            self.cho_phat = not tl.get("phat")
             self.da_ket_noi = True
         if not (self.am_thanh and self.video):
             self.gui({"loai": "dang_ky", "am_thanh": self.am_thanh, "video": self.video})
@@ -150,6 +153,10 @@ class NguoiXem:
                 if loai == "thong_tin":
                     with self.khoa:
                         self.thong_tin = tin
+                        if self.cho_phat:                   # vào trước khi phát: đo từ lúc bắt đầu phát
+                            self.cho_phat = False
+                            if self.khung_dau_ms is None:
+                                self.luc_moc = time.monotonic()
                     self.bao(f"Luồng {tin.get('rong')}x{tin.get('cao')}, {tin.get('fps')} fps,"
                              f" GOP {tin.get('gop')}, {tin.get('tan_so_mau')} Hz")
                 elif loai == "dong_ho":
@@ -160,6 +167,7 @@ class NguoiXem:
                 elif loai == "ket_thuc":
                     with self.khoa:
                         self.thong_tin = None
+                        self.cho_phat = True
                         self._lam_moi_phien()
                     self.bao("Máy phát kết thúc phát")
                 elif loai == "bi_ngat":
@@ -219,7 +227,7 @@ class NguoiXem:
                 self.khung_i += 1
                 if self.i_dau is None:
                     uoc = self._uoc_luong_ts()
-                    self.i_dau = (None if uoc is None else uoc - ts, (bay_gio - self.luc_chao) * 1000)
+                    self.i_dau = (None if uoc is None else uoc - ts, (bay_gio - self.luc_moc) * 1000)
                 if self.dang_dung:
                     self.dang_dung = False
                     ms = (bay_gio - self.giai_ma.luc_mat) * 1000 if self.giai_ma.luc_mat else 0
@@ -355,7 +363,7 @@ class NguoiXem:
         self.khung_hien += 1
         self.w_hien += 1
         if self.khung_dau_ms is None:
-            self.khung_dau_ms = (bay_gio - self.luc_chao) * 1000
+            self.khung_dau_ms = (bay_gio - self.luc_moc) * 1000
             # Nguồn khung đầu: khung I đã "cũ" (chụp trước lúc vào > 1,5 chu kỳ khung) -> từ bộ đệm GOP;
             # I mới nhưng tới muộn -> phải chờ khung I; I mới tới ngay -> vừa đúng lúc có khung I.
             cu, den = self.i_dau if self.i_dau else (None, None)
@@ -367,7 +375,8 @@ class NguoiXem:
                 self.nguon_dau = "chờ khung I"
             else:
                 self.nguon_dau = "khung I trực tiếp"
-            self.bao(f"Khung đầu sau {self.khung_dau_ms:.0f} ms: {self.nguon_dau}{them}")
+            moc = " (từ lúc phát)" if self.luc_moc > self.luc_chao else ""
+            self.bao(f"Khung đầu sau {self.khung_dau_ms:.0f} ms{moc}: {self.nguon_dau}{them}")
         if self.cho_hinh_lai is not None:
             self.bao(f"Hình trở lại sau {(bay_gio - self.cho_hinh_lai) * 1000:.0f} ms")
             self.cho_hinh_lai = None

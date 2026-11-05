@@ -95,6 +95,20 @@ class NhatKy(tk.Frame):
         self.van_ban.configure(state="disabled")
 
 
+class ThongKeDinhKy:
+    """Khi chạy riêng (NhatKy.in_ra): cứ `chu_ky` giây in một dòng số liệu ra dòng lệnh (không ghi vào ô
+    nhật ký) – để tệp nhật ký khi thử thiết bị thật cho thấy tiếng/hình có thật sự đi qua."""
+
+    def __init__(self, ten, chu_ky=5.0):
+        self.ten, self.chu_ky, self.han = ten, chu_ky, time.monotonic() + chu_ky
+
+    def in_neu_den_han(self, tao_dong):
+        if not NhatKy.in_ra or time.monotonic() < self.han:
+            return
+        self.han += self.chu_ky
+        print(f"{time.strftime('%H:%M:%S')} [{self.ten}] {tao_dong()}", flush=True)
+
+
 def nut(cha, chu, mau, lenh, rong=12):
     return tk.Button(cha, text=chu, bg=mau, activebackground=mau, width=rong, command=lenh,
                      relief="raised", bd=1)
