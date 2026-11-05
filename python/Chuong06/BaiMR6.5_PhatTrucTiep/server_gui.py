@@ -97,7 +97,7 @@ class CuaSoServer:
 
         g = khung_nhom(root, "Nhật ký")
         g.pack(fill="x", padx=6, pady=4)
-        self.nhat_ky = NhatKy(g, cao=7, rong=110)
+        self.nhat_ky = NhatKy(g, cao=7, rong=110, ten="server")
         self.nhat_ky.pack(fill="x")
         self.thanh_tt = tk.Label(root, text="Trạng thái: server chưa chạy", anchor="w", relief="sunken", bg="white")
         self.thanh_tt.pack(fill="x", padx=6, pady=(0, 6))
@@ -204,4 +204,5 @@ def main():
 
 
 if __name__ == "__main__":
+    NhatKy.in_ra = True                     # chạy riêng: nhật ký cũng ra dòng lệnh
     main()

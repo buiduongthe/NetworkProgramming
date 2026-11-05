@@ -117,7 +117,7 @@ class CuaSoPhat:
 
         g = khung_nhom(root, "Nhật ký")
         g.pack(fill="x", padx=6, pady=4)
-        self.nhat_ky = NhatKy(g, cao=5, rong=80)
+        self.nhat_ky = NhatKy(g, cao=5, rong=80, ten=f"phat {ten}")
         self.nhat_ky.pack(fill="x")
         self.thanh_tt = tk.Label(root, text="Trạng thái: chưa kết nối", anchor="w", relief="sunken", bg="white")
         self.thanh_tt.pack(fill="x", padx=6, pady=(0, 6))
@@ -270,4 +270,5 @@ def main():
 
 
 if __name__ == "__main__":
+    NhatKy.in_ra = True                     # chạy riêng: nhật ký cũng ra dòng lệnh
     main()

@@ -68,10 +68,15 @@ class ThanhMuc(tk.Canvas):
 
 
 class NhatKy(tk.Frame):
-    """Ô nhật ký cuộn (chỉ đọc), mỗi dòng có giờ."""
+    """Ô nhật ký cuộn (chỉ đọc), mỗi dòng có giờ.
 
-    def __init__(self, cha, cao=6, rong=60, **kw):
+    in_ra = True (đặt khi chạy riêng từng cửa sổ): mỗi dòng cũng in ra dòng lệnh, kèm tiền tố `ten`,
+    để chuyển hướng được vào tệp nhật ký khi thử với thiết bị thật."""
+    in_ra = False
+
+    def __init__(self, cha, cao=6, rong=60, ten="", **kw):
         super().__init__(cha, **kw)
+        self.ten = ten
         self.van_ban = tk.Text(self, height=cao, width=rong, state="disabled", wrap="word",
                                font=("TkFixedFont", 9), bg="white")
         cuon = tk.Scrollbar(self, command=self.van_ban.yview)
@@ -80,6 +85,8 @@ class NhatKy(tk.Frame):
         cuon.pack(side="right", fill="y")
 
     def ghi(self, text):
+        if NhatKy.in_ra:
+            print(f"{time.strftime('%H:%M:%S')} [{self.ten}] {text}", flush=True)
         self.van_ban.configure(state="normal")
         self.van_ban.insert("end", time.strftime("%H:%M:%S ") + text + "\n")
         if int(self.van_ban.index("end-1c").split(".")[0]) > 500:
