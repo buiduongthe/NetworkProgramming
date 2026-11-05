@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.5_PhatTrucTiep",
+    "chuong": 6,
+    "ngon_ngu": [
+      "csharp"
+    ],
+    "kiem_thu": {
+      "csharp": "đã chạy (bản dòng lệnh net10.0, Linux .NET 10.0.114, tools/demo.py; chạy chéo với Python cả hai chiều); ứng dụng WinForms net10.0-windows chưa chạy – cần Windows (chạy bằng tools/demo_windows.ps1 với thư mục GiaoDien), đã kiểm tra biên dịch với assembly tham chiếu WinForms"
+    },
+    "ten": "Phát trực tiếp âm thanh + video 1→n từ camera hoặc tệp video: máy chủ SFU nhân bản gói, khung I/P (zlib + XOR), bộ đệm GOP, xin khung khóa (PLI), đồng bộ tiếng-hình với âm thanh làm đồng hồ chủ, đăng ký theo lớp",
+    "ghi_chu": "Dự án BaiMR6.5_PhatTrucTiep.csproj (dòng lệnh: server/phat/xem) và GiaoDien/BaiMR6.5_GiaoDien.csproj (WinForms, dùng chung lõi ../*.cs). Cổng 42650/42651 (GUI 42652/42653). Kết quả: B vào muộn khi bộ đệm GOP bật hiện khung đầu sau 109 ms, C khi tắt 1479 ms (các lần chạy khác 0,5–0,8 s tùy pha GOP); D mất 3 % gói: 4 lần đứng hình, hồi phục sau PLI ≈ 100 ms; A lệch tiếng-hình +3 ms khi bật, −83 ms khi tắt; hệ số nhân bản 4,00 với 4 người xem. Chạy chéo: (a) máy phát Python + máy chủ C# + người xem C# và Python; (b) máy phát C# + máy chủ Python + người xem Python – giải mã I/P, lệch +2/+3 ms khi đồng bộ. Phát tệp video (--tep, --tao-tep-mau): bíp và chớp lệch ≤ 20 ms tại nguồn. Thiết bị: camera/tệp qua ffmpeg, micro/loa qua winmm (máy kiểm thử Linux không có camera/âm thanh – đã thử nhánh lùi về giả lập). Đọc thêm: RFC 3550 6.4.1, 3551, 4585 6.3.1, 7667, 6184 mục 8, 8085."
+  }
+]

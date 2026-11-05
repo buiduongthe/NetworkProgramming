@@ -1,0 +1,9 @@
+{
+  "nen_tang": "windows",
+  "ghi_chu": "WinForms chỉ chạy trên Windows: chạy bằng tools/demo_windows.ps1 csharp\\Chuong06\\BaiMR6.5_PhatTrucTiep\\GiaoDien; kịch bản demo dùng camera và micro giả lập (không mở thiết bị thật), có ffmpeg thì thêm lượt testsrc và lượt tệp video mẫu; ảnh ghi ra ..\\ket_qua_gui.png và ..\\ket_qua_gui_tep.png",
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "gui", "cmd": ["bin\\Release\\net10.0-windows\\BaiMR6.5_GiaoDien.exe", "demo", "127.0.0.1", "42652", "42653", "..\\ket_qua_gui.png"], "timeout": 90}
+  ],
+  "titles": {"gui": "Cửa sổ 7 – ứng dụng giao diện (server, máy phát và 2 người xem) – Windows"}
+}

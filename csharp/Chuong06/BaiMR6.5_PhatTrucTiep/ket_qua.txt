@@ -1,0 +1,250 @@
+===== server =====
+$ dotnet bin/Release/net10.0/BaiMR6.5_PhatTrucTiep.dll server 127.0.0.1 42650 42651
+[server] TCP 127.0.0.1:42650, UDP 42651; bộ đệm GOP: bật
+[server] #1 P (phát) vào từ 127.0.0.1:51344
+[server] => P kết nối (máy phát)
+[server] #1 P đăng ký UDP 127.0.0.1:37298
+[server] P phát 160x120 10 fps GOP 20, 16000 Hz
+[server] => P bắt đầu phát
+[server] #2 D (xem) vào từ 127.0.0.1:51358
+[server] => D vào xem
+[server] #2 D đăng ký UDP 127.0.0.1:48261
+[server] D: gửi bộ đệm GOP 13 gói (I #0 + 7 P)
+[server] D: khung I đầu sau 42 ms (bộ đệm)
+[server] #3 A (xem) vào từ 127.0.0.1:51360
+[server] => A vào xem
+[server] #3 A đăng ký UDP 127.0.0.1:33867
+[server] A: gửi bộ đệm GOP 15 gói (I #0 + 9 P)
+[server] A: khung I đầu sau 33 ms (bộ đệm)
+[server] PLI từ D -> P
+[server] #4 B (xem) vào từ 127.0.0.1:41572
+[server] => B vào xem
+[server] #4 B đăng ký UDP 127.0.0.1:51699
+[server] B: gửi bộ đệm GOP 8 gói (I #30 + 2 P)
+[server] B: khung I đầu sau 20 ms (bộ đệm)
+[server] PLI từ D -> P
+[server] > bo_dem tat
+[server] Bộ đệm GOP: tắt
+[server] #5 C (xem) vào từ 127.0.0.1:41584
+[server] => C vào xem
+[server] #5 C đăng ký UDP 127.0.0.1:46395
+[server] PLI từ D -> P
+[server] A đăng ký nhận: A
+[server] C: khung I đầu sau 1414 ms (trực tiếp)
+[server] > trang_thai
+[server] Trạng thái: P đang phát, 4 người xem
+[server] bộ đệm GOP tắt: 0 gói, 0 KB
+[server] vào 365 kbit/s (tiếng 261, hình 104)
+[server] ra 1461 kbit/s, hệ số nhân bản 4.00
+[server] PLI chuyển 3, bỏ 0
+[server] tên    nhận gói ra  KB ra kbit/s khung I đầu
+[server] D      A+V     541    372    365   42 ms bộ đệm
+[server] A      A       526    361    365   33 ms bộ đệm
+[server] B      A+V     368    256    365   20 ms bộ đệm
+[server] C      A+V     108     74    365 1414 ms trực tiếp
+[server] PLI từ D -> P
+[server] A đăng ký nhận: A+V
+[server] => B rời
+[server] => C rời
+[server] => D rời
+[server] => A rời
+[server] => P dừng phát
+[server] => P (máy phát) thoát
+[server] ===== TỔNG KẾT: 4 người xem =====
+[server] vào 741 gói 508 KB, ra 1969 gói 1355 KB
+[server] hệ số nhân bản (byte ra/vào) 2.67
+[server] PLI chuyển 4, bỏ 0
+[server] tên    nhận gói ra  KB ra kbit/s khung I đầu
+[server] B      A+V     455    315    388   20 ms bộ đệm
+[server] C      A+V     205    142    382 1414 ms trực tiếp
+[server] D      A+V     647    447    390   42 ms bộ đệm
+[server] A      A+V     662    451    372   33 ms bộ đệm
+[server] (kbit/s = trung bình suốt thời gian xem)
+[server] Server đã dừng
+
+===== P =====
+$ dotnet bin/Release/net10.0/BaiMR6.5_PhatTrucTiep.dll phat P 127.0.0.1 42650 --thoi-gian 11
+[phat P] Sự kiện: P kết nối (máy phát)
+[phat P] Mã 1; camera GIẢ LẬP – bảng clapper
+[phat P] Micro GIẢ LẬP – 440 Hz + bíp 1000 Hz mỗi giây
+[phat P] Bắt đầu phát 160x120 10 fps GOP 20
+[phat P] Mỗi giây: khung I/P, kbit/s hình, tiếng (cả header)
+[phat P] Sự kiện: P bắt đầu phát
+[phat P] Sự kiện: D vào xem
+[phat P] Sự kiện: A vào xem
+[phat P] PLI từ D -> gửi khung I #10
+[phat P]  1s khung I 2 P  9 | hình  123 tiếng 266 kbit/s
+[phat P]  2s khung I 0 P 10 | hình  105 tiếng 261 kbit/s
+[phat P]  3s khung I 1 P  9 | hình   95 tiếng 261 kbit/s
+[phat P] Sự kiện: B vào xem
+[phat P]  4s khung I 0 P 10 | hình  103 tiếng 261 kbit/s
+[phat P] PLI từ D -> gửi khung I #47
+[phat P]  5s khung I 1 P  9 | hình  136 tiếng 261 kbit/s
+[phat P]  6s khung I 0 P 10 | hình  105 tiếng 261 kbit/s
+[phat P] Sự kiện: C vào xem
+[phat P]  7s khung I 1 P  9 | hình  136 tiếng 266 kbit/s
+[phat P]  8s khung I 0 P 10 | hình  105 tiếng 256 kbit/s
+[phat P] PLI từ D -> gửi khung I #84
+[phat P]  9s khung I 1 P  9 | hình  136 tiếng 266 kbit/s
+[phat P] PLI từ D -> gửi khung I #94
+[phat P] Sự kiện: B rời
+[phat P] 10s khung I 1 P  9 | hình  138 tiếng 256 kbit/s
+[phat P] Sự kiện: C rời
+[phat P] Sự kiện: D rời
+[phat P] Sự kiện: A rời
+[phat P] Dừng phát
+[phat P] Sự kiện: P dừng phát
+[phat P] ===== TỔNG KẾT sau 11.0 s =====
+[phat P] khung I 7, P 104; TB I 3994 B, P 1240 B
+[phat P] P nhỏ nhất 389 B, lớn nhất 4768 B (khung chớp)
+[phat P] I/thô 6.9 %, P TB/I TB 31.0 %
+[phat P] tiếng 551 gói; PLI nhận 4
+
+===== B =====
+$ dotnet bin/Release/net10.0/BaiMR6.5_PhatTrucTiep.dll xem B 127.0.0.1 42650 --tre 3 --thoi-gian 9.7
+[xem B] Chờ 3.0 s rồi mới vào xem (vào muộn)
+[xem B] Vào xem: mã 4, máy phát đang phát
+[xem B] Luồng 160x120, 10 fps, GOP 20, 16000 Hz
+[xem B] Sự kiện: B vào xem
+[xem B] Nhận tiếng+hình, đồng bộ BẬT, jitter 100 ms
+[xem B] Mỗi giây: gói tiếng, mất, trễ ms | khung hiện, lệch ms
+[xem B] Khung đầu sau 109 ms: bộ đệm GOP (I cũ 0.3 s)
+[xem B]  1s tiếng 51 mất 0 trễ  97 | hình 11 lệch   +3
+[xem B]  2s tiếng 50 mất 0 trễ  97 | hình 10 lệch   +2
+[xem B]  3s tiếng 51 mất 0 trễ  97 | hình 10 lệch   +3
+[xem B] Sự kiện: C vào xem
+[xem B]  4s tiếng 50 mất 0 trễ  98 | hình  9 lệch   +2
+[xem B]  5s tiếng 50 mất 0 trễ  96 | hình 11 lệch   +2
+[xem B]  6s tiếng 50 mất 0 trễ  97 | hình 10 lệch   +3
+[xem B] ===== TỔNG KẾT =====
+[xem B] vào muộn 3.0 s; khung đầu sau 109 ms
+[xem B]   nguồn khung đầu: bộ đệm GOP
+[xem B] tiếng: nhận 332 gói, mất 0, trễ TB 97 ms
+[xem B]   (trễ đầu-cuối: giả định cùng đồng hồ)
+[xem B] hình: nhận 70 khung (I 5, P 65), hỏng 0
+[xem B]   P bỏ chờ I 0; hiện 67, bỏ cũ 2
+[xem B] đứng hình 0, xin khung khóa 0
+[xem B] lệch tiếng-hình TB (+ = hình chậm hơn tiếng):
+[xem B]   1. đồng bộ BẬT: +2 ms (n=66)
+[xem B] nhận TB 389 kbit/s
+
+===== C =====
+$ dotnet bin/Release/net10.0/BaiMR6.5_PhatTrucTiep.dll xem C 127.0.0.1 42650 --tre 6.5 --thoi-gian 9.6
+[xem C] Chờ 6.5 s rồi mới vào xem (vào muộn)
+[xem C] Vào xem: mã 5, máy phát đang phát
+[xem C] Luồng 160x120, 10 fps, GOP 20, 16000 Hz
+[xem C] Sự kiện: C vào xem
+[xem C] Nhận tiếng+hình, đồng bộ BẬT, jitter 100 ms
+[xem C] Mỗi giây: gói tiếng, mất, trễ ms | khung hiện, lệch ms
+[xem C]  1s tiếng 52 mất 0 trễ  92 | hình  0 lệch    –
+[xem C] Khung đầu sau 1479 ms: chờ khung I
+[xem C]  2s tiếng 50 mất 0 trễ  93 | hình  6 lệch   +1
+[xem C] Sự kiện: B rời
+[xem C] ===== TỔNG KẾT =====
+[xem C] vào muộn 6.5 s; khung đầu sau 1479 ms
+[xem C]   nguồn khung đầu: chờ khung I
+[xem C] tiếng: nhận 150 gói, mất 0, trễ TB 93 ms
+[xem C]   (trễ đầu-cuối: giả định cùng đồng hồ)
+[xem C] hình: nhận 17 khung (I 2, P 15), hỏng 0
+[xem C]   P bỏ chờ I 13; hiện 16, bỏ cũ 0
+[xem C] đứng hình 0, xin khung khóa 0
+[xem C] lệch tiếng-hình TB (+ = hình chậm hơn tiếng):
+[xem C]   1. đồng bộ BẬT: +2 ms (n=16)
+[xem C] nhận TB 385 kbit/s
+
+===== D =====
+$ dotnet bin/Release/net10.0/BaiMR6.5_PhatTrucTiep.dll xem D 127.0.0.1 42650 --mat-goi 0.03 --thoi-gian 9.5
+[xem D] Vào xem: mã 2, máy phát đang phát
+[xem D] Luồng 160x120, 10 fps, GOP 20, 16000 Hz
+[xem D] Nhận tiếng+hình, đồng bộ BẬT, jitter 100 ms, mất 3%
+[xem D] Mỗi giây: gói tiếng, mất, trễ ms | khung hiện, lệch ms
+[xem D] Sự kiện: D vào xem
+[xem D] Khung đầu sau 116 ms: bộ đệm GOP (I cũ 0.8 s)
+[xem D] Sự kiện: A vào xem
+[xem D] Thiếu khung #4 -> đứng hình, xin khung khóa
+[xem D] Hồi phục bằng khung I #10 sau 28 ms
+[xem D]  1s tiếng 50 mất 1 trễ  93 | hình  8 lệch   +2
+[xem D]  2s tiếng 49 mất 1 trễ  92 | hình 10 lệch   +2
+[xem D] Sự kiện: B vào xem
+[xem D]  3s tiếng 48 mất 4 trễ  93 | hình 10 lệch   +3
+[xem D] Thiếu khung #43 -> đứng hình, xin khung khóa
+[xem D] Hồi phục bằng khung I #47 sau 98 ms
+[xem D]  4s tiếng 49 mất 4 trễ  93 | hình  6 lệch   +3
+[xem D]  5s tiếng 50 mất 5 trễ  93 | hình 10 lệch   +3
+[xem D]  6s tiếng 47 mất 7 trễ  93 | hình 10 lệch   +3
+[xem D] Sự kiện: C vào xem
+[xem D]  7s tiếng 50 mất 8 trễ  92 | hình 10 lệch   +2
+[xem D] Thiếu khung #80 -> đứng hình, xin khung khóa
+[xem D] Hồi phục bằng khung I #84 sau 103 ms
+[xem D]  8s tiếng 50 mất 8 trễ  93 | hình  4 lệch   +2
+[xem D] Thiếu khung #85 -> đứng hình (xin sau giới hạn 1 s)
+[xem D] Chưa có khung I: xin khung khóa
+[xem D] Hồi phục bằng khung I #94 sau 594 ms
+[xem D]  9s tiếng 50 mất 8 trễ  92 | hình  3 lệch   +2
+[xem D] Sự kiện: B rời
+[xem D] Sự kiện: C rời
+[xem D] ===== TỔNG KẾT =====
+[xem D] vào ngay; khung đầu sau 116 ms
+[xem D]   nguồn khung đầu: bộ đệm GOP
+[xem D] tiếng: nhận 460 gói, mất 9, trễ TB 93 ms
+[xem D]   (trễ đầu-cuối: giả định cùng đồng hồ)
+[xem D] hình: nhận 79 khung (I 7, P 72), hỏng 1
+[xem D]   P bỏ chờ I 17; hiện 75, bỏ cũ 3
+[xem D] đứng hình 4, xin khung khóa 4
+[xem D] lệch tiếng-hình TB (+ = hình chậm hơn tiếng):
+[xem D]   1. đồng bộ BẬT: +3 ms (n=74)
+[xem D] nhận TB 382 kbit/s
+[xem D] giả lập mất 15 gói nhận
+
+===== A =====
+$ dotnet bin/Release/net10.0/BaiMR6.5_PhatTrucTiep.dll xem A 127.0.0.1 42650 --thoi-gian 10 --ghep ket_qua_video.png
+[xem A] Vào xem: mã 3, máy phát đang phát
+[xem A] Luồng 160x120, 10 fps, GOP 20, 16000 Hz
+[xem A] Sự kiện: A vào xem
+[xem A] Nhận tiếng+hình, đồng bộ BẬT, jitter 100 ms
+[xem A] Mỗi giây: gói tiếng, mất, trễ ms | khung hiện, lệch ms
+[xem A] Khung đầu sau 112 ms: bộ đệm GOP (I cũ 0.9 s)
+[xem A]  1s tiếng 51 mất 0 trễ  91 | hình 10 lệch   +2
+[xem A] > chup 1. DONG BO BAT
+[xem A] Đã chụp out/A_chup_1.png: hình 2.700 s, tiếng 2.703 s
+[xem A]  2s tiếng 50 mất 0 trễ  90 | hình 10 lệch   +3
+[xem A] Sự kiện: B vào xem
+[xem A]  3s tiếng 50 mất 0 trễ  91 | hình 10 lệch   +3
+[xem A] > dong_bo tat
+[xem A] Đồng bộ tiếng-hình: TẮT
+[xem A]  4s tiếng 50 mất 0 trễ  91 | hình 11 lệch  -52
+[xem A] > chup 2. DONG BO TAT
+[xem A] Đã chụp out/A_chup_2.png: hình 5.801 s, tiếng 5.714 s
+[xem A]  5s tiếng 50 mất 0 trễ  91 | hình 10 lệch  -85
+[xem A]  6s tiếng 49 mất 0 trễ  91 | hình 10 lệch  -84
+[xem A] Sự kiện: C vào xem
+[xem A] > dong_bo bat
+[xem A] Đồng bộ tiếng-hình: BẬT
+[xem A]  7s tiếng 51 mất 0 trễ  90 | hình  9 lệch  -32
+[xem A] > dang_ky am_thanh
+[xem A] Đăng ký nhận: âm thanh
+[xem A]  8s tiếng 49 mất 0 trễ  91 | hình  4 lệch   +2
+[xem A] > dang_ky ca_hai
+[xem A] Đăng ký nhận: âm thanh+video
+[xem A] Hình trở lại sau 171 ms
+[xem A] Sự kiện: B rời
+[xem A]  9s tiếng 51 mất 0 trễ  90 | hình  5 lệch   +3
+[xem A] Sự kiện: C rời
+[xem A] Sự kiện: D rời
+[xem A] > chup 3. NHAN LAI VIDEO
+[xem A] Đã chụp out/A_chup_3.png: hình 10.200 s, tiếng 10.205 s
+[xem A] ===== TỔNG KẾT =====
+[xem A] vào ngay; khung đầu sau 112 ms
+[xem A]   nguồn khung đầu: bộ đệm GOP
+[xem A] tiếng: nhận 496 gói, mất 0, trễ TB 91 ms
+[xem A]   (trễ đầu-cuối: giả định cùng đồng hồ)
+[xem A] hình: nhận 99 khung (I 6, P 93), hỏng 0
+[xem A]   P bỏ chờ I 0; hiện 88, bỏ cũ 9
+[xem A] đứng hình 0, xin khung khóa 0
+[xem A] lệch tiếng-hình TB (+ = hình chậm hơn tiếng):
+[xem A]   1. đồng bộ BẬT: +3 ms (n=33)
+[xem A]   2. đồng bộ TẮT: -83 ms (n=31)
+[xem A]   3. đồng bộ BẬT: +3 ms (n=23)
+[xem A] nhận TB 373 kbit/s
+[xem A] Đã ghép 3 ảnh vào ket_qua_video.png (688x672)
+
