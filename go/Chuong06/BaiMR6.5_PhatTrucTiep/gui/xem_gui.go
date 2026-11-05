@@ -104,6 +104,7 @@ func moCuaSoXem(a fyne.App, ten, host string, cong int) *cuaSoXem {
 	x.w.SetContent(container.NewVBox(ketNoi, container.NewHBox(hinh, coDinh(phai, 400, 440)), nk,
 		widget.NewSeparator(), x.trangThai))
 	x.w.SetFixedSize(true)
+	giuVe(x.w, "xem "+ten, x.dong)
 	x.w.SetOnClosed(func() {
 		close(x.dong)
 		if x.lop != nil {

@@ -138,6 +138,7 @@ func moCuaSoPhat(a fyne.App, ten, host string, cong int) *cuaSoPhat {
 	nk := nhom("Nhật ký", coDinh(p.log.ds, 790, 110))
 	p.w.SetContent(container.NewVBox(tren, giua, nk, widget.NewSeparator(), p.trangThai))
 	p.w.SetFixedSize(true)
+	giuVe(p.w, "phat "+ten, p.dong)
 	p.w.SetOnClosed(func() {
 		close(p.dong)
 		if p.henThamSo != nil {

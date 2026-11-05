@@ -110,6 +110,7 @@ func moCuaSoServer(a fyne.App, host string, tcp, udp int) *cuaSoServer {
 	s.w.SetFixedSize(true)
 	s.w.SetOnClosed(func() { close(s.dong); go s.lop.Dung() })
 	go s.henGio()
+	giuVe(s.w, "server", s.dong)
 	return s
 }
 

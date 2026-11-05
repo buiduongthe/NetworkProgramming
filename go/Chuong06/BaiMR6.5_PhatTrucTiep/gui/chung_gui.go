@@ -382,3 +382,54 @@ func ghepLuoi(duongDan string, hang [][]image.Image) (int, int, error) {
 	defer f.Close()
 	return W, H, png.Encode(f, ra)
 }
+
+// giuVe – chống lỗi "cửa sổ trắng" đã gặp trên Windows: sau một lúc (thường là sau khi cửa sổ bị che,
+// thu nhỏ rồi mở lại) Fyne chỉ còn vẽ màu nền, các điều khiển không hiện dù chương trình vẫn chạy.
+// Mỗi giây (trên luồng giao diện): canvas nhỏ hơn nội dung tối thiểu (vd 0×0 sau khi thu nhỏ) thì đặt lại
+// kích thước cửa sổ; nội dung lệch vị trí/kích thước so với canvas thì đặt lại; rồi buộc vẽ lại toàn bộ
+// cây đối tượng (Refresh lan xuống mọi con). Khi chạy riêng (inRa) in kích thước vào nhật ký lúc phát
+// hiện lệch – để chẩn đoán nếu lỗi còn xảy ra.
+func giuVe(w fyne.Window, ten string, dong <-chan struct{}) {
+	go func() {
+		t := time.NewTicker(time.Second)
+		defer t.Stop()
+		for {
+			select {
+			case <-dong:
+				return
+			case <-t.C:
+			}
+			fyne.Do(func() { veLai(w, ten) })
+		}
+	}()
+}
+
+func veLai(w fyne.Window, ten string) {
+	c := w.Content()
+	if c == nil {
+		return
+	}
+	var dem float32
+	if w.Padded() {
+		dem = theme.Padding()
+	}
+	kt := w.Canvas().Size()
+	toiThieu := c.MinSize().Add(fyne.NewSquareSize(2 * dem))
+	canPos := fyne.NewSquareOffsetPos(dem)
+	canKt := kt.Subtract(fyne.NewSquareSize(2 * dem))
+	lech := c.Size() != canKt || c.Position() != canPos
+	if lech || kt.Width < toiThieu.Width || kt.Height < toiThieu.Height {
+		if inRa {
+			fmt.Printf("%s [%s] (vẽ lại) canvas %.0fx%.0f, nội dung %.0fx%.0f tại %.0f,%.0f, tối thiểu %.0fx%.0f, tỉ lệ %.2f\n",
+				time.Now().Format("15:04:05"), ten, kt.Width, kt.Height, c.Size().Width, c.Size().Height,
+				c.Position().X, c.Position().Y, toiThieu.Width, toiThieu.Height, w.Canvas().Scale())
+		}
+		if kt.Width < toiThieu.Width || kt.Height < toiThieu.Height {
+			w.Resize(toiThieu)
+		} else {
+			c.Move(canPos)
+			c.Resize(canKt)
+		}
+	}
+	c.Refresh()
+}
