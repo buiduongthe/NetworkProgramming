@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.12_ChuyenKhoan",
+    "chuong": 6,
+    "ngon_ngu": [
+      "python"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy"
+    },
+    "ten": "Chuyển khoản – n người chuyển tiền chéo nhau (A→B và B→A) giữa 5–20 tài khoản: máy chủ TCP đa luồng, mỗi thao tác chạm hai tài nguyên, 4 cách xử lý tranh chấp (không khóa, khóa hai tài khoản theo thứ tự mã, lạc quan CAS hai tài khoản nguyên tử, hàng đợi một luồng), khóa ngây thơ gây khóa chết và phát hiện bằng hết thời gian chờ khóa 2 s, sổ kiểm toán (tổng lệch, lệch TK, thấu chi), ứng dụng ngân hàng số",
+    "ghi_chu": "Bản tham chiếu Python, dùng nguyên khung MR6.6 (chung.py, khach.py, giao_dien_chung.py, phần KHUNG mo_phong.py; chỉ đổi cổng mặc định 41760 trong main của mo_phong.py). Kết quả (500 người × 5 lần, 200 kết nối, 10 tài khoản, trễ 0–2 ms): khong_khoa 2410 thành công, 776 sai phạm (tổng lệch 1, lệch TK 10, thấu chi 765), tổng tiền 70.600.000 đ (lệch +20.600.000 đ), 6519 yc/s; khoa 2303 thành công, 0 sai phạm, 1311 yc/s, p99 1142 ms; lac_quan 1121 thành công, 0 sai phạm, 7347 xung đột, 1002 hết lượt thử, 3607 yc/s; hang_doi 2273 thành công, 0 sai phạm, 818 yc/s. Khóa ngây thơ (20 người × 2 lần, 5 tài khoản): 32/40 giao dịch bị hủy khoa_cho_lau, 6,02 s, máy chủ báo 'khóa chết: …'; khóa theo thứ tự: 40/40 trong 0,05 s. Giao diện: An→Bình và Bình→An cùng lúc ở khóa ngây thơ (trễ 0–50 ms) -> An bị hủy sau 2 s, Bình thành công; khong_khoa + trễ 0–20 ms, chuyển vòng 3 người -> tổng tiền lệch +1.000.000 đ (sai phạm 4). Đọc thêm: Coffman và cộng sự 1971 (ACM Computing Surveys 3(2)), Kung & Robinson 1981 (ACM TODS 6(2))."
+  }
+]

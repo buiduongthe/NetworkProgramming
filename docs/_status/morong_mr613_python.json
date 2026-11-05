@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.13_PhongCho",
+    "chuong": 6,
+    "ngon_ngu": [
+      "python"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy"
+    },
+    "ten": "Phòng chờ ảo bán 500 vé concert – xếp hàng nhận số thứ tự, cấp lượt theo thùng token (chỉnh được khi chạy), lượt có hạn 20 s, chờ dài (long polling) cho_luot, giới hạn số yêu cầu mua đang xử lý (từ chối quá tải), công tắc bật/tắt phòng chờ; 4 cách xử lý tranh chấp trên phát số thứ tự, kho vé và ô lượt; sổ kiểm toán (vượt vé, sai lượt, đảo số FIFO)",
+    "ghi_chu": "Bản tham chiếu Python, dùng nguyên khung MR6.6 (chỉ đổi cổng mặc định 41770 trong main của mo_phong.py); so sánh bật/tắt phòng chờ ở phần NGHIỆP VỤ mo_phong.py (so_sanh_phong_cho, bang_phong_cho) + so_sanh_phong_cho.py. Kết quả (1000 người, 200 kết nối, phòng chờ bật, 200 người/s, thùng 20, trễ 0–2 ms): khong_khoa 2807 sai phạm (vượt vé 1908 – sổ bán 2408/500 vé, sai lượt 59, đảo số 840); khoa, lac_quan (10165 xung đột), hang_doi (hàng đợi max 998, 856 quá tải) đều 0 sai phạm, bán đúng 500/500. Bật/tắt phòng chờ (khoa): tắt 206 người mua được, 2829 lần quá tải, 680 người bỏ cuộc, p99 thời gian mua 607 ms; bật 203 người mua được, 0 quá tải, p99 64,5 ms (cả lượt 1,76 s so với 0,75 s). CLI: chen ngang bị chặn 'chưa tới lượt', bấm đúp trên một kết nối -> một thành công một 'lượt đã dùng'. Giao diện: hàng chờ 300 người, An #291 còn ~134 người phía trước; khong_khoa + hai tab cùng tên An cùng thanh toán -> cả hai được nhận (sai lượt 1). Đọc thêm: Kung & Robinson 1981, Coffman và cộng sự 1971, Turner 1986 (leaky bucket), RFC 2697."
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "processes": [
+    {"name": "server", "cmd": ["python3", "server.py", "127.0.0.1", "41770"], "background": true, "wait": 0.8},
+    {"name": "mp", "cmd": ["python3", "mo_phong.py", "127.0.0.1", "41770", "--n", "1000", "--so-sanh"],
+     "timeout": 120, "wait": 0.3},
+    {"name": "pc", "cmd": ["python3", "so_sanh_phong_cho.py", "127.0.0.1", "41770", "--n", "1000"],
+     "timeout": 120, "wait": 0.3},
+    {"name": "qt", "cmd": ["python3", "khach.py", "127.0.0.1", "41770", "dat_lai", "toc_do=0.5", "dung_luong=1"],
+     "timeout": 10, "wait": 0.1},
+    {"name": "A", "cmd": ["python3", "mua_ve.py", "An", "127.0.0.1", "41770", "--tu-dong", "--so-ve", "2", "--thoi-gian", "7"],
+     "background": true, "wait": 0.3},
+    {"name": "B", "cmd": ["python3", "mua_ve.py", "Bình", "127.0.0.1", "41770", "--tu-dong", "--so-ve", "1", "--thoi-gian", "6.5"],
+     "stdin": "@0.4 mua 1\n", "background": true, "wait": 0.3},
+    {"name": "C", "cmd": ["python3", "mua_ve.py", "Chi", "127.0.0.1", "41770", "--thoi-gian", "6.5"],
+     "stdin": "@0.1 xep_hang\n@5.6 mua2 4\n", "timeout": 20, "wait": 1.0},
+    {"name": "gui", "cmd": ["xvfb-run", "-a", "-s", "-screen 0 2600x1700x24", "/usr/bin/python3.12", "demo_gui.py", "127.0.0.1", "41772"],
+     "show": ["xvfb-run", "-a", "python3", "demo_gui.py", "127.0.0.1", "41772"], "timeout": 200}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ bán vé (đa luồng, chế độ khoa, phòng chờ bật)",
+             "mp": "Cửa sổ 2 – mô phỏng 1000 người, so sánh 4 chế độ",
+             "pc": "Cửa sổ 3 – so sánh tắt và bật phòng chờ (khoa, 1000 người)",
+             "qt": "Cửa sổ 4 – quản trị (cấp lượt 0,5 người/s để thấy hàng chờ)",
+             "A": "Cửa sổ 5 – An vào hàng, tới lượt tự mua 2 vé",
+             "B": "Cửa sổ 6 – Bình chen ngang rồi đợi lượt",
+             "C": "Cửa sổ 7 – Chi tới lượt bấm đúp nút mua",
+             "gui": "Cửa sổ 8 – ứng dụng giao diện (máy chủ + 3 trang bán vé)"}
+}
