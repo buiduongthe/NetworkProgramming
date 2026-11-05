@@ -5,7 +5,7 @@
 | Loại | **Bài mở rộng** – không có trong giáo trình, không có mã giả tương ứng |
 | Liên hệ với giáo trình | Chương 7: Bài 7.1 (client HTTP); Chương 5: Bài 5.5 (tải tệp), Bài 5.6 (thử lại có lùi thời gian); Chương 3: Bài 3.4 (kiểm tra SHA-256) |
 | Thư viện | Thư viện chuẩn: `http.server`, `http.client`, `hashlib` |
-| Bản ngôn ngữ khác | [Go](../../../go/Chuong07/BaiMR7.1_TaiTiepHTTP/) |
+| Bản ngôn ngữ khác | [C#](../../../csharp/Chuong07/BaiMR7.1_TaiTiepHTTP/), [Java](../../../java/Chuong07/BaiMR7.1_TaiTiepHTTP/), [Rust](../../../rust/Chuong07/BaiMR7.1_TaiTiepHTTP/), [Go](../../../go/Chuong07/BaiMR7.1_TaiTiepHTTP/) |
 
 ## Mục tiêu
 Khi tải tệp lớn mà kết nối đứt giữa chừng, tải lại từ đầu là lãng phí. HTTP cho phép xin một phần tài nguyên (RFC 9110): client gửi `Range: bytes=<đã_có>-`, server trả `206 Partial Content` kèm `Content-Range`. Tiêu đề `If-Range: <ETag>` bảo đảm chỉ nối tiếp khi tệp trên server chưa đổi (nếu đã đổi, server trả `200` toàn bộ). Server trong bài giả lập sự cố: hai yêu cầu GET đầu tiên bị ngắt sau 100 000 byte; client tự thử lại có lùi thời gian, nối tiếp từ chỗ dừng và kiểm tra SHA-256 khi xong.

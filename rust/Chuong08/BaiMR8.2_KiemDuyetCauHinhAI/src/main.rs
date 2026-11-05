@@ -66,8 +66,8 @@ fn check_schema(cfg: &Value) -> Vec<String> {
             }
         }
     }
-    // Bản Python không kiểm phần ACL: "quy_tac" là chuỗi thì vòng lặp duyệt từng ký tự, quy tắc
-    // "permit ip any any" lọt qua kiểm tra chính sách. Ở đây bắt buộc danh sách chuỗi.
+    // "quy_tac" phải là danh sách chuỗi: nếu là một chuỗi, vòng lặp kiểm chính sách duyệt từng
+    // ký tự và quy tắc cấm "permit ip any any" lọt qua.
     for (i, a) in cfg["acl"].as_array().cloned().unwrap_or_default().iter().enumerate() {
         if !a["ten"].is_string() {
             errs.push(format!("acl[{i}].ten thiếu hoặc sai kiểu"));

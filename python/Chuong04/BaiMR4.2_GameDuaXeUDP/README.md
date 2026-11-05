@@ -5,7 +5,7 @@
 | Loại | **Bài mở rộng** (mini game) – không có trong giáo trình, không có mã giả tương ứng |
 | Liên hệ với giáo trình | Chương 4: Bài 4.1, 4.2 (client/server UDP), Bài 4.4 (số thứ tự, mất gói, gửi lại); bài mở rộng MR4.1 (phát hiện mất gói theo số thứ tự) |
 | Thư viện | Thư viện chuẩn: `socket`, `select`, `json`, `threading` |
-| Bản ngôn ngữ khác | [Go](../../../go/Chuong04/BaiMR4.2_GameDuaXeUDP/) |
+| Bản ngôn ngữ khác | [C#](../../../csharp/Chuong04/BaiMR4.2_GameDuaXeUDP/), [Java](../../../java/Chuong04/BaiMR4.2_GameDuaXeUDP/), [Rust](../../../rust/Chuong04/BaiMR4.2_GameDuaXeUDP/), [Go](../../../go/Chuong04/BaiMR4.2_GameDuaXeUDP/) |
 
 ## Mục tiêu
 Trò chơi thời gian thực (đua xe, bắn súng…) không dùng mô hình “hỏi – đáp, mất thì gửi lại” như Bài 4.4: gói đến muộn thì đã vô dụng. Bài xây dựng một trò đua xe nhỏ trên đường đua chữ 40 ô với một khúc cua, theo đúng kiến trúc của trò chơi mạng thật:

@@ -12,6 +12,7 @@ Tài khoản lấy từ biến môi trường DEVICE_USER, DEVICE_PASSWORD (khô
 
 Chạy:  python3 tu_dong_hoa.py <host> <port> <muc_tieu.json> [--thu]
 """
+import codecs
 import ipaddress
 import json
 import os
@@ -32,6 +33,8 @@ class CliSession:
         self.sock = socket.create_connection((host, port), timeout=timeout)
         self.timeout = timeout
         self.buf = ""
+        # bộ giải mã tăng dần: ký tự UTF-8 nhiều byte có thể bị tách giữa hai lần recv
+        self.giai_ma = codecs.getincrementaldecoder("utf-8")()
 
     def read_until(self, pattern):
         """READ_UNTIL: đọc dồn vào bộ đệm cho tới khi phần cuối khớp mẫu; trả về phần đã đọc."""
@@ -50,7 +53,7 @@ class CliSession:
             data = self.sock.recv(4096)
             if not data:
                 raise CliError("Thiết bị đóng kết nối")
-            self.buf += data.decode("utf-8")
+            self.buf += self.giai_ma.decode(data)
 
     def send_line(self, line):
         self.sock.sendall((line + "\n").encode("utf-8"))

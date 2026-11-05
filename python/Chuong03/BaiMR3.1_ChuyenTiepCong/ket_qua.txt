@@ -1,23 +1,23 @@
 ===== dich =====
 $ python3 server_dich.py 127.0.0.1 41311
 [dich] Server chữ hoa lắng nghe tại 127.0.0.1:41311
-[dich] 127.0.0.1:58032 gửi 29 byte, trả 29 byte chữ hoa
-[dich] 127.0.0.1:58034 gửi 360000 byte, trả 360000 byte chữ hoa
+[dich] 127.0.0.1:55994 gửi 29 byte, trả 29 byte chữ hoa
+[dich] 127.0.0.1:56010 gửi 360000 byte, trả 360000 byte chữ hoa
 [dich] Dừng server
 
 ===== chuyen_tiep =====
 $ python3 chuyen_tiep.py 127.0.0.1 41310 127.0.0.1 41311
 [chuyen-tiep] 127.0.0.1:41310 -> 127.0.0.1:41311
-[chuyen-tiep] #1 127.0.0.1:58030 <-> đích 127.0.0.1:41311
+[chuyen-tiep] #1 127.0.0.1:60964 <-> đích 127.0.0.1:41311
 [chuyen-tiep] #1 xong: lên 29 byte, xuống 29 byte
-[chuyen-tiep] #2 127.0.0.1:58042 <-> đích 127.0.0.1:41311
+[chuyen-tiep] #2 127.0.0.1:60974 <-> đích 127.0.0.1:41311
 [chuyen-tiep] #2 xong: lên 360000 byte, xuống 360000 byte
 [chuyen-tiep] Dừng
 
 ===== chuyen_tiep_hong =====
 $ python3 chuyen_tiep.py 127.0.0.1 41312 127.0.0.1 41313
 [chuyen-tiep] 127.0.0.1:41312 -> 127.0.0.1:41313
-[chuyen-tiep] #1 127.0.0.1:54298: không nối được đích 127.0.0.1:41313 (Connection refused)
+[chuyen-tiep] #1 127.0.0.1:53496: không nối được đích 127.0.0.1:41313 (Connection refused)
 [chuyen-tiep] Dừng
 
 ===== client_nho =====

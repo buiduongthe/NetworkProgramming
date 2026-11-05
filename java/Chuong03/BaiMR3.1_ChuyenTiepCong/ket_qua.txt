@@ -1,23 +1,23 @@
 ===== dich =====
 $ java -cp out ServerDich 127.0.0.1 43311
 [dich] Server chữ hoa lắng nghe tại 127.0.0.1:43311
-[dich] 127.0.0.1:41524 gửi 29 byte, trả 29 byte chữ hoa
-[dich] 127.0.0.1:41538 gửi 360000 byte, trả 360000 byte chữ hoa
+[dich] 127.0.0.1:32956 gửi 29 byte, trả 29 byte chữ hoa
+[dich] 127.0.0.1:32970 gửi 360000 byte, trả 360000 byte chữ hoa
 [dich] Dừng server
 
 ===== chuyen_tiep =====
 $ java -cp out ChuyenTiep 127.0.0.1 43310 127.0.0.1 43311
 [chuyen-tiep] 127.0.0.1:43310 -> 127.0.0.1:43311
-[chuyen-tiep] #1 127.0.0.1:58226 <-> đích 127.0.0.1:43311
+[chuyen-tiep] #1 127.0.0.1:35888 <-> đích 127.0.0.1:43311
 [chuyen-tiep] #1 xong: lên 29 byte, xuống 29 byte
-[chuyen-tiep] #2 127.0.0.1:58242 <-> đích 127.0.0.1:43311
+[chuyen-tiep] #2 127.0.0.1:35894 <-> đích 127.0.0.1:43311
 [chuyen-tiep] #2 xong: lên 360000 byte, xuống 360000 byte
 [chuyen-tiep] Dừng
 
 ===== chuyen_tiep_hong =====
 $ java -cp out ChuyenTiep 127.0.0.1 43312 127.0.0.1 43313
 [chuyen-tiep] 127.0.0.1:43312 -> 127.0.0.1:43313
-[chuyen-tiep] #1 127.0.0.1:48598: không nối được đích 127.0.0.1:43313 (Connection refused)
+[chuyen-tiep] #1 127.0.0.1:48260: không nối được đích 127.0.0.1:43313 (Connection refused)
 [chuyen-tiep] Dừng
 
 ===== client_nho =====

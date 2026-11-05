@@ -5,7 +5,7 @@
 | Loại | **Bài mở rộng** – không có trong giáo trình, không có mã giả tương ứng |
 | Liên hệ với giáo trình | Chương 4: Bài 4.1 (server UDP), Bài 4.3 (mã hóa, giải mã nhị phân theo thứ tự byte mạng), Bài 4.4 (số thứ tự để phát hiện mất gói); Chương 1 (bộ năm thông số) |
 | Thư viện | Thư viện chuẩn: `socket`, `struct`, `collections` |
-| Bản ngôn ngữ khác | [Go](../../../go/Chuong04/BaiMR4.1_ThuThapNetFlow/) |
+| Bản ngôn ngữ khác | [C#](../../../csharp/Chuong04/BaiMR4.1_ThuThapNetFlow/), [Java](../../../java/Chuong04/BaiMR4.1_ThuThapNetFlow/), [Rust](../../../rust/Chuong04/BaiMR4.1_ThuThapNetFlow/), [Go](../../../go/Chuong04/BaiMR4.1_ThuThapNetFlow/) |
 
 ## Mục tiêu
 NetFlow là cách bộ định tuyến báo cáo lưu lượng: mỗi *luồng* (flow) là một nhóm gói cùng bộ năm thông số, kèm số gói, số byte, thời điểm. Máy xuất (exporter) gửi các bản ghi luồng tới bộ thu thập (collector) bằng UDP. Bài xây dựng cả hai phía: máy xuất giả lập đóng gói NetFlow v5 (tiêu đề 24 byte + tối đa 30 bản ghi × 48 byte), bộ thu thập nhận datagram, kiểm tra tính hợp lệ, phát hiện mất gói nhờ trường `flow_sequence`, loại datagram hỏng và tổng hợp: nguồn dùng nhiều byte nhất, dịch vụ (cổng/giao thức) phổ biến.

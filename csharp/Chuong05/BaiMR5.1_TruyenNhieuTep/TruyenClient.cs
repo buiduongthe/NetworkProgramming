@@ -31,6 +31,7 @@ class LuotTruyen(string ten, string huong, string cucBo, double rateTep)
     public readonly string CucBo = cucBo;          // đường tệp phía client
     public volatile string TrangThai = TT.Chay;
     public long Tong, XongByte;
+    public long ByteDau;                          // offset lúc bắt đầu lượt (tải tiếp > 0)
     public string? ShaServer;
     public bool? ShaOk;
     public double T0 = Now, ThoiGian;
@@ -148,7 +149,7 @@ class QuanLy
             }
             t.Tong = resp["size"]!.GetValue<long>();
             t.ShaServer = resp["sha256"]!.GetValue<string>();
-            t.XongByte = off;
+            t.XongByte = off; t.ByteDau = off;
             if (off >= t.Tong)                          // đã đủ: chỉ cần kiểm và đổi tên
             {
                 s.Close();
@@ -196,7 +197,7 @@ class QuanLy
         t.ThoiGian = Now - t.T0;
         t.TrangThai = TT.Xong;
         Console.WriteLine($"[client] XONG download {t.Ten}: {DinhDangByte(t.Tong)} trong {t.ThoiGian.ToString("F1", CultureInfo.InvariantCulture)}s " +
-                          $"({DinhDangByte((long)(t.Tong / Math.Max(t.ThoiGian, 0.001)))}/s), " +
+                          $"({DinhDangByte((long)((t.Tong - t.ByteDau) / Math.Max(t.ThoiGian, 0.001)))}/s), " +
                           $"SHA-256 {(t.ShaOk == true ? "KHỚP" : "SAI")}");
     }
 
@@ -216,7 +217,7 @@ class QuanLy
                 t.TrangThai = TT.Loi;
                 return;
             }
-            t.Tong = total; t.XongByte = off;
+            t.Tong = total; t.XongByte = off; t.ByteDau = off;
             using (var f = File.OpenRead(t.CucBo))
             {
                 f.Seek(off, SeekOrigin.Begin);
@@ -237,7 +238,7 @@ class QuanLy
             t.ShaOk = ket["sha256_ok"]?.GetValue<bool>();
             t.TrangThai = TT.Xong;
             Console.WriteLine($"[client] XONG upload {t.Ten}: {DinhDangByte(total)} trong {t.ThoiGian.ToString("F1", CultureInfo.InvariantCulture)}s " +
-                              $"({DinhDangByte((long)(total / Math.Max(t.ThoiGian, 0.001)))}/s), " +
+                              $"({DinhDangByte((long)((total - t.ByteDau) / Math.Max(t.ThoiGian, 0.001)))}/s), " +
                               $"server kiểm SHA-256 {(t.ShaOk == true ? "KHỚP" : "SAI")}");
         }
         catch (Exception e) when (e is IOException || e is SocketException)

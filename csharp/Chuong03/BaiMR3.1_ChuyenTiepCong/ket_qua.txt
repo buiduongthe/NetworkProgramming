@@ -1,26 +1,26 @@
 ===== dich =====
 $ dotnet bin/Release/net10.0/BaiMR3.1_ChuyenTiepCong.dll dich 127.0.0.1 42311
 [dich] Server chữ hoa lắng nghe tại 127.0.0.1:42311
-[dich] 127.0.0.1:50522 gửi 29 byte, trả 29 byte chữ hoa
-[dich] 127.0.0.1:50532 gửi 360000 byte, trả 360000 byte chữ hoa
-[dich] 127.0.0.1:50536 gửi 41 byte, trả 41 byte chữ hoa
+[dich] 127.0.0.1:55320 gửi 29 byte, trả 29 byte chữ hoa
+[dich] 127.0.0.1:34736 gửi 360000 byte, trả 360000 byte chữ hoa
+[dich] 127.0.0.1:34748 gửi 41 byte, trả 41 byte chữ hoa
 [dich] Dừng server
 
 ===== chuyen_tiep =====
 $ dotnet bin/Release/net10.0/BaiMR3.1_ChuyenTiepCong.dll chuyen_tiep 127.0.0.1 42310 127.0.0.1 42311
 [chuyen-tiep] 127.0.0.1:42310 -> 127.0.0.1:42311
-[chuyen-tiep] #1 127.0.0.1:44708 <-> đích 127.0.0.1:42311
+[chuyen-tiep] #1 127.0.0.1:60300 <-> đích 127.0.0.1:42311
 [chuyen-tiep] #1 xong: lên 29 byte, xuống 29 byte
-[chuyen-tiep] #2 127.0.0.1:44714 <-> đích 127.0.0.1:42311
+[chuyen-tiep] #2 127.0.0.1:58630 <-> đích 127.0.0.1:42311
 [chuyen-tiep] #2 xong: lên 360000 byte, xuống 360000 byte
-[chuyen-tiep] #3 127.0.0.1:44730 <-> đích 127.0.0.1:42311
+[chuyen-tiep] #3 127.0.0.1:58644 <-> đích 127.0.0.1:42311
 [chuyen-tiep] #3 xong: lên 41 byte, xuống 41 byte
 [chuyen-tiep] Dừng
 
 ===== chuyen_tiep_hong =====
 $ dotnet bin/Release/net10.0/BaiMR3.1_ChuyenTiepCong.dll chuyen_tiep 127.0.0.1 42312 127.0.0.1 42313
 [chuyen-tiep] 127.0.0.1:42312 -> 127.0.0.1:42313
-[chuyen-tiep] #1 127.0.0.1:36238: không nối được đích 127.0.0.1:42313 (Connection refused)
+[chuyen-tiep] #1 127.0.0.1:54240: không nối được đích 127.0.0.1:42313 (Connection refused)
 [chuyen-tiep] Dừng
 
 ===== client_nho =====
@@ -44,6 +44,6 @@ $ dotnet bin/Release/net10.0/BaiMR3.1_ChuyenTiepCong.dll client 127.0.0.1 42312 
 ===== cheo_python =====
 $ python3 ../../../python/Chuong03/BaiMR3.1_ChuyenTiepCong/client_thu.py 127.0.0.1 42310 'Client Python qua bộ chuyển tiếp C#'
 [client] Gửi 41 byte, nhận 41 byte
-[client] Phản hồi: 'CLIENT PYTHON QUA BỘ CHUYỂN TIẾP C#'...
+[client] Phản hồi: 'CLIENT PYTHON QUA BỘ CHUYỂN TIẾP C#'
 [client] So khớp với bản chữ hoa: KHỚP
 

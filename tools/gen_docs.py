@@ -101,7 +101,7 @@ def main():
         s = re.sub(r'<!-- DANH_MUC_BAT_DAU -->.*<!-- DANH_MUC_KET_THUC -->',
                    '<!-- DANH_MUC_BAT_DAU -->\n' + table(data) + '\n\n<!-- DANH_MUC_KET_THUC -->', s, flags=re.S)
         s = re.sub(r'<!-- MO_RONG -->.*?<!-- /MO_RONG -->', '<!-- MO_RONG -->\n' + morong_table(mr) + '\n<!-- /MO_RONG -->', s, flags=re.S)
-        s = re.sub(r'<!-- THONG_KE -->.*?<!-- /THONG_KE -->', f'<!-- THONG_KE -->{n} bài × {L} ngôn ngữ = {L * n} chương trình; {ran} chương trình đã chạy và có ảnh kết quả thực thi' + (f'; {len(mr)} bài mở rộng' if mr else '') + '<!-- /THONG_KE -->', s, flags=re.S)
+        s = re.sub(r'<!-- THONG_KE -->.*?<!-- /THONG_KE -->', f'<!-- THONG_KE -->{n} bài × {L} ngôn ngữ = {L * n} chương trình; {ran} chương trình đã chạy và có ảnh kết quả thực thi' + (f'; {len(mr)} bài mở rộng × {L} ngôn ngữ = {sum(len(b["ngon_ngu"]) for b in mr)} chương trình, {sum(1 for b in mr for v in b["kiem_thu"].values() if v.startswith("đã chạy"))} đã chạy' if mr else '') + '<!-- /THONG_KE -->', s, flags=re.S)
         open(readme, 'w', encoding='utf-8').write(s)
     print(n, ran, len(mr))
 

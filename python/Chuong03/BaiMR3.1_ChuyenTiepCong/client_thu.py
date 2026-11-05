@@ -27,9 +27,9 @@ def main():
     if not reply:
         print("[client] Kết nối bị đóng mà không có dữ liệu trả về", flush=True)
         sys.exit(1)
-    preview = reply.decode("utf-8")[:40]
+    phan_hoi = reply.decode("utf-8", errors="replace")   # cắt theo ký tự, không theo byte
     ok = reply == text.upper().encode("utf-8") * repeat
-    print(f"[client] Phản hồi: {preview!r}{'...' if len(reply) > 40 else ''}", flush=True)
+    print(f"[client] Phản hồi: {phan_hoi[:40]!r}{'...' if len(phan_hoi) > 40 else ''}", flush=True)
     print(f"[client] So khớp với bản chữ hoa: {'KHỚP' if ok else 'SAI'}", flush=True)
 
 

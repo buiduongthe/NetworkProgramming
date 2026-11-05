@@ -194,7 +194,7 @@ public class TruyenClient {
             t.thoiGian = giay(t.t0);
             t.trangThai = XONG;
             System.out.println(String.format(Locale.ROOT, "[client] XONG download %s: %s trong %.1fs (%s/s), SHA-256 %s", t.ten,
-                    Khung.dinhDangByte(t.tong), t.thoiGian, Khung.dinhDangByte((long) (t.tong / Math.max(t.thoiGian, 0.001))),
+                    Khung.dinhDangByte(t.tong), t.thoiGian, Khung.dinhDangByte((long) ((t.tong - t.batDauTu) / Math.max(t.thoiGian, 0.001))),
                     t.shaOk ? "KHỚP" : "SAI"));
         }
 
@@ -233,7 +233,7 @@ public class TruyenClient {
                     t.shaOk = Boolean.TRUE.equals(ket.get("sha256_ok"));
                     t.trangThai = XONG;
                     System.out.println(String.format(Locale.ROOT, "[client] XONG upload %s: %s trong %.1fs (%s/s), server kiểm SHA-256 %s",
-                            t.ten, Khung.dinhDangByte(total), t.thoiGian, Khung.dinhDangByte((long) (total / Math.max(t.thoiGian, 0.001))),
+                            t.ten, Khung.dinhDangByte(total), t.thoiGian, Khung.dinhDangByte((long) ((total - t.batDauTu) / Math.max(t.thoiGian, 0.001))),
                             t.shaOk ? "KHỚP" : "SAI"));
                 }
             } catch (IOException | InterruptedException e) {

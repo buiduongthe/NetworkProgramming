@@ -5,7 +5,7 @@
 | Loại | **Bài mở rộng** – không có trong giáo trình, không có mã giả tương ứng |
 | Liên hệ với giáo trình | Chương 1 (Mục 1.2: địa chỉ, cổng, giao thức; Bài 1.1, 1.2); là “bản đồ” trước khi lập trình thật ở Chương 3 (TCP, Bài 3.1), Chương 4 (UDP, Bài 4.1, 4.4), Chương 6 (broadcast, multicast – Bài 6.5, 6.6) |
 | Thư viện | Thư viện chuẩn: `heapq`, `copy`, `json`, `argparse`; không mở socket. Playwright + Pillow chỉ dùng để chụp ảnh hoạt hình trong kịch bản minh họa |
-| Bản ngôn ngữ khác | [Go](../../../go/Chuong01/BaiMR1.2_MoPhongGiaoThuc/) |
+| Bản ngôn ngữ khác | [C#](../../../csharp/Chuong01/BaiMR1.2_MoPhongGiaoThuc/), [Java](../../../java/Chuong01/BaiMR1.2_MoPhongGiaoThuc/), [Rust](../../../rust/Chuong01/BaiMR1.2_MoPhongGiaoThuc/), [Go](../../../go/Chuong01/BaiMR1.2_MoPhongGiaoThuc/) |
 
 ## Mục tiêu
 Trước khi viết socket thật, sinh viên cần “nhìn thấy” gói tin đi trong mạng: TCP bắt tay, trượt cửa sổ và phản ứng khi mất gói ra sao; UDP khác TCP ở chỗ nào; vì sao quảng bá dừng ở router; multicast chỉ tới thành viên nhóm thế nào; anycast chọn máy phục vụ gần nhất và tự chuyển sang máy khác khi một máy hỏng. Bài xây dựng một **bộ mô phỏng sự kiện rời rạc** nhỏ: mỗi gói là một đối tượng, mỗi bước chuyển trên liên kết là một sự kiện có thời điểm (trễ lan truyền + thời gian đẩy gói theo băng thông + hàng đợi FIFO). Kết quả **tất định**: cùng `--seed` thì cùng kết quả, và bản Python, bản Go in ra giống hệt nhau.

@@ -41,7 +41,7 @@ Lần sinh 1 có 5 lỗi: VLAN 5000 ngoài miền, cổng mặc định `10.20.1
 - Lệnh CLI sinh ra vẫn cần người duyệt trước khi áp dụng (có thể áp dụng bằng cách tự động hóa như MR3.2, với chế độ chạy thử trước).
 - Mặt nạ ký tự đại diện (wildcard) trong ACL như `0.0.0.127` là phần bù của mặt nạ mạng `/25`.
 - Khác bản Python: thư viện chuẩn Rust không có kiểu mạng như `ipaddress`, nên `mang.rs` tự cài bằng phép AND với mặt nạ trên `u32`; mạng còn bit máy (như `10.20.1.5/24`) bị coi là không hợp lệ, giống `strict=True`. Lỗi lược đồ được kiểm bằng `serde_json::Value` (`as_i64`, `is_string`…) thay cho `isinstance`.
-- Bản Rust kiểm thêm lược đồ ACL (`acl[i].ten` là chuỗi, `acl[i].quy_tac` là danh sách chuỗi). Bản Python bỏ qua bước này: nếu LLM trả `"quy_tac": "permit ip any any"` (chuỗi thay vì danh sách) thì vòng lặp duyệt từng ký tự, quy tắc cấm lọt qua kiểm tra chính sách và `render` sinh mỗi ký tự một dòng; bản Go lặng lẽ bỏ quy tắc đó.
+- Lược đồ ACL được kiểm ở cả 5 phiên bản (`acl[i].ten` là chuỗi, `acl[i].quy_tac` là danh sách chuỗi): nếu LLM trả `"quy_tac": "permit ip any any"` (chuỗi thay vì danh sách) mà không kiểm, vòng lặp duyệt từng ký tự và quy tắc cấm lọt qua kiểm tra chính sách.
 - Kiểm thử: Linux, Rust 1.97.0.
 
 ## Đọc thêm

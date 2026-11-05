@@ -5,7 +5,7 @@
 | Loại | **Bài mở rộng** – không có trong giáo trình, không có mã giả tương ứng |
 | Liên hệ với giáo trình | Chương 8: Bài 8.3 (MCP server qua stdio, kiểm soát đích); Chương 3: Bài 3.4 (HTTP client); Chương 1: Bài 1.1 (phân giải tên) |
 | Thư viện | Thư viện chuẩn: `socket`, `ipaddress`, `urllib.parse`, `http.server`, `json`, `subprocess` |
-| Bản ngôn ngữ khác | [Go](../../../go/Chuong08/BaiMR8.4_ChongSSRF_MCP/) |
+| Bản ngôn ngữ khác | [C#](../../../csharp/Chuong08/BaiMR8.4_ChongSSRF_MCP/), [Java](../../../java/Chuong08/BaiMR8.4_ChongSSRF_MCP/), [Rust](../../../rust/Chuong08/BaiMR8.4_ChongSSRF_MCP/), [Go](../../../go/Chuong08/BaiMR8.4_ChongSSRF_MCP/) |
 
 ## Mục tiêu
 Một server công cụ (ví dụ công cụ MCP cho tác tử AI) thường có công cụ "tải một URL". Nếu công cụ này tải **bất kỳ URL nào người dùng/mô hình đưa vào**, kẻ tấn công có thể lợi dụng nó để truy cập dịch vụ **nội bộ** mà bản thân họ không với tới – đó là lỗ hổng **SSRF (Server-Side Request Forgery)**. Mục tiêu kinh điển: máy chủ siêu dữ liệu đám mây `169.254.169.254` (chứa khóa tạm thời), các dịch vụ chỉ nghe `127.0.0.1`, hoặc mạng riêng `10.0.0.0/8`.

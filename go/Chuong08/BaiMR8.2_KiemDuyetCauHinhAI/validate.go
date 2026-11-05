@@ -94,15 +94,23 @@ func checkSchema(obj map[string]any) (*Config, []string) {
 		}
 		cfg.VLAN = append(cfg.VLAN, v)
 	}
-	for _, raw := range al {
+	for i, raw := range al {
 		m, _ := raw.(map[string]any)
 		a := ACL{}
-		a.Ten, _ = m["ten"].(string)
-		rules, _ := m["quy_tac"].([]any)
+		var okTen bool
+		a.Ten, okTen = m["ten"].(string)
+		if !okTen {
+			errs = append(errs, fmt.Sprintf("acl[%d].ten thiếu hoặc sai kiểu", i))
+		}
+		// quy_tac phải là danh sách chuỗi; bỏ qua phần tử sai kiểu sẽ làm lọt quy tắc cấm
+		rules, okDs := m["quy_tac"].([]any)
 		for _, r := range rules {
-			if s, ok := r.(string); ok {
-				a.QuyTac = append(a.QuyTac, s)
-			}
+			s, ok := r.(string)
+			okDs = okDs && ok
+			a.QuyTac = append(a.QuyTac, s)
+		}
+		if !okDs {
+			errs = append(errs, fmt.Sprintf("acl[%d].quy_tac thiếu hoặc sai kiểu", i))
 		}
 		cfg.ACL = append(cfg.ACL, a)
 	}

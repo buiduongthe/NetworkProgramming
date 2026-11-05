@@ -46,7 +46,7 @@ public class ClientThu {
         String preview = all.codePoints().limit(40)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
         boolean ok = Arrays.equals(reply, text.toUpperCase(Locale.ROOT).repeat(repeat).getBytes(StandardCharsets.UTF_8));
-        System.out.println("[client] Phản hồi: '" + preview + "'" + (reply.length > 40 ? "..." : ""));
+        System.out.println("[client] Phản hồi: '" + preview + "'" + (all.codePointCount(0, all.length()) > 40 ? "..." : ""));
         System.out.println("[client] So khớp với bản chữ hoa: " + (ok ? "KHỚP" : "SAI"));
     }
 }

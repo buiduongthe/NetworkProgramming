@@ -61,6 +61,15 @@ def check_schema(cfg):
         for key, typ in (("id", int), ("ten", str), ("mang", str), ("cong_mac_dinh", str)):
             if not isinstance(v.get(key), typ) or (typ is int and isinstance(v.get(key), bool)):
                 errs.append(f"vlan[{i}].{key} thiếu hoặc sai kiểu")
+    # quy_tac phải là danh sách chuỗi: nếu là một chuỗi, vòng lặp kiểm chính sách sẽ duyệt từng
+    # ký tự và quy tắc cấm (ví dụ "permit ip any any") lọt qua.
+    for i, a in enumerate(cfg["acl"] if isinstance(cfg.get("acl"), list) else []):
+        a = a if isinstance(a, dict) else {}
+        if not isinstance(a.get("ten"), str):
+            errs.append(f"acl[{i}].ten thiếu hoặc sai kiểu")
+        q = a.get("quy_tac")
+        if not (isinstance(q, list) and all(isinstance(r, str) for r in q)):
+            errs.append(f"acl[{i}].quy_tac thiếu hoặc sai kiểu")
     return errs
 
 

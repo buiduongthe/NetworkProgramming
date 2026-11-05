@@ -5,7 +5,7 @@
 | Loại | **Bài mở rộng** (mini game) – không có trong giáo trình, không có mã giả tương ứng |
 | Liên hệ với giáo trình | Chương 3: Bài 3.2 (định khung JSON có tiền tố độ dài), Bài 3.3 (giao thức yêu cầu/phản hồi); Chương 6: Bài 6.1 (server nhiều client) |
 | Thư viện | Thư viện chuẩn: `socket`, `struct`, `json`, `threading`, `queue` |
-| Bản ngôn ngữ khác | [Go](../../../go/Chuong03/BaiMR3.3_GameDoanSo/) |
+| Bản ngôn ngữ khác | [C#](../../../csharp/Chuong03/BaiMR3.3_GameDoanSo/), [Java](../../../java/Chuong03/BaiMR3.3_GameDoanSo/), [Rust](../../../rust/Chuong03/BaiMR3.3_GameDoanSo/), [Go](../../../go/Chuong03/BaiMR3.3_GameDoanSo/) |
 
 ## Mục tiêu
 Server chọn một số bí mật trong khoảng 1–100; người chơi lần lượt đoán, server trả lời *thấp quá*, *cao quá* hoặc *ĐÚNG*, và thu hẹp khoảng cho người kế tiếp. Trò chơi nhỏ nhưng đủ các vấn đề của một giao thức ứng dụng thật trên TCP:

@@ -112,6 +112,15 @@ static class KiemDuyet
                     bool ok = Kind(v) == kind && (kind != JsonValueKind.Number || v!.AsValue().TryGetValue(out long _));   // id: số nguyên
                     if (!ok) errs.Add($"vlan[{i}].{key} thiếu hoặc sai kiểu");
                 }
+        // quy_tac phải là danh sách chuỗi, nếu không quy tắc cấm có thể lọt qua kiểm tra chính sách
+        if (cfg["acl"] is JsonArray acls)
+            for (int i = 0; i < acls.Count; i++)
+            {
+                var a = acls[i] as JsonObject;
+                if (Kind(a?["ten"]) != JsonValueKind.String) errs.Add($"acl[{i}].ten thiếu hoặc sai kiểu");
+                if (a?["quy_tac"] is not JsonArray q || q.Any(r => Kind(r) != JsonValueKind.String))
+                    errs.Add($"acl[{i}].quy_tac thiếu hoặc sai kiểu");
+            }
         return errs;
     }
 

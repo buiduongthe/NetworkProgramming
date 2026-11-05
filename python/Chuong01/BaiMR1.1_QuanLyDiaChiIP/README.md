@@ -5,7 +5,7 @@
 | Loại | **Bài mở rộng** – không có trong giáo trình, không có mã giả tương ứng |
 | Liên hệ với giáo trình | Chương 1, Mục 1.2.3 (địa chỉ IP, tiền tố mạng); Bài 1.1. Kế hoạch địa chỉ được dùng lại ở MR3.2 và MR8.2 |
 | Thư viện | Thư viện chuẩn: `ipaddress`, `json` |
-| Bản ngôn ngữ khác | [Go](../../../go/Chuong01/BaiMR1.1_QuanLyDiaChiIP/) |
+| Bản ngôn ngữ khác | [C#](../../../csharp/Chuong01/BaiMR1.1_QuanLyDiaChiIP/), [Java](../../../java/Chuong01/BaiMR1.1_QuanLyDiaChiIP/), [Rust](../../../rust/Chuong01/BaiMR1.1_QuanLyDiaChiIP/), [Go](../../../go/Chuong01/BaiMR1.1_QuanLyDiaChiIP/) |
 
 ## Mục tiêu
 Dùng thư viện địa chỉ IP thay vì tự cắt chuỗi: đọc một kế hoạch địa chỉ (JSON), chia khối `10.20.0.0/22` thành các mạng con theo số máy cần (VLSM – yêu cầu lớn cấp trước để mọi khối đều thẳng hàng), liệt kê phần còn trống dưới dạng ít khối CIDR nhất, kiểm tra các tiền tố đề xuất (sai cú pháp, có bit máy, ngoài khối, chồng lấn) và cấp phát địa chỉ cho thiết bị. Đây là phần lõi của các công cụ IPAM và là bước đầu tiên của mọi kịch bản tự động hóa mạng.

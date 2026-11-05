@@ -5,7 +5,7 @@
 | Loại | **Bài mở rộng** – không có trong giáo trình, không có mã giả tương ứng |
 | Liên hệ với giáo trình | Chương 3: Bài 3.2 (định khung – ở đây là đọc tới dấu nhắc), Bài 3.1; Chương 6: Bài 6.1 (server nhiều phiên); Chương 2: Bài 2.1 (bí mật lấy từ biến môi trường); MR1.1 (địa chỉ trong `muc_tieu.json`) |
 | Thư viện | Thư viện chuẩn Go: `net`, `bufio`, `regexp`, `net/netip`, `encoding/json` |
-| Bản ngôn ngữ khác | [Python](../../../python/Chuong03/BaiMR3.2_TuDongHoaCLI/) |
+| Bản ngôn ngữ khác | [C#](../../../csharp/Chuong03/BaiMR3.2_TuDongHoaCLI/), [Java](../../../java/Chuong03/BaiMR3.2_TuDongHoaCLI/), [Python](../../../python/Chuong03/BaiMR3.2_TuDongHoaCLI/), [Rust](../../../rust/Chuong03/BaiMR3.2_TuDongHoaCLI/) |
 
 ## Mục tiêu
 Luyện tự động hóa thiết bị mạng mà không cần thiết bị thật. Thiết bị mô phỏng R1 có CLI kiểu Telnet (đăng nhập, dấu nhắc `R1>` `R1#` `R1(config)#` `R1(config-if)#`, vọng lại lệnh, phân trang `--More--`). Dữ liệu CLI là luồng byte **không có khung thông điệp**, nên client phải *đọc cho tới khi gặp dấu nhắc* (READ_UNTIL bằng biểu thức chính quy) – cùng ý tưởng với `READ_LINE` ở Bài 3.2. Client tự động hóa: đọc cấu hình hiện tại, so với trạng thái mong muốn và **chỉ sinh lệnh cho phần khác biệt** (lũy đẳng – chạy lại không thay đổi gì), có chế độ chạy thử `--thu`, đọc lại để kiểm chứng rồi mới lưu cấu hình.

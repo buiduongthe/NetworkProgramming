@@ -5,7 +5,7 @@
 | Loại | **Bài mở rộng** – không có trong giáo trình, không có mã giả tương ứng |
 | Liên hệ với giáo trình | Chương 3: Bài 3.1 (vòng đời socket, `SHUTDOWN` một chiều), Bài 3.2 (`SEND_ALL`); Chương 6: Bài 6.1 (mỗi kết nối một luồng) |
 | Thư viện | Thư viện chuẩn Go: `net` (`TCPConn.CloseWrite`), `io` (`io.Copy`), `sync` |
-| Bản ngôn ngữ khác | [Python](../../../python/Chuong03/BaiMR3.1_ChuyenTiepCong/) |
+| Bản ngôn ngữ khác | [C#](../../../csharp/Chuong03/BaiMR3.1_ChuyenTiepCong/), [Java](../../../java/Chuong03/BaiMR3.1_ChuyenTiepCong/), [Python](../../../python/Chuong03/BaiMR3.1_ChuyenTiepCong/), [Rust](../../../rust/Chuong03/BaiMR3.1_ChuyenTiepCong/) |
 
 ## Mục tiêu
 Viết một bộ chuyển tiếp: mỗi client nối vào cổng nghe được ghép với một kết nối mới tới máy đích, hai luồng (goroutine) bơm dữ liệu theo hai chiều. Điểm mấu chốt là **đóng một chiều (half-close)**: khi một chiều gặp EOF, bộ chuyển tiếp gọi `SHUTDOWN(WRITE)` trên socket bên kia để chuyển tiếp gói FIN, chứ không đóng hẳn, vì chiều ngược lại có thể vẫn đang truyền. Server đích trong bài chỉ trả lời **sau khi** thấy EOF, nên nếu bộ chuyển tiếp làm sai, client và server sẽ chờ nhau mãi. Đây là nguyên lý của `ssh -L`, `socat`, proxy TCP và cân bằng tải lớp 4.

@@ -5,7 +5,7 @@
 | Loại | **Bài mở rộng** (mini game) – không có trong giáo trình, không có mã giả tương ứng |
 | Liên hệ với giáo trình | Chương 6: Bài 6.4 (server chat: nhiều client, phát tin), Bài 6.5 (khám phá bằng UDP broadcast); Chương 3: Bài 3.2 (định khung JSON); bài mở rộng MR3.3 (máy trạng thái, kiểm tra đầu vào) |
 | Thư viện | Thư viện chuẩn: `socket`, `struct`, `json`, `threading`, `queue` |
-| Bản ngôn ngữ khác | [Go](../../../go/Chuong06/BaiMR6.4_GameCaro/) |
+| Bản ngôn ngữ khác | [C#](../../../csharp/Chuong06/BaiMR6.4_GameCaro/), [Java](../../../java/Chuong06/BaiMR6.4_GameCaro/), [Rust](../../../rust/Chuong06/BaiMR6.4_GameCaro/), [Go](../../../go/Chuong06/BaiMR6.4_GameCaro/) |
 
 ## Mục tiêu
 Caro (gomoku): hai người lần lượt đặt quân X, O trên bàn 15 × 15, ai có 5 quân liên tiếp (ngang, dọc, chéo) trước thì thắng. Bài xây dựng một server trò chơi nhiều phòng hoàn chỉnh ở mức socket:

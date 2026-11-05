@@ -5,7 +5,7 @@
 | Loại | **Bài mở rộng** – không có trong giáo trình, không có mã giả tương ứng |
 | Liên hệ với giáo trình | Chương 8 (vận hành dịch vụ an toàn); Chương 6: Bài 6.1, 6.2 (server nhiều client); Chương 3: Bài 3.4 (HTTP) |
 | Thư viện | Thư viện chuẩn Go: `net`, `bufio`, `sync`, `os/signal`, `time` |
-| Bản ngôn ngữ khác | [Python](../../../python/Chuong08/BaiMR8.3_ChongSlowloris/) |
+| Bản ngôn ngữ khác | [C#](../../../csharp/Chuong08/BaiMR8.3_ChongSlowloris/), [Java](../../../java/Chuong08/BaiMR8.3_ChongSlowloris/), [Python](../../../python/Chuong08/BaiMR8.3_ChongSlowloris/), [Rust](../../../rust/Chuong08/BaiMR8.3_ChongSlowloris/) |
 
 ## Mục tiêu
 Slowloris là tấn công từ chối dịch vụ (DoS) ở **mức ứng dụng**: kẻ tấn công mở thật nhiều kết nối TCP rồi gửi phần đầu (request head) của yêu cầu HTTP một cách **cực chậm, không bao giờ kết thúc** (`\r\n\r\n`). Mỗi kết nối chiếm một goroutine/worker của server; khi mọi worker đều đang chờ đọc tiêu đề, server không còn chỗ phục vụ người dùng thật, dù băng thông và CPU gần như không bị dùng.

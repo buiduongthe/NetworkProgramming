@@ -49,7 +49,7 @@ pub fn run(args: &[String]) {
     }
     let preview: String = String::from_utf8_lossy(&reply).chars().take(40).collect();
     let ok = reply == text.to_uppercase().repeat(repeat).into_bytes();
-    let more = if reply.len() > 40 { "..." } else { "" };
+    let more = if String::from_utf8_lossy(&reply).chars().count() > 40 { "..." } else { "" }; // đếm ký tự, không đếm byte
     println!("[client] Phản hồi: '{preview}'{more}");
     println!("[client] So khớp với bản chữ hoa: {}", if ok { "KHỚP" } else { "SAI" });
 }

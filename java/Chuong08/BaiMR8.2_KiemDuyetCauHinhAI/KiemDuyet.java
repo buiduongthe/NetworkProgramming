@@ -125,6 +125,14 @@ public class KiemDuyet {
                 for (String k : new String[] {"ten", "mang", "cong_mac_dinh"})
                     if (!(v.get(k) instanceof String)) errs.add("vlan[" + i + "]." + k + " thiếu hoặc sai kiểu");
             }
+        // quy_tac phải là danh sách chuỗi, nếu không quy tắc cấm có thể lọt qua kiểm tra chính sách
+        if (cfg.get("acl") instanceof List<?> al)
+            for (int i = 0; i < al.size(); i++) {
+                Map<String, Object> a = al.get(i) instanceof Map<?, ?> mm ? (Map<String, Object>) mm : Map.of();
+                if (!(a.get("ten") instanceof String)) errs.add("acl[" + i + "].ten thiếu hoặc sai kiểu");
+                if (!(a.get("quy_tac") instanceof List<?> q && q.stream().allMatch(r -> r instanceof String)))
+                    errs.add("acl[" + i + "].quy_tac thiếu hoặc sai kiểu");
+            }
         return errs;
     }
 

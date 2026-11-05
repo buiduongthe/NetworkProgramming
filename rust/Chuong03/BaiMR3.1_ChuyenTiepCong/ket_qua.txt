@@ -1,23 +1,23 @@
 ===== dich =====
 $ ../../target/release/mr3_1_chuyen_tiep_cong dich 127.0.0.1 44311
 [dich] Server chữ hoa lắng nghe tại 127.0.0.1:44311
-[dich] 127.0.0.1:35500 gửi 29 byte, trả 29 byte chữ hoa
-[dich] 127.0.0.1:35504 gửi 360000 byte, trả 360000 byte chữ hoa
+[dich] 127.0.0.1:44934 gửi 29 byte, trả 29 byte chữ hoa
+[dich] 127.0.0.1:44942 gửi 360000 byte, trả 360000 byte chữ hoa
 [dich] Dừng server
 
 ===== chuyen_tiep =====
 $ ../../target/release/mr3_1_chuyen_tiep_cong chuyentiep 127.0.0.1 44310 127.0.0.1 44311
 [chuyen-tiep] 127.0.0.1:44310 -> 127.0.0.1:44311
-[chuyen-tiep] #1 127.0.0.1:46330 <-> đích 127.0.0.1:44311
+[chuyen-tiep] #1 127.0.0.1:44366 <-> đích 127.0.0.1:44311
 [chuyen-tiep] #1 xong: lên 29 byte, xuống 29 byte
-[chuyen-tiep] #2 127.0.0.1:46340 <-> đích 127.0.0.1:44311
+[chuyen-tiep] #2 127.0.0.1:44372 <-> đích 127.0.0.1:44311
 [chuyen-tiep] #2 xong: lên 360000 byte, xuống 360000 byte
 [chuyen-tiep] Dừng
 
 ===== chuyen_tiep_hong =====
 $ ../../target/release/mr3_1_chuyen_tiep_cong chuyentiep 127.0.0.1 44312 127.0.0.1 44313
 [chuyen-tiep] 127.0.0.1:44312 -> 127.0.0.1:44313
-[chuyen-tiep] #1 127.0.0.1:34236: không nối được đích 127.0.0.1:44313 (Connection refused)
+[chuyen-tiep] #1 127.0.0.1:39976: không nối được đích 127.0.0.1:44313 (Connection refused)
 [chuyen-tiep] Dừng
 
 ===== client_nho =====

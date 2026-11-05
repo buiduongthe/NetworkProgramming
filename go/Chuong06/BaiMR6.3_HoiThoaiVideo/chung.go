@@ -134,6 +134,8 @@ func (g *ghepKhung) them(h header, payload []byte, bayGio time.Time) []byte {
 	if k == nil {
 		k = &khungDo{tong: int(h.tong), manh: map[int][]byte{}, t: bayGio}
 		g.dang[h.soKhung] = k
+	} else if int(h.tong) != k.tong {
+		return nil // mâu thuẫn với các mảnh trước của khung: bỏ mảnh
 	}
 	k.manh[int(h.chiSo)] = append([]byte(nil), payload...)
 	for s, d := range g.dang {

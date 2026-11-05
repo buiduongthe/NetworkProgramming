@@ -1,6 +1,6 @@
 ===== demo =====
 $ java -cp out TruyenClient demo 127.0.0.1 43510
-[demo] Server cục bộ tại 127.0.0.1:43510, thư mục tạm /tmp/mr51_7316151990941382276
+[demo] Server cục bộ tại 127.0.0.1:43510, thư mục tạm /tmp/mr51_2052813384854092791
 [demo] Đã tạo 3 tệp thử, mỗi tệp 3 MiB
 
 ===== KỊCH BẢN: tải xuống 3 tệp đồng thời, giới hạn phiên 2 MiB/s =====
@@ -8,12 +8,12 @@ $ java -cp out TruyenClient demo 127.0.0.1 43510
 [client] BẮT ĐẦU download tep1.bin
 [client] BẮT ĐẦU download tep2.bin
 [client] BẮT ĐẦU download tep3.bin
-[tiến trình] tep1.bin [###-----------------]  16.3%  636.29 KiB/s
-[tiến trình] tep2.bin [#######-------------]  39.6%  1.51 MiB/s
-[tiến trình] tep3.bin [###-----------------]  17.3%  680.05 KiB/s
+[tiến trình] tep1.bin [##------------------]  14.3%  559.65 KiB/s
+[tiến trình] tep2.bin [########------------]  41.7%  1.60 MiB/s
+[tiến trình] tep3.bin [###-----------------]  16.3%  641.58 KiB/s
 [client] TẠM DỪNG tep2.bin (giữ .part)
-[tiến trình] tep1.bin [######--------------]  34.4%  693.98 KiB/s
-[tiến trình] tep3.bin [########------------]  44.6%  1.02 MiB/s
+[tiến trình] tep1.bin [######--------------]  34.4%  769.89 KiB/s
+[tiến trình] tep3.bin [########------------]  40.5%  929.13 KiB/s
 [client] DỪNG tep3.bin (xóa .part)
 
 ===== Nâng tốc độ phiên lên 8 MiB/s, tải tiếp tep2, chạy lại tep3 =====
@@ -21,12 +21,12 @@ $ java -cp out TruyenClient demo 127.0.0.1 43510
 [client] TẢI TIẾP tep2.bin
 [client] BẮT ĐẦU download tep2.bin
 [client] BẮT ĐẦU download tep3.bin
-[tiến trình] tep1.bin [###############-----]  77.9%  1.63 MiB/s
-[tiến trình] tep2.bin [##########----------]  52.1%  1.92 MiB/s
-[tiến trình] tep3.bin [#-------------------]   7.2%  2.66 MiB/s
-[client] XONG download tep1.bin: 3.00 MiB trong 2.6s (1.15 MiB/s), SHA-256 KHỚP
-[client] XONG download tep2.bin: 3.00 MiB trong 0.5s (6.04 MiB/s), SHA-256 KHỚP
-[client] XONG download tep3.bin: 3.00 MiB trong 0.7s (4.25 MiB/s), SHA-256 KHỚP
+[tiến trình] tep1.bin [###############-----]  75.8%  1.55 MiB/s
+[tiến trình] tep2.bin [###########---------]  58.2%  2.81 MiB/s
+[tiến trình] tep3.bin [##------------------]  10.2%  3.97 MiB/s
+[client] XONG download tep1.bin: 3.00 MiB trong 2.6s (1.14 MiB/s), SHA-256 KHỚP
+[client] XONG download tep2.bin: 3.00 MiB trong 0.5s (2.93 MiB/s), SHA-256 KHỚP
+[client] XONG download tep3.bin: 3.00 MiB trong 0.7s (4.45 MiB/s), SHA-256 KHỚP
 [client] --- Trạng thái ---
 [client]   tep1.bin     download xong     [####################] 100.0%  3.00 MiB/3.00 MiB
 [client]   tep2.bin     download xong     [####################] 100.0%  3.00 MiB/3.00 MiB
@@ -42,5 +42,5 @@ $ java -cp out TruyenClient demo 127.0.0.1 43510
 [demo] tep3.bin: xong, 3.00 MiB, SHA-256 KHỚP
 [demo] tep1_tai_len.bin: xong, server kiểm SHA-256 KHỚP
 [demo] Server còn giữ: ['tep1.bin', 'tep1_tai_len.bin', 'tep2.bin', 'tep3.bin']
-[demo] Đã dọn thư mục tạm /tmp/mr51_7316151990941382276
+[demo] Đã dọn thư mục tạm /tmp/mr51_2052813384854092791
 

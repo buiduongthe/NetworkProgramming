@@ -43,7 +43,7 @@ static class ClientThu
         string preview = str[..Math.Min(40, str.Length)];
         byte[] expect = Encoding.UTF8.GetBytes(string.Concat(Enumerable.Repeat(text.ToUpperInvariant(), repeat)));
         bool ok = got.AsSpan().SequenceEqual(expect);
-        Console.WriteLine($"[client] Phản hồi: '{preview}'{(got.Length > 40 ? "..." : "")}");
+        Console.WriteLine($"[client] Phản hồi: '{preview}'{(str.Length > 40 ? "..." : "")}");
         Console.WriteLine($"[client] So khớp với bản chữ hoa: {(ok ? "KHỚP" : "SAI")}");
         return 0;
     }

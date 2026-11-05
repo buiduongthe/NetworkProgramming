@@ -2,7 +2,7 @@
 $ python3 thiet_bi_gia.py 127.0.0.1 41320
 [thiet-bi] R1 lắng nghe CLI tại 127.0.0.1:41320
 [thiet-bi] phiên #1: đăng nhập admin
-[thiet-bi] phiên #1 (127.0.0.1:39328) kết thúc
+[thiet-bi] phiên #1 (127.0.0.1:52610) kết thúc
 [thiet-bi] phiên #2: đăng nhập admin
 [thiet-bi] phiên #2: Gi0/1: description Phong Lab
 [thiet-bi] phiên #2: Gi0/1: ip address 10.20.0.1 255.255.255.0
@@ -11,11 +11,11 @@ $ python3 thiet_bi_gia.py 127.0.0.1 41320
 [thiet-bi] phiên #2: Gi0/2: ip address 10.20.1.1 255.255.255.128
 [thiet-bi] phiên #2: Gi0/2: no shutdown
 [thiet-bi] phiên #2: lưu cấu hình (write memory)
-[thiet-bi] phiên #2 (127.0.0.1:39344) kết thúc
+[thiet-bi] phiên #2 (127.0.0.1:52614) kết thúc
 [thiet-bi] phiên #3: đăng nhập admin
-[thiet-bi] phiên #3 (127.0.0.1:39356) kết thúc
+[thiet-bi] phiên #3 (127.0.0.1:52624) kết thúc
 [thiet-bi] phiên #4: đăng nhập SAI (user='admin')
-[thiet-bi] phiên #4 (127.0.0.1:39368) kết thúc
+[thiet-bi] phiên #4 (127.0.0.1:52628) kết thúc
 [thiet-bi] Dừng thiết bị
 
 ===== chay_thu =====

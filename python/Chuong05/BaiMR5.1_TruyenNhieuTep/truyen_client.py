@@ -34,6 +34,7 @@ class LuotTruyen:
         self.trang_thai = CHAY
         self.tong = 0
         self.xong_byte = 0
+        self.byte_dau = 0                      # offset lúc bắt đầu lượt (tải tiếp > 0)
         self.sha_server = None
         self.sha_ok = None
         self.t0 = time.monotonic()
@@ -111,8 +112,8 @@ class QuanLy:
                 t.trang_thai = LOI
                 print(f"[client] {t.ten}: lỗi {resp.get('loi')}", flush=True)
                 return
+            t.byte_dau = t.xong_byte = off            # đặt trước t.tong để luồng báo cáo không đọc nhầm
             t.tong, t.sha_server = resp["size"], resp["sha256"]
-            t.xong_byte = off
             if off >= t.tong:                         # đã đủ: chỉ cần kiểm và đổi tên
                 s.close()
                 self._hoan_tat_tai_xuong(t, part)
@@ -149,7 +150,7 @@ class QuanLy:
         t.thoi_gian = time.monotonic() - t.t0
         t.trang_thai = XONG
         print(f"[client] XONG download {t.ten}: {dinh_dang_byte(t.tong)} trong {t.thoi_gian:.1f}s "
-              f"({dinh_dang_byte(int(t.tong / max(t.thoi_gian, 0.001)))}/s), "
+              f"({dinh_dang_byte(int((t.tong - t.byte_dau) / max(t.thoi_gian, 0.001)))}/s), "
               f"SHA-256 {'KHỚP' if t.sha_ok else 'SAI'}", flush=True)
 
     def _tai_len(self, t):
@@ -164,7 +165,8 @@ class QuanLy:
             if not resp.get("ok"):
                 t.trang_thai = LOI
                 return
-            t.tong, t.xong_byte = total, off
+            t.byte_dau = t.xong_byte = off
+            t.tong = total
             with open(t.cuc_bo, "rb") as f:
                 f.seek(off)
                 while t.xong_byte < total:
@@ -184,7 +186,7 @@ class QuanLy:
             t.sha_ok = ket.get("sha256_ok")
             t.trang_thai = XONG
             print(f"[client] XONG upload {t.ten}: {dinh_dang_byte(total)} trong {t.thoi_gian:.1f}s "
-                  f"({dinh_dang_byte(int(total / max(t.thoi_gian, 0.001)))}/s), "
+                  f"({dinh_dang_byte(int((total - t.byte_dau) / max(t.thoi_gian, 0.001)))}/s), "
                   f"server kiểm SHA-256 {'KHỚP' if t.sha_ok else 'SAI'}", flush=True)
         except (ConnectionError, OSError) as e:
             if t.trang_thai not in (DUNG, TAM_DUNG):
@@ -279,17 +281,16 @@ def chay_demo(host, port):
     dang_chay = [True]
 
     def bao_cao():
-        truoc = {}
+        truoc = {}                                   # khóa là chính lượt truyền (không phải tên tệp):
         while dang_chay[0]:
             time.sleep(0.8)
             for ten, t in list(ql.luot.items()):
                 if t.trang_thai == CHAY and t.tong:
-                    truoc_byte, truoc_tg = truoc.get(ten, (0, t.t0))
+                    # chạy lại/tải tiếp tạo lượt mới -> mốc mới là (offset ban đầu, t0) của lượt đó
+                    truoc_byte, truoc_tg = truoc.get(t, (t.byte_dau, t.t0))
                     now = time.monotonic()
-                    if t.xong_byte < truoc_byte:          # tệp bị dừng rồi chạy lại: đặt lại mốc
-                        truoc_byte, truoc_tg = 0, now
                     toc = max(0.0, (t.xong_byte - truoc_byte)) / max(now - truoc_tg, 0.001)
-                    truoc[ten] = (t.xong_byte, now)
+                    truoc[t] = (t.xong_byte, now)
                     pct = 100 * t.xong_byte / t.tong
                     print(f"[tiến trình] {ten} {thanh_tien_do(pct)} {pct:5.1f}%  "
                           f"{dinh_dang_byte(int(toc))}/s", flush=True)

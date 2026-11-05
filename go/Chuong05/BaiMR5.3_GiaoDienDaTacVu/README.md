@@ -5,7 +5,7 @@
 | Loại | **Bài mở rộng** – không có trong giáo trình, không có mã giả tương ứng |
 | Liên hệ với giáo trình | Chương 5: Bài 5.3 (giao diện bất đồng bộ), Bài 5.5 (tải tệp có tiến trình và hủy), Bài 5.2 (giới hạn đồng thời); Bài 1.2 (kiểm tra cổng), Bài 4.3 (tra cứu tên qua UDP), Bài 7.4 (SSE); MR5.2 (các mô hình đồng thời) |
 | Thư viện | Thư viện chuẩn Go: `net/http` (mẫu định tuyến Go 1.22), `context`, `sync`, `embed`, `encoding/json`; Playwright + Pillow (Python) chỉ dùng cho kịch bản minh họa |
-| Bản ngôn ngữ khác | [Python](../../../python/Chuong05/BaiMR5.3_GiaoDienDaTacVu/) (Tkinter) |
+| Bản ngôn ngữ khác | [C#](../../../csharp/Chuong05/BaiMR5.3_GiaoDienDaTacVu/), [Java](../../../java/Chuong05/BaiMR5.3_GiaoDienDaTacVu/), [Python](../../../python/Chuong05/BaiMR5.3_GiaoDienDaTacVu/), [Rust](../../../rust/Chuong05/BaiMR5.3_GiaoDienDaTacVu/) |
 
 ## Mục tiêu
 Go không có thư viện giao diện đồ họa trong thư viện chuẩn, nên giao diện là **một trang web cục bộ** do chính chương trình Go phục vụ (giống Bài 5.3 bản Go). Trang chạy nhiều tác vụ mạng cùng lúc – tải tệp HTTP từ máy chủ thử với độ trễ khác nhau, kiểm tra cổng TCP, tra cứu tên qua máy chủ “DNS” giả lập trên UDP – với thanh tiến trình và nút Hủy cho từng tác vụ, nút Hủy tất cả và thanh trượt giới hạn đồng thời; đồng hồ (mili giây) và hoạt hình **không bao giờ đứng**. Nút **“Làm SAI”** gọi một API chậm bằng `XMLHttpRequest` **đồng bộ**: luồng chính của trình duyệt bị chặn suốt thời gian chờ – tương đương “chờ mạng trên luồng giao diện” ở bản Tkinter. Trang tự đo **khoảng cách thật giữa hai nhịp đồng hồ** (đặt 20 ms).

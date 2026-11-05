@@ -249,7 +249,7 @@ impl QuanLy {
             "[client] XONG download {}: {} trong {tg:.1}s ({}/s), SHA-256 {}",
             t.ten,
             dinh_dang_byte(tong),
-            dinh_dang_byte((tong as f64 / tg.max(0.001)) as u64),
+            dinh_dang_byte(((tong - t.off_dau.load(Ordering::SeqCst)) as f64 / tg.max(0.001)) as u64),
             if ok { "KHỚP" } else { "SAI" }
         );
         Ok(())
@@ -297,7 +297,7 @@ impl QuanLy {
                 "[client] XONG upload {}: {} trong {tg:.1}s ({}/s), server kiểm SHA-256 {}",
                 t.ten,
                 dinh_dang_byte(total),
-                dinh_dang_byte((total as f64 / tg.max(0.001)) as u64),
+                dinh_dang_byte(((total - t.off_dau.load(Ordering::SeqCst)) as f64 / tg.max(0.001)) as u64),
                 if ok { "KHỚP" } else { "SAI" }
             );
             Ok(())

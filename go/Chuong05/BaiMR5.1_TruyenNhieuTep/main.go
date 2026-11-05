@@ -160,8 +160,9 @@ func chayDemo(host string, port int) {
 
 	dangChay := true
 	go func() {
-		truocByte := map[string]int64{}
-		truocTG := map[string]time.Time{}
+		// khóa là chính lượt truyền: chạy lại/tải tiếp tạo lượt mới với mốc (offset ban đầu, t0)
+		truocByte := map[*LuotTruyen]int64{}
+		truocTG := map[*LuotTruyen]time.Time{}
 		for dangChay {
 			time.Sleep(800 * time.Millisecond)
 			q.mu.Lock()
@@ -175,17 +176,19 @@ func chayDemo(host string, port int) {
 					continue
 				}
 				now := time.Now()
-				pb, ok := truocByte[t.ten]
-				pt := truocTG[t.ten]
-				if !ok || t.daLam() < pb {
-					pb, pt = 0, t.t0
+				pb, ok := truocByte[t]
+				pt := truocTG[t]
+				if !ok {
+					t.mu.Lock()
+					pb, pt = t.byteDau, t.t0
+					t.mu.Unlock()
 				}
 				toc := float64(t.daLam()-pb) / maxF(now.Sub(pt).Seconds(), 0.001)
 				if toc < 0 {
 					toc = 0
 				}
-				truocByte[t.ten] = t.daLam()
-				truocTG[t.ten] = now
+				truocByte[t] = t.daLam()
+				truocTG[t] = now
 				pct := 100 * float64(t.daLam()) / float64(t.tong)
 				fmt.Printf("[tiến trình] %s %s %5.1f%%  %s/s\n", t.ten, thanhTienDo(pct), pct, dinhDangByte(int64(toc)))
 			}

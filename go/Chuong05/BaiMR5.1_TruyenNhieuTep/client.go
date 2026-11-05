@@ -24,6 +24,7 @@ type LuotTruyen struct {
 	mu                sync.Mutex
 	trangThai         string
 	tong, xongByte    int64
+	byteDau           int64 // offset lúc bắt đầu lượt (tải tiếp > 0)
 	shaServer         string
 	shaOK, daKiem     bool
 	t0                time.Time
@@ -148,7 +149,7 @@ func (q *QuanLy) taiXuong(t *LuotTruyen) {
 		return
 	}
 	t.mu.Lock()
-	t.tong, t.shaServer, t.xongByte = resp.Size, resp.Sha256, off
+	t.tong, t.shaServer, t.xongByte, t.byteDau = resp.Size, resp.Sha256, off, off
 	t.mu.Unlock()
 	if off >= t.tong {
 		conn.Close()
@@ -197,10 +198,10 @@ func (q *QuanLy) hoanTatTaiXuong(t *LuotTruyen, part string) {
 	t.shaOK, t.daKiem = shaOK, true
 	t.thoiGian = time.Since(t.t0).Seconds()
 	t.trangThai = ttXong
-	tong, tg := t.tong, t.thoiGian
+	tong, tg, moi := t.tong, t.thoiGian, t.tong-t.byteDau
 	t.mu.Unlock()
 	fmt.Printf("[client] XONG download %s: %s trong %.1fs (%s/s), SHA-256 %s\n",
-		t.ten, dinhDangByte(tong), tg, dinhDangByte(int64(float64(tong)/maxF(tg, 0.001))), khopSai(shaOK))
+		t.ten, dinhDangByte(tong), tg, dinhDangByte(int64(float64(moi)/maxF(tg, 0.001))), khopSai(shaOK))
 }
 
 func (q *QuanLy) taiLen(t *LuotTruyen) {
@@ -221,7 +222,7 @@ func (q *QuanLy) taiLen(t *LuotTruyen) {
 		return
 	}
 	t.mu.Lock()
-	t.tong, t.xongByte = total, off
+	t.tong, t.xongByte, t.byteDau = total, off, off
 	t.mu.Unlock()
 	f, _ := os.Open(t.cucBo)
 	f.Seek(off, 0)
@@ -250,10 +251,10 @@ func (q *QuanLy) taiLen(t *LuotTruyen) {
 	t.thoiGian = time.Since(t.t0).Seconds()
 	t.shaOK = ket.Sha256OK
 	t.trangThai = ttXong
-	tg := t.thoiGian
+	tg, moi := t.thoiGian, total-t.byteDau
 	t.mu.Unlock()
 	fmt.Printf("[client] XONG upload %s: %s trong %.1fs (%s/s), server kiểm SHA-256 %s\n",
-		t.ten, dinhDangByte(total), tg, dinhDangByte(int64(float64(total)/maxF(tg, 0.001))), khopSai(ket.Sha256OK))
+		t.ten, dinhDangByte(total), tg, dinhDangByte(int64(float64(moi)/maxF(tg, 0.001))), khopSai(ket.Sha256OK))
 }
 
 func khopSai(ok bool) string {

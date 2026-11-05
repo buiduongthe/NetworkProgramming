@@ -5,7 +5,7 @@
 | Loại | **Bài mở rộng** – không có trong giáo trình, không có mã giả tương ứng |
 | Liên hệ với giáo trình | Chương 8: Bài 8.1 (gọi API LLM); Chương 3: Bài 3.3 (dữ liệu JSON); MR1.1 (kiểm tra địa chỉ); MR3.2 (áp dụng cấu hình sau khi duyệt) |
 | Thư viện | Thư viện chuẩn: `urllib.request`, `json`, `re`, `ipaddress` |
-| Bản ngôn ngữ khác | [Go](../../../go/Chuong08/BaiMR8.2_KiemDuyetCauHinhAI/) |
+| Bản ngôn ngữ khác | [C#](../../../csharp/Chuong08/BaiMR8.2_KiemDuyetCauHinhAI/), [Java](../../../java/Chuong08/BaiMR8.2_KiemDuyetCauHinhAI/), [Rust](../../../rust/Chuong08/BaiMR8.2_KiemDuyetCauHinhAI/), [Go](../../../go/Chuong08/BaiMR8.2_KiemDuyetCauHinhAI/) |
 
 ## Mục tiêu
 Đầu ra của LLM “trông hợp lý” nhưng không bảo đảm đúng, nên phải coi là **dữ liệu chưa tin cậy**, giống dữ liệu nhận từ một client lạ. Chương trình yêu cầu LLM sinh cấu hình VLAN/ACL dạng JSON, rồi kiểm duyệt bốn tầng: (1) tách và phân tích JSON (LLM hay bọc JSON trong khối ```` ```json ```` kèm lời dẫn); (2) lược đồ – đủ trường, đúng kiểu; (3) ngữ nghĩa – VLAN 1–4094 và không trùng với hạ tầng đang dùng, mạng con hợp lệ, trong khối địa chỉ, không chồng lấn, cổng mặc định là địa chỉ máy của mạng; (4) chính sách – cấm `permit ip any any`, cấm bật telnet. Có lỗi thì gửi danh sách lỗi lại cho LLM để sửa, tối đa N lần; hết lượt vẫn sai thì **từ chối**. Chỉ cấu hình đạt mới được chuyển thành lệnh CLI.

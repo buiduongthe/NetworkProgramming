@@ -75,6 +75,10 @@ class GhepKhung:
 
     def them(self, so, i, tong, w, h, payload, bay_gio):
         self.manh_nhan += 1
+        if tong <= 0 or not 0 <= i < tong or w <= 0 or h <= 0:
+            return None                                     # tiêu đề không hợp lệ: bỏ mảnh
+        if so in self.dang and (self.dang[so]["tong"], self.dang[so]["w"], self.dang[so]["h"]) != (tong, w, h):
+            return None                                     # mâu thuẫn với các mảnh trước của khung: bỏ
         if self.cuoi is not None and so <= self.cuoi:
             self.tre += 1                                   # thuộc khung đã xong hoặc đã bỏ
             return None
@@ -118,9 +122,13 @@ PHONG = {
 
 def to_mau(anh, w, x, y, rw, rh, mau):
     """Tô hình chữ nhật (x, y, rw, rh) bằng màu (r, g, b) – gán từng hàng bằng phép cắt lát."""
+    rw = max(0, min(rw, w - x))                           # cắt theo mép phải để không đổi kích thước ảnh
     hang = bytes(mau) * rw
     for yy in range(y, y + rh):
-        anh[(yy * w + x) * 3:(yy * w + x + rw) * 3] = hang
+        dau = (yy * w + x) * 3
+        if dau + rw * 3 > len(anh):                       # quá mép dưới
+            break
+        anh[dau:dau + rw * 3] = hang
 
 
 def ve_chu(anh, w, h, x, y, chu, co=1, mau=(255, 255, 255)):
