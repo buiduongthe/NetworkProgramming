@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.8_DatVePhim",
+    "chuong": 6,
+    "ngon_ngu": [
+      "python"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy"
+    },
+    "ten": "Đặt vé xem phim – phòng chiếu 8 × 12 ghế, giữ chỗ có thời hạn (TTL 30 s, luồng nền dọn ghế quá hạn), thanh toán, nhả ghế: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (khóa theo từng ghế, nhiều ghế khóa theo thứ tự), sổ kiểm toán đếm ghế trùng và thanh toán sai, bộ mô phỏng tải ghế nóng và nhiều ghế, ứng dụng sơ đồ ghế cập nhật trực tiếp",
+    "ghi_chu": "Khung chép nguyên từ MR6.6 (chỉ đổi cổng mặc định 41720 trong main của mo_phong.py và dòng đầu docstring). Kết quả (trễ 0–2 ms, 200 kết nối): 500 người giữ ghế nóng E7: khong_khoa 10 thành công (9 lượt giữ + 1 vé), 8 sai phạm ghế trùng, 5454 yc/s; khoa, lac_quan (10 xung đột), hang_doi 2/0 (784, 8825, 844 yc/s). 300 người × 3 lần, nhóm 1–2 ghế ngẫu nhiên: khong_khoa 150/18 (bán 91/96, 5 lượt giữ mồ côi); khoa 164/0, 5545 yc/s (khóa theo ghế chạy song song); lac_quan 148/0, 12 xung đột, 7110 yc/s; hang_doi 150/0, 842 yc/s, hàng đợi max 299. TTL 3 s (dòng lệnh): An giữ E7 không thanh toán, Bình bị từ chối 'đang có người giữ', hết hạn ghế tự nhả, Bình mua được; An thanh toán muộn: 'ghế E7 không do bạn giữ'; Chi thanh toán sau hạn: 'giữ chỗ F5 đã hết hạn'. Giao diện: khoa 1 người giữ E7, 2 bị từ chối; khong_khoa + trễ 0–20 ms cả 3 được báo giữ E8, 2 người sau đó thấy 'Ghế E8 đã bị Chi lấy mất!' (sai phạm 2); TTL 6 s: An hết hạn, Bình mua F5 F6. Thêm số thứ tự lần ghi (kq.phien, cap_nhat.phien). Đọc thêm: Kung & Robinson 1981 (ACM TODS 6(2)), Coffman và cộng sự 1971 (ACM Computing Surveys 3(2))."
+  }
+]

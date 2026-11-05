@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.7_DatXe",
+    "chuong": 6,
+    "ngon_ngu": [
+      "python"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy"
+    },
+    "ten": "Đặt xe – n người cùng bấm 'Đặt xe' cho m xe mỗi xe một chỗ: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa loại trừ nhiều ô theo thứ tự, lạc quan phiên bản + CAS, hàng đợi một luồng), sổ kiểm toán đếm trùng chỗ, bộ mô phỏng tải có rào xuất phát và pipelining, ứng dụng gọi xe có bản đồ và xe chạy hoạt hình",
+    "ghi_chu": "Khung chép nguyên từ MR6.6 (chung.py, khach.py, giao_dien_chung.py, phần KHUNG của mo_phong.py; chỉ đổi cổng mặc định 41710 trong main của mo_phong.py và dòng đầu docstring). Kết quả (trễ 0–2 ms, 200 kết nối): 1000 người / 1 xe: khong_khoa 7 người được báo thành công, 6 sai phạm trùng chỗ, 8197 yc/s; khoa 1/0, 752 yc/s, p99 1293 ms; lac_quan 1/0, 4 xung đột, 9238 yc/s; hang_doi 1/0, 806 yc/s, hàng đợi max 996. 2000 người / 10 xe: khong_khoa 38/28; khoa, lac_quan (70 xung đột), hang_doi 10/0. Dòng lệnh: An đặt được, Bình hết chỗ, An hủy, Bình đặt được. Giao diện: khong_khoa + trễ 0–20 ms, 3 người cùng bấm đều được báo thành công, 2 người sau đó thấy 'Tài xế Hùng đã nhận khách khác' (sai phạm 2); khoa: 1 thành công, 2 hết chỗ; 3 xe: mỗi người một xe, xe chạy tới điểm đón. Thêm số thứ tự lần ghi (kq.phien, cap_nhat.phien) để client không kết luận sai từ ảnh chụp cũ. Với 1 xe khe tranh chấp hẹp nên sai phạm khong_khoa dao động 1–8 giữa các lần chạy. Đọc thêm: Kung & Robinson 1981 (ACM TODS 6(2)), Coffman và cộng sự 1971 (ACM Computing Surveys 3(2))."
+  }
+]
