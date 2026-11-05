@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.5_PhatTrucTiep",
+    "chuong": 6,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Phát trực tiếp âm thanh + video 1→n: máy chủ SFU nhân bản gói, khung I/P (zlib + XOR), bộ đệm GOP, xin khung khóa (PLI), đồng bộ tiếng-hình với âm thanh làm đồng hồ chủ, đăng ký theo lớp",
+    "ghi_chu": "Bản Java (JDK 21, chỉ thư viện chuẩn; giao diện Swing, chụp bằng java.awt.Robot dưới xvfb-run; camera/tệp video qua ffmpeg, micro/loa qua javax.sound.sampled). Chạy chéo với Python: (a) máy phát Python + máy chủ Java + người xem Java (I 6/P 66, lệch +3 ms) và Python; (b) máy phát Java + máy chủ Python + người xem Python (lệch +2 ms bật, −91 ms tắt). Kết quả demo: B khung đầu 126 ms từ bộ đệm GOP; C chờ khung I 569 ms (pha GOP lệch do PLI của D; các lần chạy 0,5–0,8 s); D mất 3 %: 2 lần đứng hình, hồi phục sau PLI ≈ 100 ms; A lệch +2/+3 ms khi bật, −90 ms khi tắt; hệ số nhân bản 3,88 với 4 người xem. Phát tệp video (--tep/--tao-tep-mau, GUI Chọn tệp…/Tạo tệp mẫu): A lệch +3 ms. Máy kiểm thử không có webcam/thiết bị âm thanh – đã thử nhánh lùi về giả lập."
+  }
+]
