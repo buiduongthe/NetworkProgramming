@@ -224,6 +224,9 @@ public class KhachVideoGui {
     }
 
     /** Bộ hẹn giờ (EDT): vẽ khung mới, cập nhật trạng thái. */
+    String thietBiDaIn = "";                                          // chỉ dùng trên EDT
+    long demNhip;
+
     void capNhat() {
         PhienVideo p = phien;
         PhienVideo.Anh m = p != null ? p.khungMinh : null, l = p != null ? p.luoiMoi : null;
@@ -241,6 +244,13 @@ public class KhachVideoGui {
             return;
         }
         boolean gui = !p.tuTat && p.camMoServer && p.nguon != null;
+        if (!lblThietBi.getText().equals(thietBiDaIn)) {              // ghi nhật ký khi đổi camera
+            thietBiDaIn = lblThietBi.getText();
+            System.out.println("[" + tenLog + "] " + thietBiDaIn);
+        }
+        if (++demNhip % 75 == 0)                                      // 75 × 66 ms ≈ 5 s: thống kê vào nhật ký
+            System.out.println(String.format(Locale.ROOT, "[%s] Gửi %.0f fps, %.0f kbit/s%s; nhận %.0f fps, %.0f kbit/s",
+                    tenLog, p.fpsGui, p.kbpsGui, gui ? "" : " (không gửi)", p.fpsNhan, p.kbpsNhan));
         xemTruoc.datChu(m == null ? "" : "160x120" + (p.chia > 1 ? " -> gửi 1/" + p.chia : ""), m == null ? "Camera tắt" : "",
                 "", !gui);
         luoi.datChu(l == null ? "" : l.w() + "x" + l.h(), l == null ? "Đang chờ lưới…" : "", "", false);

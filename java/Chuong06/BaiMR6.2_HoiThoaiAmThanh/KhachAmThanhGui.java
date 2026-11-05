@@ -187,6 +187,8 @@ public class KhachAmThanhGui {
         });
     }
 
+    String thietBiDaIn = "";                                        // chỉ dùng trên EDT
+    long demNhip;
     volatile String txtTenAnToan = "";                               // tên đọc được từ luồng nền
 
     void ketNoi() {
@@ -282,6 +284,14 @@ public class KhachAmThanhGui {
         mucMic.datMuc(mm);
         lblMucMic.setText(ThanhMuc.chu(mm));
         if (p == null) return;
+        String tb = lblThietBi.getText() + "; " + lblLoa.getText();
+        if (!tb.equals(thietBiDaIn)) {                              // ghi nhật ký khi đổi micro/loa
+            thietBiDaIn = tb;
+            System.out.println("[" + txtTenAnToan + "] " + tb);
+        }
+        if (++demNhip % 50 == 0)                                    // 50 × 100 ms = 5 s: mức âm vào nhật ký
+            System.out.println("[" + txtTenAnToan + "] Mức: mic " + ThanhMuc.chu(mm) + ", nhận " + ThanhMuc.chu(mn)
+                    + (p.tuTat ? " (mic tự tắt)" : ""));
         double g = p.doLoiServer;
         lblServerVol.setText(Double.isNaN(g) ? "Server Vol: --" : String.format(Locale.ROOT, "Server Vol: %.0f%%", g * 100));
         String mic = p.tuTat ? "tự tắt" : p.micMoServer ? "mở" : p.lyDoMic.contains("server") ? "bị khóa (server)" : "đang chờ server";
