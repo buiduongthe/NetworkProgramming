@@ -8,7 +8,7 @@
     "kiem_thu": {
       "python": "đã chạy"
     },
-    "ten": "Phát trực tiếp âm thanh + video 1→n: máy chủ SFU nhân bản gói, khung I/P (zlib + XOR), bộ đệm GOP, xin khung khóa (PLI), đồng bộ tiếng-hình với âm thanh làm đồng hồ chủ, đăng ký theo lớp",
-    "ghi_chu": "Bản tham chiếu cho 4 ngôn ngữ còn lại. Nguồn giả lập bảng clapper (đồng hồ, chớp mỗi giây) + 440 Hz và bíp 1000 Hz mỗi giây; camera thật qua ffmpeg, micro/loa qua sounddevice (máy kiểm thử không có webcam/thiết bị âm thanh – đã thử nhánh lùi về giả lập; đã chạy ffmpeg testsrc). Kết quả: B vào muộn khi bộ đệm GOP bật hiện khung đầu sau 117 ms, C khi tắt 1577 ms; D mất 3 % gói: 4 lần đứng hình, hồi phục sau PLI ≈ 100 ms; A lệch tiếng-hình +2/+3 ms khi bật, −79 ms khi tắt (bộ đệm jitter 5 khung). Đọc thêm: RFC 3550 6.4.1, 3551, 4585 6.3.1, 7667, 6184 mục 8, 8085."
+    "ten": "Phát trực tiếp âm thanh + video 1→n từ camera hoặc tệp video: máy chủ SFU nhân bản gói, khung I/P (zlib + XOR), bộ đệm GOP, xin khung khóa (PLI), đồng bộ tiếng-hình với âm thanh làm đồng hồ chủ, đăng ký theo lớp",
+    "ghi_chu": "Bản tham chiếu cho 4 ngôn ngữ còn lại. Nguồn: camera thật (ffmpeg), tệp video (hai tiến trình ffmpeg -re, tiếng làm đồng hồ chủ), testsrc, giả lập clapper; micro/loa qua sounddevice (máy kiểm thử không có webcam/thiết bị âm thanh – đã thử nhánh lùi về giả lập). Kết quả: B vào muộn khi bộ đệm GOP bật hiện khung đầu sau 101 ms, C khi tắt 1557 ms; D mất 3 % gói: đứng hình, hồi phục sau PLI 98 ms; A lệch tiếng-hình +2/+3 ms khi bật, −88 ms khi tắt (bộ đệm jitter 5 khung); phát tệp mẫu mp4: lệch +4 ms. Đọc thêm: RFC 3550 6.4.1, 3551, 4585 6.3.1, 7667, 6184 mục 8, 8085."
   }
 ]

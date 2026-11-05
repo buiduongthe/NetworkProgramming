@@ -1,7 +1,8 @@
 """Bài mở rộng MR6.5 – Máy phát trực tiếp có giao diện Tkinter.
 
 Lõi MayPhat (may_phat.py) giữ kết nối, luồng âm thanh 20 ms và luồng video; cửa sổ chọn nguồn
-(camera thật qua ffmpeg / mẫu thử testsrc / giả lập clapper; micro thật qua sounddevice / giả lập),
+(camera thật qua ffmpeg / tệp video / mẫu thử testsrc / giả lập clapper; micro thật qua sounddevice /
+tiếng của tệp video / giả lập),
 fps, GOP, bấm Phát / Dừng phát / Khung khóa ngay; cứ 100 ms đọc trạng thái để vẽ xem trước, thanh
 mức micro, thống kê và danh sách người xem. Thiết bị thật chỉ được mở khi bấm PHÁT.
 
@@ -9,14 +10,16 @@ Chạy:  python3 phat_gui.py [tên] [host] [cổng_tcp]
 """
 import sys
 import threading
+import os
 import tkinter as tk
-from tkinter import ttk
+from tkinter import filedialog, ttk
 
 from camera import GIA_LAP, MAU_THU, co_ffmpeg, liet_ke_camera, mo_camera
 from chung import CAO, FPS_MAC_DINH, GOP_MAC_DINH, RONG
 from giao_dien_chung import (DO, NEN, XANH_DUONG, XANH_LA, HangDoiGiaoDien, NhatKy, ThanhMuc, anh_tk,
                              khung_nhom, nhan, nut, o_nhap)
 from may_phat import MayPhat
+from tep_video import TEP, mo_tep, tao_tep_mau
 from thiet_bi_am_thanh import GIA_LAP as MIC_GIA_LAP
 from thiet_bi_am_thanh import liet_ke, mo_mic, nap_sounddevice
 
@@ -55,13 +58,18 @@ class CuaSoPhat:
         nhan(g, "Camera:").grid(row=0, column=0, sticky="w")
         self.ds_cam = list(liet_ke_camera())
         if co_ffmpeg():
+            self.ds_cam.append((TEP, "Tệp video (chọn tệp bên dưới)"))
             self.ds_cam.append((MAU_THU, "Mẫu thử ffmpeg (testsrc)"))
         self.ds_cam.append((GIA_LAP, "Camera giả lập (bảng clapper)"))
         self.chon_cam = ttk.Combobox(g, state="readonly", width=34, values=[t for _, t in self.ds_cam])
         self.chon_cam.current(len(self.ds_cam) - 1)
         self.chon_cam.grid(row=0, column=1, columnspan=4, sticky="w")
+        self.chon_cam.bind("<<ComboboxSelected>>", self._doi_camera)
         nhan(g, "Micro:").grid(row=1, column=0, sticky="w")
-        self.ds_mic = list(liet_ke(self.sd, thu=True)) + [(MIC_GIA_LAP, "Micro giả lập (440 Hz + bíp mỗi giây)")]
+        self.ds_mic = list(liet_ke(self.sd, thu=True))
+        if co_ffmpeg():
+            self.ds_mic.append((TEP, "Tiếng của tệp video"))
+        self.ds_mic.append((MIC_GIA_LAP, "Micro giả lập (440 Hz + bíp mỗi giây)"))
         self.chon_mic = ttk.Combobox(g, state="readonly", width=34, values=[t for _, t in self.ds_mic])
         self.chon_mic.current(len(self.ds_mic) - 1)
         self.chon_mic.grid(row=1, column=1, columnspan=4, sticky="w")
@@ -75,8 +83,20 @@ class CuaSoPhat:
         self.spin_gop.delete(0, "end")
         self.spin_gop.insert(0, str(GOP_MAC_DINH))
         self.spin_gop.grid(row=2, column=3, sticky="w")
+        nhan(g, "Tệp video:").grid(row=3, column=0, sticky="w")
         f = tk.Frame(g, bg=NEN)
-        f.grid(row=3, column=0, columnspan=5, sticky="w", pady=3)
+        f.grid(row=3, column=1, columnspan=4, sticky="w")
+        self.o_tep = o_nhap(f, "", 30)
+        self.o_tep.pack(side="left")
+        self.nut_chon_tep = nut(f, "Chọn tệp…", "#dddddd", self.chon_tep, 9)
+        self.nut_chon_tep.pack(side="left", padx=(4, 0))
+        self.nut_tao_mau = nut(f, "Tạo tệp mẫu", "#dddddd", self.tao_mau, 10)
+        self.nut_tao_mau.pack(side="left", padx=(4, 0))
+        if not co_ffmpeg():
+            for w in (self.o_tep, self.nut_chon_tep, self.nut_tao_mau):
+                w.configure(state="disabled")
+        f = tk.Frame(g, bg=NEN)
+        f.grid(row=4, column=0, columnspan=5, sticky="w", pady=3)
         self.nut_phat = nut(f, "PHÁT", XANH_LA, self.bat_phat, 10)
         self.nut_phat.pack(side="left")
         self.nut_dung = nut(f, "DỪNG PHÁT", DO, self.dung_phat, 10)
@@ -87,7 +107,7 @@ class CuaSoPhat:
             b.configure(state="disabled")
         self.chi_bao = nhan(g, "Camera: tắt | Micro: tắt" + ("" if co_ffmpeg() else " (không có ffmpeg)"),
                             fg="#404040")
-        self.chi_bao.grid(row=4, column=0, columnspan=5, sticky="w")
+        self.chi_bao.grid(row=5, column=0, columnspan=5, sticky="w")
 
         giua = tk.Frame(root, bg=NEN)
         giua.pack(fill="x", padx=6)
@@ -183,11 +203,23 @@ class CuaSoPhat:
             return
         ma_cam, ten_cam = self.ds_cam[self.chon_cam.current()]
         fps, gop = self._so(self.spin_fps, FPS_MAC_DINH, 30), self._so(self.spin_gop, GOP_MAC_DINH, 300)
-        cam = mo_camera(ma_cam, ten_cam, lop.ten, lop.ma or 1, fps)
         chi_so, ten_mic = self.ds_mic[self.chon_mic.current()]
-        mic, loi = mo_mic(self.sd, chi_so, ten_mic)
-        if loi:
-            self.nhat_ky.ghi(loi)
+        cam = mic = None
+        if ma_cam == TEP:                                     # tệp video: hình (và tiếng nếu chọn)
+            try:
+                cam, mic = mo_tep(self.o_tep.get().strip(), fps, lay_tieng=chi_so == TEP)
+                self.nhat_ky.ghi(f"Phát tệp {cam.tep.ten}" + (" (cả tiếng)" if mic else ""))
+            except OSError as e:
+                self.nhat_ky.ghi(f"Không mở được tệp video ({e}); dùng camera giả lập")
+                cam = None
+        if cam is None:
+            cam = mo_camera(GIA_LAP if ma_cam == TEP else ma_cam, ten_cam, lop.ten, lop.ma or 1, fps)
+        if mic is None:
+            if chi_so == TEP:
+                self.nhat_ky.ghi("Tiếng của tệp chỉ dùng được khi camera là tệp video; dùng micro giả lập")
+            mic, loi = mo_mic(self.sd, MIC_GIA_LAP if chi_so == TEP else chi_so, ten_mic)
+            if loi:
+                self.nhat_ky.ghi(loi)
         lop.bat_dau_phat(cam, mic, fps, gop)
         self.chi_bao.configure(text=f"Camera: {cam.mo_ta} | Micro: {mic.mo_ta}",
                                fg="#006000" if cam.that or mic.that else "#8a4b00")
@@ -196,6 +228,49 @@ class CuaSoPhat:
         self.nut_i.configure(state="normal")
         self.chon_cam.configure(state="disabled")
         self.chon_mic.configure(state="disabled")
+
+    def _doi_camera(self, _su_kien=None):
+        """Chọn camera "Tệp video" -> micro tự chuyển sang tiếng của tệp (đổi lại được)."""
+        if self.ds_cam[self.chon_cam.current()][0] == TEP:
+            for i, (ma, _) in enumerate(self.ds_mic):
+                if ma == TEP:
+                    self.chon_mic.current(i)
+
+    def chon_tep(self):
+        duong = filedialog.askopenfilename(title="Chọn tệp video", filetypes=[
+            ("Tệp video", "*.mp4 *.mkv *.avi *.mov *.webm *.flv *.ts *.m4v"), ("Mọi tệp", "*.*")])
+        if duong:
+            self.dat_tep(duong)
+
+    def dat_tep(self, duong):
+        self.o_tep.delete(0, "end")
+        self.o_tep.insert(0, duong)
+        for i, (ma, _) in enumerate(self.ds_cam):
+            if ma == TEP:
+                self.chon_cam.current(i)
+        self._doi_camera()
+
+    def tao_mau(self):
+        """Tạo tệp mẫu 10 s (chớp trắng + bíp mỗi giây) cạnh chương trình, rồi chọn nó."""
+        duong = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out", "tep_mau.mp4")
+        os.makedirs(os.path.dirname(duong), exist_ok=True)
+        self.nut_tao_mau.configure(state="disabled", text="Đang tạo…")
+
+        def nen():
+            try:
+                tao_tep_mau(duong, 10)
+                self.ui.dua_vao(self._da_tao_mau, duong, "")
+            except OSError as e:
+                self.ui.dua_vao(self._da_tao_mau, None, str(e))
+        threading.Thread(target=nen, daemon=True).start()
+
+    def _da_tao_mau(self, duong, loi):
+        self.nut_tao_mau.configure(state="normal", text="Tạo tệp mẫu")
+        if duong:
+            self.nhat_ky.ghi(f"Đã tạo tệp mẫu {duong}")
+            self.dat_tep(duong)
+        else:
+            self.nhat_ky.ghi(f"Không tạo được tệp mẫu: {loi}")
 
     def dung_phat(self):
         if self.lop:

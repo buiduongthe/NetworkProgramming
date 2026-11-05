@@ -4,7 +4,9 @@ Một tiến trình, một luồng giao diện: cửa sổ máy chủ (Tk), máy
 P dùng camera giả lập "bảng clapper" và micro giả lập; A vào ngay, đồng bộ tiếng-hình BẬT; B bỏ chọn
 đồng bộ rồi vào muộn ~3 s. Kịch bản bấm nút như người dùng (generator: `yield giây` = chờ,
 `yield hàm` = chờ tới khi điều kiện đúng; mainloop vẫn chạy trong lúc chờ), in số liệu `[demo] …`,
-chụp 4 cửa sổ ghép thành ket_qua_gui.png. Có ffmpeg: thêm một lượt "Mẫu thử ffmpeg (testsrc)".
+chụp 4 cửa sổ ghép thành ket_qua_gui.png. Có ffmpeg: thêm một lượt "Mẫu thử ffmpeg (testsrc)" và một
+lượt "Tệp video" (tạo tệp mẫu mp4 có chớp + bíp mỗi giây, phát cả hình lẫn tiếng của tệp; chụp máy phát
+và người xem A thành ket_qua_gui_tep.png).
 
 Chạy:  xvfb-run -a -s "-screen 0 2000x1400x24" python3 demo_gui.py [host] [cổng_tcp] [cổng_udp] [tệp_ảnh]
 """
@@ -14,6 +16,7 @@ import sys
 import tkinter as tk
 
 from camera import MAU_THU, co_ffmpeg
+from tep_video import tao_tep_mau
 from phat_gui import CuaSoPhat
 from server_gui import CuaSoServer
 from xem_gui import CuaSoXem
@@ -108,7 +111,31 @@ def kich_ban(root, sv, p, ds, out):
         log(f"   P: {tp['camera']}")
         ta = a.lop.trang_thai()
         log(f"   A: khung I {ta['khung_i']}, P {ta['khung_p']}, lệch {ms(ta['lech_hien'], True)} ms")
-    log("10. Server bấm STOP SERVER")
+        log("10. P: DỪNG PHÁT, tạo tệp mẫu mp4, nguồn Tệp video, PHÁT")
+        p.nut_dung.invoke()
+        os.makedirs("out", exist_ok=True)
+        tep = tao_tep_mau(os.path.join("out", "tep_mau.mp4"), 10)
+        p.dat_tep(tep)
+        log(f"   {p.chon_cam.get()} | {p.chon_mic.get()}")
+        yield 0.3
+        p.nut_phat.invoke()
+        yield 4.4
+        tp = p.lop.trang_thai()
+        log(f"   P tệp: I {tp['so_i']} P {tp['so_p']}, TB I {tp['tb_i']:.0f} B, P {tp['tb_p']:.0f} B")
+        log(f"   P: {tp['camera'][:52]}")
+        ta = a.lop.trang_thai()
+        log(f"   A: khung I {ta['khung_i']}, P {ta['khung_p']}, lệch {ms(ta['lech_hien'], True)} ms,"
+            f" mức tiếng {ta['muc_am']:.1f} dBFS")
+        tam = [".gui_tep_0.png", ".gui_tep_1.png"]
+        chup(p.root, tam[0])
+        chup(a.root, tam[1])
+        ra = os.path.join(os.path.dirname(out) or ".", "ket_qua_gui_tep.png")
+        subprocess.run(["convert", tam[0], tam[1], "-background", "#d0d0d0", "-gravity", "north", "+append",
+                        "-bordercolor", "#d0d0d0", "-border", "4", ra], check=True)
+        for f in tam:
+            os.remove(f)
+        log(f"   Đã ghi {ra} ({os.path.getsize(ra) // 1024} KB)")
+    log("11. Server bấm STOP SERVER")
     sv.nut_stop.invoke()
     yield lambda: sv.nut_start["state"] == "normal"
     yield 0.6

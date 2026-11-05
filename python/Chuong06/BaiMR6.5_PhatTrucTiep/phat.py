@@ -5,20 +5,26 @@ trắng mỗi giây tròn) và micro giả lập (440 Hz + bíp 1000 Hz mỗi gi
   --camera testsrc     ảnh mẫu thử của ffmpeg (cần ffmpeg)
   --camera <thiết bị>  camera thật qua ffmpeg (/dev/video0, "Tên camera" trên Windows, 0 trên macOS)
   --mic <chỉ số>       micro thật qua sounddevice
+  --tep <tệp video>    phát lại hình + tiếng của tệp (mp4, mkv…) qua ffmpeg, lặp lại khi hết tệp;
+                       thêm --mic gia_lap|<chỉ số> để thay tiếng của tệp bằng micro
+  --tao-tep-mau        tạo trước tệp mẫu 10 s (chớp trắng + bíp mỗi giây) tại đường dẫn của --tep
 Thiết bị thật không mở được -> tự lùi về nguồn giả lập (có báo).
 
 Lệnh (stdin; "@t lệnh" = chờ tới giây thứ t):  khung_khoa   dung
 
 Chạy:  python3 phat.py <tên> <host> <cổng_tcp> [--camera gia_lap|testsrc|<thiết bị>]
-           [--mic gia_lap|<chỉ số>] [--fps 10] [--gop 20] [--thoi-gian 30] [--mat-goi 0.0]
+           [--mic gia_lap|<chỉ số>] [--tep <tệp video> [--tao-tep-mau]] [--fps 10] [--gop 20]
+           [--thoi-gian 30] [--mat-goi 0.0]
 """
 import argparse
+import os
 import threading
 import time
 
 from camera import GIA_LAP, CameraFfmpeg, CameraGiaLap, co_ffmpeg
 from chung import FPS_MAC_DINH, GOP_MAC_DINH, doc_lenh_stdin
 from may_phat import MayPhat, dong_tong_ket
+from tep_video import mo_tep, tao_tep_mau
 from thiet_bi_am_thanh import mo_mic, nap_sounddevice
 
 
@@ -28,7 +34,9 @@ def main():
     ap.add_argument("host")
     ap.add_argument("cong", type=int)
     ap.add_argument("--camera", default=GIA_LAP)
-    ap.add_argument("--mic", default="gia_lap")
+    ap.add_argument("--mic", default=None, help="mặc định: gia_lap (hoặc tiếng của tệp khi có --tep)")
+    ap.add_argument("--tep", default=None, help="tệp video phát lại (cần ffmpeg)")
+    ap.add_argument("--tao-tep-mau", action="store_true", help="tạo tệp mẫu tại đường dẫn --tep trước khi phát")
     ap.add_argument("--fps", type=int, default=FPS_MAC_DINH)
     ap.add_argument("--gop", type=int, default=GOP_MAC_DINH)
     ap.add_argument("--thoi-gian", type=float, default=30.0)
@@ -47,16 +55,30 @@ def main():
     except OSError as e:
         log(f"Không kết nối được: {e}")
         return
-    if a.camera != GIA_LAP and co_ffmpeg():
-        cam = CameraFfmpeg(a.camera, a.camera, a.fps)
-    else:
-        if a.camera != GIA_LAP:
-            log("Không có ffmpeg: dùng camera giả lập")
-        cam = CameraGiaLap(a.ten, ma, a.fps)
-    sd, _ = nap_sounddevice() if a.mic != "gia_lap" else (None, "")
-    mic, loi = mo_mic(sd, None if a.mic == "gia_lap" or sd is None else int(a.mic), a.mic)
-    if loi or (a.mic != "gia_lap" and sd is None):
-        log("Không mở được micro thật: dùng giả lập")
+    cam = mic = None
+    if a.tep:
+        try:
+            if a.tao_tep_mau:
+                os.makedirs(os.path.dirname(os.path.abspath(a.tep)), exist_ok=True)
+                tao_tep_mau(a.tep, 10)
+                log(f"Đã tạo tệp mẫu {os.path.basename(a.tep)} (10 s)")
+            cam, mic = mo_tep(a.tep, a.fps, lay_tieng=a.mic is None)
+        except OSError as e:
+            log(f"Không mở được tệp video: {e}")
+            cam = mic = None
+    if cam is None:
+        if a.camera != GIA_LAP and co_ffmpeg():
+            cam = CameraFfmpeg(a.camera, a.camera, a.fps)
+        else:
+            if a.camera != GIA_LAP:
+                log("Không có ffmpeg: dùng camera giả lập")
+            cam = CameraGiaLap(a.ten, ma, a.fps)
+    if mic is None:
+        ten_mic = a.mic or "gia_lap"
+        sd, _ = nap_sounddevice() if ten_mic != "gia_lap" else (None, "")
+        mic, loi = mo_mic(sd, None if ten_mic == "gia_lap" or sd is None else int(ten_mic), ten_mic)
+        if loi or (ten_mic != "gia_lap" and sd is None):
+            log("Không mở được micro thật: dùng giả lập")
     log(f"Mã {ma}; camera {cam.mo_ta}")
     log(f"Micro {mic.mo_ta}")
     xong = threading.Event()
