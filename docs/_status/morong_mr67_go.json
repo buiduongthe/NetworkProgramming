@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.7_DatXe",
+    "chuong": 6,
+    "ngon_ngu": [
+      "go"
+    ],
+    "kiem_thu": {
+      "go": "đã chạy"
+    },
+    "ten": "Đặt xe – n người cùng bấm \"Đặt xe\" cho một chỗ (m xe, mỗi xe một chỗ): 4 cách xử lý tranh chấp, sổ kiểm toán đếm trùng chỗ, số thứ tự lần ghi (phien) trong cap_nhat, bản đồ phố, hoạt hình xe",
+    "ghi_chu": "Khung chép từ MR6.6 Go (chỉ đổi đường dẫn gói), nghiệp vụ ở tranhchap/nghiepvu.go, nguoiao.go; giao diện Fyne v2.6.3 (mô-đun gui/, biên dịch trong container như MR6.6, đã chạy demo_gui dưới Xvfb). Kết quả: 1000 người/1 xe khong_khoa 4 thành công, 3 sai phạm; khoa/lac_quan/hang_doi 1 thành công, 0 sai phạm (lac_quan 15 xung đột, 71015 yc/s; hang_doi max 994); 2000 người/10 xe khong_khoa 59/49, ba chế độ kia 10/0 (lac_quan 198 xung đột). Giao diện: khong_khoa 1 xe trễ 0–20 ms, 3 người cùng được báo đặt thành công, 2 người thấy 'đã nhận khách khác' (trùng chỗ 2); 3 xe: mỗi người một xe, xe chạy tới điểm đón rồi điểm đến. Chạy chéo: mô phỏng Go -> máy chủ Python (1000/1 xe khong_khoa 19/18, còn lại 0), mô phỏng Python -> máy chủ Go (1000/1 xe 8/7; 2000/10 xe 34/24, còn lại 0); người gọi xe Go + Python chung máy chủ Python. Đọc thêm: Kung & Robinson 1981 (ACM TODS 6(2)), Coffman và cộng sự 1971 (ACM Computing Surveys 3(2))."
+  }
+]

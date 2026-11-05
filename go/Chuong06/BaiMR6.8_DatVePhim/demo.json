@@ -1,0 +1,26 @@
+{
+  "env": {"LANGUAGE": "vi"},
+  "setup": [["go", "build", "-o", "out/app", "."],
+            ["go", "-C", "gui", "mod", "tidy"],
+            ["go", "-C", "gui", "build", "-o", "../out/app_gui", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "41725"], "background": true, "wait": 0.8},
+    {"name": "mp", "cmd": ["out/app", "mo_phong", "127.0.0.1", "41725", "--n", "500", "--so-sanh"], "timeout": 120, "wait": 0.3},
+    {"name": "qtng", "cmd": ["out/app", "khach", "127.0.0.1", "41725", "dat_lai", "ghe_nong="], "timeout": 10, "wait": 0.1},
+    {"name": "mpng", "cmd": ["out/app", "mo_phong", "127.0.0.1", "41725", "--n", "300", "--lan", "3", "--so-sanh"], "timeout": 120, "wait": 0.3},
+    {"name": "qtttl", "cmd": ["out/app", "khach", "127.0.0.1", "41725", "dat_lai", "ttl_s=3", "ghe_nong=E7"], "timeout": 10, "wait": 0.1},
+    {"name": "A", "cmd": ["out/app", "dat_ve", "An", "127.0.0.1", "41725", "--thoi-gian", "6.8"], "stdin": "@0.5 giu E7\n@5.0 tt\n", "background": true, "wait": 0.3},
+    {"name": "C", "cmd": ["out/app", "dat_ve", "Chi", "127.0.0.1", "41725", "--thoi-gian", "6.4"], "stdin": "@0.6 giu F5 F6\n@4.6 tt\n", "background": true, "wait": 0.3},
+    {"name": "B", "cmd": ["out/app", "dat_ve", "Bình", "127.0.0.1", "41725"], "stdin": "@0.8 giu E7\n@4.2 giu E7\n@4.5 tt\n@5.5 xem\n", "timeout": 20, "wait": 1.0},
+    {"name": "gui", "cmd": ["xvfb-run", "-a", "-s", "-screen 0 2600x1700x24", "out/app_gui", "demo_gui", "127.0.0.1", "41727"], "show": ["xvfb-run", "-a", "out/app_gui", "demo_gui", "127.0.0.1", "41727"], "timeout": 150}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ đặt vé (khoa, giữ 30 s)",
+             "mp": "Cửa sổ 2 – 500 người giữ ghế nóng E7, 4 chế độ",
+             "qtng": "Cửa sổ 3 – quản trị (bỏ ghế nóng)",
+             "mpng": "Cửa sổ 4 – 300 người × 3 lần, nhiều ghế",
+             "qtttl": "Cửa sổ 5 – quản trị (giữ chỗ 3 s)",
+             "A": "Cửa sổ 6 – An giữ E7, không thanh toán kịp",
+             "C": "Cửa sổ 7 – Chi thanh toán sau hạn",
+             "B": "Cửa sổ 8 – Bình mua E7 sau khi An hết hạn",
+             "gui": "Cửa sổ 9 – giao diện Fyne (máy chủ + 3 ứng dụng)"}
+}

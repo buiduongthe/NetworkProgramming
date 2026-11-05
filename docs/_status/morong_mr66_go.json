@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.6_DauGia",
+    "chuong": 6,
+    "ngon_ngu": [
+      "go"
+    ],
+    "kiem_thu": {
+      "go": "đã chạy"
+    },
+    "ten": "Đấu giá trực tuyến – n người cùng tranh một món hàng: máy chủ TCP đa luồng (goroutine mỗi kết nối), 4 cách xử lý tranh chấp (không khóa, khóa loại trừ, lạc quan phiên bản + CAS, hàng đợi một goroutine), sổ kiểm toán, đồng hồ phiên gia hạn chống bắn tỉa, bộ mô phỏng tải có rào xuất phát và pipelining",
+    "ghi_chu": "Bản dòng lệnh chỉ thư viện chuẩn (mô-đun go/), lõi ở gói tranhchap (khung chung 8 bài + nghiệp vụ); ô tài nguyên lưu trong atomic.Pointer/atomic.Uint64 để khong_khoa mất cập nhật mà không có data race (go build -race sạch), khóa ô là kênh đệm 1 chỗ (chờ tối đa 2 s), hang_doi là channel + một goroutine; giao diện Fyne v2.6.3 ở mô-đun lồng gui/ (go.sum sinh trên máy tác giả bằng go mod tidy; trong container biên dịch bằng bản chép gui/ với replace tới bản clone Fyne, đã chạy demo_gui dưới Xvfb, chụp ket_qua_gui.png, ket_qua_gui_tranh_chap.png; giuVe chống cửa sổ trắng; chưa thử GUI trên Windows). Kết quả (500 người × 5 lần, 200 kết nối, trễ 0–2 ms): khong_khoa 414 thành công, 382 sai phạm, 32490 yc/s; khoa 15/0, 595 yc/s, p99 1024 ms; lac_quan 29/0, 55 xung đột, 35847 yc/s; hang_doi 13/0, 601 yc/s, hàng đợi max 499. Phiên 5 s gia hạn 3 s: gia hạn hai lần, An thắng 5.500.000 đ. Giao diện: khong_khoa + trễ 0–20 ms, 3 người cùng '+1 bước' được chấp nhận cùng giá (sai phạm 3). Chạy chéo: mô phỏng Go -> máy chủ Python (khong_khoa 658/635, 3 chế độ còn lại 0 sai phạm) và mô phỏng Python -> máy chủ Go (khong_khoa 134/85, còn lại 0); người trả giá Python + Go chung một phiên trên máy chủ Go. Đọc thêm: Kung & Robinson 1981 (ACM TODS 6(2)), Coffman và cộng sự 1971 (ACM Computing Surveys 3(2))."
+  }
+]
