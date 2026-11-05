@@ -89,6 +89,8 @@ class CuaSoServer:
         tk.Label(g, text="FPS gửi tối đa:", bg=NEN).grid(row=1, column=0, sticky="w")
         self.spin_fps = tk.Spinbox(g, from_=1, to=15, width=5, command=self.ap_fps)
         self.spin_fps.grid(row=1, column=1, sticky="w")
+        self.spin_fps.delete(0, "end")                     # chưa chọn client: hiện giá trị mặc định 10
+        self.spin_fps.insert(0, "10")
         self.spin_fps.bind("<Return>", lambda e: self.ap_fps())
         tk.Label(g, text="Độ phân giải gửi:", bg=NEN).grid(row=2, column=0, sticky="w")
         self.chon_chia = ttk.Combobox(g, state="readonly", width=5, values=["1/1", "1/2", "1/4"])
