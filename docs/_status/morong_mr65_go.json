@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.5_PhatTrucTiep",
+    "chuong": 6,
+    "ngon_ngu": [
+      "go"
+    ],
+    "kiem_thu": {
+      "go": "đã chạy"
+    },
+    "ten": "Phát trực tiếp âm thanh + video 1→n từ camera hoặc tệp video: máy chủ SFU nhân bản gói, khung I/P (zlib + XOR), bộ đệm GOP, xin khung khóa (PLI), đồng bộ tiếng-hình với âm thanh làm đồng hồ chủ, đăng ký theo lớp",
+    "ghi_chu": "Bản dòng lệnh chỉ thư viện chuẩn (mô-đun go/), lõi ở gói tructiep; giao diện Fyne v2.6.3 ở mô-đun lồng gui/ (go.sum sinh trên máy tác giả bằng go mod tidy; trong container biên dịch bằng go.local.mod trỏ tới bản clone, đã chạy demo_gui dưới Xvfb và chụp ket_qua_gui.png, ket_qua_gui_tep.png). Thiết bị: camera/micro/tệp video qua ffmpeg, loa qua ffplay (máy kiểm thử không có webcam/thiết bị âm thanh – đã thử nhánh lùi về giả lập, loa 'chỉ đo mức'); MT19937 giống random.Random của Python nên -mat-goi và nền clapper trùng bản Python. Chạy chéo với Python: (a) máy phát Python + máy chủ Go + người xem Go/Python, (b) máy phát Go + máy chủ Python + người xem Python – đều giải mã I/P, lệch +2/+3 ms khi bật đồng bộ. Kết quả: B vào muộn (bộ đệm GOP bật) khung đầu 121 ms, C (tắt) 1721 ms; D mất 3 %: 4 lần đứng hình, hồi phục sau PLI 96 ms; A lệch +2 ms khi bật, −78 ms khi tắt; phát tệp mẫu mp4 trong giao diện: lệch +2 ms. Đọc thêm: RFC 3550 6.4.1, 3551, 4585 6.3.1, 7667, 6184 mục 8, 8085."
+  }
+]

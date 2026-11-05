@@ -1,0 +1,30 @@
+{
+  "env": {"LANGUAGE": "vi"},
+  "setup": [["go", "build", "-o", "out/app", "."],
+            ["go", "-C", "gui", "mod", "tidy"],
+            ["go", "-C", "gui", "build", "-o", "../out/app_gui", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "41655", "41656"], "background": true, "wait": 0.8,
+     "stdin": "@6.0 bo_dem tat\n@9.5 trang_thai\n"},
+    {"name": "P", "cmd": ["out/app", "phat", "P", "127.0.0.1", "41655", "-thoi-gian", "11"],
+     "background": true, "wait": 0.3},
+    {"name": "B", "cmd": ["out/app", "xem", "B", "127.0.0.1", "41655", "-tre", "3", "-thoi-gian", "9.7"],
+     "background": true, "wait": 0.2},
+    {"name": "C", "cmd": ["out/app", "xem", "C", "127.0.0.1", "41655", "-tre", "6.5", "-thoi-gian", "9.6"],
+     "background": true, "wait": 0.2},
+    {"name": "D", "cmd": ["out/app", "xem", "D", "127.0.0.1", "41655", "-mat-goi", "0.03", "-thoi-gian", "9.5"],
+     "background": true, "wait": 0.2},
+    {"name": "A", "cmd": ["out/app", "xem", "A", "127.0.0.1", "41655", "-thoi-gian", "10", "-ghep", "ket_qua_video.png"],
+     "stdin": "@2 chup 1. DONG BO BAT\n@3.5 dong_bo tat\n@5 chup 2. DONG BO TAT\n@6.5 dong_bo bat\n@7.5 dang_ky am_thanh\n@8.5 dang_ky ca_hai\n@9.5 chup 3. NHAN LAI VIDEO\n",
+     "timeout": 20, "wait": 1.5},
+    {"name": "gui", "cmd": ["xvfb-run", "-a", "-s", "-screen 0 2000x1400x24", "out/app_gui", "demo_gui", "127.0.0.1", "41657", "41658", "ket_qua_gui.png"],
+     "show": ["xvfb-run", "-a", "out/app_gui", "demo_gui", "127.0.0.1", "41657", "41658", "ket_qua_gui.png"], "timeout": 90}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ trung chuyển (SFU, bộ đệm GOP)",
+             "P": "Cửa sổ 2 – máy phát P (clapper giả lập, 10 fps, GOP 20)",
+             "B": "Cửa sổ 3 – người xem B vào muộn 3 s (bộ đệm GOP bật)",
+             "C": "Cửa sổ 4 – người xem C vào muộn 6,5 s (bộ đệm GOP tắt)",
+             "D": "Cửa sổ 5 – người xem D (giả lập mất 3% gói nhận)",
+             "A": "Cửa sổ 6 – người xem A (bật/tắt đồng bộ, chỉ nghe, chụp)",
+             "gui": "Cửa sổ 7 – ứng dụng giao diện Fyne (server, máy phát và 2 người xem)"}
+}
