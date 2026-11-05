@@ -37,10 +37,17 @@ def load():
 
 
 def morong():
-    out = []
+    merged = {}                                  # gộp theo bài: mỗi nhóm/ngôn ngữ có tệp trạng thái riêng
     for f in sorted(glob.glob(os.path.join(ROOT, 'docs', '_status', 'morong*.json'))):
-        out += json.load(open(f, encoding='utf-8'))
-    return sorted(out, key=lambda b: [int(x) for x in re.findall(r'\d+', b['bai'])[:2]])
+        for b in json.load(open(f, encoding='utf-8')):
+            m = merged.setdefault(b['bai'], {'bai': b['bai'], 'chuong': b['chuong'], 'ngon_ngu': [], 'kiem_thu': {}, 'ten': b.get('ten', '')})
+            if b.get('ten') and not m['ten']:
+                m['ten'] = b['ten']
+            for k in b.get('ngon_ngu', []):
+                if k not in m['ngon_ngu']:
+                    m['ngon_ngu'].append(k)
+            m['kiem_thu'].update(b.get('kiem_thu', {}))
+    return sorted(merged.values(), key=lambda b: [int(x) for x in re.findall(r'\d+', b['bai'])[:2]])
 
 
 def morong_table(items, rel=''):
