@@ -4,7 +4,7 @@
 |---|---|
 | Loại | **Bài mở rộng** – không có trong giáo trình, không có mã giả tương ứng |
 | Liên hệ với giáo trình | Chương 6: Bài 6.1 (server đa luồng), Bài 6.4 (server chat nhiều client); Chương 4: Bài 4.1 (UDP); Chương 3: Bài 3.2 (định khung thông điệp) |
-| Thư viện | .NET 10 BCL: `System.Net.Sockets` (TCP, UDP), `System.Threading.Thread`, `BinaryPrimitives`, `System.Text.Json.Nodes`; WAV, Goertzel tự viết |
+| Thư viện | .NET 10 BCL: `System.Net.Sockets` (TCP, UDP), `System.Threading.Thread`, `BinaryPrimitives`, `System.Text.Json.Nodes`; WAV, Goertzel tự viết. Bản giao diện: Windows Forms (`net10.0-windows`), micro/loa qua `winmm.dll` (P/Invoke) – không dùng gói NuGet |
 | Bản ngôn ngữ khác | [Python](../../../python/Chuong06/BaiMR6.2_HoiThoaiAmThanh/), [Go](../../../go/Chuong06/BaiMR6.2_HoiThoaiAmThanh/), [Java](../../../java/Chuong06/BaiMR6.2_HoiThoaiAmThanh/), [Rust](../../../rust/Chuong06/BaiMR6.2_HoiThoaiAmThanh/) |
 
 ## Mục tiêu
@@ -37,10 +37,20 @@ Xây dựng một "phòng họp thoại" thu nhỏ: n client nối tới một s
 - `BaiMR6.2_HoiThoaiAmThanh.csproj` – dự án console `net10.0`; vai trò `server`, `khach`, `phantich`.
 - `Program.cs` – chọn vai trò.
 - `Chung.cs` – hằng số âm thanh, đóng/tách gói RTP (`DongGoiRtp`, `TachRtp`), PCM ↔ byte big-endian, dBFS, thanh đo mức, Goertzel, đọc/ghi WAV (RIFF tự viết), gửi dòng JSON; lớp `BoDemJitter`.
-- `ServerAmThanh.cs` – server: lớp `Khach` (trạng thái mic, độ lợi, bộ đệm), kênh TCP (mỗi client một luồng), luồng nhận UDP, luồng trộn 20 ms, bảng điều khiển đọc stdin.
+- `ServerAmThanh.cs` – server: lớp `Khach` (trạng thái mic, độ lợi, bộ đệm); lớp `PhongAmThanh` (kênh TCP – mỗi client một luồng, luồng nhận UDP, luồng trộn 20 ms, các lệnh `DatKhoaMic`, `DatDoLoi`, `DatAmLuongChung` dùng chung cho bảng điều khiển stdin và nút bấm giao diện; nguồn tiếng server `LayKhungServer`, đầu ra nghe `NgheServer` – bản dòng lệnh để trống); lớp `ServerAmThanh` – bảng điều khiển đọc stdin.
 - `KhachAmThanh.cs` – client: nguồn âm (`NguonSin`, `NguonWav`), vòng 20 ms thu–gửi–nhận–phát, ghi WAV và tệp mốc sự kiện `*_moc.json`.
 - `PhanTichWav.cs` – chia bản ghi theo mốc sự kiện, đo mức từng âm bằng Goertzel, kiểm tra mix-minus.
-- `demo.json`, `ket_qua.txt`, `ket_qua.png` – kịch bản minh họa và kết quả thực thi thật.
+- `demo.json`, `ket_qua.txt`, `ket_qua.png` – kịch bản minh họa và kết quả thực thi thật (bản dòng lệnh).
+- `GiaoDien/` – ứng dụng giao diện WinForms (dự án riêng `BaiMR6.2_GiaoDien.csproj`, `net10.0-windows`; dự án dòng lệnh loại thư mục này ra bằng `<Compile Remove="GiaoDien/**" />`). Biên dịch kèm `../Chung.cs`, `../ServerAmThanh.cs`, `../KhachAmThanh.cs`:
+  - `Program.cs` – vai trò `server_gui`, `client_gui`, `demo`;
+  - `FormServer.cs` – cửa sổ “Bảng điều khiển âm thanh” và lớp `HangKhach` (một hàng client);
+  - `FormKhach.cs` – cửa sổ client;
+  - `KetNoiAmThanh.cs` – phần mạng/âm thanh của client (không phụ thuộc WinForms);
+  - `WinMM.cs` – P/Invoke `waveIn*`/`waveOut*`: `ThuAmWinMM` (thu micro), `PhatAmWinMM` (phát loa), liệt kê micro, `timeBeginPeriod(1)`;
+  - `NguonAm.cs` – `INguonMic`, `MicGiaLap` (sin), `MicThat` (winmm), `DoMuc` (đo dBFS theo cửa sổ 100 ms);
+  - `DieuKhien.cs` – thanh đo mức tự vẽ `ThanhMucAm`, hàm tạo điều khiển, bộ hẹn giờ gom lệnh thanh trượt;
+  - `DemoGui.cs` – kịch bản tự thao tác và chụp `ket_qua_gui.png`;
+  - `demo.json` – kịch bản dạng Windows cho `tools/demo_windows.ps1`.
 
 ## Cách chạy
 Trong thư mục bài (lệnh giống nhau trên Windows và Linux):
@@ -54,9 +64,47 @@ dotnet bin/Release/net10.0/BaiMR6.2_HoiThoaiAmThanh.dll phantich out/ghi_A.wav 4
 ```
 Có thể thay `dotnet bin/Release/net10.0/BaiMR6.2_HoiThoaiAmThanh.dll` bằng `dotnet run --`. Lệnh server: `tat_mic tat_ca`, `tat_mic B`, `bat_mic tat_ca`, `do_loi C 2`, `am_luong_chung 0.5`, `trang_thai`, `thoat`. Lệnh client: `tat_mic`, `bat_mic`, `am_luong 0.5`, `thoat`. Dòng `@t lệnh` chờ tới giây thứ t rồi mới chạy lệnh (dùng cho kịch bản tự động).
 
-Tùy chọn client: `--wav tệp.wav` (nguồn là tệp WAV 16 bit mono 16 kHz, phát lặp), `--mat-goi 0.05` (giả lập mất 5 % gói gửi), `--dem 3` (độ sâu bộ đệm jitter), `--bien-do`, `--thoi-gian`. Bản C# không có micro/loa thật (BCL không có API âm thanh đa nền tảng; trên Windows có thể dùng gói NuGet NAudio) – giống bản Go, chỉ dùng âm tổng hợp hoặc tệp WAV.
+Tùy chọn client: `--wav tệp.wav` (nguồn là tệp WAV 16 bit mono 16 kHz, phát lặp), `--mat-goi 0.05` (giả lập mất 5 % gói gửi), `--dem 3` (độ sâu bộ đệm jitter), `--bien-do`, `--thoi-gian`. Bản dòng lệnh không dùng micro/loa thật (BCL không có API âm thanh đa nền tảng), chỉ dùng âm tổng hợp hoặc tệp WAV; micro/loa thật có trong ứng dụng giao diện (mục dưới, chỉ Windows).
 
 Tái lập kết quả từ thư mục gốc của kho: `python3 tools/demo.py csharp/Chuong06/BaiMR6.2_HoiThoaiAmThanh` (cổng TCP 42620, UDP 42621).
+
+## Ứng dụng giao diện
+![Ứng dụng giao diện](ket_qua_gui.png)
+
+*(Ảnh `ket_qua_gui.png` do vai trò `demo` tự chụp khi chạy trên Windows – xem “Kết quả thực thi”.)*
+
+Hai cửa sổ WinForms, cùng giao thức với bản dòng lệnh nên chạy chéo được với server/client dòng lệnh của mọi ngôn ngữ:
+- **Server – “Bảng điều khiển âm thanh”**: nhóm *Kết nối* (IP, cổng TCP/UDP, Start/Stop Server); *Điều khiển chung* (Mở mic tất cả = gỡ khóa, Tắt mic tất cả = khóa, Âm lượng chung 0–200 %); *Micro của server* (chọn “Giả lập (sin 330 Hz)” hoặc micro thật, Start/Stop Mic, Mic Volume, thanh đo mức) – tiếng server là một nguồn trong bộ trộn (SSRC 0), mọi client đều nghe; *Nghe* (phát tổng tiếng các client ra loa máy server, không gồm tiếng server). Dòng trạng thái “Server đang chạy tại …”, “Số client: n”; mỗi client một hàng: mã/tên, trạng thái mic (mở / tự tắt / bị khóa), thanh đo mức dBFS (10 lần/s), nút Khóa/Gỡ khóa, thanh trượt độ lợi 0–200 %, âm lượng nghe client báo lên, số gói nhận/mất; nhật ký sự kiện cuộn.
+- **Client**: *Kết nối* (IP, cổng, tên, Connect/Disconnect); *Nhận âm thanh* (âm lượng nghe 0–200 %, Start/Stop Audio = phát/không phát ra loa, “Server Vol: xx %”, thanh đo mức tiếng nhận); *Micro* (chọn “Giả lập (sin 440 Hz)” hoặc micro thật, Start/Stop Mic, Mic Volume, thanh đo mức, trạng thái mic do server báo); dòng trạng thái (Đã kết nối / Bị từ chối / Mất kết nối) và số gói gửi/nhận/mất, jitter.
+
+Thông điệp mới (thêm, tương thích ngược – client cũ bỏ qua): server → client `{"loai":"do_loi","gia_tri":g}` một lần sau `chao` và mỗi khi server đổi độ lợi của client đó. Bản dòng lệnh C# cũng gửi thông điệp này (đầu ra không đổi).
+
+**Thiết bị thật hay giả lập.** Ô chọn thiết bị liệt kê các micro do `waveInGetNumDevs`/`waveInGetDevCapsW` trả về, cộng mục “Giả lập”. Chương trình **không** mở micro/loa khi khởi động: micro chỉ mở khi bấm Start Mic, loa khi bấm Start Audio (client) hoặc đánh dấu *Nghe* (server); nhãn cạnh nút cho biết đang dùng “THẬT” hay “giả lập”. Mở micro thật lỗi (bị chặn quyền, thiết bị bận) → tự chuyển sang giả lập và ghi nhật ký; không có loa → vẫn nhận và đo mức. Windows 11: *Settings → Privacy & security → Microphone* phải cho phép ứng dụng desktop dùng micro. Mặc định server nghe `127.0.0.1`; muốn máy khác vào phòng thì nhập IP của card mạng (và mở tường lửa cho hai cổng).
+
+**Luồng xử lý và quy tắc luồng giao diện**
+```
+ luồng giao diện (Application.Run)          luồng mạng                       luồng âm thanh
+ ─────────────────────────────────          ──────────                       ──────────────
+ nút bấm ──► PhongAmThanh.DatKhoaMic ──TCP──► client          micro winmm ──► ThuAmWinMM (sự kiện, 8 bộ đệm 20 ms)
+ kéo thanh trượt ─(gom 300 ms)─► DatDoLoi                                        │ hàng đợi
+ Timer 100 ms ◄── chụp trạng thái (lock)    PhucVu (mỗi client 1 luồng)      VongTron 20 ms: server + client
+     │            ◄── ConcurrentQueue nhật ký NhanUdp ──► bộ đệm jitter ───►   trộn mix-minus ──UDP──► client
+     ▼                                                                        └─► NgheServer ──► PhatAmWinMM ──► loa
+ vẽ hàng client, thanh đo mức
+ Client: Connect = await Task.Run(KetNoi); luồng đọc TCP, luồng nhận UDP, luồng âm thanh 20 ms (thu–gửi, nhận–phát)
+```
+Chỉ luồng giao diện chạm vào điều khiển. Các luồng nền không gọi điều khiển: chúng ghi trạng thái vào đối tượng dùng chung (có khóa) và đẩy nhật ký vào `ConcurrentQueue`; bộ hẹn giờ `System.Windows.Forms.Timer` 100 ms (chạy trên luồng giao diện) đọc ra và vẽ. Thao tác có thể chờ mạng (Connect) chạy bằng `await Task.Run(...)`. Cách khác tương đương là `Control.BeginInvoke` (Bài 5.3). Luồng âm thanh dùng hẹn giờ tuyệt đối 20 ms và `timeBeginPeriod(1)` vì `Thread.Sleep` mặc định trên Windows chỉ chính xác ≈ 15,6 ms.
+
+**Chạy trên Windows** (cần .NET 10 SDK: `winget install Microsoft.DotNet.SDK.10`; không cần thư viện nào khác, không cần ffmpeg cho bài âm thanh):
+```powershell
+cd csharp\Chuong06\BaiMR6.2_HoiThoaiAmThanh\GiaoDien
+dotnet build -c Release
+dotnet run -c Release -- server_gui 127.0.0.1 9000 9001       # cửa sổ server
+dotnet run -c Release -- client_gui 127.0.0.1 9000 A          # mỗi client một cửa sổ (đổi tên B, C…)
+```
+Kịch bản tự động (từ thư mục gốc kho): `powershell -NoProfile -ExecutionPolicy Bypass -File tools\demo_windows.ps1 csharp\Chuong06\BaiMR6.2_HoiThoaiAmThanh\GiaoDien` – chạy `demo 127.0.0.1 42625 42626 ..\ket_qua_gui.png`: một server và ba client (A 440 Hz, B 620 Hz, C 880 Hz, đều giả lập, không mở loa) trong cùng tiến trình; Start Server, server Start Mic (giả lập 330 Hz), Connect, Start Mic; chờ 2 s; server khóa B, kéo độ lợi C lên 150 %, A kéo âm lượng nghe xuống 50 %; B Stop Mic rồi Start Mic → bị từ chối; chờ 2,5 s, in mức dBFS, số gói và chụp 4 cửa sổ (`Control.DrawToBitmap`) thành `ket_qua_gui.png`. Có thể chạy server giao diện với client dòng lệnh (hoặc ngược lại) của bất kỳ ngôn ngữ nào.
+
+**Linux/macOS**: WinForms chỉ chạy trên Windows. Phần không phụ thuộc WinForms (`PhongAmThanh`, `KetNoiAmThanh`, `NguonAm.cs`) là .NET thuần; trên Linux `winmm.dll` không có nên `WinMM.DanhSachMicro()` trả danh sách rỗng và mọi nguồn là giả lập.
 
 ## Kết quả thực thi
 ![Kết quả thực thi](ket_qua.png)
@@ -72,7 +120,13 @@ Kịch bản: B (620 Hz), C (880 Hz), A (440 Hz, giả lập mất 5 % gói gử
 | 6 | A tự đặt âm lượng nghe 0,5 | −27,1 | −21,1 | thêm −6,0 dB |
 | 7 (bản Python: 7, 8) | C tự tắt; server bật tất cả | −27,1 | vắng | C vẫn tắt |
 
-Âm 440 Hz của chính A vắng ở mọi đoạn – mix-minus đúng. Ở lần chạy C#, hai mốc “C tự tắt mic” (6,32 s) và “server bật mic tất cả” cách nhau dưới 0,45 s nên được gộp thành một đoạn (bản Python có hai đoạn 7, 8 với cùng mức đo). Server đếm được số gói mất trong luồng của A đúng bằng số gói A giả lập làm rơi, các khung thiếu được thay bằng khoảng lặng. Jitter trên máy cục bộ chỉ khoảng 0,1–0,5 ms; các client không cạn bộ đệm (3 khung) lần nào trong lần chạy này. Nếu một nhịp bị hệ điều hành lập lịch trễ làm bộ đệm cạn, đoạn chứa lần cạn đó có thêm vài chục ms im lặng và đo thấp hơn vài phần mười dB (một lần chạy thử đo được −21,5 thay vì −21,1 dBFS). Mức nghe in mỗi giây là trung bình của cả giây nên thay đổi dần qua các mốc; bảng phân tích bỏ 0,15 s đầu mỗi đoạn để loại độ trễ (≈ 80 ms: bộ đệm jitter + một nhịp trộn).
+Âm 440 Hz của chính A vắng ở mọi đoạn – mix-minus đúng. Ở lần chạy C#, hai mốc “C tự tắt mic” (6,26 s) và “server bật mic tất cả” cách nhau dưới 0,45 s nên được gộp thành một đoạn (bản Python có hai đoạn 7, 8 với cùng mức đo). Server đếm được số gói mất trong luồng của A đúng bằng số gói A giả lập làm rơi, các khung thiếu được thay bằng khoảng lặng. Jitter trên máy cục bộ chỉ khoảng 0,1–0,5 ms; các client không cạn bộ đệm (3 khung) lần nào trong lần chạy này. Nếu một nhịp bị hệ điều hành lập lịch trễ làm bộ đệm cạn, đoạn chứa lần cạn đó có thêm vài chục ms im lặng và đo thấp hơn vài phần mười dB (một lần chạy thử đo được −21,5 thay vì −21,1 dBFS). Mức nghe in mỗi giây là trung bình của cả giây nên thay đổi dần qua các mốc; bảng phân tích bỏ 0,15 s đầu mỗi đoạn để loại độ trễ (≈ 80 ms: bộ đệm jitter + một nhịp trộn).
+
+**Ứng dụng giao diện – chưa chạy GUI, cần Windows.** Môi trường biên soạn là Linux không có gói tham chiếu Windows Desktop, nên chưa có `ket_qua_gui.png` (không dựng ảnh giả); ảnh sinh ra khi tác giả chạy `tools/demo_windows.ps1` như trên. Đã kiểm tra trên Linux (.NET SDK 10.0.114):
+- toàn bộ mã WinForms biên dịch sạch (không lỗi, không cảnh báo) với các assembly tham chiếu `System.Windows.Forms`/`System.Drawing` của .NET Framework 4.8 (gói mono/reference-assemblies) trong một dự án tạm – kiểm tra kiểu và API, không chạy được cửa sổ;
+- phần không phụ thuộc WinForms chạy thật trong một dự án console tạm: server `PhongAmThanh` có tiếng server giả lập 330 Hz + ba client `KetNoiAmThanh` (440/620/880 Hz, giả lập). Đo bằng Goertzel: mỗi client nghe hai client kia và server ở −15,1 dBFS, không nghe chính mình; server *nghe* ba client −15,1 dBFS, không có 330 Hz; sau khi khóa B, độ lợi C = 2 và A nghe 50 %: A nghe 330 Hz −21,1, 880 Hz −15,1 (= −9,0 + −6,0), 620 Hz vắng; client C nhận `do_loi` = 2 (Server Vol 200 %); B bấm Stop/Start Mic bị từ chối; Stop Server → client báo “Mất kết nối với server”. `winmm.dll` không có trên Linux → 0 micro, `MicThat` ném `DllNotFoundException`, giao diện chuyển sang giả lập.
+
+Bản dòng lệnh sau khi tách lớp `PhongAmThanh` được chạy lại bằng `tools/demo.py`: `ket_qua.txt` chỉ khác bản trước ở số đo thời gian, cổng ngẫu nhiên và mức trung bình mỗi giây; bảng phân tích Goertzel giữ nguyên các mức.
 
 ## Ghi chú
 - Thời gian và số gói có thể chênh vài đơn vị giữa các lần chạy (lịch luồng của hệ điều hành); mức dBFS trong bảng phân tích ổn định tới 0,1 dB.
@@ -80,7 +134,8 @@ Kịch bản: B (620 Hz), C (880 Hz), A (440 Hz, giả lập mất 5 % gói gử
 - Hệ thống thực tế nén âm thanh (Opus, RFC 6716 – khoảng 16–32 kbit/s cho thoại), mã hóa và xác thực gói (SRTP, RFC 3711), khử vọng, tự động cân bằng mức; bài giữ PCM không nén để dễ quan sát. Không có SRTP, bất kỳ ai trên đường truyền đều nghe được và có thể giả gói với SSRC của người khác – kiểm tra địa chỉ nguồn chỉ là lớp phòng vệ tối thiểu.
 - Phép trộn làm tròn bằng `Math.Round` (mặc định làm tròn về số chẵn – giống `round()` của Python) nên luồng trộn trùng từng mẫu với bản Python khi cùng đầu vào. Giả lập mất gói dùng `new Random(mã_client)` – tất định nhưng khác dãy của Python, nên số gói A làm rơi khác bản Python (13 so với 20).
 - Giao thức giống hệt bản Python, Go: đã thử client bản Python (A) cùng client C# (B) với server C# – bản ghi của A (tệp WAV do Python ghi) được `phantich` của C# đọc và cho B −15,1 dBFS, A vắng.
-- Kiểm thử: Linux, .NET SDK 10.0.114 (không có thiết bị âm thanh).
+- Kiểm thử: Linux, .NET SDK 10.0.114 (không có thiết bị âm thanh); ứng dụng giao diện chưa chạy (cần Windows).
+- winmm đổi dữ liệu giữa bộ nhớ quản lý và không quản lý bằng `Marshal`; `WAVEHDR` nằm ở `Marshal.AllocHGlobal` vì trình điều khiển giữ con trỏ tới nó suốt lúc thu/phát. Đồng hồ card âm thanh và đồng hồ máy lệch nhau: `ThuAmWinMM` bỏ khung khi hàng đợi > 4 khung, `PhatAmWinMM` bỏ khung khi đã chờ ≥ 8 khung và chèn 2 khung lặng khi cạn.
 
 ## Bài tập gợi ý
 1. Đổi `--dem` của client thành 1 và chạy kèm `--mat-goi 0.1`; đếm số lần cạn bộ đệm và nghe thử bản ghi. Giải thích sự đánh đổi giữa độ trễ và độ ổn định.
@@ -88,6 +143,8 @@ Kịch bản: B (620 Hz), C (880 Hz), A (440 Hz, giả lập mất 5 % gói gử
 3. Thay phát khoảng lặng khi mất gói bằng lặp lại khung trước (packet loss concealment) và so sánh mức đo được của âm bị mất gói.
 4. Thêm lệnh server `chi_nghe <tên>` (chế độ người nghe) và lệnh client `xin_phat_bieu` (giơ tay) – server duyệt rồi mới gỡ khóa.
 5. Nâng cao: thêm gói báo cáo kiểu RTCP (RFC 3550 mục 6.4) để mỗi client định kỳ báo cho server tỉ lệ mất và jitter của luồng mình nhận; server hiển thị trong `trang_thai`.
+6. (Giao diện) Thêm nút “Giơ tay” ở client: gửi thông điệp mới, server tô sáng hàng của client đó và có nút “Cho nói” (gỡ khóa). Chỉ được sửa điều khiển trong luồng giao diện.
+7. (Giao diện) Vẽ dạng sóng 200 ms gần nhất của tiếng nhận trong cửa sổ client (lấy mẫu từ luồng âm thanh qua hàng đợi, vẽ trong `OnPaint`) và so sánh khi bật/tắt mất gói.
 
 ## Đọc thêm
 - RFC 3550 – *RTP: A Transport Protocol for Real-Time Applications* (header RTP mục 5.1; ước lượng jitter mục 6.4.1; tính số gói mất phụ lục A.3).
@@ -96,5 +153,6 @@ Kịch bản: B (620 Hz), C (880 Hz), A (440 Hz, giả lập mất 5 % gói gử
 - RFC 768 – *User Datagram Protocol*.
 - G. Goertzel, “An Algorithm for the Evaluation of Finite Trigonometric Series”, *The American Mathematical Monthly*, 65(1), 1958, tr. 34–37.
 - Microsoft, *WAVEFORMATEX structure* (định dạng khối `fmt ` của tệp WAV PCM); tài liệu .NET `System.Buffers.Binary.BinaryPrimitives`.
+- Microsoft Learn, *Waveform Audio* (`waveInOpen`, `waveInAddBuffer`, `waveOutWrite`, cấu trúc `WAVEHDR`), *timeBeginPeriod*; *Control.DrawToBitmap*, *Threading in Windows Forms*.
 
 Mã nguồn của bài được viết mới cho kho này.

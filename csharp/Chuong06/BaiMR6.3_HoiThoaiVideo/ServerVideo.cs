@@ -24,6 +24,8 @@ namespace BaiMR6_3;
 // Lệnh bảng điều khiển (stdin; "@t lệnh" = chờ tới giây thứ t):
 //   tat_camera <tên|tat_ca>   bat_camera <tên|tat_ca>   fps_toi_da <tên|tat_ca> <n>
 //   do_phan_giai <tên|tat_ca> <1|2|4>   fps_chung <n>   trang_thai   thoat
+// Phần xử lý phòng nằm trong lớp PhongVideo, dùng chung cho bản dòng lệnh (lớp ServerVideo bên dưới) và bản
+// giao diện (thư mục GiaoDien: lưới camera của mọi client hiển thị ngay trên cửa sổ server).
 class Khach(ushort ma, string ten, Socket conn, IPAddress ip)
 {
     public const int FpsMacDinh = 10;
@@ -90,26 +92,76 @@ class Khach(ushort ma, string ten, Socket conn, IPAddress ip)
     }
 }
 
-static class ServerVideo
+/// <summary>Một phòng video: nhận kết nối, ghép mảnh, ghép lưới và gửi, thực thi quyền điều khiển.
+/// Trạng thái dùng chung được bảo vệ bằng Khoa (bản giao diện cũng khóa Khoa khi đọc ô hình của client).</summary>
+class PhongVideo(Action<string> log)
 {
-    static readonly object khoa = new();
-    static readonly SortedDictionary<ushort, Khach> khach = [];   // mã -> client (theo thứ tự mã)
-    static readonly List<Khach> daRoi = [];
-    static ushort maMoi;
-    static int fpsChung = Khach.FpsMacDinh;   // giới hạn fps đầu ra chung cho mọi người nhận
-    static readonly double t0 = Now;
-    static int congUdp;
+    public readonly object Khoa = new();
+    public readonly SortedDictionary<ushort, Khach> DsKhach = [];   // mã -> client (theo thứ tự mã)
+    public readonly List<Khach> DaRoi = [];
+    ushort maMoi;
+    public int FpsChung { get; private set; } = Khach.FpsMacDinh;   // giới hạn fps đầu ra chung cho mọi người nhận
+    readonly double t0 = Now;
+    int congUdp;
+    TcpListener? srv;
+    Socket? udp;
+    volatile bool dung;
 
-    static void Log(string text) => Console.WriteLine($"[server] {text}");
+    public double ThoiGian => Now - t0;
+    void Log(string text) => log(text);
 
-    static void PhatSuKien(string text)
+    void PhatSuKien(string text)
     {
         Log($"  => {text}");
-        foreach (var k in khach.Values.ToList()) k.Gui(new JsonObject { ["loai"] = "su_kien", ["noi_dung"] = text });
+        foreach (var k in DsKhach.Values.ToList()) k.Gui(new JsonObject { ["loai"] = "su_kien", ["noi_dung"] = text });
+    }
+
+    // ---------------------------------------------------------------- Khởi động / dừng
+    public void BatDau(string host, int congTcp, int congUdp)
+    {
+        this.congUdp = congUdp;
+        srv = new TcpListener(IPAddress.Parse(host), congTcp);
+        srv.Start();
+        udp = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp) { ReceiveBufferSize = 1 << 20 };   // mảnh đến dồn dập
+        try { udp.Bind(new IPEndPoint(IPAddress.Parse(host), congUdp)); }
+        catch { srv.Stop(); udp.Close(); throw; }
+        Log($"TCP {host}:{congTcp} điều khiển; UDP :{congUdp} video");
+        Log($"Khung {Rong}x{Cao} RGB {Rong * Cao * 3} B, nén zlib, mảnh ≤ 1200 B");
+        void Bg(Action f) => new Thread(() => f()) { IsBackground = true }.Start();
+        var l = srv;
+        var u = udp;
+        Bg(() =>
+        {
+            while (!dung)
+            {
+                Socket c;
+                try { c = l.AcceptSocket(); }
+                catch (Exception e) when (e is SocketException || e is ObjectDisposedException || e is InvalidOperationException) { return; }
+                c.NoDelay = true;
+                Bg(() => PhucVu(c));
+            }
+        });
+        Bg(() => NhanUdp(u));
+        Bg(() => VongGui(u));
+    }
+
+    /// <summary>Dừng phòng (bản giao diện: nút STOP SERVER).</summary>
+    public void Dung()
+    {
+        dung = true;
+        srv?.Stop();
+        udp?.Close();
+        List<Khach> ds;
+        lock (Khoa) ds = DsKhach.Values.ToList();
+        foreach (var k in ds)
+        {
+            try { k.Conn.Shutdown(SocketShutdown.Both); } catch (Exception) { }
+            k.Conn.Close();
+        }
     }
 
     // ---------------------------------------------------------------- Kênh điều khiển TCP
-    static void PhucVu(Socket conn)
+    void PhucVu(Socket conn)
     {
         var addr = (IPEndPoint)conn.RemoteEndPoint!;
         var f = new StreamReader(new NetworkStream(conn), Encoding.UTF8);
@@ -119,36 +171,36 @@ static class ServerVideo
             var tin = JsonNode.Parse(f.ReadLine() ?? "{}") as JsonObject;
             string? ten = tin?["ten"]?.GetValue<string>();
             if (tin?["loai"]?.GetValue<string>() != "vao" || string.IsNullOrEmpty(ten)) return;
-            lock (khoa)
+            lock (Khoa)
             {
                 k = new Khach(++maMoi, ten.Length > 8 ? ten[..8] : ten, conn, addr.Address);
-                khach[k.Ma] = k;
+                DsKhach[k.Ma] = k;
             }
             k.Gui(new JsonObject { ["loai"] = "chao", ["ma"] = k.Ma, ["cong_udp"] = congUdp, ["rong"] = Rong, ["cao"] = Cao });
             Log($"#{k.Ma} {k.Ten} vào phòng từ {addr.Address}:{addr.Port}");
-            lock (khoa)
+            lock (Khoa)
             {
                 k.GuiCamera();
-                k.GuiNhan(fpsChung);
+                k.GuiNhan(FpsChung);
                 PhatSuKien($"{k.Ten} vào phòng");
             }
             string? dong;
             while ((dong = f.ReadLine()) != null)
             {
                 var t = JsonNode.Parse(dong)!.AsObject();
-                lock (khoa) XuLyTinClient(k, t);
+                lock (Khoa) XuLyTinClient(k, t);
             }
         }
         catch (Exception e) when (e is IOException || e is SocketException || e is System.Text.Json.JsonException ||
-                                  e is InvalidOperationException || e is FormatException) { }
+                                  e is InvalidOperationException || e is FormatException || e is ObjectDisposedException) { }
         finally
         {
             if (k != null)
             {
-                lock (khoa)
+                lock (Khoa)
                 {
-                    khach.Remove(k.Ma);
-                    daRoi.Add(k);
+                    DsKhach.Remove(k.Ma);
+                    DaRoi.Add(k);
                     Log($"#{k.Ma} {k.Ten} rời phòng");
                     PhatSuKien($"{k.Ten} rời phòng");
                 }
@@ -157,7 +209,7 @@ static class ServerVideo
         }
     }
 
-    static void XuLyTinClient(Khach k, JsonObject tin)
+    void XuLyTinClient(Khach k, JsonObject tin)
     {
         switch (tin["loai"]?.GetValue<string>())
         {
@@ -183,13 +235,13 @@ static class ServerVideo
                 k.NhanFps = Math.Clamp(tin["fps"]?.GetValue<int>() ?? k.NhanFps, 1, 30);
                 k.NhanChia = (tin["chia"]?.GetValue<int>() ?? k.NhanChia) == 2 ? 2 : 1;
                 Log($"{k.Ten} chọn nhận {k.NhanFps} fps, độ phân giải 1/{k.NhanChia}");
-                k.GuiNhan(fpsChung);
+                k.GuiNhan(FpsChung);
                 break;
         }
     }
 
     // ---------------------------------------------------------------- Kênh dữ liệu UDP
-    static void NhanUdp(Socket sock)
+    void NhanUdp(Socket sock)
     {
         var buf = new byte[2048];
         while (true)
@@ -197,14 +249,15 @@ static class ServerVideo
             EndPoint from = new IPEndPoint(IPAddress.Any, 0);
             int n;
             try { n = sock.ReceiveFrom(buf, ref from); }
-            catch (SocketException) { continue; }
+            catch (SocketException) when (!dung) { continue; }
+            catch (Exception e) when (e is SocketException || e is ObjectDisposedException) { return; }   // đã Dung()
             var addr = (IPEndPoint)from;
             var h = TachHeader(buf.AsSpan(0, n));
             if (h == null) continue;
             double bayGio = Now;
-            lock (khoa)
+            lock (Khoa)
             {
-                if (!khach.TryGetValue(h.Ma, out var k)) continue;
+                if (!DsKhach.TryGetValue(h.Ma, out var k)) continue;
                 if (k.Udp == null && addr.Address.Equals(k.Ip))
                 {
                     k.Udp = addr;
@@ -243,7 +296,7 @@ static class ServerVideo
 
     // ---------------------------------------------------------------- Ghép lưới và gửi
     /// <summary>Ghép ô của mọi client thành lưới c cột × r hàng (c = ⌈√n⌉).</summary>
-    static (byte[] Anh, int W, int H) GhepLuoi(List<Khach> ds)
+    (byte[] Anh, int W, int H) GhepLuoi(List<Khach> ds)
     {
         int n = Math.Max(1, ds.Count);
         int cot = (int)Math.Ceiling(Math.Sqrt(n)), hang = (n + cot - 1) / cot;
@@ -262,18 +315,18 @@ static class ServerVideo
 
     /// <summary>Mỗi 5 ms kiểm tra: người nhận nào tới hạn (theo fps nhận) thì ghép lưới, thu nhỏ theo độ phân giải
     /// nhận, nén, chia mảnh và gửi. Mỗi giây tính lại fps, kbit/s.</summary>
-    static void VongGui(Socket sock)
+    void VongGui(Socket sock)
     {
         double mocDo = Now;
-        while (true)
+        while (!dung)
         {
             double bayGio = Now;
-            lock (khoa)
+            lock (Khoa)
             {
-                var ds = khach.Values.Where(k => k.O != null).ToList();
-                foreach (var k in khach.Values)
+                var ds = DsKhach.Values.Where(k => k.O != null).ToList();
+                foreach (var k in DsKhach.Values)
                 {
-                    int fps = Math.Min(k.NhanFps, fpsChung);
+                    int fps = Math.Min(k.NhanFps, FpsChung);
                     if (k.Udp == null || ds.Count == 0 || bayGio < k.HanGuiRa) continue;
                     k.HanGuiRa = Math.Max(k.HanGuiRa + 1.0 / fps, bayGio);
                     var (anh, w, h) = GhepLuoi(ds);
@@ -281,7 +334,7 @@ static class ServerVideo
                     var nen = Nen(anh);
                     foreach (var g in ChiaManh(MaServer, k.SoKhungRa, w, h, nen))
                     {
-                        try { sock.SendTo(g, k.Udp); } catch (SocketException) { }
+                        try { sock.SendTo(g, k.Udp); } catch (Exception e) when (e is SocketException || e is ObjectDisposedException) { }
                     }
                     k.SoKhungRa++;
                     k.DemRa++;
@@ -289,7 +342,7 @@ static class ServerVideo
                 }
                 if (bayGio - mocDo >= 1.0)
                 {
-                    foreach (var k in khach.Values)
+                    foreach (var k in DsKhach.Values)
                     {
                         (k.FpsVao, k.KbpsVao) = (k.DemKhung, k.DemByte * 8 / 1000.0);
                         (k.FpsRa, k.KbpsRa) = (k.DemRa, k.ByteRa * 8 / 1000.0);
@@ -302,57 +355,81 @@ static class ServerVideo
         }
     }
 
-    // ---------------------------------------------------------------- Bảng điều khiển
-    static List<Khach> Chon(string ten) => khach.Values.Where(k => ten == "tat_ca" || k.Ten == ten).ToList();
+    // ---------------------------------------------------------------- Lệnh điều khiển (bảng điều khiển / nút bấm)
+    public List<Khach> Chon(string ten)
+    {
+        lock (Khoa) return DsKhach.Values.Where(k => ten == "tat_ca" || k.Ten == ten).ToList();
+    }
 
-    static bool LenhServer(string dong)
+    /// <summary>Server tắt (tat = true) hoặc bật lại camera của các client ds; ai: tên hiển thị trong sự kiện.</summary>
+    public void DatCamera(List<Khach> ds, bool tat, string ai)
+    {
+        lock (Khoa)
+        {
+            foreach (var k in ds)
+            {
+                k.ServerTat = tat;
+                k.GuiCamera();
+            }
+            if (tat) PhatSuKien($"server tắt camera {ai}");
+            else
+            {
+                var vanTat = ds.Where(k => k.TuTat).Select(k => k.Ten).ToList();   // quy tắc 3
+                string them = vanTat.Count > 0 ? $" ({string.Join(", ", vanTat)} vẫn tự tắt)" : "";
+                PhatSuKien($"server bật camera {ai}{them}");
+            }
+        }
+    }
+
+    public void DatFpsToiDa(List<Khach> ds, int fps, string ai)
+    {
+        lock (Khoa)
+        {
+            foreach (var k in ds)
+            {
+                k.FpsToiDa = Math.Clamp(fps, 1, 30);
+                k.GuiCamera();
+            }
+            PhatSuKien($"server giới hạn {ai} gửi tối đa {fps} fps");
+        }
+    }
+
+    public void DatDoPhanGiai(List<Khach> ds, int chia, string ai)
+    {
+        lock (Khoa)
+        {
+            foreach (var k in ds)
+            {
+                k.Chia = chia;
+                k.GuiCamera();
+            }
+            PhatSuKien($"server đặt độ phân giải {ai} = 1/{chia}");
+        }
+    }
+
+    public void DatFpsChung(int fps)
+    {
+        lock (Khoa)
+        {
+            FpsChung = Math.Clamp(fps, 1, 30);
+            foreach (var k in DsKhach.Values) k.GuiNhan(FpsChung);
+            PhatSuKien($"server đặt fps chung tối đa {FpsChung}");
+        }
+    }
+
+    /// <summary>Thực hiện một dòng lệnh bảng điều khiển; trả false khi gặp "thoat".</summary>
+    public bool Lenh(string dong)
     {
         var p = dong.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         if (p.Length == 0) return true;
-        Log($"t={F(Now - t0, "F1")}s > {dong}");
-        lock (khoa)
+        Log($"t={F(ThoiGian, "F1")}s > {dong}");
+        lock (Khoa)
         {
             string ai = p.Length > 1 && p[1] == "tat_ca" ? "tất cả" : p.Length > 1 ? p[1] : "";
-            if ((p[0] == "tat_camera" || p[0] == "bat_camera") && p.Length == 2)
-            {
-                var ds = Chon(p[1]);
-                foreach (var k in ds)
-                {
-                    k.ServerTat = p[0] == "tat_camera";
-                    k.GuiCamera();
-                }
-                if (p[0] == "tat_camera") PhatSuKien($"server tắt camera {ai}");
-                else
-                {
-                    var vanTat = ds.Where(k => k.TuTat).Select(k => k.Ten).ToList();   // quy tắc 3
-                    string them = vanTat.Count > 0 ? $" ({string.Join(", ", vanTat)} vẫn tự tắt)" : "";
-                    PhatSuKien($"server bật camera {ai}{them}");
-                }
-            }
-            else if (p[0] == "fps_toi_da" && p.Length == 3)
-            {
-                foreach (var k in Chon(p[1]))
-                {
-                    k.FpsToiDa = Math.Clamp(int.Parse(p[2]), 1, 30);
-                    k.GuiCamera();
-                }
-                PhatSuKien($"server giới hạn {ai} gửi tối đa {p[2]} fps");
-            }
-            else if (p[0] == "do_phan_giai" && p.Length == 3 && p[2] is "1" or "2" or "4")
-            {
-                foreach (var k in Chon(p[1]))
-                {
-                    k.Chia = int.Parse(p[2]);
-                    k.GuiCamera();
-                }
-                PhatSuKien($"server đặt độ phân giải {ai} = 1/{p[2]}");
-            }
-            else if (p[0] == "fps_chung" && p.Length == 2)
-            {
-                fpsChung = Math.Clamp(int.Parse(p[1]), 1, 30);
-                foreach (var k in khach.Values) k.GuiNhan(fpsChung);
-                PhatSuKien($"server đặt fps chung tối đa {fpsChung}");
-            }
+            if ((p[0] == "tat_camera" || p[0] == "bat_camera") && p.Length == 2) DatCamera(Chon(p[1]), p[0] == "tat_camera", ai);
+            else if (p[0] == "fps_toi_da" && p.Length == 3) DatFpsToiDa(Chon(p[1]), int.Parse(p[2]), ai);
+            else if (p[0] == "do_phan_giai" && p.Length == 3 && p[2] is "1" or "2" or "4") DatDoPhanGiai(Chon(p[1]), int.Parse(p[2]), ai);
+            else if (p[0] == "fps_chung" && p.Length == 2) DatFpsChung(int.Parse(p[1]));
             else if (p[0] == "trang_thai") InTrangThai();
             else if (p[0] == "thoat") return false;
             else Log("lệnh không hợp lệ");
@@ -360,55 +437,50 @@ static class ServerVideo
         return true;
     }
 
-    static void InTrangThai()
+    public void InTrangThai()
     {
-        Log($"Trạng thái: {khach.Count} client, fps chung {fpsChung}");
-        Log("                     giới hạn vào        ra (lưới)");
-        Log(" #  tên camera       fps 1/n  fps  kbit  fps  kbit");
-        foreach (var k in khach.Values)
-            Log($"{k.Ma,2}  {k.Ten,-3} {k.LyDo(),-12} {k.FpsToiDa,3} {k.Chia,3} {F(k.FpsVao, "F0"),4}" +
-                $" {F(k.KbpsVao, "F0"),5} {F(k.FpsRa, "F0"),4} {F(k.KbpsRa, "F0"),5}");
-    }
-
-    static void InTongKet()
-    {
-        Log("Tổng kết luồng vào (từ client tới server):");
-        Log(" #  tên mảnh khung hỏng mảnh mất  bỏ:tắt vượt fps");
-        Log("        nhận    đủ        mất hẳn");
-        foreach (var k in khach.Values.Concat(daRoi).OrderBy(k => k.Ma))
+        lock (Khoa)
         {
-            var g = k.Ghep;
-            Log($"{k.Ma,2}  {k.Ten,-3} {g.ManhNhan,4} {g.KhungDu,5} {g.KhungHong,4} {g.ManhMat,4}" +
-                $" {g.KhungMatHan,4} {k.BoTat,6} {k.BoVuotFps,6}");
+            Log($"Trạng thái: {DsKhach.Count} client, fps chung {FpsChung}");
+            Log("                     giới hạn vào        ra (lưới)");
+            Log(" #  tên camera       fps 1/n  fps  kbit  fps  kbit");
+            foreach (var k in DsKhach.Values)
+                Log($"{k.Ma,2}  {k.Ten,-3} {k.LyDo(),-12} {k.FpsToiDa,3} {k.Chia,3} {F(k.FpsVao, "F0"),4}" +
+                    $" {F(k.KbpsVao, "F0"),5} {F(k.FpsRa, "F0"),4} {F(k.KbpsRa, "F0"),5}");
         }
     }
 
+    public void InTongKet()
+    {
+        lock (Khoa)
+        {
+            Log("Tổng kết luồng vào (từ client tới server):");
+            Log(" #  tên mảnh khung hỏng mảnh mất  bỏ:tắt vượt fps");
+            Log("        nhận    đủ        mất hẳn");
+            foreach (var k in DsKhach.Values.Concat(DaRoi).OrderBy(k => k.Ma))
+            {
+                var g = k.Ghep;
+                Log($"{k.Ma,2}  {k.Ten,-3} {g.ManhNhan,4} {g.KhungDu,5} {g.KhungHong,4} {g.ManhMat,4}" +
+                    $" {g.KhungMatHan,4} {k.BoTat,6} {k.BoVuotFps,6}");
+            }
+        }
+    }
+}
+
+/// <summary>Bản dòng lệnh: một phòng + bảng điều khiển đọc lệnh từ stdin.</summary>
+static class ServerVideo
+{
     public static int Run(string[] a)
     {
         string host = a.Length > 0 ? a[0] : "127.0.0.1";
         int congTcp = a.Length > 1 ? int.Parse(a[1]) : 41630;
-        congUdp = a.Length > 2 ? int.Parse(a[2]) : 41631;
-        var srv = new TcpListener(IPAddress.Parse(host), congTcp);
-        srv.Start();
-        var udp = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp) { ReceiveBufferSize = 1 << 20 };   // mảnh đến dồn dập
-        udp.Bind(new IPEndPoint(IPAddress.Parse(host), congUdp));
-        Log($"TCP {host}:{congTcp} điều khiển; UDP :{congUdp} video");
-        Log($"Khung {Rong}x{Cao} RGB {Rong * Cao * 3} B, nén zlib, mảnh ≤ 1200 B");
+        int congUdp = a.Length > 2 ? int.Parse(a[2]) : 41631;
+        void Log(string text) => Console.WriteLine($"[server] {text}");
+        var phong = new PhongVideo(Log);
+        phong.BatDau(host, congTcp, congUdp);
         var dung = new ManualResetEventSlim();
         Console.CancelKeyPress += (_, e) => { e.Cancel = true; dung.Set(); };
-        void Bg(Action f) => new Thread(() => f()) { IsBackground = true }.Start();
-        Bg(() =>
-        {
-            while (true)
-            {
-                Socket c = srv.AcceptSocket();
-                c.NoDelay = true;
-                Bg(() => PhucVu(c));
-            }
-        });
-        Bg(() => NhanUdp(udp));
-        Bg(() => VongGui(udp));
-        Bg(() =>
+        new Thread(() =>
         {
             string? dong;
             while ((dong = Console.ReadLine()) != null)
@@ -419,19 +491,19 @@ static class ServerVideo
                     int sp = dong.IndexOf(' ');
                     string moc = sp < 0 ? dong : dong[..sp];
                     dong = sp < 0 ? "" : dong[(sp + 1)..];
-                    double cho = double.Parse(moc[1..], CultureInfo.InvariantCulture) - (Now - t0);
+                    double cho = double.Parse(moc[1..], CultureInfo.InvariantCulture) - phong.ThoiGian;
                     if (cho > 0) Thread.Sleep(TimeSpan.FromSeconds(cho));
                 }
-                if (dong != "" && !LenhServer(dong))
+                if (dong != "" && !phong.Lenh(dong))
                 {
                     dung.Set();
                     return;
                 }
             }
-        });
+        }) { IsBackground = true }.Start();
         dung.Wait();
         Log("Dừng server (Ctrl+C)");
-        lock (khoa) InTongKet();
+        phong.InTongKet();
         return 0;
     }
 }

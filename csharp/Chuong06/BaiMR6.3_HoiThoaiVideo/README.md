@@ -4,7 +4,7 @@
 |---|---|
 | Loại | **Bài mở rộng** – không có trong giáo trình, không có mã giả tương ứng |
 | Liên hệ với giáo trình | Bài mở rộng MR6.2 (hội thoại âm thanh); Chương 6: Bài 6.1 (server đa luồng), Bài 6.4 (server chat); Chương 4: Bài 4.1 (UDP); Chương 3: Bài 3.2 (định khung thông điệp) |
-| Thư viện | .NET 10 BCL: `System.Net.Sockets`, `System.Threading.Thread`, `System.IO.Compression.ZLibStream`, `BinaryPrimitives`, `System.Text.Json.Nodes`; PNG, CRC-32, phông chữ tự viết |
+| Thư viện | .NET 10 BCL: `System.Net.Sockets`, `System.Threading.Thread`, `System.IO.Compression.ZLibStream`, `BinaryPrimitives`, `System.Text.Json.Nodes`; PNG, CRC-32, phông chữ tự viết. Bản giao diện: Windows Forms (`net10.0-windows`), camera thật qua tiến trình `ffmpeg` – không dùng gói NuGet |
 | Bản ngôn ngữ khác | [Python](../../../python/Chuong06/BaiMR6.3_HoiThoaiVideo/), [Go](../../../go/Chuong06/BaiMR6.3_HoiThoaiVideo/), [Java](../../../java/Chuong06/BaiMR6.3_HoiThoaiVideo/), [Rust](../../../rust/Chuong06/BaiMR6.3_HoiThoaiVideo/) |
 
 ## Mục tiêu
@@ -35,9 +35,18 @@ Cùng ý tưởng với MR6.2 nhưng cho hình ảnh: n client gửi khung hình
 - `BaiMR6.3_HoiThoaiVideo.csproj` – dự án console `net10.0`; vai trò `server` hoặc `khach`.
 - `Program.cs` – chọn vai trò.
 - `Chung.cs` – header datagram (`ChiaManh`, `TachHeader`, `GoiGiu`), phông chữ bitmap 5×7, tô/vẽ chữ, thu nhỏ/phóng to, nén/giải nén zlib có giới hạn, `GhiPng` (PNG viết tay, CRC-32 tự tính); lớp `GhepKhung`, `CameraTongHop`.
-- `ServerVideo.cs` – server: lớp `Khach`, kênh TCP, luồng nhận UDP (ghép mảnh, kiểm tra quyền, vẽ ô), luồng ghép lưới và gửi theo hạn của từng người nhận, bảng điều khiển.
+- `ServerVideo.cs` – server: lớp `Khach`; lớp `PhongVideo` (kênh TCP, luồng nhận UDP – ghép mảnh, kiểm tra quyền, vẽ ô; luồng ghép lưới và gửi theo hạn của từng người nhận; các lệnh `DatCamera`, `DatFpsToiDa`, `DatDoPhanGiai`, `DatFpsChung` dùng chung cho bảng điều khiển stdin và nút bấm giao diện); lớp `ServerVideo` – bảng điều khiển đọc stdin.
 - `KhachVideo.cs` – client: vòng gửi theo fps cho phép, luồng nhận lưới, lệnh `chup`, ghép ảnh chụp (`--ghep`).
-- `demo.json`, `ket_qua.txt`, `ket_qua.png` – kịch bản và kết quả thực thi thật; `ket_qua_video.png` – 5 ảnh lưới do client A chụp trong lần chạy đó.
+- `demo.json`, `ket_qua.txt`, `ket_qua.png` – kịch bản và kết quả thực thi thật (bản dòng lệnh); `ket_qua_video.png` – 5 ảnh lưới do client A chụp trong lần chạy đó.
+- `GiaoDien/` – ứng dụng giao diện WinForms (dự án riêng `BaiMR6.3_GiaoDien.csproj`, `net10.0-windows`; dự án dòng lệnh loại thư mục này ra bằng `<Compile Remove="GiaoDien/**" />`). Biên dịch kèm `../Chung.cs`, `../ServerVideo.cs`:
+  - `Program.cs` – vai trò `server_gui`, `client_gui`, `demo`;
+  - `FormServer.cs` – cửa sổ “Camera Server” (lưới 4×4, danh sách client, điều khiển, nhật ký);
+  - `FormKhach.cs` – cửa sổ “Camera Client” (kết nối, chọn camera, xem trước, lưới nhận);
+  - `KetNoiVideo.cs` – phần mạng của client (không phụ thuộc WinForms): gửi theo fps cho phép, nhận và ghép lưới, số liệu mỗi giây;
+  - `CameraFfmpeg.cs` – `INguonHinh`, `CameraGiaLap` (khung tổng hợp), `CameraFfmpeg` (đọc khung RGB thô từ ffmpeg, liệt kê camera DirectShow / `/dev/video*`);
+  - `DieuKhien.cs` – ô hình tự vẽ `OHinh`, đổi RGB → `Bitmap` bằng `LockBits`, hàm tạo điều khiển;
+  - `DemoGui.cs` – kịch bản tự thao tác và chụp `ket_qua_gui.png`;
+  - `demo.json` – kịch bản dạng Windows cho `tools/demo_windows.ps1`.
 
 ## Cách chạy
 Trong thư mục bài (lệnh giống nhau trên Windows và Linux):
@@ -50,9 +59,46 @@ dotnet bin/Release/net10.0/BaiMR6.3_HoiThoaiVideo.dll khach A 127.0.0.1 9000 --t
 ```
 Có thể thay `dotnet bin/Release/net10.0/BaiMR6.3_HoiThoaiVideo.dll` bằng `dotnet run --`. Lệnh server: `tat_camera tat_ca`, `tat_camera B`, `bat_camera tat_ca`, `fps_toi_da B 2`, `do_phan_giai C 4`, `fps_chung 5`, `trang_thai`, `thoat`. Lệnh client: `tat_camera`, `bat_camera`, `nhan_fps 5`, `nhan_do_phan_giai 2`, `chup <nhãn>` (lưu `out/chup_N.png`), `thoat`. Dòng `@t lệnh` chờ tới giây thứ t. Nhãn ảnh chụp chỉ vẽ được chữ in hoa không dấu, số và vài ký hiệu (phông 5×7 tự định nghĩa).
 
-Tùy chọn client: `--fps 10` (tốc độ khung camera), `--mat-goi 0.02` (giả lập mất 2 % mảnh gửi), `--thoi-gian`. Bản C# không có camera thật (BCL không có API camera; trên Windows có thể dùng Media Foundation qua gói NuGet) – chỉ dùng camera tổng hợp.
+Tùy chọn client: `--fps 10` (tốc độ khung camera), `--mat-goi 0.02` (giả lập mất 2 % mảnh gửi), `--thoi-gian`. Bản dòng lệnh không dùng camera thật (BCL không có API camera), chỉ dùng camera tổng hợp; camera thật có trong ứng dụng giao diện (mục dưới) qua tiến trình ffmpeg.
 
 Tái lập kết quả từ thư mục gốc của kho: `python3 tools/demo.py csharp/Chuong06/BaiMR6.3_HoiThoaiVideo` (cổng TCP 42630, UDP 42631).
+
+## Ứng dụng giao diện
+![Ứng dụng giao diện](ket_qua_gui.png)
+
+*(Ảnh `ket_qua_gui.png` do vai trò `demo` tự chụp khi chạy trên Windows – xem “Kết quả thực thi”.)*
+
+Không thêm thông điệp mới; hai cửa sổ dùng đúng giao thức của bản dòng lệnh nên chạy chéo được với mọi ngôn ngữ.
+- **Server – “Camera Server”**: lưới 4×4 ô, mỗi client một ô (ảnh 160×120 của client, tên, fps nhận được, kbit/s, giới hạn gửi; chấm đỏ khi camera tắt; viền vàng = client đang chọn – bấm vào ô để chọn). Khung phải: danh sách client, nút *Tắt camera*/*Bật camera* (khóa của server) cho client đang chọn, *fps gửi tối đa* 1–15, *độ phân giải gửi* 1/1, 1/2, 1/4, *fps chung* 1–15, nhật ký, IP/cổng, START SERVER/STOP SERVER; thanh trạng thái dưới cùng.
+- **Client – “Camera Client”**: *Kết nối server* (IP, cổng, tên, Kết nối/Ngắt kết nối); *Camera* (chọn camera thật hoặc “Camera giả lập”, START/CANCEL = tự bật/tắt camera); khung xem trước camera của mình; khung *lưới nhận từ server* với *fps nhận* và *độ phân giải nhận* 1/1, 1/2; thanh trạng thái “Đang truyền dữ liệu camera… | gửi x fps, y kbit/s | nhận …”.
+
+**Camera thật qua ffmpeg.** Lúc mở cửa sổ, client chạy `ffmpeg -hide_banner -list_devices true -f dshow -i dummy` (trên luồng nền) và đọc các dòng `"Tên" (video)` ở stderr để điền danh sách – lệnh này **không** bật camera. Chỉ khi bấm START với một camera thật, chương trình mới chạy
+`ffmpeg -f dshow -i video="Tên" -vf scale=160:120,fps=15 -pix_fmt rgb24 -f rawvideo pipe:1`
+và đọc từng khung đúng 57 600 byte từ stdout (`Stream.ReadExactly`), đưa vào đúng đường gửi sẵn có (thu nhỏ theo server, nén zlib, chia mảnh). Trên Linux dùng `-f v4l2 -i /dev/videoN`. Không có ffmpeg, không có camera hoặc ffmpeg dừng giữa chừng (rút camera) → thông báo trên thanh trạng thái và dùng “Camera giả lập”; nhãn trong nhóm *Camera* luôn ghi rõ “THẬT” hay “giả lập”. Windows 11: *Settings → Privacy & security → Camera* phải cho phép ứng dụng desktop.
+
+**Luồng xử lý và quy tắc luồng giao diện**
+```
+ luồng giao diện                         luồng mạng                              luồng camera
+ ───────────────                         ──────────                              ────────────
+ nút/thanh trượt ─► PhongVideo.Dat* ─TCP─► client      ffmpeg (tiến trình) ──stdout──► CameraFfmpeg.DocKhung (khung mới nhất)
+ Timer 100 ms ◄── chụp ô hình (lock, sao chép)          NhanUdp: ghép mảnh ─► Khach.O        │
+     │        ◄── ConcurrentQueue nhật ký               VongGui: ghép lưới, nén ─UDP─► client  ▼
+     ▼                                                                    Client VongGui: theo fps ─► thu nhỏ, nén, chia mảnh ─UDP─► server
+ RGB ─LockBits─► Bitmap ─► OHinh.OnPaint
+ Client: Kết nối = await Task.Run(KetNoi); liệt kê camera = await Task.Run(DanhSach)
+```
+Chỉ luồng giao diện chạm vào điều khiển: các luồng nền chỉ ghi trạng thái (có khóa) và đẩy nhật ký vào `ConcurrentQueue`; bộ hẹn giờ `System.Windows.Forms.Timer` 100 ms trên luồng giao diện sao chép ô hình trong khóa rồi mới đổi sang `Bitmap` và vẽ (ngoài khóa). Việc có thể chờ lâu (kết nối, chạy ffmpeg để liệt kê) dùng `await Task.Run(...)`.
+
+**Chạy trên Windows** (cần .NET 10 SDK `winget install Microsoft.DotNet.SDK.10`; muốn dùng camera thật thì cài ffmpeg: `winget install -e --id Gyan.FFmpeg`, mở lại cửa sổ dòng lệnh để PATH có `ffmpeg`):
+```powershell
+cd csharp\Chuong06\BaiMR6.3_HoiThoaiVideo\GiaoDien
+dotnet build -c Release
+dotnet run -c Release -- server_gui 127.0.0.1 9000 9001       # Camera Server
+dotnet run -c Release -- client_gui 127.0.0.1 9000 A          # mỗi client một cửa sổ (đổi tên B, C…)
+```
+Kịch bản tự động (từ thư mục gốc kho): `powershell -NoProfile -ExecutionPolicy Bypass -File tools\demo_windows.ps1 csharp\Chuong06\BaiMR6.3_HoiThoaiVideo\GiaoDien` – chạy `demo 127.0.0.1 42635 42636 ..\ket_qua_gui.png`: Camera Server và ba Camera Client (A, B, C – camera giả lập, không mở camera thật) trong cùng tiến trình; START SERVER, Kết nối, START; chờ 2 s; server chọn B → Tắt camera, chọn C → fps gửi 5, độ phân giải 1/2; A chọn nhận 1/2; B CANCEL rồi START → bị từ chối; chờ 2,5 s, in fps/kbit/s và chụp 4 cửa sổ (`Control.DrawToBitmap`) thành `ket_qua_gui.png`.
+
+**Linux/macOS**: WinForms chỉ chạy trên Windows; phần `PhongVideo`, `KetNoiVideo`, `CameraFfmpeg` là .NET thuần và chạy được trên Linux (đã kiểm thử, xem dưới).
 
 ## Kết quả thực thi
 ![Kết quả thực thi](ket_qua.png)
@@ -69,6 +115,12 @@ Tái lập kết quả từ thư mục gốc của kho: `python3 tools/demo.py c
 
 Luồng của B giả lập mất 2 % mảnh: server đếm được khung hỏng và mảnh mất (bảng tổng kết), các khung đó bị bỏ, lưới vẫn hiện khung đủ gần nhất của B. Mọi dòng nhật ký của bản C# giống bản Python (chỉ khác số đo kbit/s vài phần trăm và số mảnh); ảnh lưới giống bản Python trừ vị trí hạt nhiễu (bộ sinh ngẫu nhiên `System.Random` khác của Python).
 
+**Ứng dụng giao diện – chưa chạy GUI, cần Windows.** Môi trường biên soạn là Linux không có gói tham chiếu Windows Desktop, nên chưa có `ket_qua_gui.png` (không dựng ảnh giả). Đã kiểm tra trên Linux (.NET SDK 10.0.114, ffmpeg có sẵn, không có camera):
+- toàn bộ mã WinForms biên dịch sạch (không lỗi, không cảnh báo) với các assembly tham chiếu `System.Windows.Forms`/`System.Drawing` của .NET Framework 4.8 (gói mono/reference-assemblies) trong một dự án tạm – kiểm tra kiểu và API, không chạy được cửa sổ;
+- phần không phụ thuộc WinForms chạy thật trong một dự án console tạm: `PhongVideo` + ba `KetNoiVideo`, A và B dùng `CameraGiaLap`, C dùng `CameraFfmpeg` với nguồn thử `-f lavfi -i testsrc` của ffmpeg (cùng đường đọc khung RGB thô như camera thật). Ba camera gửi 10 fps (A 575, B 547, C 360 kbit/s), mỗi client nhận lưới 320×240 ở 10 fps ≈ 1555 kbit/s, 0 mảnh mất. Sau khi server tắt camera B, giới hạn C 5 fps, A gửi 1/2 và A chọn nhận 1/2: C gửi 5 fps 185 kbit/s, A gửi 156 kbit/s và nhận lưới 160×120 ≈ 342 kbit/s; B CANCEL/START bị từ chối; STOP server → client báo “Mất kết nối với server”. Mở `/dev/video9` không tồn tại → `CameraFfmpeg.Loi` = “ffmpeg dừng: Error opening input files: No such file or directory”.
+
+Bản dòng lệnh sau khi tách lớp `PhongVideo` được chạy lại bằng `tools/demo.py`: `ket_qua.txt` chỉ khác bản trước ở số đo fps/kbit/s, số mảnh và cổng.
+
 ## Ghi chú
 - Số fps/kbit/s đo theo cửa sổ 1 giây không thẳng hàng với thời điểm lệnh, nên giây chuyển tiếp có giá trị trung gian; ở 5 fps một cửa sổ có thể đếm được 5 hoặc 6 khung.
 - Nén zlib không mất dữ liệu kém xa codec video thật: H.264/VP8/AV1 nén có mất dữ liệu và chỉ gửi phần thay đổi giữa các khung (nén liên khung), đạt chất lượng tương đương ở vài chục kbit/s cho khung nhỏ như thế này. Video thật còn cần SRTP để mã hóa, điều khiển tắc nghẽn để tự giảm tốc khi mạng nghẽn, và đồng bộ hình–tiếng theo nhãn thời gian.
@@ -76,14 +128,16 @@ Luồng của B giả lập mất 2 % mảnh: server đếm được khung hỏn
 - Giao thức (header, JSON, zlib) giống hệt bản Python, Go: đã thử client bản Python nối vào server C# và chụp được lưới 320×120 của hai client. `ZLibStream` của .NET (RFC 1950) tương thích với `zlib` của Python; mức `CompressionLevel.Fastest` cho dung lượng gần với `zlib.compress(…, 1)` (nên số mảnh của A ít hơn bản Python: 384 so với 445).
 - PNG cần CRC-32 cho mỗi khối; BCL không có sẵn (gói `System.IO.Hashing` phải tải từ NuGet) nên bài tự tính bằng bảng 256 phần tử, cùng đa thức `0xEDB88320` với `zlib.crc32`.
 - Giải nén có giới hạn 4 MiB: đọc `ZLibStream` từng khối và ném lỗi khi vượt – chống “bom nén” (vài KB giải ra hàng GB).
-- Kiểm thử: Linux, .NET SDK 10.0.114.
+- Kiểm thử: Linux, .NET SDK 10.0.114; ứng dụng giao diện chưa chạy (cần Windows).
+- ffmpeg ghi thông báo ra stderr: `CameraFfmpeg` phải đọc stderr (`BeginErrorReadLine`), nếu không ống stderr đầy sẽ làm ffmpeg dừng chờ và không ra khung nào. Đối số truyền qua `ProcessStartInfo.ArgumentList` nên tên camera có khoảng trắng không cần tự đặt dấu nháy.
 
 ## Bài tập gợi ý
 1. Thêm `fps_chung 3` vào kịch bản server và quan sát fps nhận của mọi client; giải thích vì sao `nhan_fps 30` của client vẫn không vượt được giới hạn này.
 2. Chạy client với `--mat-goi 0.1`: tính xác suất một khung 6 mảnh đến đủ (0,9⁶ ≈ 53 %) và so sánh với số khung hỏng server đếm được. Vì sao khung lớn chịu mất gói kém hơn?
 3. Bỏ ô của chính người nhận khỏi lưới (giống mix-minus) và đo băng thông tiết kiệm được.
-4. Hiển thị video trực tiếp: trên Windows, tạo cửa sổ WinForms có `PictureBox`, chép khung lưới RGB vào `Bitmap` bằng `LockBits` mỗi khi nhận khung mới (nhớ cập nhật trên luồng giao diện – xem MR5.3).
+4. (Giao diện) Ứng dụng giao diện đang đổi RGB → `Bitmap` cho cả 16 ô mỗi 100 ms trên luồng giao diện. Chuyển việc đổi sang luồng nhận (chỉ khi có khung mới) và đo thời gian xử lý một nhịp `CapNhat` trước/sau bằng `Stopwatch`.
 5. Nâng cao: chuyển server sang kiến trúc SFU – chuyển tiếp nguyên mảnh của từng người, client tự ghép lưới; giới hạn fps nhận bằng cách server bỏ cả khung (mọi mảnh có cùng số khung). So sánh CPU server và độ trễ với bản MCU.
+6. (Giao diện) Thêm nút “Chụp lưới” ở client lưu khung lưới đang xem thành PNG bằng `GhiPng` sẵn có, và ô số fps camera để chạy ffmpeg với `fps=<n>` khác (phải khởi động lại tiến trình ffmpeg).
 
 ## Đọc thêm
 - RFC 9000 – *QUIC: A UDP-Based Multiplexed and Secure Transport*, mục 14 (kích thước datagram 1200 byte).
@@ -92,5 +146,6 @@ Luồng của B giả lập mất 2 % mảnh: server đếm được khung hỏn
 - RFC 1950, RFC 1951 – định dạng zlib và DEFLATE.
 - W3C, *Portable Network Graphics (PNG) Specification* (Second Edition), 2003 (cấu trúc khối, CRC, bộ lọc hàng).
 - Tài liệu .NET: `System.IO.Compression.ZLibStream`; W3C, *Portable Network Graphics (PNG) Specification* (khối IHDR, IDAT, IEND, CRC-32).
+- FFmpeg Documentation, *ffmpeg-devices* (`dshow`, `v4l2`, `-list_devices`), *ffmpeg-formats* (`rawvideo`); Microsoft Learn, *Bitmap.LockBits*, *Control.DrawToBitmap*.
 
 Mã nguồn của bài được viết mới cho kho này.

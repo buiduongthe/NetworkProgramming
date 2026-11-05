@@ -2,15 +2,15 @@
 $ dotnet bin/Release/net10.0/BaiMR6.3_HoiThoaiVideo.dll server 127.0.0.1 42630 42631
 [server] TCP 127.0.0.1:42630 điều khiển; UDP :42631 video
 [server] Khung 160x120 RGB 57600 B, nén zlib, mảnh ≤ 1200 B
-[server] #1 B vào phòng từ 127.0.0.1:49176
+[server] #1 B vào phòng từ 127.0.0.1:35124
 [server]   => B vào phòng
-[server] #1 B đăng ký UDP 127.0.0.1:40689
-[server] #2 C vào phòng từ 127.0.0.1:49190
+[server] #1 B đăng ký UDP 127.0.0.1:44979
+[server] #2 C vào phòng từ 127.0.0.1:35138
 [server]   => C vào phòng
-[server] #2 C đăng ký UDP 127.0.0.1:45643
-[server] #3 A vào phòng từ 127.0.0.1:49206
+[server] #2 C đăng ký UDP 127.0.0.1:38070
+[server] #3 A vào phòng từ 127.0.0.1:35150
 [server]   => A vào phòng
-[server] #3 A đăng ký UDP 127.0.0.1:37464
+[server] #3 A đăng ký UDP 127.0.0.1:41902
 [server] t=2.8s > tat_camera tat_ca
 [server]   => server tắt camera tất cả
 [server] C xin bật camera -> từ chối (server đang tắt)
@@ -29,9 +29,9 @@ $ dotnet bin/Release/net10.0/BaiMR6.3_HoiThoaiVideo.dll server 127.0.0.1 42630 4
 [server] Trạng thái: 3 client, fps chung 10
 [server]                      giới hạn vào        ra (lưới)
 [server]  #  tên camera       fps 1/n  fps  kbit  fps  kbit
-[server]  1  B   tắt (tự tắt)   2   1    0     0   10   912
-[server]  2  C   mở            10   4   10    46   10   912
-[server]  3  A   mở            10   1   10   559    6   284
+[server]  1  B   tắt (tự tắt)   2   1    0     0   10   910
+[server]  2  C   mở            10   4   10    46   10   910
+[server]  3  A   mở            10   1   10   558    7   384
 [server] #3 A rời phòng
 [server]   => A rời phòng
 [server] #1 B rời phòng
@@ -42,7 +42,7 @@ $ dotnet bin/Release/net10.0/BaiMR6.3_HoiThoaiVideo.dll server 127.0.0.1 42630 4
 [server] Tổng kết luồng vào (từ client tới server):
 [server]  #  tên mảnh khung hỏng mảnh mất  bỏ:tắt vượt fps
 [server]         nhận    đủ        mất hẳn
-[server]  1  B    172    22    3    3    0      0      2
+[server]  1  B    165    21    3    3    0      0      1
 [server]  2  C    166    76    0    0    0      0      1
 [server]  3  A    384    64    0    0    0      0      1
 
@@ -55,7 +55,7 @@ $ dotnet bin/Release/net10.0/BaiMR6.3_HoiThoaiVideo.dll khach B 127.0.0.1 42630 
 [khach B] Mỗi giây: fps và kbit/s gửi | nhận, số mảnh mất
 [khach B] Sự kiện: C vào phòng
 [khach B] Sự kiện: A vào phòng
-[khach B]  1s gửi 11 fps  631 | nhận 11 fps  1308, mất 0
+[khach B]  1s gửi 11 fps  631 | nhận 11 fps  1261, mất 0
 [khach B] Camera: tắt (server), gửi tối đa 10 fps, 1/1
 [khach B] Sự kiện: server tắt camera tất cả
 [khach B]  2s gửi  9 fps  516 | nhận 10 fps  1715, mất 0
@@ -65,19 +65,19 @@ $ dotnet bin/Release/net10.0/BaiMR6.3_HoiThoaiVideo.dll khach B 127.0.0.1 42630 
 [khach B] Sự kiện: server đặt độ phân giải C = 1/4
 [khach B] Camera: mở, gửi tối đa 2 fps, 1/1
 [khach B] Sự kiện: server giới hạn B gửi tối đa 2 fps
-[khach B]  4s gửi  4 fps  230 | nhận 10 fps  1271, mất 0
+[khach B]  4s gửi  3 fps  172 | nhận 10 fps  1272, mất 0
 [khach B] > tat_camera
 [khach B] Camera: tắt (tự tắt), gửi tối đa 2 fps, 1/1
 [khach B] Sự kiện: B tự tắt camera
 [khach B] Camera: tắt (tự tắt), gửi tối đa 2 fps, 1/1
 [khach B] Sự kiện: server bật camera tất cả (B vẫn tự tắt)
-[khach B]  5s gửi  1 fps   58 | nhận 10 fps  1038, mất 0
-[khach B]  6s gửi  0 fps    0 | nhận 10 fps   908, mất 0
-[khach B]  7s gửi  0 fps    0 | nhận 10 fps   917, mất 0
+[khach B]  5s gửi  1 fps   57 | nhận 10 fps  1040, mất 0
+[khach B]  6s gửi  0 fps    0 | nhận 10 fps   906, mất 0
+[khach B]  7s gửi  0 fps    0 | nhận 10 fps   918, mất 0
 [khach B] Sự kiện: A rời phòng
-[khach B]  8s gửi  0 fps    0 | nhận 10 fps   783, mất 0
+[khach B]  8s gửi  0 fps    0 | nhận 10 fps   782, mất 0
 [khach B] Kết thúc sau 8.5 s
-[khach B] Gửi 25 khung = 175 mảnh, giả lập mất 3 mảnh
+[khach B] Gửi 24 khung = 168 mảnh, giả lập mất 3 mảnh
 [khach B] Nhận 86 khung đủ, hỏng 0, mất hẳn 0, mảnh mất 0
 
 ===== C =====
@@ -88,10 +88,10 @@ $ dotnet bin/Release/net10.0/BaiMR6.3_HoiThoaiVideo.dll khach C 127.0.0.1 42630 
 [khach C] Sự kiện: C vào phòng
 [khach C] Mỗi giây: fps và kbit/s gửi | nhận, số mảnh mất
 [khach C] Sự kiện: A vào phòng
-[khach C]  1s gửi 11 fps  597 | nhận 11 fps  1605, mất 0
+[khach C]  1s gửi 11 fps  597 | nhận 11 fps  1607, mất 0
 [khach C] Camera: tắt (server), gửi tối đa 10 fps, 1/1
 [khach C] Sự kiện: server tắt camera tất cả
-[khach C]  2s gửi  7 fps  377 | nhận 10 fps  1424, mất 0
+[khach C]  2s gửi  7 fps  377 | nhận 10 fps  1422, mất 0
 [khach C] > bat_camera
 [khach C] Bị từ chối: server đang tắt camera của bạn
 [khach C] Camera: mở, gửi tối đa 10 fps, 1/1
@@ -99,13 +99,13 @@ $ dotnet bin/Release/net10.0/BaiMR6.3_HoiThoaiVideo.dll khach C 127.0.0.1 42630 
 [khach C] Camera: mở, gửi tối đa 10 fps, 1/4
 [khach C] Sự kiện: server đặt độ phân giải C = 1/4
 [khach C] Sự kiện: server giới hạn B gửi tối đa 2 fps
-[khach C]  3s gửi  3 fps   13 | nhận 10 fps   375, mất 0
-[khach C]  4s gửi 10 fps   44 | nhận 10 fps  1378, mất 0
+[khach C]  3s gửi  3 fps   13 | nhận 10 fps   374, mất 0
+[khach C]  4s gửi 10 fps   44 | nhận 10 fps  1381, mất 0
 [khach C] Sự kiện: B tự tắt camera
 [khach C] Camera: mở, gửi tối đa 10 fps, 1/4
 [khach C] Sự kiện: server bật camera tất cả (B vẫn tự tắt)
-[khach C]  5s gửi 10 fps   45 | nhận 10 fps   993, mất 0
-[khach C]  6s gửi 10 fps   46 | nhận 10 fps   912, mất 0
+[khach C]  5s gửi 10 fps   45 | nhận 10 fps   943, mất 0
+[khach C]  6s gửi 10 fps   46 | nhận 10 fps   910, mất 0
 [khach C]  7s gửi 10 fps   46 | nhận 10 fps   917, mất 0
 [khach C] Sự kiện: A rời phòng
 [khach C]  8s gửi 10 fps   45 | nhận 10 fps   654, mất 0
@@ -126,18 +126,18 @@ $ dotnet bin/Release/net10.0/BaiMR6.3_HoiThoaiVideo.dll khach A 127.0.0.1 42630 
 [khach A] Đã chụp out/chup_1.png (320x240)
 [khach A] Camera: tắt (server), gửi tối đa 10 fps, 1/1
 [khach A] Sự kiện: server tắt camera tất cả
-[khach A]  2s gửi  5 fps  280 | nhận 10 fps  1133, mất 0
+[khach A]  2s gửi  4 fps  224 | nhận 10 fps   987, mất 0
 [khach A] > chup 2. SERVER TAT CAMERA TAT CA
 [khach A] Đã chụp out/chup_2.png (320x240)
 [khach A] Camera: mở, gửi tối đa 10 fps, 1/1
 [khach A] Sự kiện: server bật camera tất cả
 [khach A] Sự kiện: server đặt độ phân giải C = 1/4
 [khach A] Sự kiện: server giới hạn B gửi tối đa 2 fps
-[khach A]  3s gửi  5 fps  280 | nhận 10 fps   597, mất 0
+[khach A]  3s gửi  6 fps  335 | nhận 10 fps   711, mất 0
 [khach A] > chup 3. SERVER: C DO PHAN GIAI 1/4, B TOI DA 2 FPS
 [khach A] Đã chụp out/chup_3.png (320x240)
 [khach A] Sự kiện: B tự tắt camera
-[khach A]  4s gửi 10 fps  557 | nhận 10 fps  1332, mất 0
+[khach A]  4s gửi 10 fps  557 | nhận 10 fps  1331, mất 0
 [khach A] Camera: mở, gửi tối đa 10 fps, 1/1
 [khach A] Sự kiện: server bật camera tất cả (B vẫn tự tắt)
 [khach A] > chup 4. B TU TAT; SERVER BAT TAT CA NHUNG B VAN TAT
@@ -145,12 +145,12 @@ $ dotnet bin/Release/net10.0/BaiMR6.3_HoiThoaiVideo.dll khach A 127.0.0.1 42630 
 [khach A] > nhan_do_phan_giai 2
 [khach A] > nhan_fps 5
 [khach A] Nhận: 10 fps, độ phân giải 1/2
-[khach A]  5s gửi 10 fps  554 | nhận 10 fps   894, mất 0
 [khach A] Nhận: 5 fps, độ phân giải 1/2
+[khach A]  5s gửi 10 fps  554 | nhận 10 fps   899, mất 0
 [khach A] > chup 5. A TU CHON NHAN 1/2, 5 FPS
 [khach A] Đã chụp out/chup_5.png (160x120)
-[khach A]  6s gửi 10 fps  560 | nhận  5 fps   131, mất 0
-[khach A]  7s gửi 10 fps  559 | nhận  5 fps   130, mất 0
+[khach A]  6s gửi 10 fps  560 | nhận  5 fps   139, mất 0
+[khach A]  7s gửi 10 fps  559 | nhận  5 fps   136, mất 0
 [khach A] Kết thúc sau 7.3 s
 [khach A] Gửi 64 khung = 384 mảnh, giả lập mất 0 mảnh
 [khach A] Nhận 63 khung đủ, hỏng 0, mất hẳn 0, mảnh mất 0

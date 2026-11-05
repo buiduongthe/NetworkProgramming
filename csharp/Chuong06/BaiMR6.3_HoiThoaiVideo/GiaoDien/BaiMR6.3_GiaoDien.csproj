@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Ứng dụng giao diện WinForms của MR6.3 (chỉ Windows). Dùng lại mã của bản dòng lệnh ở thư mục cha:
+       Chung.cs (chia mảnh, ghép khung, nén, camera tổng hợp), ServerVideo.cs (phòng PhongVideo).
+       OutputType Exe (không phải WinExe) để kịch bản demo in được nhật ký ra stdout. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>BaiMR6_3</RootNamespace>
+    <AssemblyName>BaiMR6.3_GiaoDien</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Chung.cs" Link="DungChung\Chung.cs" />
+    <Compile Include="..\ServerVideo.cs" Link="DungChung\ServerVideo.cs" />
+  </ItemGroup>
+</Project>

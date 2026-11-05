@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Ứng dụng giao diện WinForms của MR6.2 (chỉ Windows). Dùng lại mã của bản dòng lệnh ở thư mục cha:
+       Chung.cs (RTP, PCM, bộ đệm jitter), ServerAmThanh.cs (phòng PhongAmThanh, bộ trộn), KhachAmThanh.cs (NguonSin).
+       OutputType Exe (không phải WinExe) để kịch bản demo in được nhật ký ra stdout. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>BaiMR6_2</RootNamespace>
+    <AssemblyName>BaiMR6.2_GiaoDien</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Chung.cs" Link="DungChung\Chung.cs" />
+    <Compile Include="..\ServerAmThanh.cs" Link="DungChung\ServerAmThanh.cs" />
+    <Compile Include="..\KhachAmThanh.cs" Link="DungChung\KhachAmThanh.cs" />
+  </ItemGroup>
+</Project>
