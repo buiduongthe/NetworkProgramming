@@ -17,6 +17,8 @@ import java.util.TreeMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Bài mở rộng MR6.2 – Server phòng hội thoại âm thanh: điều khiển JSON trên TCP, âm thanh RTP trên UDP,
@@ -33,6 +35,12 @@ import java.util.concurrent.TimeUnit;
  * Chạy: java -cp out ServerAmThanh [host] [cổng_tcp] [cổng_udp]
  * Lệnh (stdin): tat_mic <tên|tat_ca>, bat_mic <tên|tat_ca>, do_loi <tên> <hệ số>, am_luong_chung <hệ số>,
  *               trang_thai, thoat. Dòng "@t lệnh" = chờ tới giây thứ t kể từ khi chương trình chạy.
+ *
+ * Mỗi đối tượng ServerAmThanh là một phòng (một server): bản dòng lệnh (main bên dưới) tạo một đối tượng và
+ * đọc lệnh từ stdin; bản giao diện ServerAmThanhGui tạo đối tượng mới mỗi lần bấm Start Server và gọi thẳng các
+ * hàm tatBatMic, datDoLoi, datAmLuongChung. Hai điểm móc micServer, loaServer (null ở bản dòng lệnh) cho server
+ * tự nói và tự nghe. So với bản đầu, giao thức chỉ THÊM tin {"loai":"do_loi","gia_tri":g} gửi cho client mỗi
+ * khi độ lợi của client đó đổi (và một lần sau "chao") – client cũ bỏ qua loại tin không biết.
  */
 public class ServerAmThanh {
     static final class Khach {
@@ -70,17 +78,32 @@ public class ServerAmThanh {
         }
     }
 
-    static final Object khoa = new Object();       // bảo vệ mọi trạng thái dùng chung giữa các luồng
-    static final TreeMap<Integer, Khach> dsKhach = new TreeMap<>();   // theo thứ tự mã
-    static final List<Khach> daRoi = new ArrayList<>();
-    static int maMoi = 0;
-    static double amLuongChung = 1.0;
-    static int congUDP;
+    final Object khoa = new Object();              // bảo vệ mọi trạng thái dùng chung giữa các luồng
+    final TreeMap<Integer, Khach> dsKhach = new TreeMap<>();   // theo thứ tự mã
+    final List<Khach> daRoi = new ArrayList<>();
+    int maMoi = 0;
+    double amLuongChung = 1.0;
+    int congUDP;
 
-    static void slog(String s) { System.out.println("[server] " + s); }
+    // ---- Phần thêm cho bản giao diện; bản dòng lệnh để null nên hành vi, đầu ra giữ nguyên
+    /** Micro của máy server: mỗi 20 ms trả một khung (đã nhân Mic Volume) hoặc null. Tiếng server là một nguồn
+     *  trong bộ trộn với mã SSRC_SERVER: mọi client đều nghe, không đi qua mạng tới chính server. */
+    volatile Supplier<short[]> micServer;
+    /** Loa của máy server: nhận tổng tiếng các client (không gồm tiếng server) mỗi 20 ms. Phải trả về ngay. */
+    volatile Consumer<short[]> loaServer;
+    volatile double mucMicServer = Double.NEGATIVE_INFINITY, mucLoaServer = Double.NEGATIVE_INFINITY;   // dBFS
+
+    final Consumer<String> nhatKy;                 // nơi in nhật ký: stdout (dòng lệnh) hoặc ô nhật ký (giao diện)
+    ServerSocket ln;
+    DatagramSocket udp;
+    ScheduledExecutorService nhip;
+
+    ServerAmThanh(Consumer<String> nhatKy) { this.nhatKy = nhatKy; }
+
+    void slog(String s) { nhatKy.accept(s); }
 
     /** Báo sự kiện cho mọi client (họ hiển thị và đánh mốc trong bản ghi). Gọi khi đang giữ khóa. */
-    static void phatSuKien(String text) {
+    void phatSuKien(String text) {
         slog("  => " + text);
         for (Khach k : dsKhach.values()) k.gui(Json.obj("loai", "su_kien", "noi_dung", text));
     }
@@ -96,7 +119,7 @@ public class ServerAmThanh {
         }
     }
 
-    static void phucVu(Socket c) {
+    void phucVu(Socket c) {
         try (c) {
             BufferedReader r = new BufferedReader(new InputStreamReader(c.getInputStream(), StandardCharsets.UTF_8));
             Map<String, Object> tin = docJSON(String.valueOf(r.readLine()));
@@ -108,6 +131,7 @@ public class ServerAmThanh {
                 dsKhach.put(k.ma, k);
             }
             k.gui(Json.obj("loai", "chao", "ma", k.ma, "cong_udp", congUDP, "tan_so_mau", AmThanh.TAN_SO_MAU, "khung_ms", AmThanh.KHUNG_MS));
+            k.gui(Json.obj("loai", "do_loi", "gia_tri", k.doLoi));     // độ lợi ban đầu (client hiện "Server Vol")
             synchronized (khoa) {
                 slog("#" + k.ma + " " + k.ten + " vào phòng từ " + k.ip + ":" + c.getPort());
                 k.guiMic();
@@ -128,7 +152,7 @@ public class ServerAmThanh {
         } catch (IOException ignored) { }
     }
 
-    static void xuLyTinClient(Khach k, Map<String, Object> tin) {
+    void xuLyTinClient(Khach k, Map<String, Object> tin) {
         Object loai = tin.get("loai");
         if ("tu_tat_mic".equals(loai)) {
             k.tuTat = true;
@@ -150,7 +174,7 @@ public class ServerAmThanh {
     }
 
     // ---------------------------------------------------------------- Kênh dữ liệu UDP
-    static void nhanUDP(DatagramSocket sock) {
+    void nhanUDP(DatagramSocket sock) {
         byte[] buf = new byte[2048];
         while (true) {
             DatagramPacket p = new DatagramPacket(buf, buf.length);
@@ -182,8 +206,9 @@ public class ServerAmThanh {
     /**
      * Mỗi 20 ms: lấy một khung từ mỗi client đang mở mic, nhân độ lợi, cộng vào tổng T; người nghe k nhận
      * T - (tiếng của chính k) – "mix-minus" – nhân âm lượng chung, cắt ngọn, gửi đi.
+     * Bản giao diện: tiếng micro server (nếu có) cũng cộng vào T; loa server phát T - tiếng server.
      */
-    static void vongTron(DatagramSocket sock) {
+    void vongTron(DatagramSocket sock) {
         synchronized (khoa) {
             Map<Integer, double[]> vao = new HashMap<>();
             double[] tong = new double[AmThanh.MAU_MOI_KHUNG];
@@ -202,6 +227,10 @@ public class ServerAmThanh {
                 }
                 vao.put(k.ma, v);
             }
+            Supplier<short[]> mic = micServer;
+            short[] tiengServer = mic != null ? mic.get() : null;      // một nguồn nữa trong bộ trộn (SSRC_SERVER)
+            mucMicServer = tiengServer != null ? AmThanh.mucDBFS(tiengServer, tiengServer.length) : Double.NEGATIVE_INFINITY;
+            if (tiengServer != null) for (int i = 0; i < tong.length; i++) tong[i] += tiengServer[i];
             boolean[] cat = new boolean[1];
             for (Khach k : dsKhach.values()) {
                 if (k.udp == null) continue;
@@ -219,17 +248,52 @@ public class ServerAmThanh {
                 k.seqRa = (k.seqRa + 1) & 0xFFFF;
                 k.tsRa = (k.tsRa + AmThanh.MAU_MOI_KHUNG) & 0xFFFFFFFFL;
             }
+            Consumer<short[]> loa = loaServer;
+            if (loa != null) {                                        // server nghe: T trừ tiếng của chính server
+                short[] ra = new short[AmThanh.MAU_MOI_KHUNG];
+                for (int i = 0; i < ra.length; i++)
+                    ra[i] = AmThanh.catNgon((tong[i] - (tiengServer != null ? tiengServer[i] : 0)) * amLuongChung, null);
+                mucLoaServer = AmThanh.mucDBFS(ra, ra.length);
+                loa.accept(ra);
+            } else mucLoaServer = Double.NEGATIVE_INFINITY;
         }
     }
 
-    // ---------------------------------------------------------------- Bảng điều khiển
-    static List<Khach> chon(String ten) {
+    // ---------------------------------------------------------------- Lệnh điều khiển (dùng chung dòng lệnh – giao diện)
+    List<Khach> chon(String ten) {
         List<Khach> kq = new ArrayList<>();
         for (Khach k : dsKhach.values()) if (ten.equals("tat_ca") || k.ten.equals(ten)) kq.add(k);
         return kq;
     }
 
-    static boolean lenhServer(String dong) {
+    /** Server tắt (khóa) hoặc bật (gỡ khóa) mic của các client ds; ai = tên hiển thị trong sự kiện. Gọi khi giữ khóa. */
+    void tatBatMic(List<Khach> ds, boolean tat, String ai) {
+        List<String> vanTat = new ArrayList<>();
+        for (Khach k : ds) {
+            k.serverKhoa = tat;
+            k.guiMic();
+            if (k.tuTat) vanTat.add(k.ten);
+        }
+        if (tat) phatSuKien("server tắt mic " + ai);
+        else phatSuKien("server bật mic " + ai + (vanTat.isEmpty() ? "" : " (" + String.join(", ", vanTat) + " vẫn tự tắt)"));   // quy tắc 3
+    }
+
+    /** Đặt độ lợi đầu vào (quy tắc 4) và báo riêng cho từng client bằng tin "do_loi". Gọi khi giữ khóa. */
+    void datDoLoi(List<Khach> ds, String ai, double g) {
+        for (Khach k : ds) {
+            k.doLoi = g;
+            k.gui(Json.obj("loai", "do_loi", "gia_tri", g));
+        }
+        phatSuKien(String.format(Locale.ROOT, "server đặt độ lợi %s = %.2f", ai, g));
+    }
+
+    void datAmLuongChung(double g) {
+        amLuongChung = g;
+        phatSuKien(String.format(Locale.ROOT, "server đặt âm lượng chung %.2f", amLuongChung));
+    }
+
+    // ---------------------------------------------------------------- Bảng điều khiển (stdin)
+    boolean lenhServer(String dong) {
         String[] p = dong.strip().split("\\s+");
         if (p[0].isEmpty()) return true;
         slog(String.format(Locale.ROOT, "t=%.1fs > %s", AmThanh.giay(), dong));
@@ -240,22 +304,11 @@ public class ServerAmThanh {
                     slog("không có client " + p[1]);
                     return true;
                 }
-                List<String> vanTat = new ArrayList<>();
-                for (Khach k : ds) {
-                    k.serverKhoa = p[0].equals("tat_mic");
-                    k.guiMic();
-                    if (k.tuTat) vanTat.add(k.ten);
-                }
-                String ai = p[1].equals("tat_ca") ? "tất cả" : p[1];
-                if (p[0].equals("tat_mic")) phatSuKien("server tắt mic " + ai);
-                else phatSuKien("server bật mic " + ai + (vanTat.isEmpty() ? "" : " (" + String.join(", ", vanTat) + " vẫn tự tắt)"));   // quy tắc 3
+                tatBatMic(ds, p[0].equals("tat_mic"), p[1].equals("tat_ca") ? "tất cả" : p[1]);
             } else if (p[0].equals("do_loi") && p.length == 3) {
-                double g = Double.parseDouble(p[2]);
-                for (Khach k : chon(p[1])) k.doLoi = g;
-                phatSuKien(String.format(Locale.ROOT, "server đặt độ lợi %s = %.2f", p[1], g));
+                datDoLoi(chon(p[1]), p[1], Double.parseDouble(p[2]));
             } else if (p[0].equals("am_luong_chung") && p.length == 2) {
-                amLuongChung = Double.parseDouble(p[1]);
-                phatSuKien(String.format(Locale.ROOT, "server đặt âm lượng chung %.2f", amLuongChung));
+                datAmLuongChung(Double.parseDouble(p[1]));
             } else if (p[0].equals("trang_thai")) {
                 inTrangThai();
             } else if (p[0].equals("thoat")) {
@@ -269,7 +322,7 @@ public class ServerAmThanh {
 
     static String padPhai(String s, int n) { return s + " ".repeat(Math.max(0, n - s.length())); }
 
-    static void inTrangThai() {
+    void inTrangThai() {
         slog(String.format(Locale.ROOT, "Trạng thái: %d client, âm lượng chung %.2f", dsKhach.size(), amLuongChung));
         slog(" #  tên mic          lợi   mức vào            mất  jit.");
         for (Khach k : dsKhach.values())
@@ -277,7 +330,7 @@ public class ServerAmThanh {
                     AmThanh.chuDB(k.mucVao, 5), AmThanh.thanhMuc(k.mucVao, 10), k.boDem.mat(), k.boDem.jitterMs()));
     }
 
-    static void inTongKet() {
+    void inTongKet() {
         slog("Tổng kết (gói vào: từ client tới server):");
         slog(" #  tên gói vào mất trễ thiếu cạn bị chặn cắt ngọn");
         List<Khach> ds = new ArrayList<>(dsKhach.values());
@@ -289,20 +342,21 @@ public class ServerAmThanh {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        String host = args.length > 0 ? args[0] : "127.0.0.1";
-        int congTCP = args.length > 1 ? Integer.parseInt(args[1]) : 9000;
-        congUDP = args.length > 2 ? Integer.parseInt(args[2]) : congTCP + 1;
-        ServerSocket ln = new ServerSocket();
+    // ---------------------------------------------------------------- Khởi động, dừng
+    /** Mở cổng TCP, UDP và chạy các luồng nền: nhận kết nối, nhận UDP, nhịp trộn 20 ms. */
+    void batDau(String host, int congTCP, int congUDP) throws IOException {
+        this.congUDP = congUDP;
+        ln = new ServerSocket();
         ln.setReuseAddress(true);
         ln.bind(new InetSocketAddress(host, congTCP));
-        DatagramSocket udp = new DatagramSocket(new InetSocketAddress(host, congUDP));
+        try {
+            udp = new DatagramSocket(new InetSocketAddress(host, congUDP));
+        } catch (IOException e) {
+            ln.close();
+            throw e;
+        }
         slog("Điều khiển: TCP " + host + ":" + congTCP + "; âm thanh RTP: UDP " + host + ":" + congUDP);
         slog("PCM 16 bit mono 16 kHz; khung " + AmThanh.KHUNG_MS + " ms = " + AmThanh.MAU_MOI_KHUNG + " mẫu = " + AmThanh.BYTE_MOI_KHUNG + " B");
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {   // Ctrl+C (hoặc lệnh thoat)
-            slog("Dừng server (Ctrl+C)");
-            synchronized (khoa) { inTongKet(); }
-        }));
         Thread.ofPlatform().daemon().start(() -> {
             while (true) {
                 try {
@@ -310,14 +364,42 @@ public class ServerAmThanh {
                     c.setTcpNoDelay(true);                             // tin điều khiển đi ngay
                     Thread.ofVirtual().start(() -> phucVu(c));
                 } catch (IOException e) {
-                    return;
+                    return;                                            // ln đã đóng (Stop Server)
                 }
             }
         });
         Thread.ofPlatform().daemon().start(() -> nhanUDP(udp));
-        ScheduledExecutorService nhip = Executors.newSingleThreadScheduledExecutor();
-        nhip.scheduleAtFixedRate(() -> vongTron(udp), AmThanh.KHUNG_MS, AmThanh.KHUNG_MS, TimeUnit.MILLISECONDS);   // nhịp đều, không trôi
-        if (AmThanh.chayKichBan(ServerAmThanh::lenhServer)) System.exit(0);   // lệnh thoat
-        // hết stdin: tiếp tục phục vụ tới khi Ctrl+C
+        nhip = Executors.newSingleThreadScheduledExecutor();
+        nhip.scheduleAtFixedRate(() -> {                               // nhịp đều, không trôi
+            try {
+                vongTron(udp);
+            } catch (RuntimeException e) {                             // lỗi ở móc micro/loa không được làm dừng nhịp
+                slog("lỗi nhịp trộn: " + e);
+            }
+        }, AmThanh.KHUNG_MS, AmThanh.KHUNG_MS, TimeUnit.MILLISECONDS);
+    }
+
+    /** Dừng server (nút Stop Server): đóng cổng, ngắt mọi client, dừng nhịp trộn. */
+    void dung() {
+        try { ln.close(); } catch (IOException ignored) { }
+        udp.close();
+        nhip.shutdownNow();
+        synchronized (khoa) {
+            for (Khach k : dsKhach.values()) try { k.conn.close(); } catch (IOException ignored) { }
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        String host = args.length > 0 ? args[0] : "127.0.0.1";
+        int congTCP = args.length > 1 ? Integer.parseInt(args[1]) : 9000;
+        int congUDP = args.length > 2 ? Integer.parseInt(args[2]) : congTCP + 1;
+        ServerAmThanh s = new ServerAmThanh(x -> System.out.println("[server] " + x));
+        s.batDau(host, congTCP, congUDP);
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {   // Ctrl+C (hoặc lệnh thoat)
+            s.slog("Dừng server (Ctrl+C)");
+            synchronized (s.khoa) { s.inTongKet(); }
+        }));
+        if (AmThanh.chayKichBan(s::lenhServer)) System.exit(0);   // lệnh thoat
+        // hết stdin: tiếp tục phục vụ tới khi Ctrl+C (luồng nhịp trộn không phải daemon giữ JVM chạy)
     }
 }

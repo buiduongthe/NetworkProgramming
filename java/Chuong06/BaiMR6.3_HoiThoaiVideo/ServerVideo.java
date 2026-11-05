@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.Consumer;
 
 /**
  * Bài mở rộng MR6.3 – Server hội thoại video ghép lưới kiểu MCU (Multipoint Control Unit): giải nén khung của mọi
@@ -29,6 +30,11 @@ import java.util.TreeMap;
  * Chạy: java -cp out ServerVideo [host] [cổng_tcp] [cổng_udp]
  * Lệnh (stdin): tat_camera <tên|tat_ca>, bat_camera <tên|tat_ca>, fps_toi_da <tên|tat_ca> <n>,
  *               do_phan_giai <tên|tat_ca> <1|2|4>, fps_chung <n>, trang_thai, thoat; "@t lệnh" = chờ tới giây t.
+ *
+ * Mỗi đối tượng ServerVideo là một server: bản dòng lệnh (main) tạo một đối tượng và đọc lệnh từ stdin; bản giao
+ * diện ServerVideoGui tạo đối tượng mới mỗi lần bấm START SERVER, gọi thẳng các hàm tatBatCamera, datFpsToiDa,
+ * datDoPhanGiai, datFpsChung và đọc khung mới nhất của từng client (anhMoi) để vẽ lưới trên cửa sổ.
+ * Giao thức không thêm thông điệp nào.
  */
 public class ServerVideo {
     static final class Khach {
@@ -49,6 +55,8 @@ public class ServerVideo {
         long hanGuiRa = 0;
         int demRa, byteRa;
         double fpsRa, kbpsRa;
+        byte[] anhMoi;                                     // khung giải nén mới nhất (cho bản giao diện vẽ lưới)
+        int wMoi, hMoi;
 
         Khach(int ma, String ten, String ip, Socket conn) { this.ma = ma; this.ten = ten; this.ip = ip; this.conn = conn; }
 
@@ -65,10 +73,11 @@ public class ServerVideo {
         /** Báo cho client tham số gửi hiện hành. */
         void guiCamera() {
             gui(Json.obj("loai", "camera", "mo", camMo(), "ly_do", lyDo(), "fps", fpsToiDa, "chia", chia));
+            if (!camMo()) anhMoi = null;                   // camera tắt: bỏ hình cũ trên lưới của giao diện
             veO(null, 0, 0);
         }
 
-        void guiNhan() { gui(Json.obj("loai", "nhan", "fps", Math.min(nhanFps, fpsChung), "chia", nhanChia)); }
+        void guiNhan(int fpsChung) { gui(Json.obj("loai", "nhan", "fps", Math.min(nhanFps, fpsChung), "chia", nhanChia)); }
 
         /** Vẽ ô của client trong lưới: hình đã phóng về 160×120 + dải nhãn trạng thái. */
         void veO(byte[] anh, int w, int h) {
@@ -91,22 +100,29 @@ public class ServerVideo {
         }
     }
 
-    static final Object khoa = new Object();
-    static final TreeMap<Integer, Khach> dsKhach = new TreeMap<>();
-    static final List<Khach> daRoi = new ArrayList<>();
-    static int maMoi = 0;
-    static int fpsChung = Video.FPS_MAC_DINH;              // giới hạn fps đầu ra chung cho mọi người nhận
-    static int congUDP;
+    final Object khoa = new Object();
+    final TreeMap<Integer, Khach> dsKhach = new TreeMap<>();
+    final List<Khach> daRoi = new ArrayList<>();
+    int maMoi = 0;
+    int fpsChung = Video.FPS_MAC_DINH;                     // giới hạn fps đầu ra chung cho mọi người nhận
+    int congUDP;
 
-    static void slog(String s) { System.out.println("[server] " + s); }
+    final Consumer<String> nhatKy;                         // stdout (dòng lệnh) hoặc ô nhật ký (giao diện)
+    ServerSocket ln;
+    DatagramSocket udp;
+    volatile boolean dangChay;
 
-    static void phatSuKien(String text) {
+    ServerVideo(Consumer<String> nhatKy) { this.nhatKy = nhatKy; }
+
+    void slog(String s) { nhatKy.accept(s); }
+
+    void phatSuKien(String text) {
         slog("  => " + text);
         for (Khach k : dsKhach.values()) k.gui(Json.obj("loai", "su_kien", "noi_dung", text));
     }
 
     // ---------------------------------------------------------------- Kênh điều khiển TCP
-    static void phucVu(Socket c) {
+    void phucVu(Socket c) {
         try (c) {
             BufferedReader r = new BufferedReader(new InputStreamReader(c.getInputStream(), StandardCharsets.UTF_8));
             Map<String, Object> tin = Video.docJSON(String.valueOf(r.readLine()));
@@ -121,7 +137,7 @@ public class ServerVideo {
             synchronized (khoa) {
                 slog("#" + k.ma + " " + k.ten + " vào phòng từ " + k.ip + ":" + c.getPort());
                 k.guiCamera();
-                k.guiNhan();
+                k.guiNhan(fpsChung);
                 phatSuKien(k.ten + " vào phòng");
             }
             String line;
@@ -139,7 +155,7 @@ public class ServerVideo {
         } catch (IOException ignored) { }
     }
 
-    static void xuLyTinClient(Khach k, Map<String, Object> tin) {
+    void xuLyTinClient(Khach k, Map<String, Object> tin) {
         Object loai = tin.get("loai");
         if ("tu_tat_camera".equals(loai)) {
             k.tuTat = true;
@@ -158,12 +174,12 @@ public class ServerVideo {
             k.nhanFps = Math.max(1, Math.min(30, Video.soNguyen(tin.get("fps"), k.nhanFps)));
             k.nhanChia = Video.soNguyen(tin.get("chia"), k.nhanChia) == 2 ? 2 : 1;
             slog(k.ten + " chọn nhận " + k.nhanFps + " fps, độ phân giải 1/" + k.nhanChia);
-            k.guiNhan();
+            k.guiNhan(fpsChung);
         }
     }
 
     // ---------------------------------------------------------------- Kênh dữ liệu UDP
-    static void nhanUDP(DatagramSocket sock) {
+    void nhanUDP(DatagramSocket sock) {
         byte[] buf = new byte[2048];
         while (true) {
             DatagramPacket p = new DatagramPacket(buf, buf.length);
@@ -179,7 +195,7 @@ public class ServerVideo {
         }
     }
 
-    static void xuLyManh(Video.Manh m, DatagramPacket p, long bayGio) {
+    void xuLyManh(Video.Manh m, DatagramPacket p, long bayGio) {
         Video.Header h = m.h();
         Khach k = dsKhach.get(h.ma());
         if (k == null) return;
@@ -208,6 +224,9 @@ public class ServerVideo {
         k.lucNhanCuoi = bayGio;
         k.demKhung++;
         k.demByte += nen.length;
+        k.anhMoi = anh;
+        k.wMoi = w;
+        k.hMoi = c;
         k.veO(anh, w, c);
     }
 
@@ -232,9 +251,9 @@ public class ServerVideo {
      * Mỗi 5 ms kiểm tra người nhận nào tới hạn (theo fps nhận) thì ghép lưới, thu nhỏ theo độ phân giải nhận, nén,
      * chia mảnh và gửi. Mỗi giây tính lại fps, kbit/s.
      */
-    static void vongGui(DatagramSocket sock) {
+    void vongGui(DatagramSocket sock) {
         long mocDo = System.nanoTime();
-        while (true) {
+        while (dangChay) {
             long bayGio = System.nanoTime();
             synchronized (khoa) {
                 List<Khach> ds = new ArrayList<>();
@@ -271,46 +290,64 @@ public class ServerVideo {
         }
     }
 
-    // ---------------------------------------------------------------- Bảng điều khiển
-    static List<Khach> chon(String ten) {
+    // ---------------------------------------------------------------- Lệnh điều khiển (dùng chung dòng lệnh – giao diện)
+    List<Khach> chon(String ten) {
         List<Khach> kq = new ArrayList<>();
         for (Khach k : dsKhach.values()) if (ten.equals("tat_ca") || k.ten.equals(ten)) kq.add(k);
         return kq;
     }
 
-    static boolean lenhServer(String dong) {
+    /** Server tắt hoặc bật (gỡ lệnh tắt) camera của các client ds; ai = tên hiển thị. Gọi khi giữ khóa. */
+    void tatBatCamera(List<Khach> ds, boolean tat, String ai) {
+        List<String> vanTat = new ArrayList<>();
+        for (Khach k : ds) {
+            k.serverTat = tat;
+            k.guiCamera();
+            if (k.tuTat) vanTat.add(k.ten);
+        }
+        if (tat) phatSuKien("server tắt camera " + ai);
+        else phatSuKien("server bật camera " + ai + (vanTat.isEmpty() ? "" : " (" + String.join(", ", vanTat) + " vẫn tự tắt)"));   // quy tắc 3
+    }
+
+    /** Giới hạn fps gửi (quy tắc 4). */
+    void datFpsToiDa(List<Khach> ds, String ai, int n) {
+        for (Khach k : ds) {
+            k.fpsToiDa = Math.max(1, Math.min(30, n));
+            k.guiCamera();
+        }
+        phatSuKien("server giới hạn " + ai + " gửi tối đa " + n + " fps");
+    }
+
+    /** Độ phân giải gửi 1/n (n = 1, 2, 4). */
+    void datDoPhanGiai(List<Khach> ds, String ai, int n) {
+        for (Khach k : ds) {
+            k.chia = n;
+            k.guiCamera();
+        }
+        phatSuKien("server đặt độ phân giải " + ai + " = 1/" + n);
+    }
+
+    void datFpsChung(int n) {
+        fpsChung = Math.max(1, Math.min(30, n));
+        for (Khach k : dsKhach.values()) k.guiNhan(fpsChung);
+        phatSuKien("server đặt fps chung tối đa " + fpsChung);
+    }
+
+    // ---------------------------------------------------------------- Bảng điều khiển (stdin)
+    boolean lenhServer(String dong) {
         String[] p = dong.strip().split("\\s+");
         if (p[0].isEmpty()) return true;
         slog(String.format(Locale.ROOT, "t=%.1fs > %s", Video.giay(), dong));
         synchronized (khoa) {
             String ai = p.length > 1 ? (p[1].equals("tat_ca") ? "tất cả" : p[1]) : "";
             if ((p[0].equals("tat_camera") || p[0].equals("bat_camera")) && p.length == 2) {
-                List<String> vanTat = new ArrayList<>();
-                for (Khach k : chon(p[1])) {
-                    k.serverTat = p[0].equals("tat_camera");
-                    k.guiCamera();
-                    if (k.tuTat) vanTat.add(k.ten);
-                }
-                if (p[0].equals("tat_camera")) phatSuKien("server tắt camera " + ai);
-                else phatSuKien("server bật camera " + ai + (vanTat.isEmpty() ? "" : " (" + String.join(", ", vanTat) + " vẫn tự tắt)"));   // quy tắc 3
+                tatBatCamera(chon(p[1]), p[0].equals("tat_camera"), ai);
             } else if (p[0].equals("fps_toi_da") && p.length == 3) {
-                int n = Integer.parseInt(p[2]);
-                for (Khach k : chon(p[1])) {
-                    k.fpsToiDa = Math.max(1, Math.min(30, n));
-                    k.guiCamera();
-                }
-                phatSuKien("server giới hạn " + ai + " gửi tối đa " + p[2] + " fps");
+                datFpsToiDa(chon(p[1]), ai, Integer.parseInt(p[2]));
             } else if (p[0].equals("do_phan_giai") && p.length == 3 && List.of("1", "2", "4").contains(p[2])) {
-                int n = Integer.parseInt(p[2]);
-                for (Khach k : chon(p[1])) {
-                    k.chia = n;
-                    k.guiCamera();
-                }
-                phatSuKien("server đặt độ phân giải " + ai + " = 1/" + p[2]);
+                datDoPhanGiai(chon(p[1]), ai, Integer.parseInt(p[2]));
             } else if (p[0].equals("fps_chung") && p.length == 2) {
-                fpsChung = Math.max(1, Math.min(30, Integer.parseInt(p[1])));
-                for (Khach k : dsKhach.values()) k.guiNhan();
-                phatSuKien("server đặt fps chung tối đa " + fpsChung);
+                datFpsChung(Integer.parseInt(p[1]));
             } else if (p[0].equals("trang_thai")) {
                 inTrangThai();
             } else if (p[0].equals("thoat")) {
@@ -324,7 +361,7 @@ public class ServerVideo {
 
     static String padPhai(String s, int n) { return s + " ".repeat(Math.max(0, n - s.length())); }
 
-    static void inTrangThai() {
+    void inTrangThai() {
         slog("Trạng thái: " + dsKhach.size() + " client, fps chung " + fpsChung);
         slog("                     giới hạn vào        ra (lưới)");
         slog(" #  tên camera       fps 1/n  fps  kbit  fps  kbit");
@@ -333,7 +370,7 @@ public class ServerVideo {
                     k.fpsToiDa, k.chia, k.fpsVao, k.kbpsVao, k.fpsRa, k.kbpsRa));
     }
 
-    static void inTongKet() {
+    void inTongKet() {
         slog("Tổng kết luồng vào (từ client tới server):");
         slog(" #  tên mảnh khung hỏng mảnh mất  bỏ:tắt vượt fps");
         slog("        nhận    đủ        mất hẳn");
@@ -347,21 +384,23 @@ public class ServerVideo {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        String host = args.length > 0 ? args[0] : "127.0.0.1";
-        int congTCP = args.length > 1 ? Integer.parseInt(args[1]) : 9000;
-        congUDP = args.length > 2 ? Integer.parseInt(args[2]) : congTCP + 1;
-        ServerSocket ln = new ServerSocket();
+    // ---------------------------------------------------------------- Khởi động, dừng
+    /** Mở cổng TCP, UDP; chạy luồng nhận kết nối, luồng nhận UDP và luồng ghép lưới – gửi. */
+    void batDau(String host, int congTCP, int congUDP) throws IOException {
+        this.congUDP = congUDP;
+        ln = new ServerSocket();
         ln.setReuseAddress(true);
         ln.bind(new InetSocketAddress(host, congTCP));
-        DatagramSocket udp = new DatagramSocket(new InetSocketAddress(host, congUDP));
+        try {
+            udp = new DatagramSocket(new InetSocketAddress(host, congUDP));
+        } catch (IOException e) {
+            ln.close();
+            throw e;
+        }
         udp.setReceiveBufferSize(1 << 20);                         // đệm nhận lớn: mảnh đến dồn dập
         slog("TCP " + host + ":" + congTCP + " điều khiển; UDP :" + congUDP + " video");
         slog("Khung " + Video.RONG + "x" + Video.CAO + " RGB " + Video.RONG * Video.CAO * 3 + " B, nén zlib, mảnh ≤ 1200 B");
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            slog("Dừng server (Ctrl+C)");
-            synchronized (khoa) { inTongKet(); }
-        }));
+        dangChay = true;
         Thread.ofPlatform().daemon().start(() -> {
             while (true) {
                 try {
@@ -369,12 +408,34 @@ public class ServerVideo {
                     c.setTcpNoDelay(true);
                     Thread.ofVirtual().start(() -> phucVu(c));
                 } catch (IOException e) {
-                    return;
+                    return;                                        // ln đã đóng (STOP SERVER)
                 }
             }
         });
         Thread.ofPlatform().daemon().start(() -> nhanUDP(udp));
         Thread.ofPlatform().start(() -> vongGui(udp));             // luồng thường: giữ JVM chạy tới khi Ctrl+C
-        if (Video.chayKichBan(ServerVideo::lenhServer)) System.exit(0);
+    }
+
+    /** STOP SERVER: đóng cổng, ngắt mọi client, dừng luồng gửi. */
+    void dung() {
+        dangChay = false;
+        try { ln.close(); } catch (IOException ignored) { }
+        udp.close();
+        synchronized (khoa) {
+            for (Khach k : dsKhach.values()) try { k.conn.close(); } catch (IOException ignored) { }
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        String host = args.length > 0 ? args[0] : "127.0.0.1";
+        int congTCP = args.length > 1 ? Integer.parseInt(args[1]) : 9000;
+        int congUDP = args.length > 2 ? Integer.parseInt(args[2]) : congTCP + 1;
+        ServerVideo s = new ServerVideo(x -> System.out.println("[server] " + x));
+        s.batDau(host, congTCP, congUDP);
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            s.slog("Dừng server (Ctrl+C)");
+            synchronized (s.khoa) { s.inTongKet(); }
+        }));
+        if (Video.chayKichBan(s::lenhServer)) System.exit(0);
     }
 }

@@ -4,7 +4,7 @@
 |---|---|
 | Loại | **Bài mở rộng** – không có trong giáo trình, không có mã giả tương ứng |
 | Liên hệ với giáo trình | Bài mở rộng MR6.2 (hội thoại âm thanh); Chương 6: Bài 6.1 (server đa luồng), Bài 6.4 (server chat); Chương 4: Bài 4.1 (UDP); Chương 3: Bài 3.2 (định khung thông điệp) |
-| Thư viện | JDK 21: `java.net.Socket`, `java.net.DatagramSocket`, `java.nio.ByteBuffer`, `java.util.zip.Deflater`/`Inflater` (zlib), `javax.imageio.ImageIO` (PNG); `Json.java` tự viết |
+| Thư viện | JDK 21: `java.net.Socket`, `java.net.DatagramSocket`, `java.nio.ByteBuffer`, `java.util.zip.Deflater`/`Inflater` (zlib), `javax.imageio.ImageIO` (PNG); Swing, `java.awt.Robot`, `ProcessBuilder` (camera thật qua ffmpeg) cho bản giao diện; `Json.java` tự viết – chỉ JDK |
 | Bản ngôn ngữ khác | [C#](../../../csharp/Chuong06/BaiMR6.3_HoiThoaiVideo/), [Python](../../../python/Chuong06/BaiMR6.3_HoiThoaiVideo/), [Rust](../../../rust/Chuong06/BaiMR6.3_HoiThoaiVideo/), [Go](../../../go/Chuong06/BaiMR6.3_HoiThoaiVideo/) |
 
 ## Mục tiêu
@@ -36,7 +36,14 @@ Cùng ý tưởng với MR6.2 nhưng cho hình ảnh: n client gửi khung hình
 - `ServerVideo.java` – server: kênh TCP (mỗi client một luồng ảo), luồng nhận UDP (ghép mảnh, kiểm tra quyền, vẽ ô), luồng ghép lưới và gửi theo hạn của từng người nhận, bảng điều khiển.
 - `KhachVideo.java` – client: vòng gửi theo fps cho phép, luồng nhận lưới, lệnh `chup`, ghép ảnh chụp (`--ghep`).
 - `Json.java` – bộ mã hóa, giải mã JSON tối giản (chép từ Bài 5.3 bản Java).
-- `demo.json`, `ket_qua.txt`, `ket_qua.png` – kịch bản và kết quả thực thi thật; `ket_qua_video.png` – 5 ảnh lưới do client A chụp trong lần chạy đó.
+- Bản giao diện (Swing):
+  - `ServerVideoGui.java` – cửa sổ "Camera Server" (vai trò `server_gui`): lưới 4×4, danh sách client, điều khiển, nhật ký; dùng thẳng lớp `ServerVideo`.
+  - `KhachVideoGui.java` – cửa sổ "Camera Client" (vai trò `client_gui`); `PhienVideo.java` – phần mạng/camera của client giao diện.
+  - `CameraFfmpeg.java` – liệt kê camera và đọc khung RGB thô từ tiến trình `ffmpeg`; camera giả lập; `KhungHinh.java` – ô hiển thị khung hình.
+  - `DemoGui.java` – kịch bản tự thao tác (vai trò `demo_gui`), chụp cửa sổ thành `ket_qua_gui.png`.
+- `demo.json`, `ket_qua.txt`, `ket_qua.png` – kịch bản và kết quả thực thi thật (gồm cả phần `demo_gui`); `ket_qua_video.png` – 5 ảnh lưới do client A chụp trong lần chạy đó; `ket_qua_gui.png` – ảnh các cửa sổ giao diện.
+
+`ServerVideo` được tổ chức thành lớp có đối tượng để bản giao diện bấm START/STOP SERVER nhiều lần và gọi chung các hàm `tatBatCamera`, `datFpsToiDa`, `datDoPhanGiai`, `datFpsChung` với bảng điều khiển stdin; server lưu thêm khung giải nén mới nhất của từng client (`anhMoi`) để vẽ lưới. Đầu ra bản dòng lệnh và giao thức không đổi.
 
 ## Cách chạy
 Trong thư mục bài:
@@ -70,6 +77,41 @@ Tái lập kết quả từ thư mục gốc của kho: `python3 tools/demo.py j
 
 Luồng của B giả lập mất 2 % mảnh: server đếm được khung hỏng và mảnh mất (bảng tổng kết), các khung đó bị bỏ, lưới vẫn hiện khung đủ gần nhất của B.
 
+## Ứng dụng giao diện
+![Ứng dụng giao diện: Camera Server và ba Camera Client](ket_qua_gui.png)
+
+**Server – "Camera Server"**: lưới 4×4 ô, mỗi client một ô (tên, fps nhận được, giới hạn gửi, kbit/s; **chấm đỏ** và chữ "Camera tắt (server)/(tự tắt)" khi camera tắt); bấm vào ô hoặc chọn trong danh sách để điều khiển client đó: **Tắt/Bật camera** (khóa của server), **fps gửi tối đa** 1–15, **độ phân giải gửi** 1/1, 1/2, 1/4; **fps chung** cho mọi người nhận; nhật ký; START SERVER / STOP SERVER; thanh trạng thái (số client, tổng kbit/s vào). Giao thức không thêm thông điệp nào.
+
+**Client – "Camera Client"**: *Kết nối Server* (IP, cổng, tên); *Camera* (danh sách camera thật + "Mẫu thử ffmpeg (testsrc)" + "Camera giả lập"; START = tự bật, CANCEL = tự tắt); khung *Camera của tôi* (xem trước, chấm đỏ khi không gửi); khung *Lưới nhận từ server* (chọn fps nhận, độ phân giải 1/1, 1/2); thanh trạng thái "Đang truyền dữ liệu camera… gửi x fps, y kbit/s".
+
+### Camera thật qua ffmpeg
+JDK không có API camera, nên bản Java chạy tiến trình `ffmpeg` (không thư viện ngoài) và đọc đúng 160 × 120 × 3 = 57 600 byte cho mỗi khung từ stdout, rồi đưa vào đường gửi sẵn có (thu nhỏ, nén zlib, chia mảnh):
+- liệt kê: Windows `ffmpeg -hide_banner -list_devices true -f dshow -i dummy` (đọc dòng `"Tên" (video)`), Linux các tệp `/dev/video*`, macOS `ffmpeg -f avfoundation -list_devices true -i ""`;
+- thu: `ffmpeg -f dshow -i video="Tên"` (Linux `-f v4l2 -i /dev/video0`) `-vf scale=160:120,fps=15 -pix_fmt rgb24 -f rawvideo pipe:1`. Truyền qua `ProcessBuilder` thì đối số là `video=Tên` (Java tự đặt ngoặc kép khi tên có khoảng trắng).
+- Cài ffmpeg trên Windows: `winget install -e --id Gyan.FFmpeg` (mở lại cửa sổ dòng lệnh để `ffmpeg` có trong PATH). Không có ffmpeg hoặc camera, danh sách chỉ còn "Camera giả lập" (khung tổng hợp như bản dòng lệnh); ffmpeg dừng giữa chừng (camera bị chương trình khác chiếm…) thì client tự chuyển sang giả lập và báo lý do.
+- "Mẫu thử ffmpeg (testsrc)" dùng nguồn ảo `-f lavfi -i testsrc` – kiểm tra đường ffmpeg trên máy không có camera.
+- Camera chỉ được mở khi bấm START; vừa kết nối, client gửi ngay `tu_tat_camera`.
+
+### Cách chạy
+```bash
+javac -encoding UTF-8 -d out *.java
+java -cp out ServerVideoGui 127.0.0.1 9000 9001        # cửa sổ server
+java -cp out KhachVideoGui 127.0.0.1 9000 A             # mỗi client một cửa sổ
+java -cp out DemoGui 127.0.0.1 43637 43638              # kịch bản tự thao tác, ghi ket_qua_gui.png
+```
+Windows: chỉ cần JDK 21 (ví dụ `winget install -e --id Microsoft.OpenJDK.21`) và ffmpeg cho camera thật. Linux không có màn hình: `xvfb-run -a -s "-screen 0 2100x1300x24" java -cp out DemoGui`.
+
+### Luồng và quy tắc chạm điều khiển
+```
+ Luồng giao diện (EDT) ──bấm nút──> luồng lệnh nền ──> ServerVideo (giữ khóa, gửi tin TCP) / PhienVideo
+        ^   Timer Swing 66 ms: chụp nhanh khung mới nhất (byte[] không đổi sau khi tạo) -> BufferedImage -> vẽ ô
+        |   invokeLater(nhật ký, kết quả kết nối, danh sách camera)
+ Server: nhận kết nối, đọc TCP, nhận UDP (ghép mảnh, giải nén), luồng ghép lưới – gửi
+ Client: đọc TCP, nhận UDP (ghép lưới), vòng gửi 2 ms (lấy khung, thu nhỏ, nén, chia mảnh)
+ Tiến trình ffmpeg ──stdout 57 600 B/khung──> luồng đọc khung ──(khung mới nhất)──> vòng gửi;  stderr -> luồng đọc lỗi
+```
+Chỉ EDT chạm vào điều khiển Swing; liệt kê camera (chạy ffmpeg 1–2 s), kết nối, khởi động ffmpeg đều chạy trên luồng nền. Khi đặt điều khiển theo client đang chọn, cờ `dangDongBo` chặn sự kiện phát ngược lệnh về server.
+
 ## Ghi chú
 - Nén bằng `java.util.zip.Deflater(BEST_SPEED)` cho dòng dữ liệu định dạng zlib (có header 2 byte và Adler-32) – giống `zlib.compress` của Python và `compress/zlib` của Go, nên ba bản giải nén được khung của nhau. `Inflater` được đọc từng khối và dừng khi vượt 4 MB (chống “bom nén”).
 - PNG được ghi bằng `ImageIO.write` từ `BufferedImage` kiểu `TYPE_INT_RGB` (bản Python tự viết các khối PNG, bản Go dùng `image/png`).
@@ -78,13 +120,16 @@ Luồng của B giả lập mất 2 % mảnh: server đếm được khung hỏn
 - Nén zlib không mất dữ liệu kém xa codec video thật: H.264/VP8/AV1 nén có mất dữ liệu và chỉ gửi phần thay đổi giữa các khung (nén liên khung), đạt chất lượng tương đương ở vài chục kbit/s cho khung nhỏ như thế này. Video thật còn cần SRTP để mã hóa, điều khiển tắc nghẽn để tự giảm tốc khi mạng nghẽn, và đồng bộ hình–tiếng theo nhãn thời gian.
 - Server ghép lưới và nén lại cho từng người nhận mỗi khung; với nhiều client hơn, CPU server sẽ là nút thắt – đó chính là lý do hệ thống lớn dùng SFU.
 - Kiểm thử: Linux, OpenJDK 21.0.12.
+- Kết quả bản giao diện (`demo_gui` trong `ket_qua.txt`, ảnh `ket_qua_gui.png`) chạy thật dưới `xvfb-run` trên Linux với ffmpeg 6.1: container không có `/dev/video*`, nên A, B dùng **camera giả lập**, C dùng **mẫu thử ffmpeg** (đúng đường đọc khung thô từ tiến trình ffmpeg). Số liệu: ban đầu mỗi client gửi 10 fps (A, B ≈ 560 kbit/s, C ≈ 240 kbit/s), nhận lưới 320×240 10 fps ≈ 1,4 Mbit/s; sau khi server giới hạn B 2 fps, đặt C 1/4, tắt camera A: B vào 2 fps ≈ 115 kbit/s, C ≈ 30 kbit/s, ô A chấm đỏ và A xin bật lại bị từ chối; B chọn nhận 5 fps, 1/2 → lưới 160×120 ≈ 138 kbit/s. Camera thật (dshow) cần chạy trên Windows của tác giả.
 
 ## Bài tập gợi ý
 1. Thêm `fps_chung 3` vào kịch bản server và quan sát fps nhận của mọi client; giải thích vì sao `nhan_fps 30` của client vẫn không vượt được giới hạn này.
 2. Chạy client với `--mat-goi 0.1`: tính xác suất một khung 6 mảnh đến đủ (0,9⁶ ≈ 53 %) và so sánh với số khung hỏng server đếm được. Vì sao khung lớn chịu mất gói kém hơn?
 3. Bỏ ô của chính người nhận khỏi lưới (giống mix-minus) và đo băng thông tiết kiệm được.
 4. Hiển thị video trực tiếp: Tkinter `PhotoImage` nhận dữ liệu PPM (`P6` + header + RGB thô) – cập nhật ảnh mỗi khi nhận khung lưới mới.
-5. Nâng cao: chuyển server sang kiến trúc SFU – chuyển tiếp nguyên mảnh của từng người, client tự ghép lưới; giới hạn fps nhận bằng cách server bỏ cả khung (mọi mảnh có cùng số khung). So sánh CPU server và độ trễ với bản MCU.
+5. Giao diện: thêm nút "Chụp" trên Camera Client lưu lưới đang xem thành PNG (`ImageIO.write`) – thực hiện ghi tệp trên luồng nền, chỉ đổi nhãn kết quả trên EDT.
+6. Giao diện: cho server phóng to một ô khi bấm đúp (hiện riêng camera của client đó ở 1/1) và hiển thị đồ thị kbit/s 10 giây gần nhất của client đang chọn.
+7. Nâng cao: chuyển server sang kiến trúc SFU – chuyển tiếp nguyên mảnh của từng người, client tự ghép lưới; giới hạn fps nhận bằng cách server bỏ cả khung (mọi mảnh có cùng số khung). So sánh CPU server và độ trễ với bản MCU.
 
 ## Đọc thêm
 - RFC 9000 – *QUIC: A UDP-Based Multiplexed and Secure Transport*, mục 14 (kích thước datagram 1200 byte).
