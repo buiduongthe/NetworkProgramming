@@ -1,0 +1,11 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server", "cmd": ["../../target/release/mr5_3_giao_dien_da_tac_vu", "server", "127.0.0.1", "44530"], "background": true, "wait": 0.8},
+    {"name": "ui", "cmd": ["../../target/release/mr5_3_giao_dien_da_tac_vu", "ui", "127.0.0.1", "44539", "127.0.0.1", "44530"], "background": true, "wait": 0.8},
+    {"name": "browser", "cmd": ["python3", "chup_giao_dien.py", "44539"], "timeout": 90, "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ thử (HTTP, DNS giả lập, cổng mở)",
+             "ui": "Cửa sổ 2 – chương trình giao diện (Rust, tokio, SSE)",
+             "browser": "Cửa sổ 3 – trình duyệt do Playwright điều khiển"}
+}

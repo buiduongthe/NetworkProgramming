@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Giao diện đa tác vụ</title>
+<!-- Bài mở rộng MR5.3 – trang giao diện cho bản Rust (dùng chung với bản Go). Mọi lời gọi API dùng fetch() bất đồng bộ; tiến trình
+     về qua Server-Sent Events. Riêng nút "Làm SAI" dùng XMLHttpRequest ĐỒNG BỘ để thấy luồng chính bị chặn. -->
+<style>
+  :root { --bg:#eef0f4; --card:#fff; --ink:#1d2330; --muted:#5b6475; --line:#c9ced8; --bar:#2f5d8a; --accent:#2457c5; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.4 system-ui, "Segoe UI", Roboto, sans-serif; }
+  #win { width:980px; max-width:100%; margin:0 auto; padding:10px 14px; background:#f7f8fa; }
+  .top { display:flex; align-items:center; gap:14px; }
+  #clock { font:bold 24px ui-monospace, "DejaVu Sans Mono", Consolas, monospace; }
+  #anim { position:relative; width:260px; height:36px; background:#e9edf5; border-radius:6px; overflow:hidden; }
+  #ball { position:absolute; top:8px; left:0; width:20px; height:20px; border-radius:50%; background:var(--accent); }
+  #spin { position:absolute; right:6px; top:3px; width:30px; height:30px; border:4px solid #e07b00; border-right-color:transparent; border-radius:50%; }
+  #stats { margin:6px 0 2px; color:var(--muted); white-space:pre-line; }
+  .bar { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:8px 0; }
+  button { font:inherit; padding:4px 12px; border:1px solid #9aa3b2; background:#fff; border-radius:4px; cursor:pointer; }
+  button:disabled { color:#aab; cursor:default; }
+  #btnBad { background:#f6d5d9; border-color:#d9a0a8; }
+  input[type=number] { width:48px; font:inherit; }
+  fieldset { border:1px solid var(--line); border-radius:6px; margin:6px 0; padding:6px 10px; background:var(--card); }
+  legend { color:var(--muted); }
+  .row { display:grid; grid-template-columns:220px 300px 1fr 60px; align-items:center; gap:8px; padding:2px 0; }
+  .prog { height:16px; background:#dfe3ea; border:1px solid #b9c0cc; }
+  .prog > div { height:100%; width:0; background:var(--bar); }
+  #log { height:190px; overflow-y:auto; font:12px/1.45 ui-monospace, "DejaVu Sans Mono", Consolas, monospace; white-space:pre; }
+</style>
+</head>
+<body>
+<div id="win">
+  <div class="top"><span id="clock">--:--:--.---</span><div id="anim"><div id="ball"></div><div id="spin"></div></div></div>
+  <div id="stats">Khoảng cách thật giữa hai nhịp đồng hồ (đặt 20 ms):
+  đang đo…</div>
+  <div class="bar">
+    <input id="n" type="number" min="1" max="8" value="5"><button id="btnDl">Tải tệp</button>
+    <button id="btnPorts">Kiểm tra cổng</button><button id="btnDns">Tra cứu tên</button>
+    <label>Giới hạn đồng thời <input id="limit" type="range" min="1" max="8" value="3"> <b id="limitVal">3</b></label>
+    <button id="btnCancelAll">Hủy tất cả</button><button id="btnBad">Làm SAI (gọi đồng bộ)</button>
+  </div>
+  <fieldset><legend>Tác vụ</legend><div id="tasks"></div></fieldset>
+  <fieldset><legend>Nhật ký</legend><div id="log"></div></fieldset>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+const tasks = {};                     // id -> {row, done}
+const stats = {};                     // giai đoạn -> {n, sum, max} (ms)
+let last = performance.now(), ticks = 0, badPending = false;
+let paused = false, skipNext = false;   // kịch bản minh họa tạm dừng đo trong lúc chụp ảnh
+
+// ---------- nhịp đồng hồ 20 ms: đo khoảng cách thật giữa hai nhịp ----------
+function tick() {
+  const now = performance.now(), gap = now - last;
+  last = now;
+  if (paused || skipNext) skipNext = paused;
+  else if (ticks > 0) {
+    let phase = "rỗi";
+    if (badPending) { phase = "luồng chính bị chặn"; badPending = false; }
+    else if (running().length > 0) phase = "chạy song song";
+    const s = stats[phase] || (stats[phase] = { n: 0, sum: 0, max: 0 });
+    s.n++; s.sum += gap; s.max = Math.max(s.max, gap);
+  }
+  ticks++;
+  const d = new Date();
+  $("clock").textContent = d.toTimeString().slice(0, 8) + "." + String(d.getMilliseconds()).padStart(3, "0");
+  $("ball").style.left = (110 + 100 * Math.sin(now / 1000 * 3)) + "px";      // quả bóng chạy qua lại
+  $("spin").style.transform = `rotate(${(now / 1000 * 360) % 360}deg)`;
+  const parts = ["chạy song song", "luồng chính bị chặn"].filter(p => stats[p]).map(p =>
+    `  • ${p}: tối đa ${stats[p].max.toFixed(0)} ms, trung bình ${(stats[p].sum / stats[p].n).toFixed(1)} ms (${stats[p].n} nhịp)`);
+  $("stats").textContent = ["Khoảng cách thật giữa hai nhịp đồng hồ (đặt 20 ms):", ...(parts.length ? parts : ["  đang đo…"])].join("\n");
+}
+setInterval(tick, 20);
+
+// ---------- tác vụ và sự kiện SSE ----------
+function running() { return Object.values(tasks).filter(t => !t.done); }
+function addRow(id, name) {
+  const row = document.createElement("div");
+  row.className = "row"; row.id = "row-" + id;
+  row.innerHTML = `<span>#${id} ${name}</span><div class="prog"><div></div></div><span class="st">chờ lượt</span><button>Hủy</button>`;
+  row.querySelector("button").onclick = () => fetch("/api/cancel?id=" + id, { method: "POST" });
+  $("tasks").appendChild(row);
+  tasks[id] = { row, done: false };
+}
+function clearFinished() {
+  for (const [id, t] of Object.entries(tasks)) if (t.done) { t.row.remove(); delete tasks[id]; }
+}
+function addLog(text) {
+  const box = $("log");
+  box.textContent += text + "\n";
+  box.scrollTop = box.scrollHeight;
+}
+const es = new EventSource("/api/events");
+es.onmessage = e => {
+  const ev = JSON.parse(e.data), t = tasks[ev.id];
+  if (ev.type === "new") addRow(ev.id, ev.name);
+  else if (ev.type === "log") addLog(ev.text);
+  else if (t && ev.type === "progress") { t.row.querySelector(".prog > div").style.width = ev.pct + "%"; t.row.querySelector(".st").textContent = ev.text; }
+  else if (t && ev.type === "state") t.row.querySelector(".st").textContent = ev.text;
+  else if (t && ev.type === "done") { t.done = true; t.row.querySelector(".st").textContent = ev.text; t.row.querySelector("button").disabled = true; }
+};
+
+// ---------- nút bấm: chỉ gọi fetch() bất đồng bộ, không chờ ----------
+const post = url => fetch(url, { method: "POST" });
+$("btnDl").onclick = () => { clearFinished(); post("/api/start?kind=tai&n=" + $("n").value); };
+$("btnPorts").onclick = () => { clearFinished(); post("/api/start?kind=cong"); };
+$("btnDns").onclick = () => { clearFinished(); post("/api/start?kind=dns"); };
+$("btnCancelAll").onclick = () => post("/api/cancel_all");
+$("limit").onchange = e => { $("limitVal").textContent = e.target.value; post("/api/limit?n=" + e.target.value); };
+$("btnBad").onclick = () => {
+  // CÁCH SAI: XMLHttpRequest đồng bộ – luồng chính của trang đứng chờ cho tới khi server trả lời
+  const t = performance.now();
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "/api/bad", false);
+  xhr.send();
+  const ms = performance.now() - t;
+  badPending = true;
+  post("/api/log?text=" + encodeURIComponent(`Trang bị chặn ${ms.toFixed(0)} ms: đồng hồ, nút, thanh tiến trình đứng yên`));
+};
+window.demo = { running: () => running().length, stats, pause: on => { paused = on; } };      // cho kịch bản Playwright
+</script>
+</body>
+</html>

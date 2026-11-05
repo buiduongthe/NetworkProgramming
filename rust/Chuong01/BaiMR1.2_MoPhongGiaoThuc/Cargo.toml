@@ -1,0 +1,9 @@
+[package]
+name = "mr1_2_mo_phong_giao_thuc"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR1.2 – Mô phỏng giao thức và kiểu truyền theo sự kiện rời rạc"
+publish = false
+
+[dependencies]
+serde_json = { version = "=1.0.154", features = ["preserve_order"] }

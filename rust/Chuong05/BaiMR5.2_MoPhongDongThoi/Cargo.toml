@@ -1,0 +1,9 @@
+[package]
+name = "mr5_2_mo_phong_dong_thoi"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR5.2 – So sánh các mô hình đồng thời: tuần tự, luồng, nhóm luồng, tokio, spawn_blocking"
+publish = false
+
+[dependencies]
+tokio = { version = "=1.54.1", features = ["rt", "rt-multi-thread", "macros", "net", "io-util", "time", "sync", "signal"] }

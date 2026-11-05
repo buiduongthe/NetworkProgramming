@@ -1,0 +1,10 @@
+[package]
+name = "mr5_3_giao_dien_da_tac_vu"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR5.3 – Giao diện web cục bộ luôn phản hồi khi nhiều tác vụ mạng chạy song song (tokio, SSE)"
+publish = false
+
+[dependencies]
+serde_json = { version = "=1.0.154", features = ["preserve_order"] }
+tokio = { version = "=1.54.1", features = ["rt-multi-thread", "macros", "net", "io-util", "time", "sync", "signal"] }

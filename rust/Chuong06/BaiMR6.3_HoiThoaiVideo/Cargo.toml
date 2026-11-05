@@ -1,0 +1,12 @@
+[package]
+name = "mr6_3_hoi_thoai_video"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR6.3 – Phòng hội thoại video nhiều client: chia mảnh UDP, ghép lưới kiểu MCU, PNG viết tay"
+publish = false
+
+[dependencies]
+ctrlc = "=3.4.7"
+miniz_oxide = "=0.8.9"   # nén/giải nén zlib (RFC 1950) thuần Rust, thay cho mô-đun zlib của Python
+serde_json = { version = "=1.0.154", features = ["preserve_order"] }
+socket2 = "=0.5.10"      # đặt SO_RCVBUF lớn cho socket UDP (std không có hàm này)

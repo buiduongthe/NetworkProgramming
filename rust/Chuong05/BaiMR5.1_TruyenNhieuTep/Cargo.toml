@@ -1,0 +1,12 @@
+[package]
+name = "mr5_1_truyen_nhieu_tep"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR5.1 – Truyền nhiều tệp đồng thời có điều khiển và giới hạn tốc độ"
+publish = false
+
+[dependencies]
+ctrlc = "=3.4.7"
+getrandom = "=0.3.3"   # tạo nội dung ngẫu nhiên cho tệp thử (như os.urandom)
+serde_json = { version = "=1.0.154", features = ["preserve_order"] }
+sha2 = "=0.10.9"

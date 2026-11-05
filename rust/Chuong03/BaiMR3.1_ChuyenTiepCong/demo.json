@@ -1,0 +1,17 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "dich", "cmd": ["../../target/release/mr3_1_chuyen_tiep_cong", "dich", "127.0.0.1", "44311"], "background": true, "wait": 0.6},
+    {"name": "chuyen_tiep", "cmd": ["../../target/release/mr3_1_chuyen_tiep_cong", "chuyentiep", "127.0.0.1", "44310", "127.0.0.1", "44311"], "background": true, "wait": 0.6},
+    {"name": "chuyen_tiep_hong", "cmd": ["../../target/release/mr3_1_chuyen_tiep_cong", "chuyentiep", "127.0.0.1", "44312", "127.0.0.1", "44313"], "background": true, "wait": 0.6},
+    {"name": "client_nho", "cmd": ["../../target/release/mr3_1_chuyen_tiep_cong", "client", "127.0.0.1", "44310", "Xin chào lập trình mạng"]},
+    {"name": "client_lon", "cmd": ["../../target/release/mr3_1_chuyen_tiep_cong", "client", "127.0.0.1", "44310", "dữ liệu lớn ", "20000"]},
+    {"name": "client_hong", "cmd": ["../../target/release/mr3_1_chuyen_tiep_cong", "client", "127.0.0.1", "44312", "Có ai không?"], "wait": 0.5}
+  ],
+  "titles": {"dich": "Cửa sổ 1 – server đích (chữ hoa) cổng 44311",
+             "chuyen_tiep": "Cửa sổ 2 – chuyển tiếp 44310 -> 44311",
+             "chuyen_tiep_hong": "Cửa sổ 3 – chuyển tiếp 44312 -> 44313 (không có đích)",
+             "client_nho": "Cửa sổ 4 – client gửi chuỗi ngắn qua 44310",
+             "client_lon": "Cửa sổ 5 – client gửi 360 000 byte qua 44310",
+             "client_hong": "Cửa sổ 6 – client nối 44312 (đích không chạy)"}
+}

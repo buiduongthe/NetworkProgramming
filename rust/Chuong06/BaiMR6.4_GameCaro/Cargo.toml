@@ -1,0 +1,11 @@
+[package]
+name = "mr6_4_game_caro"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR6.4 – Caro nhiều phòng qua TCP, khám phá server trong LAN bằng UDP broadcast"
+publish = false
+
+[dependencies]
+ctrlc = "=3.4.7"
+serde_json = { version = "=1.0.154", features = ["preserve_order"] }
+socket2 = "=0.5.10"   # SO_REUSEADDR cho socket UDP khám phá (std không đặt được trước bind)

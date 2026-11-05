@@ -1,0 +1,146 @@
+===== server =====
+$ ../../target/release/mr6_4_game_caro server 0.0.0.0 44640 --kham-pha 44641 --ten 'Phòng-Lab-A' --het-gio-ms 1000
+[server] Phòng-Lab-A: Caro 15×15 tại 0.0.0.0:44640, khám phá UDP cổng 44641, mỗi nước tối đa 1000 ms
+[server] Trả lời discover từ 192.0.2.2:35960
+[server] An vào sảnh (192.0.2.2:48800)
+[server] An tạo phòng ban1
+[server] An vào phòng ban1 (quân X)
+[server] Cuong vào sảnh (127.0.0.1:52554)
+[server] Cuong tạo phòng ban2
+[server] Cuong vào phòng ban2 (quân X)
+[server] Trả lời discover từ 192.0.2.2:41229
+[server] Khach vào sảnh (127.0.0.1:52562)
+[server] Khach vào phòng ban1 (người xem)
+[server] Dung vào sảnh (127.0.0.1:52570)
+[server] Dung vào phòng ban2 (quân O)
+[server] Phòng ban2, ván 1: X = Cuong, O = Dung
+[server] Binh vào sảnh (127.0.0.1:52580)
+[server] Binh vào phòng ban1 (quân O)
+[server] Phòng ban1, ván 1: X = An, O = Binh
+[server] Từ chối Binh: NOT_YOUR_TURN
+[server] Từ chối Binh: CELL_TAKEN (h8)
+[server] Từ chối Binh: OUT_OF_BOARD (15, 3)
+[server] Phòng ban2: Dung (O) hết giờ
+[server] Phòng ban2, ván 1 kết thúc sau 1 nước: Cuong (X) thắng – đối thủ hết giờ
+[server] Dung rời phòng ban2
+[server] Dung tạm biệt
+[server] Cuong rời phòng ban2
+[server] Phòng ban2 đóng (không còn người chơi)
+[server] Cuong tạm biệt
+[server] Phòng ban1, ván 1 kết thúc sau 27 nước: An (X) thắng – 5 quân liên tiếp
+[server] Phòng ban1, ván 2: X = Binh, O = An
+[server] Phòng ban1, ván 2 kết thúc sau 28 nước: An (O) thắng – 5 quân liên tiếp
+[server] Binh rời phòng ban1
+[server] Binh tạm biệt
+[server] An rời phòng ban1
+[server] Phòng ban1 đóng (không còn người chơi)
+[server] An tạm biệt
+[server] Khach tạm biệt
+[server] Dừng server
+
+===== An =====
+$ ../../target/release/mr6_4_game_caro choi An --tim 44641 --tao ban1 --bot can_bang --so-van 2 --tre-ms 60
+[An] Tìm server Caro bằng broadcast tới cổng 44641...
+[An] Thấy Phòng-Lab-A tại 192.0.2.2:44640, kết nối
+[An] Vào sảnh; số phòng hiện có: 0
+[An] Vào phòng ban1, cầm quân X
+[An] Ván 1 bắt đầu: X = An, O = Binh (tôi cầm X)
+[An] Ván 1 kết thúc sau 27 nước: An (X) thắng – 5 quân liên tiếp
+[An] Binh xin chơi lại – đồng ý
+[An] Ván 2 bắt đầu: X = Binh, O = An (tôi cầm O)
+[An] Ván 2 kết thúc sau 28 nước: An (O) thắng – 5 quân liên tiếp
+[An] Binh rời phòng
+[An] Đã chơi 2 ván, rời phòng
+
+===== Cuong =====
+$ ../../target/release/mr6_4_game_caro choi Cuong 127.0.0.1 44640 --tao ban2 --bot can_bang --tre-ms 60
+[Cuong] Đã kết nối 127.0.0.1:44640
+[Cuong] Vào sảnh; số phòng hiện có: 1
+[Cuong] Vào phòng ban2, cầm quân X
+[Cuong] Ván 1 bắt đầu: X = Cuong, O = Dung (tôi cầm X)
+[Cuong] Ván 1 kết thúc sau 1 nước: Cuong (X) thắng – đối thủ hết giờ
+[Cuong] Dung rời phòng
+[Cuong] Đã chơi 1 ván, rời phòng
+
+===== tim =====
+$ ../../target/release/mr6_4_game_caro tim 44641 500
+[tim] Phát discover tới 255.255.255.255:44641, chờ 500 ms
+[tim] Tìm thấy 1 server:
+[tim]   Phòng-Lab-A tại 192.0.2.2:44640 – 2 phòng, 2 người
+
+===== Khach =====
+$ ../../target/release/mr6_4_game_caro choi Khach 127.0.0.1 44640 --xem ban1
+[Khach] Đã kết nối 127.0.0.1:44640
+[Khach] Xem phòng ban1 (X = An, O = chưa có)
+[Khach] Ván 1: X = An, O = Binh
+[Khach] Nước 10: Binh (O) g6
+[Khach] Nước 20: Binh (O) j10
+[Khach] Ván 1 kết thúc sau 27 nước: An (X) thắng – 5 quân liên tiếp
+    a b c d e f g h i j k l m n o
+  1 . . . . . . . . . . . . . . .
+  2 . . . . . . . . . . . . . . .
+  3 . . . . . . . . . . . . . . .
+  4 . . . . . x . . . . . . . . .
+  5 . . . . O X . O O . . . . . .
+  6 . . . . . X O X O . . . . . .
+  7 . . . . O X X X O X . . . . .
+  8 . . . . . X O X X X X O . . .
+  9 . . . . . O . O X O . . . . .
+ 10 . . . . . . . . . O . . . . .
+ 11 . . . . . . . . . . . . . . .
+ 12 . . . . . . . . . . . . . . .
+ 13 . . . . . . . . . . . . . . .
+ 14 . . . . . . . . . . . . . . .
+ 15 . . . . . . . . . . . . . . .
+[Khach] Dãy thắng: f4 f5 f6 f7 f8
+[Khach] Ván 2: X = Binh, O = An
+[Khach] Nước 10: An (O) g10
+[Khach] Nước 20: An (O) i7
+[Khach] Ván 2 kết thúc sau 28 nước: An (O) thắng – 5 quân liên tiếp
+    a b c d e f g h i j k l m n o
+  1 . . . . . . . . . . . . . . .
+  2 . . . . . . . . . . . . . . .
+  3 . . . . . . . . . . . . . . .
+  4 . . . . . . . . o X . . . . .
+  5 . . . . . . . . O . . . . . .
+  6 . . . . . . . O O . . . . . .
+  7 . . . . X O O O O X . . . . .
+  8 . . . . . O X X O . . . . . .
+  9 . . . . X X O X X X . . . . .
+ 10 . . . . . X O X X . . . . . .
+ 11 . . . . . . . O . X . . . . .
+ 12 . . . . . . . . . . O . . . .
+ 13 . . . . . . . . . . . . . . .
+ 14 . . . . . . . . . . . . . . .
+ 15 . . . . . . . . . . . . . . .
+[Khach] Dãy thắng: i4 i5 i6 i7 i8
+[Khach] Binh rời phòng
+[Khach] An rời phòng
+[Khach] Phòng ban1 đã đóng
+
+===== Dung =====
+$ ../../target/release/mr6_4_game_caro choi Dung 127.0.0.1 44640 --vao ban2 --bot im_lang
+[Dung] Đã kết nối 127.0.0.1:44640
+[Dung] Vào sảnh; số phòng hiện có: 2
+[Dung] Vào phòng ban2, cầm quân O
+[Dung] Ván 1 bắt đầu: X = Cuong, O = Dung (tôi cầm O)
+[Dung] Ván 1 kết thúc sau 1 nước: Cuong (X) thắng – đối thủ hết giờ
+[Dung] Đã chơi 1 ván, rời phòng
+
+===== Binh =====
+$ ../../target/release/mr6_4_game_caro choi Binh 127.0.0.1 44640 --vao ban1 --bot tap_su --seed 14 --thu-loi --so-van 2 --tre-ms 60
+[Binh] Đã kết nối 127.0.0.1:44640
+[Binh] Vào sảnh; số phòng hiện có: 2
+[Binh] Vào phòng ban1, cầm quân O
+[Binh] Ván 1 bắt đầu: X = An, O = Binh (tôi cầm O)
+[Binh] (thử lỗi) đánh h8 khi chưa đến lượt
+[Binh] Server báo lỗi NOT_YOUR_TURN: Chưa đến lượt bạn
+[Binh] (thử lỗi) đánh vào ô đã có quân h8 và ô ngoài bàn (15, 3)
+[Binh] Server báo lỗi CELL_TAKEN: Ô đã có quân
+[Binh] Server báo lỗi OUT_OF_BOARD: Ô nằm ngoài bàn cờ
+[Binh] Ván 1 kết thúc sau 27 nước: An (X) thắng – 5 quân liên tiếp
+[Binh] Xin chơi lại
+[Binh] Ván 2 bắt đầu: X = Binh, O = An (tôi cầm X)
+[Binh] Ván 2 kết thúc sau 28 nước: An (O) thắng – 5 quân liên tiếp
+[Binh] Đã chơi 2 ván, rời phòng
+

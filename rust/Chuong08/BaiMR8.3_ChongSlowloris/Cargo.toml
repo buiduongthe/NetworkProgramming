@@ -1,0 +1,11 @@
+[package]
+name = "mr8_3_chong_slowloris"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR8.3 – Phòng thủ tấn công từ chối dịch vụ mức ứng dụng kiểu Slowloris"
+publish = false
+
+[dependencies]
+# socket2 để gắn địa chỉ nguồn loopback (127.0.0.2) trước khi connect – thư viện chuẩn chưa hỗ trợ
+socket2 = "=0.5.10"
+ctrlc = "=3.4.7"       # in tổng kết khi nhận SIGINT (giống khối finally bắt KeyboardInterrupt của Python)

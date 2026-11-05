@@ -1,0 +1,10 @@
+[package]
+name = "mr3_3_game_doan_so"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR3.3 – Trò chơi đoán số nhiều người chơi qua TCP (khung JSON có tiền tố độ dài)"
+publish = false
+
+[dependencies]
+ctrlc = "=3.4.7"
+serde_json = { version = "=1.0.154", features = ["preserve_order"] }

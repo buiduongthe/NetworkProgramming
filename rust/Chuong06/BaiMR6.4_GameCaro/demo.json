@@ -1,0 +1,19 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server", "cmd": ["../../target/release/mr6_4_game_caro", "server", "0.0.0.0", "44640", "--kham-pha", "44641", "--ten", "Phòng-Lab-A", "--het-gio-ms", "1000"], "background": true, "wait": 0.6},
+    {"name": "An", "cmd": ["../../target/release/mr6_4_game_caro", "choi", "An", "--tim", "44641", "--tao", "ban1", "--bot", "can_bang", "--so-van", "2", "--tre-ms", "60"], "background": true, "wait": 1.2},
+    {"name": "Cuong", "cmd": ["../../target/release/mr6_4_game_caro", "choi", "Cuong", "127.0.0.1", "44640", "--tao", "ban2", "--bot", "can_bang", "--tre-ms", "60"], "background": true, "wait": 0.3},
+    {"name": "tim", "cmd": ["../../target/release/mr6_4_game_caro", "tim", "44641", "500"], "wait": 0.2},
+    {"name": "Khach", "cmd": ["../../target/release/mr6_4_game_caro", "choi", "Khach", "127.0.0.1", "44640", "--xem", "ban1"], "background": true, "wait": 0.3},
+    {"name": "Dung", "cmd": ["../../target/release/mr6_4_game_caro", "choi", "Dung", "127.0.0.1", "44640", "--vao", "ban2", "--bot", "im_lang"], "background": true, "wait": 0.3},
+    {"name": "Binh", "cmd": ["../../target/release/mr6_4_game_caro", "choi", "Binh", "127.0.0.1", "44640", "--vao", "ban1", "--bot", "tap_su", "--seed", "14", "--thu-loi", "--so-van", "2", "--tre-ms", "60"], "timeout": 30, "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server Caro (mỗi nước tối đa 1000 ms)",
+             "An": "Cửa sổ 2 – An (bot cân bằng, tìm server bằng broadcast)",
+             "Cuong": "Cửa sổ 3 – Cuong (bot, phòng ban2)",
+             "tim": "Cửa sổ 4 – tìm server trong LAN",
+             "Khach": "Cửa sổ 5 – Khach (người xem phòng ban1)",
+             "Dung": "Cửa sổ 6 – Dung (bot im lặng, phòng ban2)",
+             "Binh": "Cửa sổ 7 – Binh (bot tập sự, thử gửi nước sai)"}
+}

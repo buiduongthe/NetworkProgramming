@@ -1,0 +1,7 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "host", "cmd": ["python3", "mcp_test_client.py", "44840", "44841", "44842", "../../target/release/mr8_4_chong_ssrf_mcp"], "timeout": 60}
+  ],
+  "titles": {"host": "Cửa sổ dòng lệnh – client thử nghiệm MCP chống SSRF (META=44840, PUB=44841, REDIR=44842; server Rust)"}
+}

@@ -1,0 +1,79 @@
+===== thiet_bi =====
+$ ../../target/release/mr3_2_tu_dong_hoa_cli thietbi 127.0.0.1 44320
+[thiet-bi] R1 lắng nghe CLI tại 127.0.0.1:44320
+[thiet-bi] phiên #1: đăng nhập admin
+[thiet-bi] phiên #1 (127.0.0.1:40336) kết thúc
+[thiet-bi] phiên #2: đăng nhập admin
+[thiet-bi] phiên #2: Gi0/1: description Phong Lab
+[thiet-bi] phiên #2: Gi0/1: ip address 10.20.0.1 255.255.255.0
+[thiet-bi] phiên #2: Gi0/1: no shutdown
+[thiet-bi] phiên #2: Gi0/2: description WiFi Khach
+[thiet-bi] phiên #2: Gi0/2: ip address 10.20.1.1 255.255.255.128
+[thiet-bi] phiên #2: Gi0/2: no shutdown
+[thiet-bi] phiên #2: lưu cấu hình (write memory)
+[thiet-bi] phiên #2 (127.0.0.1:40348) kết thúc
+[thiet-bi] phiên #3: đăng nhập admin
+[thiet-bi] phiên #3 (127.0.0.1:40352) kết thúc
+[thiet-bi] phiên #4: đăng nhập SAI (user='admin')
+[thiet-bi] phiên #4 (127.0.0.1:40356) kết thúc
+[thiet-bi] Dừng thiết bị
+
+===== chay_thu =====
+$ ../../target/release/mr3_2_tu_dong_hoa_cli tudong 127.0.0.1 44320 muc_tieu.json --thu
+[tu-dong] Kết nối 127.0.0.1:44320, tài khoản admin
+[tu-dong] Chế độ chạy thử: chỉ in lệnh, không áp dụng
+[tu-dong] Thiết bị mô phỏng R1, phần mềm SIM-IOS 1.0
+[tu-dong] Gi0/0: đã đúng, không cần thay đổi
+[tu-dong] Gi0/1: cần 3 lệnh
+           + description Phong Lab
+           + ip address 10.20.0.1 255.255.255.0
+           + no shutdown
+[tu-dong] Gi0/2: cần 3 lệnh
+           + description WiFi Khach
+           + ip address 10.20.1.1 255.255.255.128
+           + no shutdown
+[tu-dong] show ip interface brief:
+  Interface IP-Address    Status                Protocol
+  Gi0/0     10.20.1.225   up                    up
+  Gi0/1     unassigned    administratively down down
+  Gi0/2     unassigned    administratively down down
+
+===== ap_dung =====
+$ ../../target/release/mr3_2_tu_dong_hoa_cli tudong 127.0.0.1 44320 muc_tieu.json
+[tu-dong] Kết nối 127.0.0.1:44320, tài khoản admin
+[tu-dong] Thiết bị mô phỏng R1, phần mềm SIM-IOS 1.0
+[tu-dong] Gi0/0: đã đúng, không cần thay đổi
+[tu-dong] Gi0/1: cần 3 lệnh
+           + description Phong Lab
+           + ip address 10.20.0.1 255.255.255.0
+           + no shutdown
+[tu-dong] Gi0/2: cần 3 lệnh
+           + description WiFi Khach
+           + ip address 10.20.1.1 255.255.255.128
+           + no shutdown
+[tu-dong] Đã áp dụng và kiểm chứng 6 lệnh, đã lưu cấu hình
+[tu-dong] show ip interface brief:
+  Interface IP-Address    Status                Protocol
+  Gi0/0     10.20.1.225   up                    up
+  Gi0/1     10.20.0.1     up                    up
+  Gi0/2     10.20.1.1     up                    up
+
+===== lan_hai =====
+$ ../../target/release/mr3_2_tu_dong_hoa_cli tudong 127.0.0.1 44320 muc_tieu.json
+[tu-dong] Kết nối 127.0.0.1:44320, tài khoản admin
+[tu-dong] Thiết bị mô phỏng R1, phần mềm SIM-IOS 1.0
+[tu-dong] Gi0/0: đã đúng, không cần thay đổi
+[tu-dong] Gi0/1: đã đúng, không cần thay đổi
+[tu-dong] Gi0/2: đã đúng, không cần thay đổi
+[tu-dong] Thiết bị đã ở đúng trạng thái mong muốn (lũy đẳng)
+[tu-dong] show ip interface brief:
+  Interface IP-Address    Status                Protocol
+  Gi0/0     10.20.1.225   up                    up
+  Gi0/1     10.20.0.1     up                    up
+  Gi0/2     10.20.1.1     up                    up
+
+===== sai_mk =====
+$ DEVICE_PASSWORD=sai-mat-khau ../../target/release/mr3_2_tu_dong_hoa_cli tudong 127.0.0.1 44320 muc_tieu.json
+[tu-dong] Kết nối 127.0.0.1:44320, tài khoản admin
+[tu-dong] LỖI: Đăng nhập thất bại
+

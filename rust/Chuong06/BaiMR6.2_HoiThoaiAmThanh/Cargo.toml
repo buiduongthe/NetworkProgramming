@@ -1,0 +1,11 @@
+[package]
+name = "mr6_2_hoi_thoai_am_thanh"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR6.2 – Phòng hội thoại âm thanh nhiều client: RTP/UDP, trộn mix-minus, WAV, Goertzel"
+publish = false
+
+[dependencies]
+ctrlc = "=3.4.7"
+serde = "=1.0.229"
+serde_json = { version = "=1.0.154", features = ["preserve_order"] }

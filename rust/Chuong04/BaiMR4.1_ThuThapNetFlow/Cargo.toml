@@ -1,0 +1,8 @@
+[package]
+name = "mr4_1_thu_thap_netflow"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR4.1 – Thu thập và phân tích NetFlow v5 trên UDP"
+publish = false
+
+[dependencies]

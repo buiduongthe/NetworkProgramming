@@ -1,0 +1,7 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "demo", "cmd": ["../../target/release/mr5_1_truyen_nhieu_tep", "demo", "127.0.0.1", "44510"], "timeout": 60}
+  ],
+  "titles": {"demo": "Cửa sổ dòng lệnh – demo truyền nhiều tệp (server cục bộ + client, cổng 44510)"}
+}

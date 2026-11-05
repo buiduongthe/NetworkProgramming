@@ -1,0 +1,15 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server", "cmd": ["../../target/release/mr5_2_mo_phong_dong_thoi", "server", "127.0.0.1", "44520", "200"], "background": true, "wait": 0.8},
+    {"name": "mang", "cmd": ["../../target/release/mr5_2_mo_phong_dong_thoi", "mang", "127.0.0.1", "44520"], "timeout": 60, "wait": 0.5},
+    {"name": "cpu", "cmd": ["../../target/release/mr5_2_mo_phong_dong_thoi", "cpu"], "timeout": 60},
+    {"name": "tron", "cmd": ["../../target/release/mr5_2_mo_phong_dong_thoi", "tron", "127.0.0.1", "44520"], "timeout": 60, "wait": 0.5},
+    {"name": "khoa", "cmd": ["../../target/release/mr5_2_mo_phong_dong_thoi", "khoa"], "timeout": 60}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ thử tokio (trễ 200 ms mỗi yêu cầu)",
+             "mang": "Cửa sổ 2 – 20 yêu cầu mạng, bốn mô hình (luồng, nhóm luồng, tokio)",
+             "cpu": "Cửa sổ 3 – việc nặng CPU, không có GIL",
+             "tron": "Cửa sổ 4 – mạng + CPU, tokio và spawn_blocking",
+             "khoa": "Cửa sổ 5 – tranh chấp dữ liệu, bế tắc"}
+}

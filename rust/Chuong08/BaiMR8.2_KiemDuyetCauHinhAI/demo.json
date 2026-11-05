@@ -1,0 +1,12 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "env": {"LLM_BASE_URL": "http://127.0.0.1:44820/v1", "LLM_API_KEY": "khoa-thu-nghiem", "LLM_MODEL": "mock-model"},
+  "processes": [
+    {"name": "mock", "cmd": ["python3", "mock_llm_cau_hinh.py", "127.0.0.1", "44820"], "background": true, "wait": 0.8},
+    {"name": "duyet", "cmd": ["../../target/release/mr8_2_kiem_duyet_cau_hinh_ai", "ha_tang.json", "Tạo 3 VLAN Phong_Lab, WiFi_Khach, May_Chu trong 10.20.0.0/22", "--so-lan", "3"]},
+    {"name": "tu_choi", "cmd": ["../../target/release/mr8_2_kiem_duyet_cau_hinh_ai", "ha_tang.json", "Tạo 3 VLAN Phong_Lab, WiFi_Khach, May_Chu trong 10.20.0.0/22", "--so-lan", "2"]}
+  ],
+  "titles": {"mock": "Cửa sổ 1 – LLM giả lập sinh cấu hình (44820)",
+             "duyet": "Cửa sổ 2 – kiểm duyệt, tối đa 3 lần sinh",
+             "tu_choi": "Cửa sổ 3 – kiểm duyệt, tối đa 2 lần sinh"}
+}

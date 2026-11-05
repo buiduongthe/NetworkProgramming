@@ -1,0 +1,14 @@
+[package]
+name = "mr8_4_chong_ssrf_mcp"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR8.4 – MCP server có công cụ fetch_url, so sánh bản ngây thơ và bản chống SSRF"
+publish = false
+
+[[bin]]
+name = "mr8_4_chong_ssrf_mcp"
+path = "src/main.rs"
+
+[dependencies]
+# JSON-RPC: phải in gọn, giữ thứ tự khóa để byte-khớp json.dumps(separators=(",",":")) của Python
+serde_json = { version = "=1.0.154", features = ["preserve_order"] }

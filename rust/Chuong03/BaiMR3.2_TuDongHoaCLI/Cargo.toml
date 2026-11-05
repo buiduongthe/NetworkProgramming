@@ -1,0 +1,11 @@
+[package]
+name = "mr3_2_tu_dong_hoa_cli"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR3.2 – Tự động hóa cấu hình thiết bị qua CLI (kiểu expect/Netmiko, chỉ dùng socket)"
+publish = false
+
+[dependencies]
+ctrlc = "=3.4.7"                                                    # in "Dừng thiết bị" khi Ctrl+C
+regex = "=1.13.1"                                                   # mẫu dấu nhắc như re của Python
+serde_json = { version = "=1.0.154", features = ["preserve_order"] } # đọc muc_tieu.json

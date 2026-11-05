@@ -1,0 +1,9 @@
+[package]
+name = "mr1_1_quan_ly_dia_chi_ip"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR1.1 – Quản lý địa chỉ IP (IPAM): VLSM, khối còn trống, chồng lấn, cấp phát"
+publish = false
+
+[dependencies]
+serde_json = { version = "=1.0.154", features = ["preserve_order"] }

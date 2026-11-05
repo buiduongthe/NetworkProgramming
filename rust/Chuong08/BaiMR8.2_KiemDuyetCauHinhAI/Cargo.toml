@@ -1,0 +1,13 @@
+[package]
+name = "mr8_2_kiem_duyet_cau_hinh_ai"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR8.2 – Kiểm duyệt cấu hình do LLM sinh ra (guardrail và vòng phản hồi)"
+publish = false
+
+[dependencies]
+regex = "=1.13.1"   # tách khối ```json và nhận diện quy tắc ACL bị cấm, như re của Python
+serde_json = { version = "=1.0.154", features = ["preserve_order"] }
+# POST tới LLM_BASE_URL dạng https:// (dịch vụ LLM thật)
+rustls = { version = "=0.23.46", default-features = false, features = ["ring", "std", "tls12"] }
+rustls-native-certs = "=0.8.5"

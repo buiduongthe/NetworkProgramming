@@ -1,0 +1,10 @@
+[package]
+name = "mr7_1_tai_tiep_http"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR7.1 – Tải tệp HTTP có tải tiếp (Range, If-Range), kiểm tra SHA-256"
+publish = false
+
+[dependencies]
+ctrlc = "=3.4.7"
+sha2 = "=0.10.9"

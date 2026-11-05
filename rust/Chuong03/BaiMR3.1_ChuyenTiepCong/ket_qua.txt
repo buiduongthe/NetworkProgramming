@@ -1,0 +1,40 @@
+===== dich =====
+$ ../../target/release/mr3_1_chuyen_tiep_cong dich 127.0.0.1 44311
+[dich] Server chữ hoa lắng nghe tại 127.0.0.1:44311
+[dich] 127.0.0.1:35500 gửi 29 byte, trả 29 byte chữ hoa
+[dich] 127.0.0.1:35504 gửi 360000 byte, trả 360000 byte chữ hoa
+[dich] Dừng server
+
+===== chuyen_tiep =====
+$ ../../target/release/mr3_1_chuyen_tiep_cong chuyentiep 127.0.0.1 44310 127.0.0.1 44311
+[chuyen-tiep] 127.0.0.1:44310 -> 127.0.0.1:44311
+[chuyen-tiep] #1 127.0.0.1:46330 <-> đích 127.0.0.1:44311
+[chuyen-tiep] #1 xong: lên 29 byte, xuống 29 byte
+[chuyen-tiep] #2 127.0.0.1:46340 <-> đích 127.0.0.1:44311
+[chuyen-tiep] #2 xong: lên 360000 byte, xuống 360000 byte
+[chuyen-tiep] Dừng
+
+===== chuyen_tiep_hong =====
+$ ../../target/release/mr3_1_chuyen_tiep_cong chuyentiep 127.0.0.1 44312 127.0.0.1 44313
+[chuyen-tiep] 127.0.0.1:44312 -> 127.0.0.1:44313
+[chuyen-tiep] #1 127.0.0.1:34236: không nối được đích 127.0.0.1:44313 (Connection refused)
+[chuyen-tiep] Dừng
+
+===== client_nho =====
+$ ../../target/release/mr3_1_chuyen_tiep_cong client 127.0.0.1 44310 'Xin chào lập trình mạng'
+[client] Gửi 29 byte, nhận 29 byte
+[client] Phản hồi: 'XIN CHÀO LẬP TRÌNH MẠNG'
+[client] So khớp với bản chữ hoa: KHỚP
+
+===== client_lon =====
+$ ../../target/release/mr3_1_chuyen_tiep_cong client 127.0.0.1 44310 'dữ liệu lớn ' 20000
+[client] Gửi 360000 byte, nhận 360000 byte
+[client] Phản hồi: 'DỮ LIỆU LỚN DỮ LIỆU LỚN DỮ LIỆU LỚN DỮ L'...
+[client] So khớp với bản chữ hoa: KHỚP
+
+===== client_hong =====
+$ ../../target/release/mr3_1_chuyen_tiep_cong client 127.0.0.1 44312 'Có ai không?'
+[client] Kết nối bị đặt lại (RST) trước khi có phản hồi
+[client] Gửi 14 byte, nhận 0 byte
+[client] Kết nối bị đóng mà không có dữ liệu trả về
+

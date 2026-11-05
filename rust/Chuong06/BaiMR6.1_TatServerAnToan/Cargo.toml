@@ -1,0 +1,9 @@
+[package]
+name = "mr6_1_tat_server_an_toan"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR6.1 – Tắt server an toàn (graceful shutdown) với tokio"
+publish = false
+
+[dependencies]
+tokio = { version = "=1.54.1", features = ["rt-multi-thread", "macros", "net", "io-util", "time", "sync", "signal"] }

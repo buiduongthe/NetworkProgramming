@@ -1,0 +1,12 @@
+[package]
+name = "mr8_1_tac_tu_chan_doan"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR8.1 – Tác tử AI chẩn đoán mạng bằng gọi công cụ, có lớp kiểm soát"
+publish = false
+
+[dependencies]
+serde_json = { version = "=1.0.154", features = ["preserve_order"] }
+# POST tới LLM_BASE_URL dạng https:// (dịch vụ LLM thật): TLS bộ mật mã ring, kho chứng chỉ của hệ điều hành
+rustls = { version = "=0.23.46", default-features = false, features = ["ring", "std", "tls12"] }
+rustls-native-certs = "=0.8.5"

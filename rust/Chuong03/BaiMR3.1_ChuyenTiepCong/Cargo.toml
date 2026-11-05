@@ -1,0 +1,9 @@
+[package]
+name = "mr3_1_chuyen_tiep_cong"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR3.1 – Bộ chuyển tiếp cổng TCP có chuyển tiếp đóng một chiều (half-close)"
+publish = false
+
+[dependencies]
+ctrlc = "=3.4.7"   # bắt Ctrl+C để in dòng "Dừng" như bản Python

@@ -1,0 +1,9 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"], ["rm", "-f", "tep_tai_ve.bin"]],
+  "processes": [
+    {"name": "server", "cmd": ["../../target/release/mr7_1_tai_tiep_http", "server", "127.0.0.1", "44710", "--kich-thuoc", "300000", "--cat-sau", "100000", "--so-lan-cat", "2"], "background": true, "wait": 0.8},
+    {"name": "tai", "cmd": ["../../target/release/mr7_1_tai_tiep_http", "tai", "http://127.0.0.1:44710/tep.bin", "tep_tai_ve.bin"], "timeout": 30},
+    {"name": "tai_lai", "cmd": ["../../target/release/mr7_1_tai_tiep_http", "tai", "http://127.0.0.1:44710/tep.bin", "tep_tai_ve.bin"], "timeout": 30}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server tệp (ngắt 2 lần sau 100000 byte)", "tai": "Cửa sổ 2 – tải có tải tiếp", "tai_lai": "Cửa sổ 3 – chạy lại khi tệp đã đủ"}
+}

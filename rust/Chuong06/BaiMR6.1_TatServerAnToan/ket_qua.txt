@@ -1,0 +1,46 @@
+===== server =====
+$ ../../target/release/mr6_1_tat_server_an_toan server 127.0.0.1 44610 --han-cho-ms 2000
+[server] Lắng nghe tại 127.0.0.1:44610, PID ghi vào server.pid
+[server] #1 kết nối từ cổng 36562
+[server] #1 bắt đầu LAM 1500
+[server] #2 kết nối từ cổng 36564
+[server] #2 bắt đầu LAM 4000
+[server] #3 kết nối từ cổng 36580
+[server] #3 bắt đầu LAM 100
+[server] #3 XONG 100
+[server] Nhận SIGTERM: ngừng nhận kết nối mới
+[server] Chờ tối đa 2000 ms cho 3 kết nối
+[server] #3 đang rỗi -> gửi BYE, đóng
+[server] #1 XONG 1500 -> gửi BYE, đóng
+[server] Hết hạn chờ: hủy 1 kết nối
+[server] #2 quá hạn chờ -> hủy LAM 4000
+[server] Đã tắt sau 2.0 s: xong 2 yêu cầu, hủy 1
+
+===== A =====
+$ ../../target/release/mr6_1_tat_server_an_toan khach A 127.0.0.1 44610 1500
+[khach A] Gửi LAM 1500
+[khach A] t=1.5s nhận: XONG 1500
+[khach A] t=1.5s nhận: BYE server đang tắt
+[khach A] t=1.5s server đóng kết nối
+
+===== B =====
+$ ../../target/release/mr6_1_tat_server_an_toan khach B 127.0.0.1 44610 4000
+[khach B] Gửi LAM 4000
+[khach B] t=2.5s nhận: HUY yêu cầu bị hủy vì server tắt
+[khach B] t=2.5s server đóng kết nối
+
+===== C =====
+$ ../../target/release/mr6_1_tat_server_an_toan khach C 127.0.0.1 44610 100
+[khach C] Gửi LAM 100
+[khach C] t=0.1s nhận: XONG 100
+[khach C] t=0.4s nhận: BYE server đang tắt
+[khach C] t=0.4s server đóng kết nối
+
+===== quan_tri =====
+$ sh -c 'kill -TERM $(cat server.pid)'
+Gửi SIGTERM tới PID 11276
+
+===== D =====
+$ ../../target/release/mr6_1_tat_server_an_toan khach D 127.0.0.1 44610 100
+[khach D] Không kết nối được: Connection refused
+

@@ -1,0 +1,8 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "thu_thap", "cmd": ["../../target/release/mr4_1_thu_thap_netflow", "thuthap", "127.0.0.1", "44410", "--nhan-roi", "1.5"], "background": true, "wait": 0.8},
+    {"name": "xuat", "cmd": ["../../target/release/mr4_1_thu_thap_netflow", "xuat", "127.0.0.1", "44410", "--so-luong", "100", "--bo-goi", "2"], "wait": 2.5}
+  ],
+  "titles": {"thu_thap": "Cửa sổ 1 – bộ thu thập NetFlow v5 (UDP 44410)", "xuat": "Cửa sổ 2 – máy xuất giả lập (bỏ gói #2)"}
+}
