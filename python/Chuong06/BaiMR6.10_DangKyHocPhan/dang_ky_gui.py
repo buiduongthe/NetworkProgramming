@@ -29,6 +29,7 @@ class CuaSoDangKy(CuaSoNguoiDungCoSo):
         self.cua_toi = {}                                # mã lớp -> giờ đăng ký (theo kết quả máy chủ)
         self.thieu_tu = {}                               # mã lớp -> lúc thấy danh sách lớp thiếu tên mình
         self.dang_cho = set()                            # mã lớp đang chờ trả lời
+        self.cho_cap_nhat = set()                        # mã lớp vừa có kq, chưa có cap_nhat nào tới sau
         self.hang = {}
         dau = tk.Frame(khung, bg=XANH_DH)
         dau.pack(fill="x", pady=(4, 0))
@@ -94,6 +95,7 @@ class CuaSoDangKy(CuaSoNguoiDungCoSo):
     def _ket_qua(self, loai, truong, tin, rtt):
         ma = truong["ma_lop"]
         self.dang_cho.discard(ma)
+        self.cho_cap_nhat.add(ma)                        # tt đang giữ có thể chụp trước lần ghi này
         if tin.get("ok"):
             if loai == "dang_ky":
                 self.cua_toi[ma] = time.strftime("%H:%M:%S")
@@ -117,6 +119,10 @@ class CuaSoDangKy(CuaSoNguoiDungCoSo):
         self.thong_bao.configure(text=text, bg=nen, fg=chu)
 
     # ------------------------------------------------------------ nhận trạng thái
+    def _nhan_cap_nhat(self, tt):
+        self.cho_cap_nhat.clear()                        # cap_nhat mới tới SAU các kq đã nhận
+        super()._nhan_cap_nhat(tt)
+
     def _cap_nhat(self, tt, kiem_mat=True):
         ma_moi = [x["ma"] for x in tt["lop"]]
         if list(self.hang) != ma_moi:                    # số lớp đổi (đặt lại): vẽ lại bảng
@@ -164,12 +170,15 @@ class CuaSoDangKy(CuaSoNguoiDungCoSo):
 
     def _kiem_mat(self, tt):
         """Đối chiếu kết quả mình nhận với danh sách lớp của máy chủ. cap_nhat có thể đến trễ hơn kq,
-        nên chỉ báo khi danh sách thiếu tên mình liên tục 0,5 s."""
+        nên chỉ báo khi danh sách thiếu tên mình liên tục 0,5 s, và bỏ qua lớp vừa có kq mà chưa có
+        cap_nhat nào tới sau (bản tt đang giữ chụp trước lần ghi của mình – ví dụ vừa hủy mà tt cũ
+        vẫn còn tên)."""
         for x in tt["lop"]:
             ma = x["ma"]
-            if ma in self.dang_cho or self.ten in x["sv"] or ma not in self.cua_toi:
+            cho = ma in self.dang_cho or ma in self.cho_cap_nhat
+            if cho or self.ten in x["sv"] or ma not in self.cua_toi:
                 self.thieu_tu.pop(ma, None)
-            if ma in self.dang_cho:
+            if cho:
                 continue
             if ma in self.cua_toi and self.ten not in x["sv"]:
                 if time.monotonic() - self.thieu_tu.setdefault(ma, time.monotonic()) < 0.5:
