@@ -73,6 +73,8 @@ Tên thư mục bài giống nhau ở cả năm ngôn ngữ và trùng với dò
 
 Bài 5.3 bản C# dùng Windows Forms nên chỉ chạy trên Windows.
 
+**Lệnh cài đặt** từng thành phần (Windows `winget`, Linux `apt`, macOS `brew`), kể cả công cụ cho các bài có giao diện, âm thanh, video (ffmpeg, gcc cho Fyne, MSVC Build Tools cho Rust, `sounddevice`) và thư viện riêng của từng bài: xem [docs/CaiDatMoiTruong.md](docs/CaiDatMoiTruong.md).
+
 ## Bắt đầu nhanh
 Ví dụ với Bài 3.1 (TCP Echo). Mở hai cửa sổ dòng lệnh trong thư mục bài của ngôn ngữ cần chạy:
 ```bash

@@ -1,0 +1,83 @@
+# Cài đặt môi trường
+
+Tài liệu này gom mọi lệnh cài công cụ và thư viện cần cho kho mã, theo thứ tự nên làm. Phần lớn bài chỉ dùng thư viện chuẩn của ngôn ngữ; các thành phần ghi "tùy chọn" chỉ cần cho một số bài (cột cuối). Phiên bản tối thiểu xem mục *Yêu cầu môi trường* trong [README](../README.md#yêu-cầu-môi-trường).
+
+Sau khi cài, **đóng hết cửa sổ dòng lệnh rồi mở lại** để biến `PATH` nhận công cụ mới. Kiểm tra nhanh trên Windows: chạy `THU\00_KIEM_TRA_CAI_DAT.bat` (hoặc mục 0 của `THU_MENU.bat`) trong thư mục gốc của kho trên máy tác giả, hoặc gõ các lệnh ở cột "Kiểm tra".
+
+## 1. Windows (winget)
+
+`winget` có sẵn trên Windows 10 (1809+) và Windows 11. Mở **Command Prompt** hoặc **PowerShell**; khi Windows hỏi quyền quản trị thì đồng ý.
+
+### 1.1. Năm ngôn ngữ
+
+| Thành phần | Lệnh cài | Kiểm tra |
+|---|---|---|
+| Python 3.13 (có Tkinter) | `winget install -e --id Python.Python.3.13` | `py -3 --version` |
+| JDK 21 | `winget install -e --id EclipseAdoptium.Temurin.21.JDK` | `java -version`, `javac -version` |
+| .NET SDK 10 | `winget install Microsoft.DotNet.SDK.10` | `dotnet --version` |
+| Go 1.24+ | `winget install -e --id GoLang.Go` | `go version` |
+| Rust (rustup) | `winget install -e --id Rustlang.Rustup` | `cargo --version`, `rustc --version` |
+| Trình liên kết C++ cho Rust (MSVC Build Tools) | `winget install -e --id Microsoft.VisualStudio.2022.BuildTools --override "--quiet --wait --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"` | `cargo build` của một bài Rust không báo thiếu `link.exe` |
+
+- Rust trên Windows mặc định dùng toolchain MSVC nên **bắt buộc** có Build Tools (gói "Desktop development with C++"; tải khoảng 2–3 GB, cài 10–20 phút). Đã có Visual Studio 2022 với workload C++ thì bỏ qua.
+- Lần biên dịch đầu của mỗi bài Rust tải crate từ crates.io (cần mạng), các bài có giao diện (egui, cpal) mất vài phút; các lần sau nhanh.
+
+### 1.2. Công cụ dùng chung cho các bài có giao diện, âm thanh, video
+
+| Thành phần | Lệnh cài | Dùng cho |
+|---|---|---|
+| ffmpeg (kèm ffplay) | `winget install -e --id Gyan.FFmpeg` | Camera thật, mẫu thử `testsrc`, phát **tệp video** (MR6.3, MR6.5 – mọi ngôn ngữ); micro/loa của bản Go (MR6.2, MR6.5) |
+| gcc (MinGW-w64, cho cgo) | `winget install -e --id BrechtSanders.WinLibs.POSIX.UCRT` | Giao diện Fyne của bản Go (Bai5.3, MR5.3, MR5.6, MR6.2, MR6.3, MR6.5) |
+| Bật cgo cho Go | `go env -w CGO_ENABLED=1` | như trên (chạy một lần sau khi có gcc) |
+| Thư viện Fyne (Go) | trong thư mục bài Go có giao diện: `go -C gui mod tidy` | tải Fyne v2 và tạo `gui/go.sum` (cần mạng, một lần mỗi bài) |
+| `sounddevice` (Python) | `py -3 -m pip install --user sounddevice` | Micro/loa thật của bản Python (MR6.2, MR6.5); không có thì tự dùng nguồn giả lập |
+
+- Micro/loa của các bản khác không cần cài thêm: Java dùng `javax.sound` (có trong JDK), C# dùng `winmm` của Windows, Rust dùng WASAPI qua crate `cpal`.
+- Cho phép ứng dụng dùng thiết bị: *Settings → Privacy & security → Camera* và *Microphone* → bật **Let desktop apps access …**.
+- Mỗi webcam chỉ một chương trình mở được tại một thời điểm (DirectShow): khi thử nhiều client, chỉ một client chọn camera thật, các client còn lại chọn camera giả lập hoặc `testsrc`.
+- Xem tên camera/micro mà ffmpeg thấy: `ffmpeg -hide_banner -list_devices true -f dshow -i dummy`.
+
+### 1.3. Thành phần riêng của một số bài
+
+| Thành phần | Lệnh cài | Dùng cho |
+|---|---|---|
+| `grpcio`, `grpcio-tools` (Python) | `py -3 -m pip install --user -r python\Chuong07\Bai7.5_gRPC\requirements.txt` | Bài 7.5 bản Python |
+| `aiosmtpd` (Python) | `py -3 -m pip install --user aiosmtpd` | Bài 7.6 (máy chủ SMTP thử dùng chung cho cả 5 ngôn ngữ) |
+| Maven | chưa có gói winget chính thức ổn định: tải bản nhị phân từ maven.apache.org, giải nén và thêm thư mục `bin` vào `PATH` (hoặc `choco install maven` nếu dùng Chocolatey) | Bài 7.5 bản Java (`mvn --version`) |
+| Mosquitto (MQTT broker) | `winget install -e --id EclipseFoundation.Mosquitto` | Bài 7.8 |
+| OpenSSL | `winget install -e --id ShiningLight.OpenSSL.Light` | Bài 7.6, 8.4 (tạo chứng chỉ thử) |
+| Module Go của gRPC | trong `go\`: `go mod download` | Bài 7.5 bản Go |
+
+ICMP thô (Bài 7.7) cần chạy dòng lệnh với quyền quản trị (*Run as administrator*).
+
+## 2. Linux (Ubuntu/Debian)
+
+```bash
+sudo apt update
+sudo apt install -y python3 python3-tk python3-pip openjdk-21-jdk ffmpeg \
+     gcc libgl1-mesa-dev xorg-dev libasound2-dev pkg-config libportaudio2
+# .NET 10: theo hướng dẫn của Microsoft cho bản phân phối (gói dotnet-sdk-10.0)
+# Go 1.24+: tải từ go.dev/dl hoặc gói của bản phân phối nếu đủ mới
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh     # Rust
+python3 -m pip install --user sounddevice                          # micro/loa thật (Python)
+sudo apt install -y mosquitto openssl maven                        # tùy chọn: Bài 7.8, 7.6/8.4, 7.5 (Java)
+```
+- `libasound2-dev`, `pkg-config`: ALSA cho crate `cpal` (Rust); `gcc`, `libgl1-mesa-dev`, `xorg-dev`: Fyne (Go); `libportaudio2`: `sounddevice` (Python).
+- Camera USB là `/dev/video0`; người dùng cần thuộc nhóm `video` (`sudo usermod -aG video $USER`, đăng nhập lại).
+- Kịch bản giao diện tự động (`demo_gui`) chạy dưới `xvfb-run` (`sudo apt install -y xvfb imagemagick`).
+
+## 3. macOS (Homebrew)
+
+```bash
+xcode-select --install                     # trình biên dịch C (cgo cho Fyne, crate Rust)
+brew install python python-tk@3.13 openjdk@21 go rustup ffmpeg portaudio
+brew install --cask dotnet-sdk                # .NET SDK
+rustup-init                                # cài toolchain Rust
+python3 -m pip install --user sounddevice
+brew install mosquitto openssl maven       # tùy chọn
+```
+Lần đầu dùng camera/micro, macOS hỏi quyền cho ứng dụng Terminal – chọn *Allow* (hoặc *System Settings → Privacy & Security → Camera / Microphone*).
+
+## 4. Chạy thử trên Windows bằng tệp .bat
+
+Trên máy tác giả, thư mục gốc của kho có `THU_MENU.bat` (menu chọn bài × ngôn ngữ) và thư mục `THU\` (mỗi bài có giao diện/thiết bị thật một tệp cho từng ngôn ngữ, cùng `00_KIEM_TRA_CAI_DAT.bat`). Mỗi tệp tự kiểm tra công cụ (thiếu thì in lệnh cài như trên), biên dịch, mở các cửa sổ cần thiết và ghi nhật ký vào thư mục `_log`. Hai thư mục/tệp này không đưa lên GitHub (xem `.gitignore`). Chạy kịch bản tự động của bản C# WinForms: `powershell -NoProfile -ExecutionPolicy Bypass -File tools\demo_windows.ps1 <thư mục bài>`.
