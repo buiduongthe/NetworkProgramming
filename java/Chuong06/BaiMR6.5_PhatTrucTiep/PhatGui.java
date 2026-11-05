@@ -359,7 +359,15 @@ public class PhatGui {
         cboMic.setEnabled(true);
     }
 
+    /** Giữ mũi tên của ô FPS/GOP đổi giá trị liên tục: chỉ áp dụng (và gửi thong_tin) khi giá trị đứng yên 400 ms. */
+    final javax.swing.Timer henThamSo = new javax.swing.Timer(400, e -> apThamSoThat());
+    { henThamSo.setRepeats(false); }
+
     void apThamSo() {
+        henThamSo.restart();
+    }
+
+    void apThamSoThat() {
         if (lop != null && lop.dangPhat) lop.datThamSo((Integer) spnFps.getValue(), (Integer) spnGop.getValue());
     }
 

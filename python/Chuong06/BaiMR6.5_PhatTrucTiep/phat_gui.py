@@ -33,6 +33,7 @@ class CuaSoPhat:
         self.anh = None
         self.ts_da_ve = None
         self.dem_giay = 0
+        self.hen_tham_so = None                # hẹn giờ áp dụng FPS/GOP (chờ người dùng ngừng bấm)
         root.title(f"Máy phát trực tiếp – MR6.5 ({ten})")
         root.configure(bg=NEN)
         root.resizable(False, False)
@@ -293,6 +294,14 @@ class CuaSoPhat:
             self.lop.khung_khoa_ngay("nút Khung khóa ngay")
 
     def ap_tham_so(self):
+        """Giữ nút mũi tên của ô FPS/GOP sẽ đổi giá trị liên tục: chỉ áp dụng (và gửi thong_tin) khi giá trị
+        đứng yên 400 ms – tránh gửi hàng chục thông điệp cho mỗi lần đổi."""
+        if self.hen_tham_so is not None:
+            self.root.after_cancel(self.hen_tham_so)
+        self.hen_tham_so = self.root.after(400, self._ap_tham_so_that)
+
+    def _ap_tham_so_that(self):
+        self.hen_tham_so = None
         if self.lop and self.lop.dang_phat:
             self.lop.dat_tham_so(self._so(self.spin_fps, FPS_MAC_DINH, 30), self._so(self.spin_gop, GOP_MAC_DINH, 300))
 
