@@ -211,6 +211,17 @@ class UngDung : Form
     }
 
     // ---------- tạo và chạy tác vụ ----------
+    /// <summary>Thêm đúng một hàng cho tác vụ mới (không dựng lại cả bảng – dựng lại tốn hàng trăm ms).</summary>
+    void AddRow(TaskRow t)
+    {
+        tblTasks.SuspendLayout();
+        int r = tasks.Count - 1;
+        tblTasks.RowCount = tasks.Count;
+        for (int c = 0; c < 4; c++) tblTasks.Controls.Add(t.Widgets[c], c, r);
+        tblTasks.ResumeLayout();
+    }
+
+    /// <summary>Dựng lại cả bảng (chỉ dùng sau khi xóa các tác vụ đã xong).</summary>
     void Relayout()
     {
         tblTasks.SuspendLayout();
@@ -236,7 +247,7 @@ class UngDung : Form
         var t = new TaskRow(nextId++, name);
         t.BtnCancel.Click += (_, _) => t.Cts.Cancel();
         tasks.Add(t);
-        Relayout();
+        AddRow(t);
         _ = RunTask(t, job);                                // không chờ: tác vụ chạy song song với giao diện
     }
 

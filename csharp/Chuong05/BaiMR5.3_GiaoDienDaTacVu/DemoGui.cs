@@ -21,6 +21,14 @@ static class DemoGui
         throw new TimeoutException("Kịch bản chờ quá lâu");
     }
 
+    /// <summary>Bấm nút như người dùng và ghi lại nút đó giữ luồng giao diện bao lâu.</summary>
+    static void Click(UngDung f, Button b, string ten)
+    {
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        b.PerformClick();
+        f.Log($"  (nút {ten} giữ luồng giao diện {sw.ElapsedMilliseconds} ms)");
+    }
+
     static Bitmap Snapshot(UngDung f)                        // chụp cửa sổ (kể cả thanh tiêu đề)
     {
         f.Refresh();
@@ -36,10 +44,12 @@ static class DemoGui
         await Task.Delay(600);
         f.TrackLimit.Value = 3;
         f.SpinN.Value = 5;
-        f.BtnDl.PerformClick();
-        f.BtnPorts.PerformClick();
-        f.BtnDns.PerformClick();
-        await Task.Delay(900);
+        Click(f, f.BtnDl, "Tải tệp");
+        await Task.Delay(150);                                // người dùng thật không bấm 3 nút trong 1 ms
+        Click(f, f.BtnPorts, "Kiểm tra cổng");
+        await Task.Delay(150);
+        Click(f, f.BtnDns, "Tra cứu tên");
+        await Task.Delay(600);
         f.Log($"Kịch bản bấm Hủy ở tác vụ #{f.Tasks[1].Id}");
         f.Tasks[1].BtnCancel.PerformClick();
         await Task.Delay(600);
@@ -49,7 +59,7 @@ static class DemoGui
         await WaitUntil(() => !Running());
 
         f.SpinN.Value = 4;
-        f.BtnDl.PerformClick();                               // bốn tệp chạy nền trong lúc làm sai
+        Click(f, f.BtnDl, "Tải tệp");                         // bốn tệp chạy nền trong lúc làm sai
         await Task.Delay(300);
         f.BtnBad.PerformClick();                              // chặn luồng giao diện ≈ 1,2 s
         await Task.Delay(100);
@@ -57,7 +67,7 @@ static class DemoGui
         await WaitUntil(() => !Running());
 
         f.SpinN.Value = 4;
-        f.BtnDl.PerformClick();
+        Click(f, f.BtnDl, "Tải tệp");
         await Task.Delay(500);
         f.BtnCancelAll.PerformClick();
         await WaitUntil(() => !Running());
