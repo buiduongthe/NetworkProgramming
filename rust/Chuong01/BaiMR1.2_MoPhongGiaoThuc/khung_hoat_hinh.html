@@ -29,14 +29,16 @@
   #log div.new { background:#fff6d6; }
   #legend { display:flex; flex-wrap:wrap; gap:12px; margin-top:6px; color:var(--muted); font-size:12px; }
   #legend span::before { content:""; display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:4px; background:var(--c); vertical-align:-1px; }
-  #chartCard { display:none; grid-column:1 / -1; }
+  #chartCard, #laneCard { display:none; grid-column:1 / -1; }
+  #laneLegend { display:flex; flex-wrap:wrap; gap:12px; margin-top:6px; color:var(--muted); font-size:12px; }
+  #laneLegend span::before { content:""; display:inline-block; width:14px; height:10px; margin-right:4px; background:var(--c); vertical-align:-1px; }
   @media (max-width: 900px) { main { grid-template-columns:1fr; } #log { height:260px; } }
 </style>
 </head>
 <body>
 <header>
   <h1>Mô phỏng giao thức mạng theo sự kiện rời rạc</h1>
-  <p id="sub">Bài mở rộng MR1.2 – hoạt hình phát lại đúng các sự kiện của lần chạy mô phỏng.</p>
+  <p id="sub">Bài mở rộng MR1.2 – hoạt hình phát lại đúng các sự kiện của lần chạy mô phỏng (giao thức, kiểu truyền và bên trong máy chủ).</p>
 </header>
 <div id="tabs"></div>
 <div id="bar">
@@ -55,16 +57,24 @@
     <div id="legend"></div>
   </div>
   <div class="card"><h2>Nhật ký sự kiện</h2><div id="log"></div></div>
+  <div class="card" id="laneCard"><h2>Bên trong máy chủ H5 – mỗi hàng là một luồng (vòng lặp, luồng thợ) theo thời gian</h2>
+    <canvas id="lanes" width="1200" height="200"></canvas><div id="laneLegend"></div></div>
   <div class="card" id="chartCard"><h2>Cửa sổ tắc nghẽn cwnd (MSS) theo thời gian</h2>
     <canvas id="chart" width="1200" height="170"></canvas></div>
 </main>
 <script>
 const DATA = {{.Data}};
-const COLORS = { TCP:"#2457c5", UDP:"#e07b00", UNI:"#1b9e5a", BC:"#d1344b", MC:"#7a3fc4", IGMP:"#7d8597", ANY:"#0e8f9a" };
-const NAMES = { TCP:"TCP", UDP:"UDP", UNI:"Unicast", BC:"Broadcast", MC:"Multicast", IGMP:"IGMP", ANY:"Anycast" };
+const COLORS = { TCP:"#2457c5", UDP:"#e07b00", UNI:"#1b9e5a", BC:"#d1344b", MC:"#7a3fc4", IGMP:"#7d8597", ANY:"#0e8f9a",
+                 YC:"#b5179e", TL:"#2b8a3e" };
+const NAMES = { TCP:"TCP", UDP:"UDP", UNI:"Unicast", BC:"Broadcast", MC:"Multicast", IGMP:"IGMP", ANY:"Anycast",
+                YC:"Yêu cầu", TL:"Trả lời" };
+// Trạng thái của luồng trong máy chủ (kịch bản dong_bo … phoi_hop)
+const LANE = { cpu:["#2457c5", "dùng CPU"], io:["#a5c8f5", "bị chặn chờ I/O"], cho_cpu:["#ffc078", "chờ lõi CPU"],
+               khoa:["#d1344b", "giữ khóa (đoạn găng)"], cho_khoa:["#f4a6b3", "chờ khóa"], tao:["#adb5bd", "tạo luồng"] };
 const node = {}; DATA.nodes.forEach(n => node[n.name] = n);
 const cv = document.getElementById("net"), g = cv.getContext("2d");
 const ch = document.getElementById("chart"), gc = ch.getContext("2d");
+const lv = document.getElementById("lanes"), gl = lv.getContext("2d");
 let run = DATA.runs[0], T = 0, D = 1, playing = true, last = null;
 
 function ms(t) { return (Math.floor(t / 100) / 10).toFixed(1); }
@@ -81,6 +91,16 @@ function select(id) {
   document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b.dataset.id === run.id));
   document.getElementById("title").textContent = run.title;
   document.getElementById("chartCard").style.display = run.cwnd ? "block" : "none";
+  document.getElementById("laneCard").style.display = run.lanes ? "block" : "none";
+  if (run.lanes) {
+    lv.height = 34 + 30 * (run.lanes.length + (run.io ? 1 : 0));
+    const used = new Set(); run.lanes.forEach(l => l[1].forEach(s => used.add(s[2])));
+    document.getElementById("laneLegend").innerHTML = Object.keys(LANE).filter(k => used.has(k))
+      .map(k => `<span style="--c:${LANE[k][0]}">${LANE[k][1]}</span>`).join("")
+      + (run.io ? `<span style="--c:#7fb069">I/O bất đồng bộ đang chờ (không giữ luồng)</span>` : "")
+      + (run.beats ? `<span style="--c:#f2b705">▲ nhịp tim (đỏ: chạy muộn)</span>` : "")
+      + (run.lanes.some(l => l[2].length) ? `<span style="--c:#3a4256">│ việc rất ngắn trên vòng lặp</span>` : "");
+  }
   const kinds = [...new Set(run.hops.map(h => h[4]))];
   document.getElementById("legend").innerHTML = kinds.map(k => `<span style="--c:${COLORS[k]}">${NAMES[k]}</span>`).join("")
     + `<span style="--c:#d1344b">× mất gói</span>`;
@@ -170,6 +190,53 @@ function drawChart() {
   path(D, "#d5dcea", 2); path(T, COLORS.TCP, 2.5);
   gc.strokeStyle = "#f2b705"; gc.lineWidth = 1.5; gc.beginPath(); gc.moveTo(X(T), 6); gc.lineTo(X(T), H - B); gc.stroke();
 }
+function drawLanes() {
+  if (!run.lanes) return;
+  const W = lv.width, H = lv.height, L = 120, R = 12, rowH = 30;
+  const X = t => L + (W - L - R) * t / D;
+  gl.clearRect(0, 0, W, H);
+  gl.font = "12px system-ui"; gl.textBaseline = "middle";
+  const rows = run.lanes.map(l => [l[0], l[1], l[2]]);
+  if (run.io) rows.push(["I/O đang chờ", null, null]);
+  rows.forEach((r, i) => {
+    const y = 8 + i * rowH;
+    gl.fillStyle = i % 2 ? "#fafbfc" : "#f1f3f6"; gl.fillRect(L, y, W - L - R, rowH - 4);
+    gl.fillStyle = "#1d2330"; gl.textAlign = "right"; gl.fillText(r[0], L - 8, y + (rowH - 4) / 2);
+    if (r[1]) {
+      r[1].forEach(sg => {                         // đoạn hoạt động của luồng, vẽ tới thời điểm T
+        if (sg[0] > T) return;
+        const x0 = X(sg[0]), x1 = X(Math.min(sg[1], T));
+        gl.fillStyle = (LANE[sg[2]] || ["#999"])[0]; gl.fillRect(x0, y + 3, Math.max(1, x1 - x0), rowH - 10);
+        if (x1 - x0 > 14) { gl.fillStyle = sg[2] === "io" || sg[2] === "cho_cpu" || sg[2] === "cho_khoa" ? "#1d2330" : "#fff";
+          gl.textAlign = "center"; gl.fillText(sg[3], (x0 + x1) / 2, y + (rowH - 4) / 2); }
+      });
+      gl.fillStyle = "#3a4256";
+      r[2].forEach(m => { if (m <= T) gl.fillRect(X(m) - 1, y + 2, 2, rowH - 8); });
+    } else {                                        // I/O bất đồng bộ: mỗi lệnh một vạch mảnh, xếp chồng
+      const lanesEnd = [];
+      run.io.forEach(io => {
+        let k = lanesEnd.findIndex(e => e <= io[0]); if (k < 0) { k = lanesEnd.length; lanesEnd.push(0); }
+        lanesEnd[k] = io[1];
+        if (io[0] > T) return;
+        const x0 = X(io[0]), x1 = X(Math.min(io[1], T));
+        gl.fillStyle = "#7fb069"; gl.fillRect(x0, y + 2 + k * 4, Math.max(1, x1 - x0), 3);
+      });
+    }
+  });
+  if (run.beats) {                                  // nhịp tim trên hàng vòng lặp
+    const y = 8 + run.lanes.findIndex(l => l[0] === "vòng lặp") * rowH;
+    run.beats.forEach(b => {
+      if (b[1] > T) return;
+      const late = b[1] - b[0] >= 1000;
+      if (late) { gl.strokeStyle = "#d1344b"; gl.lineWidth = 1; gl.beginPath(); gl.moveTo(X(b[0]), y + 1); gl.lineTo(X(b[1]), y + 1); gl.stroke(); }
+      gl.fillStyle = late ? "#d1344b" : "#f2b705";
+      gl.beginPath(); gl.moveTo(X(b[1]), y - 2); gl.lineTo(X(b[1]) - 5, y + 7); gl.lineTo(X(b[1]) + 5, y + 7); gl.fill();
+    });
+  }
+  gl.fillStyle = "#667085"; gl.textAlign = "center"; gl.textBaseline = "alphabetic";
+  gl.fillText("0 ms", L, H - 6); gl.fillText(ms(D) + " ms", W - 40, H - 6);
+  gl.strokeStyle = "#f2b705"; gl.lineWidth = 1.5; gl.beginPath(); gl.moveTo(X(T), 4); gl.lineTo(X(T), H - 18); gl.stroke();
+}
 function drawLog() {
   const shown = run.notes.filter(n => n[0] <= T).slice(-40), box = document.getElementById("log");
   box.innerHTML = shown.map((n, i) =>
@@ -189,7 +256,7 @@ function frame(now) {
 function render() {
   document.getElementById("slider").value = Math.round(1000 * T / D);
   document.getElementById("clock").textContent = `t = ${ms(T)} / ${ms(D)} ms`;
-  drawNet(); drawChart(); drawLog();
+  drawNet(); drawChart(); drawLanes(); drawLog();
 }
 function seek(id, t, pause) { select(id); T = t; playing = !pause; updatePlay(); render(); }
 function updatePlay() { document.getElementById("play").textContent = playing ? "⏸ Dừng" : "▶ Chạy"; }

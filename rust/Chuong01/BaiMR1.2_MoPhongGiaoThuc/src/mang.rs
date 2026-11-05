@@ -94,6 +94,8 @@ pub struct PData {
     pub msg: String,
     pub reply: bool,
     pub join: bool,
+    pub id: &'static str, // mã yêu cầu (mô phỏng bên trong máy chủ)
+    pub code: i64,        // mã trả lời: 200 hoặc 503 (mô phỏng bên trong máy chủ)
 }
 
 #[derive(Clone)]
@@ -191,6 +193,7 @@ pub struct Net {
     mroute: HashMap<String, Vec<usize>>,      // nhóm -> switch (LAN) có thành viên (router biết)
     pub member: Vec<Vec<String>>,             // host -> các nhóm đã tham gia
     pub hop_trace: bool,                      // in từng bước chuyển (tắt với TCP/UDP cho gọn)
+    pub quiet: bool,                          // không in nhật ký (dùng khi chỉ cần chỉ số, ví dụ lệnh so_sanh)
     pub hops: Vec<Value>,                     // dữ liệu cho hoạt hình HTML
     pub notes: Vec<Value>,
     pub changes: Vec<Value>, // thay đổi trạng thái nút/liên kết (hỏng, phục hồi)
@@ -227,6 +230,7 @@ impl Net {
             mroute: HashMap::new(),
             member: vec![Vec::new(); NODES.len()],
             hop_trace: true,
+            quiet: false,
             hops: Vec::new(),
             notes: Vec::new(),
             changes: Vec::new(),
@@ -265,7 +269,9 @@ impl Net {
     }
 
     pub fn log(&mut self, text: &str, node: &str) {
-        println!("{:>7} ms  {text}", fmt_t(self.now));
+        if !self.quiet {
+            println!("{:>7} ms  {text}", fmt_t(self.now));
+        }
         self.notes.push(json!([self.now, node, text]));
     }
 

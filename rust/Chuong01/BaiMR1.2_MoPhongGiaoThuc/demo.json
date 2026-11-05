@@ -7,6 +7,12 @@
     {"name": "broadcast", "cmd": ["../../target/release/mr1_2_mo_phong_giao_thuc", "broadcast"]},
     {"name": "multicast", "cmd": ["../../target/release/mr1_2_mo_phong_giao_thuc", "multicast"]},
     {"name": "anycast", "cmd": ["../../target/release/mr1_2_mo_phong_giao_thuc", "anycast"]},
+    {"name": "dong_bo", "cmd": ["../../target/release/mr1_2_mo_phong_giao_thuc", "dong_bo"]},
+    {"name": "da_luong", "cmd": ["../../target/release/mr1_2_mo_phong_giao_thuc", "da_luong"]},
+    {"name": "nhom_luong", "cmd": ["../../target/release/mr1_2_mo_phong_giao_thuc", "nhom_luong"]},
+    {"name": "bat_dong_bo", "cmd": ["../../target/release/mr1_2_mo_phong_giao_thuc", "bat_dong_bo"]},
+    {"name": "phoi_hop", "cmd": ["../../target/release/mr1_2_mo_phong_giao_thuc", "phoi_hop"]},
+    {"name": "so_sanh", "cmd": ["../../target/release/mr1_2_mo_phong_giao_thuc", "so_sanh"]},
     {"name": "html", "cmd": ["sh", "-c", "../../target/release/mr1_2_mo_phong_giao_thuc tat_ca --html mo_phong.html | tail -n 1 && python3 chup_hoat_hinh.py mo_phong.html ket_qua_gui.png"],
      "show": ["../../target/release/mr1_2_mo_phong_giao_thuc", "tat_ca", "--html", "mo_phong.html"], "timeout": 90}
   ],
@@ -16,5 +22,11 @@
              "broadcast": "Cửa sổ 4 – broadcast trong LAN",
              "multicast": "Cửa sổ 5 – multicast với IGMP",
              "anycast": "Cửa sổ 6 – anycast và dự phòng",
-             "html": "Cửa sổ 7 – sinh hoạt hình HTML, chụp bằng Playwright"}
+             "dong_bo": "Cửa sổ 7 – máy chủ đồng bộ, một luồng",
+             "da_luong": "Cửa sổ 8 – đa luồng, chờ lõi CPU, khóa",
+             "nhom_luong": "Cửa sổ 9 – nhóm luồng, hàng đợi, từ chối 503",
+             "bat_dong_bo": "Cửa sổ 10 – bất đồng bộ, vòng lặp bị chặn",
+             "phoi_hop": "Cửa sổ 11 – phối hợp vòng lặp và nhóm luồng",
+             "so_sanh": "Cửa sổ 12 – so sánh năm mô hình máy chủ",
+             "html": "Cửa sổ 13 – sinh hoạt hình HTML, chụp bằng Playwright"}
 }

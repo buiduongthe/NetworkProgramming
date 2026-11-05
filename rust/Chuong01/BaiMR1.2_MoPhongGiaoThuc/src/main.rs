@@ -6,7 +6,9 @@
 //!
 //! Cách dùng:
 //!     cargo run -q --release -- <kịch_bản> [--seed N] [--loss P] [--doan N] [--mat 20,20] [--html tệp.html]
-//!     kịch_bản: tcp | udp | unicast | broadcast | multicast | anycast | tat_ca
+//!     kịch_bản: tcp | udp | unicast | broadcast | multicast | anycast            (giao thức, kiểu truyền)
+//!               dong_bo | da_luong | nhom_luong | bat_dong_bo | phoi_hop   (bên trong máy chủ)
+//!               so_sanh (bảng so sánh 5 mô hình máy chủ) | tat_ca
 //!     --seed  hạt giống bộ sinh ngẫu nhiên (mặc định 7)
 //!     --loss  xác suất mất gói trên liên kết R2–R3, 0..1 (mặc định: 0; UDP: 0.2)
 //!     --doan  số đoạn dữ liệu TCP (mặc định 40)
@@ -15,6 +17,7 @@
 
 mod kich_ban;
 mod mang;
+mod may_chu;
 mod tcp;
 
 use mang::{Net, LINKS, NODES};
@@ -25,6 +28,7 @@ use tcp::{TcpScenario, MSS};
 /// Khung trang hoạt hình được nhúng vào chương trình lúc biên dịch.
 const KHUNG_HTML: &str = include_str!("../khung_hoat_hinh.html");
 
+/// Kịch bản giao thức, kiểu truyền; các kịch bản bên trong máy chủ nằm ở may_chu::TITLES.
 const TITLES: [(&str, &str); 6] = [
     ("tcp", "TCP – bắt tay, cửa sổ trượt, cwnd, mất gói, đóng FIN"),
     ("udp", "UDP – datagram, mất gói, sai thứ tự, không gửi lại"),
@@ -33,6 +37,11 @@ const TITLES: [(&str, &str); 6] = [
     ("multicast", "Multicast – IGMP, chỉ giao cho thành viên nhóm"),
     ("anycast", "Anycast – máy phục vụ gần nhất, dự phòng khi hỏng"),
 ];
+
+/// Mọi kịch bản theo thứ tự chạy của tat_ca: giao thức, kiểu truyền rồi tới bên trong máy chủ.
+fn all_titles() -> impl Iterator<Item = (&'static str, &'static str)> {
+    TITLES.into_iter().chain(may_chu::TITLES)
+}
 
 struct Options {
     kich_ban: String,
@@ -44,7 +53,10 @@ struct Options {
 }
 
 fn usage(msg: &str) -> ! {
-    eprintln!("Cách dùng: mo_phong <tcp|udp|unicast|broadcast|multicast|anycast|tat_ca> [--seed N] [--loss P] [--doan N] [--mat 20,20] [--html tệp.html]");
+    eprintln!("Cách dùng: mo_phong <kịch_bản> [--seed N] [--loss P] [--doan N] [--mat 20,20] [--html tệp.html]");
+    eprintln!("  kịch_bản: tcp | udp | unicast | broadcast | multicast | anycast            (giao thức, kiểu truyền)");
+    eprintln!("            dong_bo | da_luong | nhom_luong | bat_dong_bo | phoi_hop   (bên trong máy chủ)");
+    eprintln!("            so_sanh (bảng so sánh 5 mô hình máy chủ) | tat_ca");
     eprintln!("lỗi: {msg}");
     process::exit(2);
 }
@@ -84,19 +96,26 @@ fn parse_args() -> Options {
         }
         i += 1;
     }
-    if o.kich_ban != "tat_ca" && !TITLES.iter().any(|t| t.0 == o.kich_ban) {
+    if o.kich_ban != "tat_ca" && o.kich_ban != "so_sanh" && !all_titles().any(|t| t.0 == o.kich_ban) {
         usage(&format!("kịch bản không hợp lệ: '{}'", o.kich_ban));
     }
     o
 }
 
-fn run_one(name: &str, title: &str, o: &Options) -> Value {
+fn run_one(name: &'static str, title: &str, o: &Options) -> Value {
     println!("=== Kịch bản {name} (seed {}) ===", o.seed);
     println!("{title}");
     let mut net = Net::new(o.seed);
     let loss_set = o.loss >= 0.0;
     if loss_set {
         net.link_mut("R2", "R3").loss = (o.loss * 1000.0 + 0.5) as i64;
+    }
+    if may_chu::TITLES.iter().any(|t| t.0 == name) {
+        let extra = may_chu::chay(&mut net, name);
+        println!();
+        let mut run = json!({"id": name, "title": title, "hops": net.hops, "notes": net.notes, "changes": net.changes});
+        run.as_object_mut().unwrap().extend(extra);
+        return run;
     }
     let mut cwnd = None;
     match name {
@@ -142,8 +161,13 @@ fn write_html(path: &str, runs: Vec<Value>) {
 
 fn main() {
     let o = parse_args();
+    if o.kich_ban == "so_sanh" {
+        let kq: Vec<_> = may_chu::TITLES.iter().map(|&(m, _)| (m, may_chu::chi_so(&mut Net::new(o.seed), m))).collect();
+        may_chu::so_sanh(&kq);
+        return;
+    }
     let mut runs = Vec::new();
-    for (name, title) in TITLES {
+    for (name, title) in all_titles() {
         if o.kich_ban == "tat_ca" || o.kich_ban == name {
             runs.push(run_one(name, title, &o));
         }
