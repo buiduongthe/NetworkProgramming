@@ -1,0 +1,13 @@
+[
+  {
+    "bai": "BaiMR5.6_MoPhongThucThiTacVu",
+    "chuong": 5,
+    "ngon_ngu": [
+      "python"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy (bản dòng lệnh và ứng dụng Tkinter dưới xvfb; Python 3.13/3.12)"
+    },
+    "ten": "Mô phỏng thực thi tác vụ: đơn luồng/đa luồng × đồng bộ/bất đồng bộ, chia lát thời gian, chen ngang, phụ thuộc (join), một việc trên hai luồng; Gantt văn bản và ứng dụng giao diện có Gantt hoạt hình"
+  }
+]

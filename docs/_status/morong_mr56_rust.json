@@ -8,6 +8,6 @@
     "kiem_thu": {
       "rust": "đã chạy"
     },
-    "ten": "Mô phỏng thực thi tác vụ: đơn luồng/đa luồng × đồng bộ/bất đồng bộ, chen ngang, phụ thuộc, một việc trên hai luồng"
+    "ten": "Mô phỏng thực thi tác vụ: đơn luồng/đa luồng × đồng bộ/bất đồng bộ, chia lát thời gian, chen ngang, phụ thuộc (join), một việc trên hai luồng; Gantt văn bản và ứng dụng giao diện có Gantt hoạt hình"
   }
 ]
