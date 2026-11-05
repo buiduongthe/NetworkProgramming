@@ -1,0 +1,414 @@
+===== tcp =====
+$ dotnet bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll tcp
+=== Kịch bản tcp (seed 7) ===
+TCP – bắt tay, cửa sổ trượt, cwnd, mất gói, đóng FIN
+Truyền 40 đoạn × 1000 byte từ H1 tới H5; ép mất đoạn: #20, #20
+Sơ đồ thời gian – trình tự (H1 khách, H5 máy chủ; thời gian ms):
+   gửi   nhận  H1                                 H5
+   0.0   12.0  |─ SYN seq=0 ─────────────────────►|
+  12.0   24.1  |◄─────────── SYN+ACK seq=0 ack=1 ─|
+  24.1   36.2  |─ ACK ack=1 ─────────────────────►|  ESTABLISHED
+  24.1   38.1  |─ #1 seq=1 ──────────────────────►|
+  38.1   50.2  |◄────────────────────── ACK 1001 ─|  cwnd=2.0
+  50.2   64.2  |─ #2 seq=1001 ───────────────────►|
+  50.2   65.0  |─ #3 seq=2001 ───────────────────►|
+  64.2   76.2  |◄────────────────────── ACK 2001 ─|  cwnd=3.0
+  65.0   77.1  |◄────────────────────── ACK 3001 ─|  cwnd=4.0
+  76.2   90.2  |─ #4 seq=3001 ───────────────────►|
+  76.2   91.1  |─ #5 seq=4001 ───────────────────►|
+  77.1   91.9  |─ #6 seq=5001 ───────────────────►|
+  77.1   92.7  |─ #7 seq=6001 ───────────────────►|
+  90.2  102.3  |◄────────────────────── ACK 4001 ─|  cwnd=5.0
+  91.1  103.2  |◄────────────────────── ACK 5001 ─|  cwnd=6.0
+  91.9  104.0  |◄────────────────────── ACK 6001 ─|  cwnd=7.0
+  92.7  104.8  |◄────────────────────── ACK 7001 ─|  cwnd=8.0
+ 102.3  116.3  |─ #8 seq=7001 ───────────────────►|
+ 102.3  117.1  |─ #9 seq=8001 ───────────────────►|
+ 103.2  118.0  |─ #10 seq=9001 ──────────────────►|
+ 103.2  118.8  |─ #11 seq=10001 ─────────────────►|
+ 104.0  119.6  |─ #12 seq=11001 ─────────────────►|
+ 104.0  120.5  |─ #13 seq=12001 ─────────────────►|
+ 104.8  121.3  |─ #14 seq=13001 ─────────────────►|
+ 104.8  122.1  |─ #15 seq=14001 ─────────────────►|
+ 116.3  128.4  |◄────────────────────── ACK 8001 ─|  cwnd=8.1
+ 117.1  129.2  |◄────────────────────── ACK 9001 ─|  cwnd=8.2
+ 118.0  130.1  |◄───────────────────── ACK 10001 ─|  cwnd=8.3
+ 118.8  130.9  |◄───────────────────── ACK 11001 ─|  cwnd=8.4
+ 119.6  131.7  |◄───────────────────── ACK 12001 ─|  cwnd=8.6
+ 120.5  132.6  |◄───────────────────── ACK 13001 ─|  cwnd=8.7
+ 121.3  133.4  |◄───────────────────── ACK 14001 ─|  cwnd=8.8
+ 122.1  134.2  |◄───────────────────── ACK 15001 ─|  cwnd=8.9
+ 128.4  142.4  |─ #16 seq=15001 ─────────────────►|
+ 129.2  143.2  |─ #17 seq=16001 ─────────────────►|
+ 130.1  144.1  |─ #18 seq=17001 ─────────────────►|
+ 130.9  144.9  |─ #19 seq=18001 ─────────────────►|
+ 131.7      ×  |─ #20 seq=19001 ────×             |  MẤT R2→R3
+ 132.6  146.5  |─ #21 seq=20001 ─────────────────►|
+ 133.4  147.4  |─ #22 seq=21001 ─────────────────►|
+ 134.2  148.2  |─ #23 seq=22001 ─────────────────►|
+ 142.4  154.5  |◄───────────────────── ACK 16001 ─|  cwnd=9.0
+ 143.2  155.3  |◄───────────────────── ACK 17001 ─|  cwnd=9.1
+ 144.1  156.1  |◄───────────────────── ACK 18001 ─|  cwnd=9.2
+ 144.9  157.0  |◄───────────────────── ACK 19001 ─|  cwnd=9.3
+ 146.5  158.6  |◄───────────────────── ACK 19001 ─|  trùng 1
+ 147.4  159.5  |◄───────────────────── ACK 19001 ─|  trùng 2
+ 148.2  160.3  |◄───────────────────── ACK 19001 ─|  trùng 3
+ 154.5  168.5  |─ #24 seq=23001 ─────────────────►|
+ 154.5  169.3  |─ #25 seq=24001 ─────────────────►|
+ 155.3  170.1  |─ #26 seq=25001 ─────────────────►|
+ 156.1  171.0  |─ #27 seq=26001 ─────────────────►|
+ 157.0  171.8  |─ #28 seq=27001 ─────────────────►|
+ 160.3         => 3 ACK TRÙNG: gửi lại nhanh, ssthresh=cwnd=4.5
+ 160.3      ×  |─ #20 seq=19001 gửi lại ────×     |  MẤT R2→R3
+ 168.5  180.5  |◄───────────────────── ACK 19001 ─|  trùng 4
+ 169.3  181.4  |◄───────────────────── ACK 19001 ─|  trùng 5
+ 170.1  182.2  |◄───────────────────── ACK 19001 ─|  trùng 6
+ 171.0  183.0  |◄───────────────────── ACK 19001 ─|  trùng 7
+ 171.8  183.9  |◄───────────────────── ACK 19001 ─|  trùng 8
+ 257.0         => HẾT GIỜ RTO=100 ms: ssthresh=4.5, cwnd=1
+ 257.0  271.0  |─ #20 seq=19001 gửi lại ─────────►|
+ 271.0  283.0  |◄───────────────────── ACK 28001 ─|  cwnd=2.0
+ 283.0  297.0  |─ #29 seq=28001 ─────────────────►|
+ 283.0  297.9  |─ #30 seq=29001 ─────────────────►|
+ 297.0  309.1  |◄───────────────────── ACK 29001 ─|  cwnd=3.0
+ 297.9  309.9  |◄───────────────────── ACK 30001 ─|  cwnd=4.0
+ 309.1  323.1  |─ #31 seq=30001 ─────────────────►|
+ 309.1  323.9  |─ #32 seq=31001 ─────────────────►|
+ 309.9  324.8  |─ #33 seq=32001 ─────────────────►|
+ 309.9  325.6  |─ #34 seq=33001 ─────────────────►|
+ 323.1  335.2  |◄───────────────────── ACK 31001 ─|  cwnd=5.0
+ 323.9  336.0  |◄───────────────────── ACK 32001 ─|  cwnd=5.2
+ 324.8  336.8  |◄───────────────────── ACK 33001 ─|  cwnd=5.3
+ 325.6  337.7  |◄───────────────────── ACK 34001 ─|  cwnd=5.5
+ 335.2  349.2  |─ #35 seq=34001 ─────────────────►|
+ 335.2  350.0  |─ #36 seq=35001 ─────────────────►|
+ 336.0  350.8  |─ #37 seq=36001 ─────────────────►|
+ 336.8  351.7  |─ #38 seq=37001 ─────────────────►|
+ 337.7  352.5  |─ #39 seq=38001 ─────────────────►|
+ 349.2  361.2  |◄───────────────────── ACK 35001 ─|  cwnd=5.7
+ 350.0  362.1  |◄───────────────────── ACK 36001 ─|  cwnd=5.9
+ 350.8  362.9  |◄───────────────────── ACK 37001 ─|  cwnd=6.0
+ 351.7  363.7  |◄───────────────────── ACK 38001 ─|  cwnd=6.2
+ 352.5  364.6  |◄───────────────────── ACK 39001 ─|  cwnd=6.4
+ 361.2  375.2  |─ #40 seq=39001 ─────────────────►|
+ 375.2  387.3  |◄───────────────────── ACK 40001 ─|  cwnd=6.5
+ 387.3  399.4  |─ FIN seq=40001 ─────────────────►|  CLOSE_WAIT
+ 399.4  411.5  |◄───────────────────── ACK 40002 ─|  FIN_WAIT_2
+ 400.4  412.5  |◄───────────────────── FIN seq=1 ─|  TIME_WAIT
+ 412.5  424.5  |─ ACK ack=2 ─────────────────────►|  CLOSED
+
+Biểu đồ cwnd (đơn vị MSS = 1000 byte) theo thời gian:
+   9 │                    █                               
+   8 │              ███████                               
+   7 │             ████████                               
+   6 │             ████████                           ████
+   5 │             ████████                        ███████
+   4 │          ████████████████████████       ███████████
+   3 │          ████████████████████████       ███████████
+   2 │      ████████████████████████████    ██████████████
+   1 │████████████████████████████████████████████████████
+     └────────────────────────────────────────────────────
+                           F            T
+      0                                           387.3 ms
+      F = gửi lại nhanh (3 ACK trùng), T = hết giờ RTO
+
+Tóm tắt TCP: 40 đoạn (40000 byte), truyền 42 lần, gửi lại 2
+  (1 lần gửi lại nhanh, 1 lần hết giờ); xong sau 363.2 ms,
+  thông lượng ≈ 881 kbit/s (liên kết chậm nhất 10 Mbit/s,
+  RTT ≈ 26 ms): cửa sổ nhỏ và mất gói làm thông lượng thấp hơn
+  nhiều so với băng thông.
+
+Tổng kết theo nút (Gửi = phát ra, Nhận = gói tới, Giao = đưa lên
+ứng dụng, Ch.tiếp = số bản sao chuyển đi, Bỏ = bỏ qua/chặn/mất):
+  Nút  Địa chỉ        Gửi  Nhận  Giao  Ch.tiếp   Bỏ
+  H1   192.168.1.11    46    43    43        0    0
+  H2   192.168.1.12     0     0     0        0    0
+  H3   192.168.1.13     0     0     0        0    0
+  SW1  -                0    89     0       89    0
+  R1   192.168.1.1      0    89     0       89    0
+  R2   10.0.0.2         0    89     0       89    2
+  R3   192.168.2.1      0    87     0       87    0
+  SW2  -                0    87     0       87    0
+  H4   192.168.2.14     0     0     0        0    0
+  H5   192.168.2.15    43    44    44        0    0
+  H6   192.168.2.16     0     0     0        0    0
+
+
+===== udp =====
+$ dotnet bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll udp
+=== Kịch bản udp (seed 7) ===
+UDP – datagram, mất gói, sai thứ tự, không gửi lại
+Liên kết R2–R3: mất gói 20.0 %, trễ dao động 0–15 ms
+  Đường H2→H6: H2 → SW1 → R1 → R2 → R3 → SW2 → H6 (chi phí 6)
+    0.0 ms  H2 gửi datagram #1 (200 byte)
+   10.0 ms  H2 gửi datagram #2 (200 byte)
+   13.8 ms  H6 nhận datagram #1  đúng thứ tự
+   20.0 ms  H2 gửi datagram #3 (200 byte)
+   30.0 ms  H2 gửi datagram #4 (200 byte)
+   34.2 ms  H6 nhận datagram #3  đến sớm, đang thiếu #2
+   35.7 ms  H6 nhận datagram #2  ĐẾN MUỘN – sai thứ tự
+   40.0 ms  H2 gửi datagram #5 (200 byte)
+   46.0 ms  × UDP #4: mất trên R2→R3
+   50.0 ms  H2 gửi datagram #6 (200 byte)
+   60.0 ms  H2 gửi datagram #7 (200 byte)
+   60.4 ms  H6 nhận datagram #5  đến sớm, đang thiếu #4
+   67.2 ms  H6 nhận datagram #6  đúng thứ tự
+   70.0 ms  H2 gửi datagram #8 (200 byte)
+   74.4 ms  × UDP #7: mất trên R2→R3
+   80.0 ms  H2 gửi datagram #9 (200 byte)
+   90.0 ms  H2 gửi datagram #10 (200 byte)
+   91.8 ms  H6 nhận datagram #8  đến sớm, đang thiếu #7
+  100.0 ms  H2 gửi datagram #11 (200 byte)
+  102.6 ms  H6 nhận datagram #9  đúng thứ tự
+  110.0 ms  H2 gửi datagram #12 (200 byte)
+  113.0 ms  H6 nhận datagram #10 đúng thứ tự
+  120.3 ms  H6 nhận datagram #11 đúng thứ tự
+  130.4 ms  H6 nhận datagram #12 đúng thứ tự
+
+Tóm tắt UDP: gửi 12, nhận 10, mất 2 (#4, #7), sai thứ tự 1
+  UDP không xác nhận, không gửi lại, không sắp xếp lại:
+  ứng dụng tự xử lý (đánh số thứ tự, bỏ qua hoặc yêu cầu lại).
+
+Tổng kết theo nút (Gửi = phát ra, Nhận = gói tới, Giao = đưa lên
+ứng dụng, Ch.tiếp = số bản sao chuyển đi, Bỏ = bỏ qua/chặn/mất):
+  Nút  Địa chỉ        Gửi  Nhận  Giao  Ch.tiếp   Bỏ
+  H1   192.168.1.11     0     0     0        0    0
+  H2   192.168.1.12    12     0     0        0    0
+  H3   192.168.1.13     0     0     0        0    0
+  SW1  -                0    12     0       12    0
+  R1   192.168.1.1      0    12     0       12    0
+  R2   10.0.0.2         0    12     0       12    2
+  R3   192.168.2.1      0    10     0       10    0
+  SW2  -                0    10     0       10    0
+  H4   192.168.2.14     0     0     0        0    0
+  H5   192.168.2.15     0     0     0        0    0
+  H6   192.168.2.16     0    10    10        0    0
+
+
+===== unicast =====
+$ dotnet bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll unicast
+=== Kịch bản unicast (seed 7) ===
+Unicast – một nguồn tới một đích
+Bảng định tuyến của R1 (đích → chặng kế, chi phí):
+  H2  → SW1 chi phí 2
+  H5  → R2  chi phí 4
+  Đường H1→H2: H1 → SW1 → H2 (chi phí 2)
+  Đường H1→H5: H1 → SW1 → R1 → R2 → R3 → SW2 → H5 (chi phí 6)
+    0.5 ms   H1 → SW1 UNI H1→H2
+    1.0 ms  SW1 → H2  UNI H1→H2
+    1.0 ms  H2 nhận "xin chào H2" từ H1 (TTL còn 64)
+    5.5 ms   H1 → SW1 UNI H1→H5
+    6.0 ms  SW1 → R1  UNI H1→H5
+   11.0 ms   R1 → R2  UNI H1→H5
+   16.1 ms   R2 → R3  UNI H1→H5
+   16.6 ms   R3 → SW2 UNI H1→H5
+   17.1 ms  SW2 → H5  UNI H1→H5
+   17.1 ms  H5 nhận "xin chào H5" từ H1 (TTL còn 61)
+   17.7 ms   H5 → SW2 UNI H5→H1
+   18.2 ms  SW2 → R3  UNI H5→H1
+   23.2 ms   R3 → R2  UNI H5→H1
+   28.3 ms   R2 → R1  UNI H5→H1
+   28.8 ms   R1 → SW1 UNI H5→H1
+   29.3 ms  SW1 → H1  UNI H5→H1
+   29.3 ms  H1 nhận "chào H1" từ H5 (TTL còn 61)
+   50.0 ms  Liên kết R1–R2 hỏng → các router tính lại đường
+  Đường H1→H5: H1 → SW1 → R1 → R3 → SW2 → H5 (chi phí 7)
+   50.5 ms   H1 → SW1 UNI H1→H5
+   51.0 ms  SW1 → R1  UNI H1→H5
+   59.0 ms   R1 → R3  UNI H1→H5
+   59.6 ms   R3 → SW2 UNI H1→H5
+   60.1 ms  SW2 → H5  UNI H1→H5
+   60.1 ms  H5 nhận "lần 2" từ H1 (TTL còn 62)
+
+Tóm tắt unicast: mỗi gói chỉ tới đúng một đích; switch chỉ
+  chuyển ra đúng một cổng; router giảm TTL, chọn chặng kế theo
+  chi phí nhỏ nhất; đường đổi khi liên kết hỏng.
+
+Tổng kết theo nút (Gửi = phát ra, Nhận = gói tới, Giao = đưa lên
+ứng dụng, Ch.tiếp = số bản sao chuyển đi, Bỏ = bỏ qua/chặn/mất):
+  Nút  Địa chỉ        Gửi  Nhận  Giao  Ch.tiếp   Bỏ
+  H1   192.168.1.11     3     1     1        0    0
+  H2   192.168.1.12     0     1     1        0    0
+  H3   192.168.1.13     0     0     0        0    0
+  SW1  -                0     4     0        4    0
+  R1   192.168.1.1      0     3     0        3    0
+  R2   10.0.0.2         0     2     0        2    0
+  R3   192.168.2.1      0     3     0        3    0
+  SW2  -                0     3     0        3    0
+  H4   192.168.2.14     0     0     0        0    0
+  H5   192.168.2.15     1     2     2        0    0
+  H6   192.168.2.16     0     0     0        0    0
+
+
+===== broadcast =====
+$ dotnet bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll broadcast
+=== Kịch bản broadcast (seed 7) ===
+Broadcast – gửi tràn trong LAN, dừng ở router
+    0.5 ms   H1 → SW1 BC 192.168.1.255
+    1.0 ms  SW1 → H2  BC 192.168.1.255
+    1.0 ms  H2 nhận quảng bá "Ai có 192.168.1.13?" từ H1
+    1.0 ms  SW1 → H3  BC 192.168.1.255
+    1.0 ms  H3 nhận quảng bá "Ai có 192.168.1.13?" từ H1
+    1.0 ms  SW1 → R1  BC 192.168.1.255
+    1.0 ms  R1 chặn quảng bá: không chuyển ra ngoài LAN A
+   10.5 ms   H4 → SW2 BC 255.255.255.255
+   11.0 ms  SW2 → R3  BC 255.255.255.255
+   11.0 ms  R3 chặn quảng bá: không chuyển ra ngoài LAN B
+   11.0 ms  SW2 → H5  BC 255.255.255.255
+   11.0 ms  H5 nhận quảng bá "DHCP DISCOVER" từ H4
+   11.0 ms  SW2 → H6  BC 255.255.255.255
+   11.0 ms  H6 nhận quảng bá "DHCP DISCOVER" từ H4
+
+Tóm tắt broadcast: switch gửi tràn mọi cổng trong LAN; router
+  chặn nên H4, H5, H6 không nhận quảng bá của H1 và LAN A không
+  nhận quảng bá của H4 (miền quảng bá = một LAN).
+
+Tổng kết theo nút (Gửi = phát ra, Nhận = gói tới, Giao = đưa lên
+ứng dụng, Ch.tiếp = số bản sao chuyển đi, Bỏ = bỏ qua/chặn/mất):
+  Nút  Địa chỉ        Gửi  Nhận  Giao  Ch.tiếp   Bỏ
+  H1   192.168.1.11     1     0     0        0    0
+  H2   192.168.1.12     0     1     1        0    0
+  H3   192.168.1.13     0     1     1        0    0
+  SW1  -                0     1     0        3    0
+  R1   192.168.1.1      0     1     0        0    1
+  R2   10.0.0.2         0     0     0        0    0
+  R3   192.168.2.1      0     1     0        0    1
+  SW2  -                0     1     0        3    0
+  H4   192.168.2.14     1     0     0        0    0
+  H5   192.168.2.15     0     1     1        0    0
+  H6   192.168.2.16     0     1     1        0    0
+
+
+===== multicast =====
+$ dotnet bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll multicast
+=== Kịch bản multicast (seed 7) ===
+Multicast – IGMP, chỉ giao cho thành viên nhóm
+    0.0 ms  H2 tham gia nhóm 239.1.1.1: gửi IGMP Report
+    0.5 ms   H2 → SW1 IGMP Report 239.1.1.1
+    1.0 ms  SW1 → R1  IGMP Report 239.1.1.1
+    1.0 ms  R1 ghi nhận: LAN A có thành viên 239.1.1.1
+    5.0 ms  H1 gửi luồng #1 tới nhóm 239.1.1.1
+    5.5 ms   H1 → SW1 MC 239.1.1.1 #1
+    6.0 ms  SW1 → H2  MC 239.1.1.1 #1
+    6.0 ms  H2 nhận luồng #1 của nhóm 239.1.1.1
+    6.0 ms  SW1 → R1  MC 239.1.1.1 #1
+    6.0 ms  R1 không chuyển tiếp: phía sau không có thành viên
+   20.0 ms  H5 tham gia nhóm 239.1.1.1: gửi IGMP Report
+   20.5 ms   H5 → SW2 IGMP Report 239.1.1.1
+   21.0 ms  SW2 → R3  IGMP Report 239.1.1.1
+   21.0 ms  R3 ghi nhận: LAN B có thành viên 239.1.1.1
+   40.0 ms  H1 gửi luồng #2 tới nhóm 239.1.1.1
+   40.5 ms   H1 → SW1 MC 239.1.1.1 #2
+   41.0 ms  SW1 → H2  MC 239.1.1.1 #2
+   41.0 ms  H2 nhận luồng #2 của nhóm 239.1.1.1
+   41.0 ms  SW1 → R1  MC 239.1.1.1 #2
+   46.4 ms   R1 → R2  MC 239.1.1.1 #2
+   51.8 ms   R2 → R3  MC 239.1.1.1 #2
+   52.4 ms   R3 → SW2 MC 239.1.1.1 #2
+   52.9 ms  SW2 → H5  MC 239.1.1.1 #2
+   52.9 ms  H5 nhận luồng #2 của nhóm 239.1.1.1
+   70.0 ms  H6 tham gia nhóm 239.1.1.1: gửi IGMP Report
+   70.5 ms   H6 → SW2 IGMP Report 239.1.1.1
+   71.0 ms  SW2 → R3  IGMP Report 239.1.1.1
+   75.0 ms  H2 rời nhóm 239.1.1.1: gửi IGMP Leave
+   75.5 ms   H2 → SW1 IGMP Leave 239.1.1.1
+   76.0 ms  SW1 → R1  IGMP Leave 239.1.1.1
+   76.0 ms  R1 ghi nhận: LAN A hết thành viên 239.1.1.1
+   90.0 ms  H1 gửi luồng #3 tới nhóm 239.1.1.1
+   90.5 ms   H1 → SW1 MC 239.1.1.1 #3
+   91.0 ms  SW1 → R1  MC 239.1.1.1 #3
+   96.4 ms   R1 → R2  MC 239.1.1.1 #3
+  101.8 ms   R2 → R3  MC 239.1.1.1 #3
+  102.4 ms   R3 → SW2 MC 239.1.1.1 #3
+  102.9 ms  SW2 → H5  MC 239.1.1.1 #3
+  102.9 ms  H5 nhận luồng #3 của nhóm 239.1.1.1
+  102.9 ms  SW2 → H6  MC 239.1.1.1 #3
+  102.9 ms  H6 nhận luồng #3 của nhóm 239.1.1.1
+
+Tóm tắt multicast: chỉ thành viên nhóm nhận dữ liệu; switch
+  (IGMP snooping) chỉ chuyển ra cổng có thành viên; router chỉ
+  chuyển sang LAN có thành viên; mỗi liên kết chỉ mang một bản
+  sao dù phía sau có nhiều thành viên.
+
+Tổng kết theo nút (Gửi = phát ra, Nhận = gói tới, Giao = đưa lên
+ứng dụng, Ch.tiếp = số bản sao chuyển đi, Bỏ = bỏ qua/chặn/mất):
+  Nút  Địa chỉ        Gửi  Nhận  Giao  Ch.tiếp   Bỏ
+  H1   192.168.1.11     3     0     0        0    0
+  H2   192.168.1.12     2     2     2        0    0
+  H3   192.168.1.13     0     0     0        0    0
+  SW1  -                0     5     0        7    0
+  R1   192.168.1.1      0     5     2        2    0
+  R2   10.0.0.2         0     2     0        2    0
+  R3   192.168.2.1      0     4     2        2    0
+  SW2  -                0     4     0        5    0
+  H4   192.168.2.14     0     0     0        0    0
+  H5   192.168.2.15     1     2     2        0    0
+  H6   192.168.2.16     1     1     1        0    0
+
+
+===== anycast =====
+$ dotnet bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll anycast
+=== Kịch bản anycast (seed 7) ===
+Anycast – máy phục vụ gần nhất, dự phòng khi hỏng
+Địa chỉ anycast 10.53.0.53 (DNS) do H3 và H6 cùng quảng bá.
+  H1: H3 chi phí 2, H6 chi phí 6 → chọn H3
+  H5: H3 chi phí 6, H6 chi phí 2 → chọn H6
+    0.0 ms  H1 gửi truy vấn #1 tới 10.53.0.53
+    0.5 ms   H1 → SW1 ANY H1→10.53.0.53
+    1.0 ms  SW1 → H3  ANY H1→10.53.0.53
+    1.0 ms  H3 (phục vụ 10.53.0.53) nhận "truy vấn #1" từ H1
+    1.5 ms   H3 → SW1 UNI H3→H1
+    2.0 ms  H5 gửi truy vấn #1 tới 10.53.0.53
+    2.0 ms  SW1 → H1  UNI H3→H1
+    2.0 ms  H1 nhận "trả lời từ H3"
+    2.5 ms   H5 → SW2 ANY H5→10.53.0.53
+    3.0 ms  SW2 → H6  ANY H5→10.53.0.53
+    3.0 ms  H6 (phục vụ 10.53.0.53) nhận "truy vấn #1" từ H5
+    3.5 ms   H6 → SW2 UNI H6→H5
+    4.0 ms  SW2 → H5  UNI H6→H5
+    4.0 ms  H5 nhận "trả lời từ H6"
+   40.0 ms  H3 ngừng hoạt động → rút quảng bá 10.53.0.53
+  H1: còn H6 chi phí 6 → chọn H6
+   41.0 ms  H1 gửi truy vấn #2 tới 10.53.0.53
+   41.5 ms   H1 → SW1 ANY H1→10.53.0.53
+   42.0 ms  SW1 → R1  ANY H1→10.53.0.53
+   47.0 ms   R1 → R2  ANY H1→10.53.0.53
+   52.1 ms   R2 → R3  ANY H1→10.53.0.53
+   52.6 ms   R3 → SW2 ANY H1→10.53.0.53
+   53.1 ms  SW2 → H6  ANY H1→10.53.0.53
+   53.1 ms  H6 (phục vụ 10.53.0.53) nhận "truy vấn #2" từ H1
+   53.6 ms   H6 → SW2 UNI H6→H1
+   54.1 ms  SW2 → R3  UNI H6→H1
+   59.2 ms   R3 → R2  UNI H6→H1
+   64.3 ms   R2 → R1  UNI H6→H1
+   64.8 ms   R1 → SW1 UNI H6→H1
+   65.3 ms  SW1 → H1  UNI H6→H1
+   65.3 ms  H1 nhận "trả lời từ H6"
+
+Tóm tắt anycast: cùng một địa chỉ, gói tới máy phục vụ gần nhất
+  theo chi phí định tuyến; khi H3 hỏng, truy vấn của H1 được
+  chuyển sang H6 (dự phòng tự động).
+
+Tổng kết theo nút (Gửi = phát ra, Nhận = gói tới, Giao = đưa lên
+ứng dụng, Ch.tiếp = số bản sao chuyển đi, Bỏ = bỏ qua/chặn/mất):
+  Nút  Địa chỉ        Gửi  Nhận  Giao  Ch.tiếp   Bỏ
+  H1   192.168.1.11     2     2     2        0    0
+  H2   192.168.1.12     0     0     0        0    0
+  H3   192.168.1.13     1     1     1        0    0
+  SW1  -                0     4     0        4    0
+  R1   192.168.1.1      0     2     0        2    0
+  R2   10.0.0.2         0     2     0        2    0
+  R3   192.168.2.1      0     2     0        2    0
+  SW2  -                0     4     0        4    0
+  H4   192.168.2.14     0     0     0        0    0
+  H5   192.168.2.15     1     1     1        0    0
+  H6   192.168.2.16     2     2     2        0    0
+
+
+===== html =====
+$ dotnet bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll tat_ca --html mo_phong.html
+Đã ghi hoạt hình HTML: mo_phong.html
+[trình duyệt] tcp: t = 150.0 / 427.5 ms, 7 gói đang trên đường truyền
+[trình duyệt] multicast: t = 102.6 / 105.9 ms, 2 gói đang trên đường truyền
+[trình duyệt] Đã chụp hoạt hình: ket_qua_gui.png
+

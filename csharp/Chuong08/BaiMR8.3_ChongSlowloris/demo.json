@@ -1,0 +1,17 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "sv_vuln", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR8.3_ChongSlowloris.dll", "server", "vulnerable", "127.0.0.1", "42830"], "background": true, "wait": 0.8},
+    {"name": "sv_prot", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR8.3_ChongSlowloris.dll", "server", "protected", "127.0.0.1", "42831"], "background": true, "wait": 0.8},
+    {"name": "slow_vuln", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR8.3_ChongSlowloris.dll", "slow", "127.0.0.1", "42830", "150"], "background": true, "wait": 0.1},
+    {"name": "slow_prot", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR8.3_ChongSlowloris.dll", "slow", "127.0.0.1", "42831", "150"], "background": true, "wait": 2.0},
+    {"name": "probe_vuln", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR8.3_ChongSlowloris.dll", "probe", "127.0.0.1", "42830"], "wait": 0.3},
+    {"name": "probe_prot", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR8.3_ChongSlowloris.dll", "probe", "127.0.0.1", "42831"], "wait": 0.3}
+  ],
+  "titles": {"sv_vuln": "Cửa sổ 1 – server vulnerable (cổng 42830, không hạn tiêu đề)",
+             "sv_prot": "Cửa sổ 2 – server protected (cổng 42831, có phòng thủ)",
+             "slow_vuln": "Cửa sổ 3 – client gửi chậm (thí nghiệm) tới vulnerable",
+             "slow_prot": "Cửa sổ 4 – client gửi chậm (thí nghiệm) tới protected",
+             "probe_vuln": "Cửa sổ 5 – probe tới vulnerable (bị nghẽn)",
+             "probe_prot": "Cửa sổ 6 – probe tới protected (vẫn phục vụ)"}
+}

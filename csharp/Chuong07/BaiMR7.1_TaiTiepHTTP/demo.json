@@ -1,0 +1,12 @@
+{
+  "setup": [["rm", "-f", "tep_tai_ve.bin", "tep_python.bin"], ["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "server", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR7.1_TaiTiepHTTP.dll", "server", "127.0.0.1", "42710", "--kich-thuoc", "300000", "--cat-sau", "100000", "--so-lan-cat", "2"], "background": true, "wait": 1.0},
+    {"name": "tai", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR7.1_TaiTiepHTTP.dll", "tai", "http://127.0.0.1:42710/tep.bin", "tep_tai_ve.bin"], "timeout": 30},
+    {"name": "tai_lai", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR7.1_TaiTiepHTTP.dll", "tai", "http://127.0.0.1:42710/tep.bin", "tep_tai_ve.bin"], "timeout": 30},
+    {"name": "cheo_python", "cmd": ["sh", "-c", "head -c 123456 tep_tai_ve.bin > tep_python.bin && python3 ../../../python/Chuong07/BaiMR7.1_TaiTiepHTTP/tai_tiep.py http://127.0.0.1:42710/tep.bin tep_python.bin; rm -f tep_tai_ve.bin tep_python.bin"],
+     "show": ["python3", "../../../python/Chuong07/BaiMR7.1_TaiTiepHTTP/tai_tiep.py", "http://127.0.0.1:42710/tep.bin", "tep_python.bin"], "timeout": 30}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server tệp (ngắt 2 lần sau 100000 byte)", "tai": "Cửa sổ 2 – tải có tải tiếp", "tai_lai": "Cửa sổ 3 – chạy lại khi tệp đã đủ",
+             "cheo_python": "Cửa sổ 4 – chạy chéo – client bản Python tải tiếp từ byte 123456"}
+}

@@ -1,0 +1,9 @@
+{
+  "khoi_dia_chi": "192.168.50.0/24",
+  "yeu_cau": [
+    {"ten": "Phong_Lab", "so_may": 200},
+    {"ten": "WiFi_Khach", "so_may": 100}
+  ],
+  "kiem_tra": [],
+  "cap_phat": null
+}

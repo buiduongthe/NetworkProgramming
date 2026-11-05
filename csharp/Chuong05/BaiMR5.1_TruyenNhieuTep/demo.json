@@ -1,0 +1,7 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "demo", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR5.1_TruyenNhieuTep.dll", "demo", "127.0.0.1", "42510"], "timeout": 60}
+  ],
+  "titles": {"demo": "Cửa sổ dòng lệnh – demo truyền nhiều tệp (server cục bộ + client, cổng 42510)"}
+}

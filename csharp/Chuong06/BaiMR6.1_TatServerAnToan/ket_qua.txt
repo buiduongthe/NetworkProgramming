@@ -1,0 +1,46 @@
+===== server =====
+$ dotnet bin/Release/net10.0/BaiMR6.1_TatServerAnToan.dll server 127.0.0.1 42610 --han-cho-ms 2000
+[server] Lắng nghe tại 127.0.0.1:42610, PID ghi vào server.pid
+[server] #1 kết nối từ cổng 37342
+[server] #1 bắt đầu LAM 1500
+[server] #2 kết nối từ cổng 37354
+[server] #2 bắt đầu LAM 4000
+[server] #3 kết nối từ cổng 37358
+[server] #3 bắt đầu LAM 100
+[server] #3 XONG 100
+[server] Nhận SIGTERM: ngừng nhận kết nối mới
+[server] Chờ tối đa 2000 ms cho 3 kết nối
+[server] #3 đang rỗi -> gửi BYE, đóng
+[server] #1 XONG 1500 -> gửi BYE, đóng
+[server] Hết hạn chờ: hủy 1 kết nối
+[server] #2 quá hạn chờ -> hủy LAM 4000
+[server] Đã tắt sau 2.0 s: xong 2 yêu cầu, hủy 1
+
+===== A =====
+$ dotnet bin/Release/net10.0/BaiMR6.1_TatServerAnToan.dll khach A 127.0.0.1 42610 1500
+[khach A] Gửi LAM 1500
+[khach A] t=1.5s nhận: XONG 1500
+[khach A] t=1.5s nhận: BYE server đang tắt
+[khach A] t=1.5s server đóng kết nối
+
+===== B =====
+$ dotnet bin/Release/net10.0/BaiMR6.1_TatServerAnToan.dll khach B 127.0.0.1 42610 4000
+[khach B] Gửi LAM 4000
+[khach B] t=3.0s nhận: HUY yêu cầu bị hủy vì server tắt
+[khach B] t=3.0s server đóng kết nối
+
+===== C =====
+$ python3 ../../../python/Chuong06/BaiMR6.1_TatServerAnToan/khach.py C 127.0.0.1 42610 100
+[khach C] Gửi LAM 100
+[khach C] t=0.1s nhận: XONG 100
+[khach C] t=0.6s nhận: BYE server đang tắt
+[khach C] t=0.6s server đóng kết nối
+
+===== quan_tri =====
+$ sh -c 'kill -TERM $(cat server.pid)'
+Gửi SIGTERM tới PID 11469
+
+===== D =====
+$ dotnet bin/Release/net10.0/BaiMR6.1_TatServerAnToan.dll khach D 127.0.0.1 42610 100
+[khach D] Không kết nối được: Connection refused
+

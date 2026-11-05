@@ -1,0 +1,19 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "env": {"DEVICE_USER": "admin", "DEVICE_PASSWORD": "lab123"},
+  "processes": [
+    {"name": "thiet_bi", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR3.2_TuDongHoaCLI.dll", "thiet_bi", "127.0.0.1", "42320"], "background": true, "wait": 1.0},
+    {"name": "chay_thu", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR3.2_TuDongHoaCLI.dll", "tu_dong", "127.0.0.1", "42320", "muc_tieu.json", "--thu"]},
+    {"name": "ap_dung", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR3.2_TuDongHoaCLI.dll", "tu_dong", "127.0.0.1", "42320", "muc_tieu.json"]},
+    {"name": "lan_hai", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR3.2_TuDongHoaCLI.dll", "tu_dong", "127.0.0.1", "42320", "muc_tieu.json"]},
+    {"name": "cheo_python", "cmd": ["python3", "../../../python/Chuong03/BaiMR3.2_TuDongHoaCLI/tu_dong_hoa.py", "127.0.0.1", "42320", "muc_tieu.json"]},
+    {"name": "sai_mk", "cmd": ["env", "DEVICE_PASSWORD=sai-mat-khau", "dotnet", "bin/Release/net10.0/BaiMR3.2_TuDongHoaCLI.dll", "tu_dong", "127.0.0.1", "42320", "muc_tieu.json"],
+     "show": ["DEVICE_PASSWORD=sai-mat-khau", "dotnet", "bin/Release/net10.0/BaiMR3.2_TuDongHoaCLI.dll", "tu_dong", "127.0.0.1", "42320", "muc_tieu.json"], "wait": 0.5}
+  ],
+  "titles": {"thiet_bi": "Cửa sổ 1 – thiết bị mô phỏng R1 (cổng 42320)",
+             "chay_thu": "Cửa sổ 2 – chạy thử (--thu), chỉ in lệnh",
+             "ap_dung": "Cửa sổ 3 – áp dụng cấu hình",
+             "lan_hai": "Cửa sổ 4 – chạy lại, lũy đẳng",
+             "cheo_python": "Cửa sổ 5 – chạy chéo – client bản Python với thiết bị C#",
+             "sai_mk": "Cửa sổ 6 – sai mật khẩu"}
+}

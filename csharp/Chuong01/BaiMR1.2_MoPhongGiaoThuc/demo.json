@@ -1,0 +1,20 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "tcp", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll", "tcp"]},
+    {"name": "udp", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll", "udp"]},
+    {"name": "unicast", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll", "unicast"]},
+    {"name": "broadcast", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll", "broadcast"]},
+    {"name": "multicast", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll", "multicast"]},
+    {"name": "anycast", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll", "anycast"]},
+    {"name": "html", "cmd": ["sh", "-c", "dotnet bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll tat_ca --html mo_phong.html | tail -n 1 && python3 chup_hoat_hinh.py mo_phong.html ket_qua_gui.png"],
+     "show": ["dotnet", "bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll", "tat_ca", "--html", "mo_phong.html"], "timeout": 90}
+  ],
+  "titles": {"tcp": "Cửa sổ 1 – TCP – bắt tay, cwnd, mất gói, FIN",
+             "udp": "Cửa sổ 2 – UDP – mất gói, sai thứ tự",
+             "unicast": "Cửa sổ 3 – unicast, đổi đường khi liên kết hỏng",
+             "broadcast": "Cửa sổ 4 – broadcast trong LAN",
+             "multicast": "Cửa sổ 5 – multicast với IGMP",
+             "anycast": "Cửa sổ 6 – anycast và dự phòng",
+             "html": "Cửa sổ 7 – sinh hoạt hình HTML, chụp bằng Playwright"}
+}

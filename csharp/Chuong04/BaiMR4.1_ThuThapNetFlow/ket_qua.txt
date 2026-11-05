@@ -1,0 +1,58 @@
+===== thu_thap =====
+$ dotnet bin/Release/net10.0/BaiMR4.1_ThuThapNetFlow.dll thu_thap 127.0.0.1 42410 --nhan-roi 1.5
+[thu-thap] Nghe NetFlow v5 tại UDP 127.0.0.1:42410
+[thu-thap] Gói seq=0: 30 luồng
+[thu-thap] MẤT GÓI: chờ seq=30, nhận seq=60, thiếu 30 luồng
+[thu-thap] Gói seq=60: 30 luồng
+[thu-thap] Gói seq=90: 10 luồng
+[thu-thap] Loại gói từ 127.0.0.1:58394: phiên bản 30825, không phải 5
+[thu-thap] Nhàn rỗi 1.5 s, kết thúc
+[thu-thap] Hợp lệ 3 gói, loại 1 gói, mất 30 luồng
+[thu-thap] Đã thu 70 luồng, tổng 6137511 byte
+[thu-thap] Nguồn dùng nhiều byte nhất:
+  10.20.1.5      1816666 byte (29.6%)
+  10.20.0.14     1367005 byte (22.3%)
+  10.20.0.11     1024011 byte (16.7%)
+[thu-thap] Dịch vụ theo số luồng:
+  443/TCP    29 luồng   3025664 byte
+  5432/TCP   18 luồng   1114254 byte
+  80/TCP     16 luồng   1133396 byte
+  53/UDP      7 luồng    864197 byte
+
+===== xuat =====
+$ dotnet bin/Release/net10.0/BaiMR4.1_ThuThapNetFlow.dll xuat 127.0.0.1 42410 --so-luong 100 --bo-goi 2
+[xuat] Gói #1: 30 bản ghi, seq=0, 1464 byte
+[xuat] Gói #2: 30 bản ghi, seq=30 -> BỎ (giả lập mất gói)
+[xuat] Gói #3: 30 bản ghi, seq=60, 1464 byte
+[xuat] Gói #4: 10 bản ghi, seq=90, 504 byte
+[xuat] Gửi thêm 1 datagram rác để thử bộ thu
+
+===== thu_thap_2 =====
+$ dotnet bin/Release/net10.0/BaiMR4.1_ThuThapNetFlow.dll thu_thap 127.0.0.1 42411 --nhan-roi 1.5
+[thu-thap] Nghe NetFlow v5 tại UDP 127.0.0.1:42411
+[thu-thap] Gói seq=0: 30 luồng
+[thu-thap] MẤT GÓI: chờ seq=30, nhận seq=60, thiếu 30 luồng
+[thu-thap] Gói seq=60: 30 luồng
+[thu-thap] Gói seq=90: 10 luồng
+[thu-thap] Loại gói từ 127.0.0.1:32791: phiên bản 30825, không phải 5
+[thu-thap] Nhàn rỗi 1.5 s, kết thúc
+[thu-thap] Hợp lệ 3 gói, loại 1 gói, mất 30 luồng
+[thu-thap] Đã thu 70 luồng, tổng 6137511 byte
+[thu-thap] Nguồn dùng nhiều byte nhất:
+  10.20.1.5      1816666 byte (29.6%)
+  10.20.0.14     1367005 byte (22.3%)
+  10.20.0.11     1024011 byte (16.7%)
+[thu-thap] Dịch vụ theo số luồng:
+  443/TCP    29 luồng   3025664 byte
+  5432/TCP   18 luồng   1114254 byte
+  80/TCP     16 luồng   1133396 byte
+  53/UDP      7 luồng    864197 byte
+
+===== xuat_python =====
+$ python3 ../../../python/Chuong04/BaiMR4.1_ThuThapNetFlow/may_xuat.py 127.0.0.1 42411 --so-luong 100 --bo-goi 2
+[xuat] Gói #1: 30 bản ghi, seq=0, 1464 byte
+[xuat] Gói #2: 30 bản ghi, seq=30 -> BỎ (giả lập mất gói)
+[xuat] Gói #3: 30 bản ghi, seq=60, 1464 byte
+[xuat] Gói #4: 10 bản ghi, seq=90, 504 byte
+[xuat] Gửi thêm 1 datagram rác để thử bộ thu
+

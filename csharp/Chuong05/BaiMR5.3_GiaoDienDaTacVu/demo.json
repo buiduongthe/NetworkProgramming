@@ -1,0 +1,11 @@
+{
+  "nen_tang": "windows",
+  "ghi_chu": "WinForms chỉ chạy trên Windows: chạy bằng tools/demo_windows.ps1 (PowerShell) thay cho tools/demo.py; ket_qua.png dựng từ nhật ký bằng tools/render_output.py",
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "server", "cmd": ["bin\\Release\\net10.0-windows\\BaiMR5.3_GiaoDienDaTacVu.exe", "server", "127.0.0.1", "42530"], "background": true, "wait": 2.0},
+    {"name": "gui", "cmd": ["bin\\Release\\net10.0-windows\\BaiMR5.3_GiaoDienDaTacVu.exe", "demo", "127.0.0.1", "42530"], "timeout": 60}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ thử (HTTP, DNS giả lập, cổng mở)",
+             "gui": "Cửa sổ 2 – ứng dụng WinForms, kịch bản demo (Windows)"}
+}

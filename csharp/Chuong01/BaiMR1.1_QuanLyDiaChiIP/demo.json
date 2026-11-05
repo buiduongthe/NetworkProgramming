@@ -1,0 +1,7 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "ipam", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR1.1_QuanLyDiaChiIP.dll", "ke_hoach.json", "ke_hoach_qua_tai.json"]}
+  ],
+  "titles": {"ipam": "Cửa sổ dòng lệnh – hai kế hoạch địa chỉ (10.20.0.0/22 và 192.168.50.0/24)"}
+}

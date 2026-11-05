@@ -1,0 +1,6 @@
+{
+  "khoi_dia_chi": "10.20.0.0/22",
+  "da_dung": [
+    {"ten": "Quan_Tri", "vlan": 99, "mang": "10.20.3.0/24"}
+  ]
+}

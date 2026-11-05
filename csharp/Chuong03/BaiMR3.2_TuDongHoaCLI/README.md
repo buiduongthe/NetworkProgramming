@@ -1,0 +1,54 @@
+# Bài mở rộng MR3.2 – Tự động hóa cấu hình thiết bị qua CLI (kiểu expect/Netmiko, chỉ dùng socket) (C#)
+
+| Thông tin | Nội dung |
+|---|---|
+| Loại | **Bài mở rộng** – không có trong giáo trình, không có mã giả tương ứng |
+| Liên hệ với giáo trình | Chương 3: Bài 3.2 (định khung – ở đây là đọc tới dấu nhắc), Bài 3.1; Chương 6: Bài 6.1 (server nhiều phiên); Chương 2: Bài 2.1 (bí mật lấy từ biến môi trường); MR1.1 (địa chỉ trong `muc_tieu.json`) |
+| Thư viện | .NET 10 BCL: `System.Net.Sockets`, `System.Text.RegularExpressions`, `System.Text.Json` |
+| Bản ngôn ngữ khác | [Python](../../../python/Chuong03/BaiMR3.2_TuDongHoaCLI/), [Go](../../../go/Chuong03/BaiMR3.2_TuDongHoaCLI/), [Java](../../../java/Chuong03/BaiMR3.2_TuDongHoaCLI/), [Rust](../../../rust/Chuong03/BaiMR3.2_TuDongHoaCLI/) |
+
+## Mục tiêu
+Luyện tự động hóa thiết bị mạng mà không cần thiết bị thật. Thiết bị mô phỏng R1 có CLI kiểu Telnet (đăng nhập, dấu nhắc `R1>` `R1#` `R1(config)#` `R1(config-if)#`, vọng lại lệnh, phân trang `--More--`). Dữ liệu CLI là luồng byte **không có khung thông điệp**, nên client phải *đọc cho tới khi gặp dấu nhắc* (READ_UNTIL bằng biểu thức chính quy) – cùng ý tưởng với `READ_LINE` ở Bài 3.2. Client tự động hóa: đọc cấu hình hiện tại, so với trạng thái mong muốn và **chỉ sinh lệnh cho phần khác biệt** (lũy đẳng – chạy lại không thay đổi gì), có chế độ chạy thử `--thu`, đọc lại để kiểm chứng rồi mới lưu cấu hình.
+
+## Tệp
+- `BaiMR3.2_TuDongHoaCLI.csproj` – dự án console `net10.0`; vai trò chọn bằng tham số đầu tiên.
+- `Program.cs` – chọn vai trò `thiet_bi` hoặc `tu_dong`.
+- `ThietBiGia.cs` – thiết bị mô phỏng R1 (server TCP nhiều phiên, trạng thái chung có `lock`); lớp `Session` (đăng nhập, dấu nhắc, `Show` có phân trang `--More--`).
+- `TuDongHoa.cs` – client: lớp `CliSession` (`ReadUntil`, `Login`, `Command`), `ParseInterface`, `DiffCommands`.
+- `muc_tieu.json` – trạng thái mong muốn của ba cổng (giống bản Python).
+- `demo.json` – kịch bản chạy minh họa (dùng với `tools/demo.py`); có bước chạy chéo client bản Python với thiết bị C#.
+- `ket_qua.txt`, `ket_qua.png` – kết quả thực thi thật.
+
+## Cách chạy
+Trong thư mục bài:
+```bash
+dotnet build -c Release
+export DEVICE_USER=admin DEVICE_PASSWORD=lab123          # PowerShell: $env:DEVICE_USER="admin"; $env:DEVICE_PASSWORD="lab123"
+dotnet bin/Release/net10.0/BaiMR3.2_TuDongHoaCLI.dll thiet_bi 127.0.0.1 9000                     # cửa sổ 1
+dotnet bin/Release/net10.0/BaiMR3.2_TuDongHoaCLI.dll tu_dong 127.0.0.1 9000 muc_tieu.json --thu  # cửa sổ 2: chỉ in lệnh
+dotnet bin/Release/net10.0/BaiMR3.2_TuDongHoaCLI.dll tu_dong 127.0.0.1 9000 muc_tieu.json        # áp dụng
+dotnet bin/Release/net10.0/BaiMR3.2_TuDongHoaCLI.dll tu_dong 127.0.0.1 9000 muc_tieu.json        # chạy lại: không thay đổi
+```
+Có thể thay `dotnet bin/Release/net10.0/BaiMR3.2_TuDongHoaCLI.dll` bằng `dotnet run --`. Có thể nối tay vào thiết bị bằng `nc 127.0.0.1 9000` (hoặc `telnet`) để gõ lệnh và thấy phân trang `--More--` khi chưa gõ `terminal length 0`.
+
+Tái lập kết quả từ thư mục gốc của kho: `python3 tools/demo.py csharp/Chuong03/BaiMR3.2_TuDongHoaCLI` (cổng 42320).
+
+## Kết quả thực thi
+![Kết quả thực thi](ket_qua.png)
+
+Lần chạy thử chỉ in 6 lệnh cần cho `Gi0/1`, `Gi0/2` (cổng `Gi0/0` đã đúng) và thiết bị không ghi nhận thay đổi nào. Lần áp dụng gửi đúng 6 lệnh đó, đọc lại để kiểm chứng rồi `write memory`; bảng `show ip interface brief` chuyển hai cổng sang `up`. Lần chạy thứ ba không gửi lệnh cấu hình nào (lũy đẳng). Sai mật khẩu: thiết bị ghi nhận đăng nhập sai, client báo *Đăng nhập thất bại* và thoát với mã 1. Bản C# in thông điệp giống hệt bản Python và bản Go; cửa sổ 5 chạy chéo client bản Python với thiết bị C# (lúc đó thiết bị đã đúng nên client Python cũng không gửi lệnh nào).
+
+## Ghi chú
+- Thiết bị mô phỏng gửi mật khẩu dạng rõ như Telnet. Thiết bị thật phải dùng SSH: .NET không có SSH trong BCL, thường dùng gói NuGet SSH.NET (`Renci.SshNet`). Logic `read_until` dấu nhắc, so sánh và sinh lệnh khác biệt giữ nguyên khi thay kênh Telnet bằng SSH.
+- Cú pháp lệnh mô phỏng theo kiểu Cisco IOS nhưng tối giản (ba cổng, một vài lệnh); không phải phần mềm của hãng nào.
+- Mẫu dấu nhắc chỉ được so ở **cuối** bộ đệm; dòng kết quả nào kết thúc bằng `#` hoặc `>` đúng lúc gói tin bị chia có thể bị nhầm là dấu nhắc – thư viện thật như Netmiko cũng gặp vấn đề này và cho phép chỉ định mẫu dấu nhắc chặt hơn.
+- Thiết bị bọc `NetworkStream` trong `BufferedStream` để vừa đọc theo dòng (tự viết `ReadLine` tới `\n`) vừa đọc một byte (`ReadByte`) khi chờ phím ở `--More--`; client giải mã bằng `Decoder` của UTF-8 nên ký tự nhiều byte bị chia giữa hai gói vẫn đúng.
+- `ip address` được kiểm tra bằng `ValidIpMask` tự viết (IPv4 chấm + mặt nạ có các bit 1 liền nhau); bản Python dùng `ipaddress.ip_interface`, vốn chấp nhận cả mặt nạ đảo (hostmask) như `0.0.0.255`.
+- Mẫu dấu nhắc dùng chung cú pháp `Regex` với Python (`$` khớp ở cuối chuỗi hoặc trước `\n` cuối).
+- Kiểm thử: Linux, .NET SDK 10.0.114.
+
+## Đọc thêm
+- Eric Chou, *Mastering Python Networking*, 4th ed., Packt, 2023, Chương 2 *Low-Level Network Device Interactions* (Pexpect, Paramiko, Netmiko; mục *Idempotent network device interaction*).
+- Claus Töpke, *Network Programming and Automation Essentials*, Packt, 2023, Chương 3 *Accessing the Network* (CLI, truy cập từ xa an toàn) và Chương 6 (thư viện truy cập thiết bị qua CLI).
+
+Mã nguồn của bài được viết mới cho kho này; sách trên chỉ là tài liệu tham khảo ý tưởng.

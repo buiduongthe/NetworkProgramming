@@ -1,0 +1,19 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "dich", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR3.1_ChuyenTiepCong.dll", "dich", "127.0.0.1", "42311"], "background": true, "wait": 1.0},
+    {"name": "chuyen_tiep", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR3.1_ChuyenTiepCong.dll", "chuyen_tiep", "127.0.0.1", "42310", "127.0.0.1", "42311"], "background": true, "wait": 1.0},
+    {"name": "chuyen_tiep_hong", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR3.1_ChuyenTiepCong.dll", "chuyen_tiep", "127.0.0.1", "42312", "127.0.0.1", "42313"], "background": true, "wait": 1.0},
+    {"name": "client_nho", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR3.1_ChuyenTiepCong.dll", "client", "127.0.0.1", "42310", "Xin chào lập trình mạng"]},
+    {"name": "client_lon", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR3.1_ChuyenTiepCong.dll", "client", "127.0.0.1", "42310", "dữ liệu lớn ", "20000"]},
+    {"name": "client_hong", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR3.1_ChuyenTiepCong.dll", "client", "127.0.0.1", "42312", "Có ai không?"], "wait": 0.5},
+    {"name": "cheo_python", "cmd": ["python3", "../../../python/Chuong03/BaiMR3.1_ChuyenTiepCong/client_thu.py", "127.0.0.1", "42310", "Client Python qua bộ chuyển tiếp C#"]}
+  ],
+  "titles": {"dich": "Cửa sổ 1 – server đích (chữ hoa) cổng 42311",
+             "chuyen_tiep": "Cửa sổ 2 – chuyển tiếp 42310 -> 42311",
+             "chuyen_tiep_hong": "Cửa sổ 3 – chuyển tiếp 42312 -> 42313 (không có đích)",
+             "client_nho": "Cửa sổ 4 – client gửi chuỗi ngắn qua 42310",
+             "client_lon": "Cửa sổ 5 – client gửi 360 000 byte qua 42310",
+             "client_hong": "Cửa sổ 6 – client nối 42312 (đích không chạy)",
+             "cheo_python": "Cửa sổ 7 – chạy chéo – client bản Python qua bộ chuyển tiếp C#"}
+}

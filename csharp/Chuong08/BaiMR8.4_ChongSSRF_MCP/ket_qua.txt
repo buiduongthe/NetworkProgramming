@@ -1,0 +1,68 @@
+===== host =====
+$ python3 mcp_test_client.py 42840 42841 42842 dotnet bin/Release/net10.0/BaiMR8.4_ChongSSRF_MCP.dll
+[client] Dựng META:127.0.0.1:42840 (giữ bí mật), PUB:127.0.0.1:42841, REDIR:127.0.0.1:42842
+[client] Khởi chạy MCP server: dotnet bin/Release/net10.0/BaiMR8.4_ChongSSRF_MCP.dll
+[client] (công bố phiên bản)
+[client]    <- {"jsonrpc":"2.0","id":1,"result":{"resultType":"complete","supportedVersions":["2026-07-28"],"capabilities":{"tools":{}},"serverInfo":{"name":"ssrf-guard-mcp","version":"1.0.0"}}}
+[client] (liệt kê công cụ)
+[client]    <- {"jsonrpc":"2.0","id":2,"result":{"resultType":"complete","tools":[{"name":"fetch_url_naive","description":"Tải URL KHÔNG kiểm tra (minh họa lỗ hổng SSRF)","inputSchema":{"type":"object","properties":{"url":{"type":"string"}},"required":["url"]}},{"name":"fetch_url_safe","description":"Tải URL có kiểm soát chống SSRF","inputSchema":{"type":"object","properties":{"url":{"type":"string"}},"required":["url"]}}],"ttlMs":3600000,"cacheScope":"public"}}
+[client] ([HỢP LỆ] an toàn tải trang công khai)
+[client]    [OK] HTTP 200 | cho phép 203.0.113.10 (203.0.113.10):80/; nối tới ĐÚNG IP đã kiểm tra | thân: Trang cong khai hop le (203.0.113.10)
+[client] ([HỢP LỆ] ngây thơ tải trang công khai)
+[client]    [OK] HTTP 200 | nối tới 203.0.113.10 (203.0.113.10):80/ | thân: Trang cong khai hop le (203.0.113.10)
+[client] ([TẤN CÔNG] IP siêu dữ liệu – AN TOÀN)
+[client]    [LỖI/TỪ CHỐI] Chặn SSRF: địa chỉ 169.254.169.254 thuộc dải cấm 169.254.0.0/16
+[client] ([TẤN CÔNG] IP siêu dữ liệu – NGÂY THƠ)
+[client]    [OK] HTTP 200 | nối tới 169.254.169.254 (169.254.169.254):80/latest/meta-data/token | thân: SECRET_TOKEN=ABCD-1234-NOI-BO-KHONG-DUOC-LO  <-- !!! LỘ BÍ MẬT NỘI BỘ !!!
+[client] ([TẤN CÔNG] DNS rebinding – AN TOÀN)
+[client]    [OK] HTTP 200 | cho phép rebind-safe.evil.test (203.0.113.10):80/secret; nối tới ĐÚNG IP đã kiểm tra | thân: Trang cong khai hop le (203.0.113.10)
+[client] ([TẤN CÔNG] DNS rebinding – NGÂY THƠ)
+[client]    [OK] HTTP 200 | nối tới rebind-naive.evil.test (127.0.0.1):80/secret | thân: SECRET_TOKEN=ABCD-1234-NOI-BO-KHONG-DUOC-LO  <-- !!! LỘ BÍ MẬT NỘI BỘ !!!
+[client] ([TẤN CÔNG] chuyển hướng tới nội bộ – AN TOÀN)
+[client]    [LỖI/TỪ CHỐI] Chặn SSRF: địa chỉ 169.254.169.254 thuộc dải cấm 169.254.0.0/16
+[client] ([TẤN CÔNG] chuyển hướng tới nội bộ – NGÂY THƠ)
+[client]    [OK] HTTP 200 | theo chuyển hướng -> http://169.254.169.254/latest/meta-data/token | nối tới 169.254.169.254 (169.254.169.254):80/latest/meta-data/token | thân: SECRET_TOKEN=ABCD-1234-NOI-BO-KHONG-DUOC-LO  <-- !!! LỘ BÍ MẬT NỘI BỘ !!!
+[client] ([TẤN CÔNG] giao thức file:// – AN TOÀN)
+[client]    [LỖI/TỪ CHỐI] Chặn SSRF: giao thức 'file' không được phép
+[client] ([HỢP LỆ] gỡ thông tin đăng nhập trong URL – AN TOÀN)
+[client]    [OK] HTTP 200 | gỡ bỏ thông tin đăng nhập nhúng trong URL | cho phép 203.0.113.10 (203.0.113.10):80/; nối tới ĐÚNG IP đã kiểm tra | thân: Trang cong khai hop le (203.0.113.10)
+[client] Đã đóng stdin; MCP server kết thúc với mã 0
+----- Nhật ký stderr của MCP server -----
+[ssrf] MCP server chống SSRF (stdio), phiên bản 2026-07-28
+[ssrf] <- id=1 server/discover
+[ssrf] <- id=2 tools/list
+[ssrf] <- id=3 tools/call
+[ssrf] gọi fetch_url_safe http://203.0.113.10/
+[ssrf]     cho phép 203.0.113.10 (203.0.113.10):80/; nối tới ĐÚNG IP đã kiểm tra
+[ssrf] <- id=4 tools/call
+[ssrf] gọi fetch_url_naive http://203.0.113.10/
+[ssrf]     nối tới 203.0.113.10 (203.0.113.10):80/
+[ssrf] <- id=5 tools/call
+[ssrf] gọi fetch_url_safe http://169.254.169.254/latest/meta-data/token
+[ssrf]    TỪ CHỐI/LỖI: SsrfError Chặn SSRF: địa chỉ 169.254.169.254 thuộc dải cấm 169.254.0.0/16
+[ssrf] <- id=6 tools/call
+[ssrf] gọi fetch_url_naive http://169.254.169.254/latest/meta-data/token
+[ssrf]     nối tới 169.254.169.254 (169.254.169.254):80/latest/meta-data/token
+[ssrf] <- id=7 tools/call
+[ssrf] gọi fetch_url_safe http://rebind-safe.evil.test/secret
+[ssrf]     cho phép rebind-safe.evil.test (203.0.113.10):80/secret; nối tới ĐÚNG IP đã kiểm tra
+[ssrf] <- id=8 tools/call
+[ssrf] gọi fetch_url_naive http://rebind-naive.evil.test/secret
+[ssrf]     nối tới rebind-naive.evil.test (127.0.0.1):80/secret
+[ssrf] <- id=9 tools/call
+[ssrf] gọi fetch_url_safe http://203.0.113.20/go
+[ssrf]    TỪ CHỐI/LỖI: SsrfError Chặn SSRF: địa chỉ 169.254.169.254 thuộc dải cấm 169.254.0.0/16
+[ssrf] <- id=10 tools/call
+[ssrf] gọi fetch_url_naive http://203.0.113.20/go
+[ssrf]     nối tới 203.0.113.20 (203.0.113.20):80/go
+[ssrf]     theo chuyển hướng -> http://169.254.169.254/latest/meta-data/token
+[ssrf]     nối tới 169.254.169.254 (169.254.169.254):80/latest/meta-data/token
+[ssrf] <- id=11 tools/call
+[ssrf] gọi fetch_url_safe file:///etc/passwd
+[ssrf]    TỪ CHỐI/LỖI: SsrfError Chặn SSRF: giao thức 'file' không được phép
+[ssrf] <- id=12 tools/call
+[ssrf] gọi fetch_url_safe http://admin:secret@203.0.113.10/
+[ssrf]     gỡ bỏ thông tin đăng nhập nhúng trong URL
+[ssrf]     cho phép 203.0.113.10 (203.0.113.10):80/; nối tới ĐÚNG IP đã kiểm tra
+[ssrf] Host đã đóng stdin, kết thúc
+

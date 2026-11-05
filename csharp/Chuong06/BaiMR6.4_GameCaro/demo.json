@@ -1,0 +1,19 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "server", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.4_GameCaro.dll", "server", "0.0.0.0", "42640", "--kham-pha", "42641", "--ten", "Phòng-Lab-A", "--het-gio-ms", "1000"], "background": true, "wait": 1.0},
+    {"name": "An", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.4_GameCaro.dll", "choi", "An", "--tim", "42641", "--tao", "ban1", "--bot", "can_bang", "--so-van", "2", "--tre-ms", "60"], "background": true, "wait": 1.4},
+    {"name": "Cuong", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.4_GameCaro.dll", "choi", "Cuong", "127.0.0.1", "42640", "--tao", "ban2", "--bot", "can_bang", "--tre-ms", "60"], "background": true, "wait": 0.3},
+    {"name": "tim", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.4_GameCaro.dll", "tim", "42641", "500"], "wait": 0.2},
+    {"name": "Khach", "cmd": ["python3", "../../../python/Chuong06/BaiMR6.4_GameCaro/nguoi_choi.py", "Khach", "127.0.0.1", "42640", "--xem", "ban1"], "background": true, "wait": 0.3},
+    {"name": "Dung", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.4_GameCaro.dll", "choi", "Dung", "127.0.0.1", "42640", "--vao", "ban2", "--bot", "im_lang"], "background": true, "wait": 0.3},
+    {"name": "Binh", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.4_GameCaro.dll", "choi", "Binh", "127.0.0.1", "42640", "--vao", "ban1", "--bot", "tap_su", "--seed", "14", "--thu-loi", "--so-van", "2", "--tre-ms", "60"], "timeout": 30, "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server Caro (mỗi nước tối đa 1000 ms)",
+             "An": "Cửa sổ 2 – An (bot cân bằng, tìm server bằng broadcast)",
+             "Cuong": "Cửa sổ 3 – Cuong (bot, phòng ban2)",
+             "tim": "Cửa sổ 4 – tìm server trong LAN",
+             "Khach": "Cửa sổ 5 – Khach (client bản Python, người xem phòng ban1)",
+             "Dung": "Cửa sổ 6 – Dung (bot im lặng, phòng ban2)",
+             "Binh": "Cửa sổ 7 – Binh (bot tập sự, thử gửi nước sai)"}
+}

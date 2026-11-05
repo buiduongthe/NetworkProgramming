@@ -1,0 +1,15 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "server", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR5.2_MoPhongDongThoi.dll", "server", "127.0.0.1", "42520", "200"], "background": true, "wait": 1.0},
+    {"name": "mang", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR5.2_MoPhongDongThoi.dll", "mang", "127.0.0.1", "42520"], "timeout": 60, "wait": 0.5},
+    {"name": "cpu", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR5.2_MoPhongDongThoi.dll", "cpu"], "timeout": 60},
+    {"name": "tron", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR5.2_MoPhongDongThoi.dll", "tron", "127.0.0.1", "42520"], "timeout": 60, "wait": 0.5},
+    {"name": "khoa", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR5.2_MoPhongDongThoi.dll", "khoa"], "timeout": 60}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ thử (trễ 200 ms mỗi yêu cầu)",
+             "mang": "Cửa sổ 2 – 20 yêu cầu mạng, năm mô hình",
+             "cpu": "Cửa sổ 3 – việc nặng CPU, .NET không có GIL",
+             "tron": "Cửa sổ 4 – mạng + CPU, async/await và vòng lặp một luồng",
+             "khoa": "Cửa sổ 5 – tranh chấp dữ liệu, bế tắc"}
+}

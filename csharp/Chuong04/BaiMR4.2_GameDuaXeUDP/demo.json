@@ -1,0 +1,11 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "server", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR4.2_GameDuaXeUDP.dll", "server", "127.0.0.1", "42420", "--so-xe", "2", "--mat", "0,20", "--dao", "0,10", "--seed", "7", "--so-van", "2"], "background": true, "wait": 1.0},
+    {"name": "Binh", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR4.2_GameDuaXeUDP.dll", "xe", "Binh", "127.0.0.1", "42420", "--bot", "lieu", "--khung", "0", "--so-van", "2"], "background": true, "wait": 0.6},
+    {"name": "An", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR4.2_GameDuaXeUDP.dll", "xe", "An", "127.0.0.1", "42420", "--bot", "can_than", "--khung", "10", "--so-van", "2"], "timeout": 40, "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server (đua 1 mất 0 %, đua 2 mất 20 % và đảo 10 %)",
+             "Binh": "Cửa sổ 2 – Binh (bot liều)",
+             "An": "Cửa sổ 3 – An (bot cẩn thận, in khung hình)"}
+}

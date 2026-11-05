@@ -1,0 +1,7 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "host", "cmd": ["python3", "mcp_test_client.py", "42840", "42841", "42842", "dotnet", "bin/Release/net10.0/BaiMR8.4_ChongSSRF_MCP.dll"], "timeout": 60}
+  ],
+  "titles": {"host": "Cửa sổ dòng lệnh – client thử nghiệm MCP chống SSRF (META=42840, PUB=42841, REDIR=42842; server C#)"}
+}

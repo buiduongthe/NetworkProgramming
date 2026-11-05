@@ -1,0 +1,11 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "thu_thap", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR4.1_ThuThapNetFlow.dll", "thu_thap", "127.0.0.1", "42410", "--nhan-roi", "1.5"], "background": true, "wait": 1.0},
+    {"name": "xuat", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR4.1_ThuThapNetFlow.dll", "xuat", "127.0.0.1", "42410", "--so-luong", "100", "--bo-goi", "2"], "wait": 2.5},
+    {"name": "thu_thap_2", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR4.1_ThuThapNetFlow.dll", "thu_thap", "127.0.0.1", "42411", "--nhan-roi", "1.5"], "background": true, "wait": 1.0},
+    {"name": "xuat_python", "cmd": ["python3", "../../../python/Chuong04/BaiMR4.1_ThuThapNetFlow/may_xuat.py", "127.0.0.1", "42411", "--so-luong", "100", "--bo-goi", "2"], "wait": 2.5}
+  ],
+  "titles": {"thu_thap": "Cửa sổ 1 – bộ thu thập NetFlow v5 (UDP 42410)", "xuat": "Cửa sổ 2 – máy xuất giả lập (bỏ gói #2)",
+             "thu_thap_2": "Cửa sổ 3 – bộ thu thập C# (UDP 42411)", "xuat_python": "Cửa sổ 4 – chạy chéo – máy xuất bản Python"}
+}

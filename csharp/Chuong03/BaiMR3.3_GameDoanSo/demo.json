@@ -1,0 +1,17 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "server", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR3.3_GameDoanSo.dll", "server", "127.0.0.1", "42330", "--so-nguoi", "4", "--het-gio-ms", "1500", "--seed", "2026", "--so-van", "1"], "background": true, "wait": 1.0},
+    {"name": "Binh", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR3.3_GameDoanSo.dll", "choi", "Binh", "127.0.0.1", "42330", "--bot", "chia_doi", "--nghi-ms", "200"], "background": true, "wait": 0.6},
+    {"name": "Cuong", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR3.3_GameDoanSo.dll", "choi", "Cuong", "127.0.0.1", "42330", "--bot", "nghich", "--nghi-ms", "200"], "background": true, "wait": 0.6},
+    {"name": "An", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR3.3_GameDoanSo.dll", "choi", "An", "127.0.0.1", "42330"], "stdin": "abc\n40\n39\n", "background": true, "wait": 0.6},
+    {"name": "Dung", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR3.3_GameDoanSo.dll", "choi", "Dung", "127.0.0.1", "42330", "--bot", "im_lang"], "background": true, "wait": 0.8},
+    {"name": "Em", "cmd": ["python3", "../../../python/Chuong03/BaiMR3.3_GameDoanSo/nguoi_choi.py", "Em", "127.0.0.1", "42330", "--bot", "chia_doi"], "wait": 3.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server (cần 4 người, mỗi lượt 1500 ms, seed 2026)",
+             "Binh": "Cửa sổ 2 – Binh (bot chia đôi)",
+             "Cuong": "Cửa sổ 3 – Cuong (bot nghịch – gửi thông điệp sai)",
+             "An": "Cửa sổ 4 – An (người chơi, nhập từ bàn phím)",
+             "Dung": "Cửa sổ 5 – Dung (bot im lặng – hết giờ rồi rời)",
+             "Em": "Cửa sổ 6 – Em (client bản Python, đến muộn khi ván đang chơi)"}
+}
