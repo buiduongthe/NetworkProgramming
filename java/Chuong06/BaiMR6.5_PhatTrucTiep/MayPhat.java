@@ -202,6 +202,14 @@ final class MayPhat {
             mic = m;
             fps = Math.max(1, Math.min(30, f > 0 ? f : fps));
             gop = Math.max(1, Math.min(300, g > 0 ? g : gop));
+            tt = thongTin();
+        }
+        // thong_tin đi TCP, gói phương tiện đi UDP trên luồng khác: gửi thong_tin trước và chờ 20 ms để máy chủ kịp
+        // chuyển sang "đang phát" – nếu không, khung I #0 có thể tới trước, bị bỏ vì "chưa phát", và bộ đệm GOP rỗng
+        // tới khung I kế tiếp.
+        gui(tt);
+        Chung.ngu(0.02);
+        synchronized (khoa) {
             t0 = Chung.bayGio();
             so = 0;
             seq = 0;
@@ -213,9 +221,7 @@ final class MayPhat {
             lamMoiThongKe();
             dangPhat = true;
             cam.datFps(fps);
-            tt = thongTin();
         }
-        gui(tt);
         bao.accept("Bắt đầu phát " + Chung.RONG + "x" + Chung.CAO + " " + fps + " fps GOP " + gop);
     }
 
