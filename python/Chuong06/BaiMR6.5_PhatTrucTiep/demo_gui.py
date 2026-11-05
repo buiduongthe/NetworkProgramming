@@ -61,6 +61,7 @@ def kich_ban(root, sv, p, ds, out):
     log("1. Server: bấm START SERVER")
     sv.nut_start.invoke()
     log("2. P: Kết nối; camera giả lập (clapper), micro giả lập")
+    p.chon_mic.current(len(p.ds_mic) - 1)          # kịch bản luôn dùng micro giả lập (mặc định là micro thật)
     p.nut_ket_noi.invoke()
     yield lambda: p.nut_phat["state"] == "normal"
     log("   P bấm PHÁT (10 fps, GOP 20)")

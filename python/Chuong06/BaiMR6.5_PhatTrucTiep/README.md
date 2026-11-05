@@ -96,6 +96,7 @@ python3 xem_gui.py B 127.0.0.1 41652
 - **Windows:** Python từ python.org đã có Tkinter; ffmpeg: `winget install -e --id Gyan.FFmpeg`; âm thanh: `pip install sounddevice`. Cho phép ứng dụng desktop dùng camera/micro trong *Settings → Privacy & security*.
 - **Linux:** `sudo apt install python3-tk ffmpeg libportaudio2`, `pip install sounddevice`. **macOS:** `brew install ffmpeg portaudio`.
 - Chạy riêng từng cửa sổ (không qua `demo_gui.py`): mọi dòng nhật ký và cứ 5 giây một dòng số liệu (tiếng nhận/mất, mức dBFS, loa; khung I/P, đứng hình, lệch, trễ; kbit/s vào/ra) cũng in ra dòng lệnh, chuyển hướng được vào tệp (`python3 xem_gui.py A … > xem_A.txt`) để kiểm tra khi thử thiết bị thật.
+- Ô Micro của máy phát mặc định chọn **micro thật đầu tiên** tìm thấy (máy không có micro thì là micro giả lập); kịch bản `demo_gui` tự chọn micro giả lập.
 - Thiết bị thật chỉ được mở khi bấm PHÁT. Muốn máy khác nối vào: máy chủ nghe IP card mạng (hoặc `0.0.0.0`) và mở tường lửa cho hai cổng.
 - Kịch bản tự động (Linux): `xvfb-run -a -s "-screen 0 2000x1400x24" python3 demo_gui.py 127.0.0.1 41652 41653`.
 
