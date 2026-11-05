@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.7_DatXe",
+    "chuong": 6,
+    "ngon_ngu": [
+      "csharp"
+    ],
+    "kiem_thu": {
+      "csharp": "đã chạy (bản dòng lệnh net10.0, Linux .NET 10.0.114, tools/demo.py; chạy chéo với Python cả hai chiều); ứng dụng WinForms net10.0-windows chưa chạy – cần Windows (chạy bằng tools/demo_windows.ps1 với thư mục GiaoDien), đã kiểm tra biên dịch với assembly tham chiếu WinForms"
+    },
+    "ten": "Đặt xe – n người cùng bấm 'Đặt xe' cho m xe mỗi xe một chỗ: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa loại trừ nhiều ô theo thứ tự, lạc quan phiên bản + CAS, hàng đợi một luồng), sổ kiểm toán đếm trùng chỗ, bộ mô phỏng tải có rào xuất phát và pipelining, ứng dụng gọi xe có bản đồ và xe chạy hoạt hình",
+    "ghi_chu": "Dự án BaiMR6.7_DatXe.csproj (dòng lệnh: server/mo_phong/khach/dat_xe) và GiaoDien/BaiMR6.7_GiaoDien.csproj (WinForms, dùng chung lõi ../*.cs). Cổng 42710 (GUI 42712). Kết quả: 1000 người, 1 xe – khong_khoa 197 người được báo thành công, 196 trùng chỗ; khoa/lac_quan/hang_doi 1 thành công, 0 sai phạm (lac_quan 11 xung đột, 28070 yc/s; hang_doi hàng đợi max 997). 2000 người, 10 xe – khong_khoa 84 thành công, 74 sai phạm; khoa/lac_quan/hang_doi 10 thành công, 0 sai phạm (lac_quan 28 xung đột, 17512 yc/s). Lượt người dùng (1 xe): An đặt rồi hủy, Bình hết chỗ rồi đặt được sau khi An hủy (giống bản Python). Chạy chéo cả hai chiều (mô phỏng C# -> máy chủ Python: khong_khoa 8 sai phạm, còn lại 0; mô phỏng Python -> máy chủ C#: 199, còn lại 0; dat_xe hai chiều)."
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.8_DatVePhim",
+    "chuong": 6,
+    "ngon_ngu": [
+      "csharp"
+    ],
+    "kiem_thu": {
+      "csharp": "đã chạy (bản dòng lệnh net10.0, Linux .NET 10.0.114, tools/demo.py; chạy chéo với Python cả hai chiều); ứng dụng WinForms net10.0-windows chưa chạy – cần Windows (chạy bằng tools/demo_windows.ps1 với thư mục GiaoDien), đã kiểm tra biên dịch với assembly tham chiếu WinForms"
+    },
+    "ten": "Đặt vé xem phim – phòng chiếu 8 × 12 ghế, giữ chỗ có thời hạn (TTL 30 s, luồng nền dọn ghế quá hạn), thanh toán, nhả ghế: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (khóa theo từng ghế, nhiều ghế khóa theo thứ tự), sổ kiểm toán đếm ghế trùng và thanh toán sai, bộ mô phỏng tải ghế nóng và nhiều ghế, ứng dụng sơ đồ ghế cập nhật trực tiếp",
+    "ghi_chu": "Dự án BaiMR6.8_DatVePhim.csproj (dòng lệnh: server/mo_phong/khach/dat_ve) và GiaoDien/BaiMR6.8_GiaoDien.csproj (WinForms, dùng chung lõi ../*.cs). Cổng 42720 (GUI 42722). Kết quả: 500 người tranh ghế nóng E7 – khong_khoa 129 thành công, 128 sai phạm (127 ghế trùng, 1 thanh toán sai); khoa/lac_quan/hang_doi 2 thành công (1 giữ + 1 vé), 0 sai phạm. 300 người × 3 lần, ghế ngẫu nhiên – khong_khoa 208 / 116 sai phạm; khoa 156 / 0, 3160 yc/s (khóa theo ghế); lac_quan 154 / 0, 10 xung đột, 6161 yc/s; hang_doi 152 / 0, 801 yc/s. Giữ chỗ 3 s: An hết hạn, Chi thanh toán sau hạn bị từ chối (het_han), Bình mua E7 (S1930-E7) – giống bản Python. Chạy chéo cả hai chiều (mô phỏng C# -> máy chủ Python: khong_khoa 10 sai phạm, còn lại 0; mô phỏng Python -> máy chủ C#: 72, còn lại 0; dat_ve hai chiều)."
+  }
+]

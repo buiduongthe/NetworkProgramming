@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.6_DauGia",
+    "chuong": 6,
+    "ngon_ngu": [
+      "csharp"
+    ],
+    "kiem_thu": {
+      "csharp": "đã chạy (bản dòng lệnh net10.0, Linux .NET 10.0.114, tools/demo.py; chạy chéo với Python cả hai chiều); ứng dụng WinForms net10.0-windows chưa chạy – cần Windows (chạy bằng tools/demo_windows.ps1 với thư mục GiaoDien), đã kiểm tra biên dịch với assembly tham chiếu WinForms"
+    },
+    "ten": "Đấu giá trực tuyến – n người cùng tranh một món hàng: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa loại trừ, lạc quan phiên bản + CAS, hàng đợi một luồng), sổ kiểm toán, đồng hồ phiên gia hạn chống bắn tỉa, bộ mô phỏng tải có rào xuất phát và pipelining",
+    "ghi_chu": "Dự án BaiMR6.6_DauGia.csproj (dòng lệnh: server/mo_phong/khach/dau_gia) và GiaoDien/BaiMR6.6_GiaoDien.csproj (WinForms, dùng chung lõi ../*.cs). Cổng 42700 (GUI 42702). Kết quả (500 người × 5 lần, 200 kết nối, trễ 0–2 ms): khong_khoa 580 thành công, 505 sai phạm (giá thấp hơn), 8165 yc/s; khoa 244 thành công, 0 sai phạm, 765 yc/s, p99 1648,6 ms (Monitor không công bằng); lac_quan 42 thành công, 0 sai phạm, 64 xung đột, 14550 yc/s; hang_doi 12 thành công, 0 sai phạm, 876 yc/s, hàng đợi max 500. Phiên 5 s gia hạn 3 s: gia hạn hai lần, An thắng 5.500.000 đ, giá sau khi đóng bị từ chối (giống bản Python). Chạy chéo: mô phỏng C# -> máy chủ Python (khong_khoa 452 sai phạm, 3 chế độ còn lại 0); mô phỏng Python -> máy chủ C# (541 sai phạm, còn lại 0); dau_gia.py với máy chủ C#. Đọc thêm: Kung & Robinson 1981 (ACM TODS 6(2)), Coffman và cộng sự 1971 (ACM Computing Surveys 3(2)), tài liệu .NET lock/Monitor/Interlocked/BlockingCollection/Channels/Barrier."
+  }
+]

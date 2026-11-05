@@ -1,0 +1,9 @@
+{
+  "nen_tang": "windows",
+  "ghi_chu": "WinForms chỉ chạy trên Windows: chạy bằng tools/demo_windows.ps1 csharp\\Chuong06\\BaiMR6.6_DauGia\\GiaoDien; kịch bản demo tự bấm nút trên máy chủ và 3 phòng đấu giá, chạy so sánh 4 chế độ; ảnh ghi ra ..\\ket_qua_gui.png và ..\\ket_qua_gui_tranh_chap.png",
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "gui", "cmd": ["bin\\Release\\net10.0-windows\\BaiMR6.6_GiaoDien.exe", "demo", "127.0.0.1", "42702", "..\\ket_qua_gui.png"], "timeout": 120}
+  ],
+  "titles": {"gui": "Cửa sổ 6 – ứng dụng giao diện (máy chủ + 3 phòng đấu giá) – Windows"}
+}
