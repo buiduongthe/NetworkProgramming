@@ -1,7 +1,8 @@
 """Bài mở rộng MR1.2 – Chụp ảnh tệp hoạt hình HTML bằng Playwright (chỉ dùng cho kịch bản minh họa).
 
 Mở tệp HTML do mo_phong.py sinh ra trong Chromium không màn hình, tua tới hai thời điểm đáng chú ý
-(TCP lúc mất gói và có ACK trùng; multicast lúc gói tới hai thành viên ở LAN B), dừng hoạt hình,
+(TCP lúc mất gói và có ACK trùng; multicast lúc gói tới hai thành viên ở LAN B; bất đồng bộ và phối hợp
+lúc 62 ms – so sánh hàng luồng của máy chủ H5), dừng hoạt hình,
 chụp lại và ghép hai ảnh thành một tệp PNG.
 
 Chạy:  python3 chup_hoat_hinh.py <tệp.html> [tệp_ảnh.png]
@@ -13,7 +14,8 @@ import sys
 from PIL import Image
 from playwright.sync_api import sync_playwright
 
-SHOTS = [("tcp", 150000), ("multicast", 102600)]     # (kịch bản, thời điểm µs)
+SHOTS = [("tcp", 150000), ("multicast", 102600),    # (kịch bản, thời điểm µs)
+         ("bat_dong_bo", 62000), ("phoi_hop", 62000)]
 
 
 def main():

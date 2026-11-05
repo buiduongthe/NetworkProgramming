@@ -122,6 +122,7 @@ class Net
     readonly Dictionary<string, List<string>> mroute = [];                  // nhóm -> switch (LAN) có thành viên
     public readonly Dictionary<string, List<string>> Member = [];           // host -> các nhóm đã tham gia
     public bool HopTrace = true;                 // in từng bước chuyển (tắt với TCP/UDP cho gọn)
+    public bool Quiet;                           // không in nhật ký (dùng khi chỉ cần chỉ số, ví dụ lệnh so_sanh)
     public Action<string, Packet>? OnDeliver;    // tầng ứng dụng của kịch bản
     public Action<Packet, string, string>? OnLoss;   // kịch bản được báo khi mất gói
     public readonly List<object[]> Hops = [], Notes = [];   // dữ liệu cho hoạt hình HTML
@@ -163,7 +164,7 @@ class Net
 
     public void Log(string text, string node = "")
     {
-        Console.WriteLine($"{Fmt.T(Now),7} ms  {text}");
+        if (!Quiet) Console.WriteLine($"{Fmt.T(Now),7} ms  {text}");
         Notes.Add([Now, node, text]);
     }
 

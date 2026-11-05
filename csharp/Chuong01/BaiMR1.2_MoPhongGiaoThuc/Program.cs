@@ -1,4 +1,5 @@
-// Bài mở rộng MR1.2 – Mô phỏng giao thức và kiểu truyền: TCP, UDP, unicast, broadcast, multicast, anycast.
+// Bài mở rộng MR1.2 – Mô phỏng giao thức, kiểu truyền và mô hình máy chủ: TCP, UDP, unicast, broadcast,
+// multicast, anycast; đồng bộ, đa luồng, nhóm luồng, bất đồng bộ, phối hợp.
 //
 // Bài mở rộng, không có trong giáo trình; minh họa trực quan Chương 1 (mô hình TCP/IP, tầng giao vận,
 // các kiểu địa chỉ) trước khi lập trình socket thật ở các chương sau. Toàn bộ chạy trong bộ mô phỏng
@@ -6,7 +7,9 @@
 //
 // Cách dùng:
 //     dotnet run -- <kịch_bản> [--seed N] [--loss P] [--doan N] [--mat 20,20] [--html tệp.html]
-//     kịch_bản: tcp | udp | unicast | broadcast | multicast | anycast | tat_ca
+//     kịch_bản: tcp | udp | unicast | broadcast | multicast | anycast            (giao thức, kiểu truyền)
+//               dong_bo | da_luong | nhom_luong | bat_dong_bo | phoi_hop   (bên trong máy chủ, MayChu.cs)
+//               so_sanh (bảng so sánh 5 mô hình máy chủ) | tat_ca
 //     --seed  hạt giống bộ sinh ngẫu nhiên (mặc định 7)
 //     --loss  xác suất mất gói trên liên kết R2–R3, 0..1 (mặc định: 0; UDP: 0.2)
 //     --doan  số đoạn dữ liệu TCP (mặc định 40)
@@ -30,6 +33,7 @@ var titles = new Dictionary<string, string>
     ["multicast"] = "Multicast – IGMP, chỉ giao cho thành viên nhóm",
     ["anycast"] = "Anycast – máy phục vụ gần nhất, dự phòng khi hỏng",
 };
+foreach (var (k, v) in MayChu.Titles) titles[k] = v;     // năm kịch bản bên trong máy chủ
 
 // ---- đọc tham số (giống argparse của bản Python) ----
 string? scenario = null;
@@ -47,11 +51,17 @@ for (int i = 0; i < args.Length; i++)
         default: scenario = args[i]; break;
     }
 }
-if (scenario == null || !(titles.ContainsKey(scenario) || scenario == "tat_ca"))
+if (scenario == null || !(titles.ContainsKey(scenario) || scenario == "so_sanh" || scenario == "tat_ca"))
 {
-    Console.WriteLine("Cách dùng: dotnet run -- tcp|udp|unicast|broadcast|multicast|anycast|tat_ca " +
-                      "[--seed N] [--loss P] [--doan N] [--mat 20,20] [--html tệp.html]");
+    Console.WriteLine("Cách dùng: dotnet run -- <kịch_bản> [--seed N] [--loss P] [--doan N] [--mat 20,20] [--html tệp.html]");
+    Console.WriteLine("  kịch_bản: tcp|udp|unicast|broadcast|multicast|anycast");
+    Console.WriteLine("            dong_bo|da_luong|nhom_luong|bat_dong_bo|phoi_hop|so_sanh|tat_ca");
     return 2;
+}
+if (scenario == "so_sanh")
+{
+    MayChu.SoSanh(MayChu.Titles.Keys.Select(m => (m, MayChu.ChiSo(new Net(seed), m))).ToList());
+    return 0;
 }
 
 var names = scenario == "tat_ca" ? titles.Keys.ToList() : new List<string> { scenario };
@@ -67,6 +77,17 @@ Dictionary<string, object> RunOne(string name)
     bool lossSet = loss >= 0;
     if (lossSet) net.L[("R2", "R3")].Loss = (int)(loss * 1000 + 0.5);
     var run = new Dictionary<string, object> { ["id"] = name, ["title"] = titles[name] };
+    if (MayChu.Titles.ContainsKey(name))
+    {
+        var extra = MayChu.Chay(net, name);
+        Console.WriteLine();
+        run["hops"] = net.Hops;
+        run["notes"] = net.Notes;
+        run["changes"] = net.Changes;
+        foreach (var (k, v) in extra) run[k] = v;
+        return run;
+    }
+    List<long[]>? cwnd = null;           // thêm sau "changes" để thứ tự khóa JSON giống bản Python
     switch (name)
     {
         case "tcp":
@@ -77,7 +98,7 @@ Dictionary<string, object> RunOne(string name)
             sc.Start();
             net.Run();
             sc.Report();
-            run["cwnd"] = sc.CwndLog;
+            cwnd = sc.CwndLog;
             break;
         case "udp": KichBan.Udp(net, lossSet); break;
         case "unicast": KichBan.Unicast(net); break;
@@ -91,6 +112,7 @@ Dictionary<string, object> RunOne(string name)
     run["hops"] = net.Hops;
     run["notes"] = net.Notes;
     run["changes"] = net.Changes;
+    if (cwnd != null) run["cwnd"] = cwnd;
     return run;
 }
 

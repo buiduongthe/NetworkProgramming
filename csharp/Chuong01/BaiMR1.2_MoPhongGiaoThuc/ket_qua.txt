@@ -405,10 +405,384 @@ Tổng kết theo nút (Gửi = phát ra, Nhận = gói tới, Giao = đưa lên
   H6   192.168.2.16     2     2     2        0    0
 
 
+===== dong_bo =====
+$ dotnet bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll dong_bo
+=== Kịch bản dong_bo (seed 7) ===
+Đồng bộ, một luồng – xử lý lần lượt, yêu cầu sau phải chờ
+6 yêu cầu tới H5, mỗi yêu cầu: đọc CSDL 30 ms (chờ I/O)
+  + xử lý 10 ms CPU; máy chủ có 2 lõi CPU
+    0.0 ms  H4 gửi yêu cầu A tới máy chủ H5
+    0.0 ms  H6 gửi yêu cầu B tới máy chủ H5
+    0.0 ms  H1 gửi yêu cầu D tới máy chủ H5
+    0.0 ms  H2 gửi yêu cầu E tới máy chủ H5
+    0.0 ms  H3 gửi yêu cầu F tới máy chủ H5
+    1.0 ms  yêu cầu A từ H4 tới H5
+    1.0 ms  luồng chính xử lý A: đọc CSDL, luồng bị chặn 30 ms
+    1.0 ms  yêu cầu B từ H6 tới H5
+    1.0 ms  luồng chính bận → B chờ trong hàng đợi kết nối (1)
+    2.0 ms  H4 gửi yêu cầu C tới máy chủ H5
+    3.0 ms  yêu cầu C từ H4 tới H5
+    3.0 ms  luồng chính bận → C chờ trong hàng đợi kết nối (2)
+   12.3 ms  yêu cầu D từ H1 tới H5
+   12.3 ms  luồng chính bận → D chờ trong hàng đợi kết nối (3)
+   12.5 ms  yêu cầu E từ H2 tới H5
+   12.5 ms  luồng chính bận → E chờ trong hàng đợi kết nối (4)
+   12.7 ms  yêu cầu F từ H3 tới H5
+   12.7 ms  luồng chính bận → F chờ trong hàng đợi kết nối (5)
+   41.0 ms  luồng chính xong A (CPU 10 ms), gửi trả lời
+   41.0 ms  luồng chính xử lý B: đọc CSDL, luồng bị chặn 30 ms
+   42.1 ms  H4 nhận trả lời A (200) sau 42.1 ms
+   81.0 ms  luồng chính xong B (CPU 10 ms), gửi trả lời
+   81.0 ms  luồng chính xử lý C: đọc CSDL, luồng bị chặn 30 ms
+   82.1 ms  H6 nhận trả lời B (200) sau 82.1 ms
+  121.0 ms  luồng chính xong C (CPU 10 ms), gửi trả lời
+  121.0 ms  luồng chính xử lý D: đọc CSDL, luồng bị chặn 30 ms
+  122.1 ms  H4 nhận trả lời C (200) sau 120.1 ms
+  161.0 ms  luồng chính xong D (CPU 10 ms), gửi trả lời
+  161.0 ms  luồng chính xử lý E: đọc CSDL, luồng bị chặn 30 ms
+  174.9 ms  H1 nhận trả lời D (200) sau 174.9 ms
+  201.0 ms  luồng chính xong E (CPU 10 ms), gửi trả lời
+  201.0 ms  luồng chính xử lý F: đọc CSDL, luồng bị chặn 30 ms
+  214.9 ms  H2 nhận trả lời E (200) sau 214.9 ms
+  241.0 ms  luồng chính xong F (CPU 10 ms), gửi trả lời
+  254.9 ms  H3 nhận trả lời F (200) sau 254.9 ms
+
+Bên trong máy chủ H5, 1 ô = 6 ms:
+  CHỮ HOA dùng CPU, chữ thường bị chặn chờ I/O, + tạo luồng,
+  - chờ lõi CPU, # giữ khóa, ~ chờ khóa, · việc rất ngắn
+  luồng chính |aaaaaAAbbbbbBBcccccCdddddDDeeeeeEEfffffF |
+               0                                  246 ms
+
+  Mã  Client    Gửi  Tới H5  Nhận TL  Phản hồi  Kết quả
+  A   H4        0.0     1.0     42.1      42.1  200 OK
+  B   H6        0.0     1.0     82.1      82.1  200 OK
+  C   H4        2.0     3.0    122.1     120.1  200 OK
+  D   H1        0.0    12.3    174.9     174.9  200 OK
+  E   H2        0.0    12.5    214.9     214.9  200 OK
+  F   H3        0.0    12.7    254.9     254.9  200 OK
+  Hoàn tất lúc 254.9 ms; phản hồi TB 148.2 ms, lớn nhất 254.9 ms
+  Luồng tối đa 1; từ chối 0
+
+Nhận xét: một luồng làm lần lượt; khi chờ CSDL luồng bị chặn,
+  CPU rảnh mà không phục vụ được ai; yêu cầu sau chờ cộng dồn.
+
+
+===== da_luong =====
+$ dotnet bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll da_luong
+=== Kịch bản da_luong (seed 7) ===
+Đa luồng – mỗi yêu cầu một luồng, chờ lõi CPU, khóa
+6 yêu cầu tới H5, mỗi yêu cầu: đọc CSDL 30 ms (chờ I/O)
+  + xử lý 10 ms CPU; máy chủ có 2 lõi CPU
+    0.0 ms  H4 gửi yêu cầu A tới máy chủ H5
+    0.0 ms  H6 gửi yêu cầu B tới máy chủ H5
+    0.0 ms  H1 gửi yêu cầu D tới máy chủ H5
+    0.0 ms  H2 gửi yêu cầu E tới máy chủ H5
+    0.0 ms  H3 gửi yêu cầu F tới máy chủ H5
+    1.0 ms  yêu cầu A từ H4 tới H5
+    1.0 ms  tạo luồng T1 cho A (1 luồng đang chạy)
+    1.0 ms  yêu cầu B từ H6 tới H5
+    1.0 ms  tạo luồng T2 cho B (2 luồng đang chạy)
+    2.0 ms  H4 gửi yêu cầu C tới máy chủ H5
+    2.0 ms  T1: A đọc CSDL (T1 bị chặn, các luồng khác vẫn chạy)
+    2.0 ms  T2: B đọc CSDL (T2 bị chặn, các luồng khác vẫn chạy)
+    3.0 ms  yêu cầu C từ H4 tới H5
+    3.0 ms  tạo luồng T3 cho C (3 luồng đang chạy)
+    4.0 ms  T3: C đọc CSDL (T3 bị chặn, các luồng khác vẫn chạy)
+   12.3 ms  yêu cầu D từ H1 tới H5
+   12.3 ms  tạo luồng T4 cho D (4 luồng đang chạy)
+   12.5 ms  yêu cầu E từ H2 tới H5
+   12.5 ms  tạo luồng T5 cho E (5 luồng đang chạy)
+   12.7 ms  yêu cầu F từ H3 tới H5
+   12.7 ms  tạo luồng T6 cho F (6 luồng đang chạy)
+   13.3 ms  T4: D đọc CSDL (T4 bị chặn, các luồng khác vẫn chạy)
+   13.5 ms  T5: E đọc CSDL (T5 bị chặn, các luồng khác vẫn chạy)
+   13.7 ms  T6: F đọc CSDL (T6 bị chặn, các luồng khác vẫn chạy)
+   34.0 ms  T3: C chờ lõi CPU (cả 2 lõi đang bận)
+   42.0 ms  T2: B chờ khóa (luồng khác đang trong đoạn găng)
+   43.5 ms  T5: E chờ lõi CPU (cả 2 lõi đang bận)
+   43.7 ms  T6: F chờ lõi CPU (cả 2 lõi đang bận)
+   45.0 ms  T1: A vào đoạn găng, bộ đếm chung = 1, nhả khóa
+   45.0 ms  T1: gửi trả lời A, luồng kết thúc (5 luồng còn chạy)
+   46.1 ms  H4 nhận trả lời A (200) sau 46.1 ms
+   48.0 ms  T2: B vào đoạn găng, bộ đếm chung = 2, nhả khóa
+   48.0 ms  T2: gửi trả lời B, luồng kết thúc (4 luồng còn chạy)
+   49.1 ms  H6 nhận trả lời B (200) sau 49.1 ms
+   53.3 ms  T4: D chờ khóa (luồng khác đang trong đoạn găng)
+   55.0 ms  T3: C vào đoạn găng, bộ đếm chung = 3, nhả khóa
+   55.0 ms  T3: gửi trả lời C, luồng kết thúc (3 luồng còn chạy)
+   56.1 ms  H4 nhận trả lời C (200) sau 54.1 ms
+   58.0 ms  T4: D vào đoạn găng, bộ đếm chung = 4, nhả khóa
+   58.0 ms  T4: gửi trả lời D, luồng kết thúc (2 luồng còn chạy)
+   63.3 ms  T6: F chờ khóa (luồng khác đang trong đoạn găng)
+   65.0 ms  T5: E vào đoạn găng, bộ đếm chung = 5, nhả khóa
+   65.0 ms  T5: gửi trả lời E, luồng kết thúc (1 luồng còn chạy)
+   68.0 ms  T6: F vào đoạn găng, bộ đếm chung = 6, nhả khóa
+   68.0 ms  T6: gửi trả lời F, luồng kết thúc (0 luồng còn chạy)
+   71.9 ms  H1 nhận trả lời D (200) sau 71.9 ms
+   78.9 ms  H2 nhận trả lời E (200) sau 78.9 ms
+   81.9 ms  H3 nhận trả lời F (200) sau 81.9 ms
+
+Bên trong máy chủ H5, 1 ô = 2 ms:
+  CHỮ HOA dùng CPU, chữ thường bị chặn chờ I/O, + tạo luồng,
+  - chờ lõi CPU, # giữ khóa, ~ chờ khóa, · việc rất ngắn
+  T1          | aaaaaaaaaaaaaaaAAAAA##            |
+  T2          | bbbbbbbbbbbbbbbBBBBB~~#           |
+  T3          |  ccccccccccccccc----CCCCC##       |
+  T4          |      +dddddddddddddddDDDDD~#      |
+  T5          |      +eeeeeeeeeeeeeee----EEEEE##  |
+  T6          |      +fffffffffffffff-----FFFFF~# |
+               0                             70 ms
+
+  Mã  Client    Gửi  Tới H5  Nhận TL  Phản hồi  Kết quả
+  A   H4        0.0     1.0     46.1      46.1  200 OK
+  B   H6        0.0     1.0     49.1      49.1  200 OK
+  C   H4        2.0     3.0     56.1      54.1  200 OK
+  D   H1        0.0    12.3     71.9      71.9  200 OK
+  E   H2        0.0    12.5     78.9      78.9  200 OK
+  F   H3        0.0    12.7     81.9      81.9  200 OK
+  Hoàn tất lúc 81.9 ms; phản hồi TB 63.7 ms, lớn nhất 81.9 ms
+  Luồng tối đa 6; từ chối 0
+
+Nhận xét: mỗi yêu cầu một luồng nên các lần chờ I/O chồng lên
+  nhau; nhưng 6 luồng chỉ có 2 lõi (-: chờ lõi), đoạn găng chỉ
+  cho một luồng vào mỗi lúc (~: chờ khóa); mỗi luồng tốn bộ
+  nhớ và thời gian tạo (+).
+
+
+===== nhom_luong =====
+$ dotnet bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll nhom_luong
+=== Kịch bản nhom_luong (seed 7) ===
+Nhóm luồng – 2 luồng thợ + hàng đợi 2, đầy thì từ chối (503)
+6 yêu cầu tới H5, mỗi yêu cầu: đọc CSDL 30 ms (chờ I/O)
+  + xử lý 10 ms CPU; máy chủ có 2 lõi CPU
+    0.0 ms  H4 gửi yêu cầu A tới máy chủ H5
+    0.0 ms  H6 gửi yêu cầu B tới máy chủ H5
+    0.0 ms  H1 gửi yêu cầu D tới máy chủ H5
+    0.0 ms  H2 gửi yêu cầu E tới máy chủ H5
+    0.0 ms  H3 gửi yêu cầu F tới máy chủ H5
+    1.0 ms  yêu cầu A từ H4 tới H5
+    1.0 ms  W1 nhận A: đọc CSDL (W1 bị chặn 30 ms)
+    1.0 ms  yêu cầu B từ H6 tới H5
+    1.0 ms  W2 nhận B: đọc CSDL (W2 bị chặn 30 ms)
+    2.0 ms  H4 gửi yêu cầu C tới máy chủ H5
+    3.0 ms  yêu cầu C từ H4 tới H5
+    3.0 ms  W1, W2 đều bận → C vào hàng đợi (1/2)
+   12.3 ms  yêu cầu D từ H1 tới H5
+   12.3 ms  W1, W2 đều bận → D vào hàng đợi (2/2)
+   12.5 ms  yêu cầu E từ H2 tới H5
+   12.5 ms  hàng đợi đầy → từ chối E ngay (503)
+   12.7 ms  yêu cầu F từ H3 tới H5
+   12.7 ms  hàng đợi đầy → từ chối F ngay (503)
+   24.7 ms  H2 nhận trả lời E (503) sau 24.7 ms
+   24.8 ms  H3 nhận trả lời F (503) sau 24.8 ms
+   41.0 ms  W1 xong A, gửi trả lời
+   41.0 ms  W1 lấy C từ hàng đợi (đã chờ 38.0 ms)
+   41.0 ms  W1 nhận C: đọc CSDL (W1 bị chặn 30 ms)
+   41.0 ms  W2 xong B, gửi trả lời
+   41.0 ms  W2 lấy D từ hàng đợi (đã chờ 28.6 ms)
+   41.0 ms  W2 nhận D: đọc CSDL (W2 bị chặn 30 ms)
+   42.1 ms  H4 nhận trả lời A (200) sau 42.1 ms
+   42.2 ms  H6 nhận trả lời B (200) sau 42.2 ms
+   81.0 ms  W1 xong C, gửi trả lời
+   81.0 ms  W2 xong D, gửi trả lời
+   82.1 ms  H4 nhận trả lời C (200) sau 80.1 ms
+   95.0 ms  H1 nhận trả lời D (200) sau 95.0 ms
+
+Bên trong máy chủ H5, 1 ô = 2 ms:
+  CHỮ HOA dùng CPU, chữ thường bị chặn chờ I/O, + tạo luồng,
+  - chờ lõi CPU, # giữ khóa, ~ chờ khóa, · việc rất ngắn
+  W1          | aaaaaaaaaaaaaaaAAAAAcccccccccccccccCCCCC|
+  W2          | bbbbbbbbbbbbbbbBBBBBdddddddddddddddDDDDD|
+               0                                   82 ms
+
+  Mã  Client    Gửi  Tới H5  Nhận TL  Phản hồi  Kết quả
+  A   H4        0.0     1.0     42.1      42.1  200 OK
+  B   H6        0.0     1.0     42.2      42.2  200 OK
+  C   H4        2.0     3.0     82.1      80.1  200 OK
+  D   H1        0.0    12.3     95.0      95.0  200 OK
+  E   H2        0.0    12.5     24.7      24.7  503 từ chối
+  F   H3        0.0    12.7     24.8      24.8  503 từ chối
+  Hoàn tất lúc 95.0 ms; phản hồi TB 51.5 ms, lớn nhất 95.0 ms
+  Luồng tối đa 2; từ chối 2
+
+Nhận xét: số luồng cố định nên tài nguyên được giới hạn; khi
+  2 thợ đều bận và hàng đợi đầy, yêu cầu bị từ chối ngay (503)
+  thay vì làm máy chủ quá tải.
+
+
+===== bat_dong_bo =====
+$ dotnet bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll bat_dong_bo
+=== Kịch bản bat_dong_bo (seed 7) ===
+Bất đồng bộ – một vòng lặp sự kiện, việc CPU chặn vòng lặp
+6 yêu cầu tới H5, mỗi yêu cầu: đọc CSDL 30 ms (chờ I/O)
+  + xử lý 10 ms CPU; máy chủ có 2 lõi CPU
+    0.0 ms  H4 gửi yêu cầu A tới máy chủ H5
+    0.0 ms  H6 gửi yêu cầu B tới máy chủ H5
+    0.0 ms  H1 gửi yêu cầu D tới máy chủ H5
+    0.0 ms  H2 gửi yêu cầu E tới máy chủ H5
+    0.0 ms  H3 gửi yêu cầu F tới máy chủ H5
+    1.0 ms  yêu cầu A từ H4 tới H5
+    1.0 ms  vòng lặp nhận A, gửi lệnh đọc CSDL không chặn
+    1.0 ms  yêu cầu B từ H6 tới H5
+    1.0 ms  vòng lặp nhận B, gửi lệnh đọc CSDL không chặn
+    2.0 ms  H4 gửi yêu cầu C tới máy chủ H5
+    3.0 ms  yêu cầu C từ H4 tới H5
+    3.0 ms  vòng lặp nhận C, gửi lệnh đọc CSDL không chặn
+   12.3 ms  yêu cầu D từ H1 tới H5
+   12.3 ms  vòng lặp nhận D, gửi lệnh đọc CSDL không chặn
+   12.5 ms  yêu cầu E từ H2 tới H5
+   12.5 ms  vòng lặp nhận E, gửi lệnh đọc CSDL không chặn
+   12.7 ms  yêu cầu F từ H3 tới H5
+   12.7 ms  vòng lặp nhận F, gửi lệnh đọc CSDL không chặn
+   31.0 ms  CSDL xong A → việc CPU 10 ms vào hàng đợi vòng lặp
+   31.0 ms  CSDL xong B → việc CPU 10 ms vào hàng đợi vòng lặp
+   33.0 ms  CSDL xong C → việc CPU 10 ms vào hàng đợi vòng lặp
+   41.0 ms  vòng lặp tính xong A (CPU trên vòng lặp), trả lời
+   42.1 ms  H4 nhận trả lời A (200) sau 42.1 ms
+   42.3 ms  CSDL xong D → việc CPU 10 ms vào hàng đợi vòng lặp
+   42.5 ms  CSDL xong E → việc CPU 10 ms vào hàng đợi vòng lặp
+   42.7 ms  CSDL xong F → việc CPU 10 ms vào hàng đợi vòng lặp
+   51.0 ms  vòng lặp tính xong B (CPU trên vòng lặp), trả lời
+   52.1 ms  H6 nhận trả lời B (200) sau 52.1 ms
+   61.0 ms  vòng lặp tính xong C (CPU trên vòng lặp), trả lời
+   61.0 ms  nhịp tim 40.0 ms chạy muộn 21.0 ms: vòng lặp bận
+   62.1 ms  H4 nhận trả lời C (200) sau 60.1 ms
+   71.0 ms  vòng lặp tính xong D (CPU trên vòng lặp), trả lời
+   81.0 ms  vòng lặp tính xong E (CPU trên vòng lặp), trả lời
+   84.9 ms  H1 nhận trả lời D (200) sau 84.9 ms
+   91.0 ms  vòng lặp tính xong F (CPU trên vòng lặp), trả lời
+   91.0 ms  nhịp tim 50.0 ms chạy muộn 41.0 ms: vòng lặp bận
+   91.0 ms  nhịp tim 60.0 ms chạy muộn 31.0 ms: vòng lặp bận
+   91.0 ms  nhịp tim 70.0 ms chạy muộn 21.0 ms: vòng lặp bận
+   91.0 ms  nhịp tim 80.0 ms chạy muộn 11.0 ms: vòng lặp bận
+   91.0 ms  nhịp tim 90.0 ms chạy muộn 1.0 ms: vòng lặp bận
+   94.9 ms  H2 nhận trả lời E (200) sau 94.9 ms
+  104.9 ms  H3 nhận trả lời F (200) sau 104.9 ms
+
+Bên trong máy chủ H5, 1 ô = 2 ms:
+  CHỮ HOA dùng CPU, chữ thường bị chặn chờ I/O, + tạo luồng,
+  - chờ lõi CPU, # giữ khóa, ~ chờ khóa, · việc rất ngắn
+  vòng lặp    |··   ··   ·    ·AAAAABBBBBCCCCCDDDDDEEEEEFFFFF|
+  I/O đang chờ| 23333666666666643333                         |
+               0                                        92 ms
+
+  Mã  Client    Gửi  Tới H5  Nhận TL  Phản hồi  Kết quả
+  A   H4        0.0     1.0     42.1      42.1  200 OK
+  B   H6        0.0     1.0     52.1      52.1  200 OK
+  C   H4        2.0     3.0     62.1      60.1  200 OK
+  D   H1        0.0    12.3     84.9      84.9  200 OK
+  E   H2        0.0    12.5     94.9      94.9  200 OK
+  F   H3        0.0    12.7    104.9     104.9  200 OK
+  Hoàn tất lúc 104.9 ms; phản hồi TB 73.2 ms, lớn nhất 104.9 ms
+  Luồng tối đa 1; từ chối 0
+  Nhịp tim 10 ms: 10 nhịp, trễ lớn nhất 41.0 ms, TB 12.6 ms
+
+Nhận xét: một luồng vẫn phục vụ nhiều yêu cầu vì I/O không
+  chặn (hàng I/O đang chờ có tới 6 lệnh cùng lúc); nhưng việc
+  CPU chạy trên vòng lặp làm mọi việc khác, kể cả nhịp tim,
+  phải chờ.
+
+
+===== phoi_hop =====
+$ dotnet bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll phoi_hop
+=== Kịch bản phoi_hop (seed 7) ===
+Phối hợp – vòng lặp sự kiện lo I/O, nhóm luồng lo việc CPU
+6 yêu cầu tới H5, mỗi yêu cầu: đọc CSDL 30 ms (chờ I/O)
+  + xử lý 10 ms CPU; máy chủ có 2 lõi CPU
+    0.0 ms  H4 gửi yêu cầu A tới máy chủ H5
+    0.0 ms  H6 gửi yêu cầu B tới máy chủ H5
+    0.0 ms  H1 gửi yêu cầu D tới máy chủ H5
+    0.0 ms  H2 gửi yêu cầu E tới máy chủ H5
+    0.0 ms  H3 gửi yêu cầu F tới máy chủ H5
+    1.0 ms  yêu cầu A từ H4 tới H5
+    1.0 ms  vòng lặp nhận A, gửi lệnh đọc CSDL không chặn
+    1.0 ms  yêu cầu B từ H6 tới H5
+    1.0 ms  vòng lặp nhận B, gửi lệnh đọc CSDL không chặn
+    2.0 ms  H4 gửi yêu cầu C tới máy chủ H5
+    3.0 ms  yêu cầu C từ H4 tới H5
+    3.0 ms  vòng lặp nhận C, gửi lệnh đọc CSDL không chặn
+   12.3 ms  yêu cầu D từ H1 tới H5
+   12.3 ms  vòng lặp nhận D, gửi lệnh đọc CSDL không chặn
+   12.5 ms  yêu cầu E từ H2 tới H5
+   12.5 ms  vòng lặp nhận E, gửi lệnh đọc CSDL không chặn
+   12.7 ms  yêu cầu F từ H3 tới H5
+   12.7 ms  vòng lặp nhận F, gửi lệnh đọc CSDL không chặn
+   31.0 ms  vòng lặp giao việc CPU của A cho nhóm luồng
+   31.0 ms  vòng lặp giao việc CPU của B cho nhóm luồng
+   33.0 ms  vòng lặp giao việc CPU của C cho nhóm luồng
+   33.0 ms  P1, P2 đều bận → việc CPU của C chờ trong hàng đợi
+   41.0 ms  P1 tính xong A → gửi kết quả về vòng lặp
+   41.0 ms  vòng lặp nhận kết quả A từ nhóm luồng, trả lời
+   41.0 ms  P2 tính xong B → gửi kết quả về vòng lặp
+   41.0 ms  vòng lặp nhận kết quả B từ nhóm luồng, trả lời
+   42.1 ms  H4 nhận trả lời A (200) sau 42.1 ms
+   42.2 ms  H6 nhận trả lời B (200) sau 42.2 ms
+   42.3 ms  vòng lặp giao việc CPU của D cho nhóm luồng
+   42.5 ms  vòng lặp giao việc CPU của E cho nhóm luồng
+   42.5 ms  P1, P2 đều bận → việc CPU của E chờ trong hàng đợi
+   42.7 ms  vòng lặp giao việc CPU của F cho nhóm luồng
+   42.7 ms  P1, P2 đều bận → việc CPU của F chờ trong hàng đợi
+   51.0 ms  P1 tính xong C → gửi kết quả về vòng lặp
+   51.0 ms  vòng lặp nhận kết quả C từ nhóm luồng, trả lời
+   52.1 ms  H4 nhận trả lời C (200) sau 50.1 ms
+   52.3 ms  P2 tính xong D → gửi kết quả về vòng lặp
+   52.3 ms  vòng lặp nhận kết quả D từ nhóm luồng, trả lời
+   61.0 ms  P1 tính xong E → gửi kết quả về vòng lặp
+   61.0 ms  vòng lặp nhận kết quả E từ nhóm luồng, trả lời
+   62.3 ms  P2 tính xong F → gửi kết quả về vòng lặp
+   62.3 ms  vòng lặp nhận kết quả F từ nhóm luồng, trả lời
+   66.3 ms  H1 nhận trả lời D (200) sau 66.3 ms
+   74.9 ms  H2 nhận trả lời E (200) sau 74.9 ms
+   76.3 ms  H3 nhận trả lời F (200) sau 76.3 ms
+
+Bên trong máy chủ H5, 1 ô = 2 ms:
+  CHỮ HOA dùng CPU, chữ thường bị chặn chờ I/O, + tạo luồng,
+  - chờ lõi CPU, # giữ khóa, ~ chờ khóa, · việc rất ngắn
+  vòng lặp    |··   ··   ·    ··   ··   ··   ··|
+  P1          |                AAAAACCCCCEEEEE |
+  P2          |                BBBBBDDDDDFFFFF |
+  I/O đang chờ| 23333666666666643333           |
+               0                          64 ms
+
+  Mã  Client    Gửi  Tới H5  Nhận TL  Phản hồi  Kết quả
+  A   H4        0.0     1.0     42.1      42.1  200 OK
+  B   H6        0.0     1.0     42.2      42.2  200 OK
+  C   H4        2.0     3.0     52.1      50.1  200 OK
+  D   H1        0.0    12.3     66.3      66.3  200 OK
+  E   H2        0.0    12.5     74.9      74.9  200 OK
+  F   H3        0.0    12.7     76.3      76.3  200 OK
+  Hoàn tất lúc 76.3 ms; phản hồi TB 58.7 ms, lớn nhất 76.3 ms
+  Luồng tối đa 3; từ chối 0
+  Nhịp tim 10 ms: 7 nhịp, trễ lớn nhất 0.0 ms, TB 0.0 ms
+
+Nhận xét: vòng lặp chỉ điều phối (nhận, gửi lệnh I/O, trả lời);
+  việc CPU chạy trên nhóm luồng, song song trên 2 lõi, rồi báo
+  về vòng lặp: vòng lặp luôn rảnh, nhịp tim đúng giờ.
+
+
+===== so_sanh =====
+$ dotnet bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll so_sanh
+So sánh năm mô hình máy chủ: cùng 6 yêu cầu, mỗi yêu cầu
+  30 ms I/O + 10 ms CPU, máy chủ 2 lõi. TB, Lớn nhất: thời gian
+  phản hồi; 503: số yêu cầu bị từ chối; Nhịp tim: trễ lớn nhất.
+  Mô hình     Luồng  Hoàn tất        TB  Lớn nhất 503  Nhịp tim
+  đồng bộ         1  254.9 ms  148.2 ms  254.9 ms   0         –
+  đa luồng        6   81.9 ms   63.7 ms   81.9 ms   0         –
+  nhóm luồng      2   95.0 ms   51.5 ms   95.0 ms   2         –
+  bất đồng bộ     1  104.9 ms   73.2 ms  104.9 ms   0   41.0 ms
+  phối hợp        3   76.3 ms   58.7 ms   76.3 ms   0    0.0 ms
+
+Ghi nhớ: luồng giúp chồng thời gian chờ I/O nhưng tốn tài nguyên
+  và cần khóa khi dùng chung dữ liệu; bất đồng bộ phục vụ nhiều
+  I/O bằng một luồng nhưng không được làm việc CPU trên vòng
+  lặp; phối hợp vòng lặp + nhóm luồng có được cả hai ưu điểm.
+
 ===== html =====
 $ dotnet bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll tat_ca --html mo_phong.html
 Đã ghi hoạt hình HTML: mo_phong.html
 [trình duyệt] tcp: t = 150.0 / 427.5 ms, 7 gói đang trên đường truyền
 [trình duyệt] multicast: t = 102.6 / 105.9 ms, 2 gói đang trên đường truyền
+[trình duyệt] bat_dong_bo: t = 62.0 / 107.9 ms, 1 gói đang trên đường truyền
+[trình duyệt] phoi_hop: t = 62.0 / 79.3 ms, 2 gói đang trên đường truyền
 [trình duyệt] Đã chụp hoạt hình: ket_qua_gui.png
 
