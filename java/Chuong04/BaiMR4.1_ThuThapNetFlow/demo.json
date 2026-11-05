@@ -1,0 +1,8 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "NetFlowV5.java", "MayXuat.java", "BoThuThap.java"]],
+  "processes": [
+    {"name": "thu_thap", "cmd": ["java", "-cp", "out", "BoThuThap", "127.0.0.1", "43410", "--nhan-roi", "1.5"], "background": true, "wait": 1.0},
+    {"name": "xuat", "cmd": ["java", "-cp", "out", "MayXuat", "127.0.0.1", "43410", "--so-luong", "100", "--bo-goi", "2"], "wait": 2.5}
+  ],
+  "titles": {"thu_thap": "Cửa sổ 1 – bộ thu thập NetFlow v5 (UDP 43410)", "xuat": "Cửa sổ 2 – máy xuất giả lập (bỏ gói #2)"}
+}

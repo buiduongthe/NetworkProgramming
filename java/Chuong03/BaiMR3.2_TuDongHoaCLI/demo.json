@@ -1,0 +1,17 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "DiaChi.java", "ThietBiGia.java", "TuDongHoa.java"]],
+  "env": {"DEVICE_USER": "admin", "DEVICE_PASSWORD": "lab123"},
+  "processes": [
+    {"name": "thiet_bi", "cmd": ["java", "-cp", "out", "ThietBiGia", "127.0.0.1", "43320"], "background": true, "wait": 1.0},
+    {"name": "chay_thu", "cmd": ["java", "-cp", "out", "TuDongHoa", "127.0.0.1", "43320", "muc_tieu.json", "--thu"]},
+    {"name": "ap_dung", "cmd": ["java", "-cp", "out", "TuDongHoa", "127.0.0.1", "43320", "muc_tieu.json"]},
+    {"name": "lan_hai", "cmd": ["java", "-cp", "out", "TuDongHoa", "127.0.0.1", "43320", "muc_tieu.json"]},
+    {"name": "sai_mk", "cmd": ["env", "DEVICE_PASSWORD=sai-mat-khau", "java", "-cp", "out", "TuDongHoa", "127.0.0.1", "43320", "muc_tieu.json"],
+     "show": ["DEVICE_PASSWORD=sai-mat-khau", "java", "-cp", "out", "TuDongHoa", "127.0.0.1", "43320", "muc_tieu.json"], "wait": 0.5}
+  ],
+  "titles": {"thiet_bi": "Cửa sổ 1 – thiết bị mô phỏng R1 (cổng 43320)",
+             "chay_thu": "Cửa sổ 2 – chạy thử (--thu), chỉ in lệnh",
+             "ap_dung": "Cửa sổ 3 – áp dụng cấu hình",
+             "lan_hai": "Cửa sổ 4 – chạy lại, lũy đẳng",
+             "sai_mk": "Cửa sổ 5 – sai mật khẩu"}
+}

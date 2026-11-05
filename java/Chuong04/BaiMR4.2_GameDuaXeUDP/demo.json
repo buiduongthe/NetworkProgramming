@@ -1,0 +1,11 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "DuaXe.java", "ServerDuaXe.java", "Xe.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "ServerDuaXe", "127.0.0.1", "43420", "--so-xe", "2", "--mat", "0,20", "--dao", "0,10", "--seed", "7", "--so-van", "2"], "background": true, "wait": 1.0},
+    {"name": "Binh", "cmd": ["java", "-cp", "out", "Xe", "Binh", "127.0.0.1", "43420", "--bot", "lieu", "--khung", "0", "--so-van", "2"], "background": true, "wait": 0.8},
+    {"name": "An", "cmd": ["java", "-cp", "out", "Xe", "An", "127.0.0.1", "43420", "--bot", "can_than", "--khung", "10", "--so-van", "2"], "timeout": 40, "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server (đua 1 mất 0 %, đua 2 mất 20 % và đảo 10 %)",
+             "Binh": "Cửa sổ 2 – Binh (bot liều)",
+             "An": "Cửa sổ 3 – An (bot cẩn thận, in khung hình)"}
+}

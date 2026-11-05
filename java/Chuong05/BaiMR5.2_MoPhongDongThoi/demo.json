@@ -1,0 +1,15 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "DongHo.java", "MayChuTre.java", "Khoa.java", "DongThoi.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "DongThoi", "server", "127.0.0.1", "43520", "200"], "background": true, "wait": 1.0},
+    {"name": "mang", "cmd": ["java", "-cp", "out", "DongThoi", "mang", "127.0.0.1", "43520"], "timeout": 60, "wait": 0.5},
+    {"name": "cpu", "cmd": ["java", "-cp", "out", "DongThoi", "cpu"], "timeout": 60},
+    {"name": "tron", "cmd": ["java", "-cp", "out", "DongThoi", "tron", "127.0.0.1", "43520"], "timeout": 60, "wait": 0.5},
+    {"name": "khoa", "cmd": ["java", "-cp", "out", "DongThoi", "khoa"], "timeout": 60}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ thử (trễ 200 ms mỗi yêu cầu, luồng ảo)",
+             "mang": "Cửa sổ 2 – 20 yêu cầu mạng, năm mô hình",
+             "cpu": "Cửa sổ 3 – việc nặng CPU (luồng, nhóm luồng, luồng ảo)",
+             "tron": "Cửa sổ 4 – mạng + CPU, luồng ảo và nhóm luồng CPU",
+             "khoa": "Cửa sổ 5 – tranh chấp dữ liệu, bế tắc"}
+}

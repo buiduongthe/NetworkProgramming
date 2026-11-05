@@ -1,0 +1,7 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "Khung.java", "TruyenServer.java", "TruyenClient.java"]],
+  "processes": [
+    {"name": "demo", "cmd": ["java", "-cp", "out", "TruyenClient", "demo", "127.0.0.1", "43510"], "timeout": 60}
+  ],
+  "titles": {"demo": "Cửa sổ dòng lệnh – demo truyền nhiều tệp (server cục bộ + client, cổng 43510)"}
+}

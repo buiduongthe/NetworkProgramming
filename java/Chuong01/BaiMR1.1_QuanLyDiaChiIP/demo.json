@@ -1,0 +1,7 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "QuanLyIP.java"]],
+  "processes": [
+    {"name": "ipam", "cmd": ["java", "-cp", "out", "QuanLyIP", "ke_hoach.json", "ke_hoach_qua_tai.json"]}
+  ],
+  "titles": {"ipam": "Cửa sổ dòng lệnh – hai kế hoạch địa chỉ (10.20.0.0/22 và 192.168.50.0/24)"}
+}

@@ -1,0 +1,10 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "MayChuThu.java", "TacVu.java", "UngDung.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "MayChuThu", "127.0.0.1", "43530"], "background": true, "wait": 1.0},
+    {"name": "gui", "cmd": ["xvfb-run", "-a", "-s", "-screen 0 1280x900x24", "java", "-cp", "out", "UngDung", "127.0.0.1", "43530", "--demo"],
+     "show": ["xvfb-run", "-a", "java", "-cp", "out", "UngDung", "127.0.0.1", "43530", "--demo"], "timeout": 60}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ thử (HTTP, DNS giả lập, cổng mở)",
+             "gui": "Cửa sổ 2 – ứng dụng Swing, kịch bản --demo"}
+}

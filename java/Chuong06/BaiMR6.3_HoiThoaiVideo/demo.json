@@ -1,0 +1,18 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "Video.java", "ServerVideo.java", "KhachVideo.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "ServerVideo", "127.0.0.1", "43630", "43631"], "background": true, "wait": 0.8,
+     "stdin": "@2.8 tat_camera tat_ca\n@3.9 bat_camera tat_ca\n@3.9 do_phan_giai C 4\n@3.9 fps_toi_da B 2\n@5.4 bat_camera tat_ca\n@7.6 trang_thai\n"},
+    {"name": "B", "cmd": ["java", "-cp", "out", "KhachVideo", "B", "127.0.0.1", "43630", "--thoi-gian", "8.5", "--mat-goi", "0.02"],
+     "background": true, "wait": 0.2, "stdin": "@4.3 tat_camera\n"},
+    {"name": "C", "cmd": ["java", "-cp", "out", "KhachVideo", "C", "127.0.0.1", "43630", "--thoi-gian", "8.5"],
+     "background": true, "wait": 0.2, "stdin": "@2.4 bat_camera\n"},
+    {"name": "A", "cmd": ["java", "-cp", "out", "KhachVideo", "A", "127.0.0.1", "43630", "--thoi-gian", "7.3", "--ghep", "ket_qua_video.png"],
+     "stdin": "@1.2 chup 1. BAN DAU: 3 CAMERA BAT, 10 FPS\n@2.3 chup 2. SERVER TAT CAMERA TAT CA\n@3.6 chup 3. SERVER: C DO PHAN GIAI 1/4, B TOI DA 2 FPS\n@4.6 chup 4. B TU TAT; SERVER BAT TAT CA NHUNG B VAN TAT\n@5.0 nhan_do_phan_giai 2\n@5.0 nhan_fps 5\n@5.8 chup 5. A TU CHON NHAN 1/2, 5 FPS\n",
+     "timeout": 20, "wait": 1.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server video – ghép lưới, bảng điều khiển",
+             "B": "Cửa sổ 2 – client B (giả lập mất 2% mảnh gửi)",
+             "C": "Cửa sổ 3 – client C",
+             "A": "Cửa sổ 4 – client A (chụp lưới trước/sau mỗi lệnh)"}
+}

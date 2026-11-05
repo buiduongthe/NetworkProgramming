@@ -1,0 +1,12 @@
+{
+  "khoi_dia_chi": "10.20.0.0/22",
+  "yeu_cau": [
+    {"ten": "Phong_Lab", "so_may": 200},
+    {"ten": "Giang_Vien", "so_may": 60},
+    {"ten": "May_Chu", "so_may": 20},
+    {"ten": "WiFi_Khach", "so_may": 100},
+    {"ten": "Lien_Ket_R1_R2", "so_may": 2}
+  ],
+  "kiem_tra": ["10.20.1.0/25", "10.20.3.0/24", "192.168.1.0/24", "10.20.2.300/24", "10.20.0.5/24"],
+  "cap_phat": {"mang": "May_Chu", "thiet_bi": ["web01", "db01", "dns01"]}
+}

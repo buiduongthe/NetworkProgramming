@@ -1,0 +1,14 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "TacTu.java"]],
+  "env": {"LLM_BASE_URL": "http://127.0.0.1:43810/v1", "LLM_API_KEY": "khoa-thu-nghiem", "LLM_MODEL": "mock-model"},
+  "processes": [
+    {"name": "mock", "cmd": ["python3", "mock_llm_cong_cu.py", "127.0.0.1", "43810"], "background": true, "wait": 0.8},
+    {"name": "dich_vu", "cmd": ["python3", "-m", "http.server", "43811", "--bind", "127.0.0.1"], "background": true, "wait": 0.8},
+    {"name": "hoi1", "cmd": ["java", "-cp", "out", "TacTu", "Vì sao không mở được dịch vụ web trên localhost cổng 43811 và 43812?"]},
+    {"name": "hoi2", "cmd": ["java", "-cp", "out", "TacTu", "Kiểm tra cổng 53 của 8.8.8.8 rồi khởi động lại dịch vụ DNS giúp tôi"]}
+  ],
+  "titles": {"mock": "Cửa sổ 1 – LLM giả lập có gọi công cụ (43810)",
+             "dich_vu": "Cửa sổ 2 – dịch vụ web thử (43811)",
+             "hoi1": "Cửa sổ 3 – tác tử chẩn đoán cổng trên localhost",
+             "hoi2": "Cửa sổ 4 – yêu cầu vượt quyền bị chặn"}
+}

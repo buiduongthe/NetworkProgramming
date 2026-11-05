@@ -1,0 +1,17 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "ChuyenTiep.java", "ServerDich.java", "ClientThu.java"]],
+  "processes": [
+    {"name": "dich", "cmd": ["java", "-cp", "out", "ServerDich", "127.0.0.1", "43311"], "background": true, "wait": 1.0},
+    {"name": "chuyen_tiep", "cmd": ["java", "-cp", "out", "ChuyenTiep", "127.0.0.1", "43310", "127.0.0.1", "43311"], "background": true, "wait": 1.0},
+    {"name": "chuyen_tiep_hong", "cmd": ["java", "-cp", "out", "ChuyenTiep", "127.0.0.1", "43312", "127.0.0.1", "43313"], "background": true, "wait": 1.0},
+    {"name": "client_nho", "cmd": ["java", "-cp", "out", "ClientThu", "127.0.0.1", "43310", "Xin chào lập trình mạng"]},
+    {"name": "client_lon", "cmd": ["java", "-cp", "out", "ClientThu", "127.0.0.1", "43310", "dữ liệu lớn ", "20000"]},
+    {"name": "client_hong", "cmd": ["java", "-cp", "out", "ClientThu", "127.0.0.1", "43312", "Có ai không?"], "wait": 0.5}
+  ],
+  "titles": {"dich": "Cửa sổ 1 – server đích (chữ hoa) cổng 43311",
+             "chuyen_tiep": "Cửa sổ 2 – chuyển tiếp 43310 -> 43311",
+             "chuyen_tiep_hong": "Cửa sổ 3 – chuyển tiếp 43312 -> 43313 (không có đích)",
+             "client_nho": "Cửa sổ 4 – client gửi chuỗi ngắn qua 43310",
+             "client_lon": "Cửa sổ 5 – client gửi 360 000 byte qua 43310",
+             "client_hong": "Cửa sổ 6 – client nối 43312 (đích không chạy)"}
+}

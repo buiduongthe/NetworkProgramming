@@ -1,0 +1,19 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "GiaoThuc.java", "BanCo.java", "ServerCaro.java", "NguoiChoi.java", "TimServer.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "ServerCaro", "0.0.0.0", "43640", "--kham-pha", "43641", "--ten", "Phòng-Lab-A", "--het-gio-ms", "1000"], "background": true, "wait": 1.0},
+    {"name": "An", "cmd": ["java", "-cp", "out", "NguoiChoi", "An", "--tim", "43641", "--tao", "ban1", "--bot", "can_bang", "--so-van", "2", "--tre-ms", "60"], "background": true, "wait": 1.8},
+    {"name": "Cuong", "cmd": ["java", "-cp", "out", "NguoiChoi", "Cuong", "127.0.0.1", "43640", "--tao", "ban2", "--bot", "can_bang", "--tre-ms", "60"], "background": true, "wait": 0.8},
+    {"name": "tim", "cmd": ["java", "-cp", "out", "TimServer", "43641", "500"], "wait": 0.2},
+    {"name": "Khach", "cmd": ["java", "-cp", "out", "NguoiChoi", "Khach", "127.0.0.1", "43640", "--xem", "ban1"], "background": true, "wait": 0.8},
+    {"name": "Dung", "cmd": ["java", "-cp", "out", "NguoiChoi", "Dung", "127.0.0.1", "43640", "--vao", "ban2", "--bot", "im_lang"], "background": true, "wait": 0.8},
+    {"name": "Binh", "cmd": ["java", "-cp", "out", "NguoiChoi", "Binh", "127.0.0.1", "43640", "--vao", "ban1", "--bot", "tap_su", "--seed", "14", "--thu-loi", "--so-van", "2", "--tre-ms", "60"], "timeout": 30, "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server Caro (mỗi nước tối đa 1000 ms)",
+             "An": "Cửa sổ 2 – An (bot cân bằng, tìm server bằng broadcast)",
+             "Cuong": "Cửa sổ 3 – Cuong (bot, phòng ban2)",
+             "tim": "Cửa sổ 4 – tìm server trong LAN",
+             "Khach": "Cửa sổ 5 – Khach (người xem phòng ban1)",
+             "Dung": "Cửa sổ 6 – Dung (bot im lặng, phòng ban2)",
+             "Binh": "Cửa sổ 7 – Binh (bot tập sự, thử gửi nước sai)"}
+}

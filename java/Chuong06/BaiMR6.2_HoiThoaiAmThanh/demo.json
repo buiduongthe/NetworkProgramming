@@ -1,0 +1,19 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "AmThanh.java", "ServerAmThanh.java", "KhachAmThanh.java", "PhanTichWav.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "ServerAmThanh", "127.0.0.1", "43620", "43621"], "background": true, "wait": 0.8,
+     "stdin": "@2.5 tat_mic tat_ca\n@3.5 bat_mic tat_ca\n@4.5 tat_mic B\n@4.5 do_loi C 2\n@5.5 bat_mic B\n@5.5 am_luong_chung 0.5\n@8.0 bat_mic tat_ca\n@8.6 trang_thai\n"},
+    {"name": "B", "cmd": ["java", "-cp", "out", "KhachAmThanh", "B", "127.0.0.1", "43620", "--tan-so", "620", "--thoi-gian", "9.5"],
+     "background": true, "wait": 0.2, "stdin": "@4.2 bat_mic\n"},
+    {"name": "C", "cmd": ["java", "-cp", "out", "KhachAmThanh", "C", "127.0.0.1", "43620", "--tan-so", "880", "--thoi-gian", "9.5"],
+     "background": true, "wait": 0.2, "stdin": "@6.5 tat_mic\n"},
+    {"name": "A", "cmd": ["java", "-cp", "out", "KhachAmThanh", "A", "127.0.0.1", "43620", "--tan-so", "440", "--thoi-gian", "8.3", "--mat-goi", "0.05", "--ghi", "out/ghi_A.wav"],
+     "stdin": "@5.3 am_luong 0.5\n", "timeout": 20, "wait": 1.5},
+    {"name": "phan_tich", "cmd": ["java", "-cp", "out", "PhanTichWav", "out/ghi_A.wav", "440:A", "620:B", "880:C"], "timeout": 30}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server – trộn mix-minus, bảng điều khiển",
+             "B": "Cửa sổ 2 – client B (sin 620 Hz)",
+             "C": "Cửa sổ 3 – client C (sin 880 Hz)",
+             "A": "Cửa sổ 4 – client A (sin 440 Hz, mất 5% gói gửi, ghi những gì nghe)",
+             "phan_tich": "Cửa sổ 5 – phân tích bản ghi của A bằng Goertzel"}
+}

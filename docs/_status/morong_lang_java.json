@@ -1,0 +1,211 @@
+[
+  {
+    "bai": "BaiMR1.1_QuanLyDiaChiIP",
+    "chuong": 1,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Quản lý địa chỉ IP (IPAM): chia mạng con VLSM, khối còn trống, kiểm tra chồng lấn, cấp phát"
+  },
+  {
+    "bai": "BaiMR1.2_MoPhongGiaoThuc",
+    "chuong": 1,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Mô phỏng sự kiện rời rạc các giao thức và kiểu truyền: TCP (bắt tay, cwnd, gửi lại nhanh, RTO, FIN), UDP, unicast, broadcast, multicast/IGMP, anycast; hoạt hình HTML"
+  },
+  {
+    "bai": "BaiMR3.1_ChuyenTiepCong",
+    "chuong": 3,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Bộ chuyển tiếp cổng TCP có chuyển tiếp đóng một chiều (half-close)"
+  },
+  {
+    "bai": "BaiMR3.2_TuDongHoaCLI",
+    "chuong": 3,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Tự động hóa cấu hình thiết bị qua CLI: đọc tới dấu nhắc, sinh lệnh khác biệt, lũy đẳng, chạy thử"
+  },
+  {
+    "bai": "BaiMR3.3_GameDoanSo",
+    "chuong": 3,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Trò chơi đoán số nhiều người chơi qua TCP: giao thức yêu cầu/phản hồi khung JSON, máy trạng thái, kiểm tra đầu vào, hết giờ, mất kết nối"
+  },
+  {
+    "bai": "BaiMR4.1_ThuThapNetFlow",
+    "chuong": 4,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Thu thập và giải mã NetFlow v5 trên UDP, phát hiện mất gói, thống kê lưu lượng"
+  },
+  {
+    "bai": "BaiMR4.2_GameDuaXeUDP",
+    "chuong": 4,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Đua xe thời gian thực qua UDP: vòng tick 20 Hz có thẩm quyền, đầu vào có số thứ tự và dư thừa, ảnh chụp mới nhất thắng, dự đoán phía client, giả lập mất gói 0 % và 20 %"
+  },
+  {
+    "bai": "BaiMR5.1_TruyenNhieuTep",
+    "chuong": 5,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Truyền nhiều tệp đồng thời: start/pause/resume/stop, giới hạn tốc độ (thùng token) theo phiên và theo tệp, tải tiếp bằng offset + SHA-256"
+  },
+  {
+    "bai": "BaiMR5.2_MoPhongDongThoi",
+    "chuong": 5,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "So sánh mô hình đồng thời trên cùng khối việc (20 yêu cầu mạng 200 ms, việc CPU, mạng + CPU): tuần tự, luồng/goroutine, nhóm luồng/worker, asyncio/kênh, nhóm tiến trình; biểu đồ Gantt văn bản; GIL; tranh chấp dữ liệu, bế tắc"
+  },
+  {
+    "bai": "BaiMR5.3_GiaoDienDaTacVu",
+    "chuong": 5,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Giao diện luôn phản hồi khi nhiều tác vụ mạng chạy song song: tải HTTP có tiến trình, kiểm tra cổng, tra cứu tên UDP, hủy từng tác vụ/hủy tất cả, giới hạn đồng thời đổi được; nút “làm sai” chặn luồng giao diện và đo khoảng nghỉ giữa hai nhịp đồng hồ"
+  },
+  {
+    "bai": "BaiMR6.1_TatServerAnToan",
+    "chuong": 6,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Tắt server an toàn khi nhận SIGTERM/SIGINT: ngừng nhận, làm nốt, hạn chờ, hủy"
+  },
+  {
+    "bai": "BaiMR6.2_HoiThoaiAmThanh",
+    "chuong": 6,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Phòng hội thoại âm thanh nhiều client: RTP/UDP, điều khiển JSON/TCP, trộn mix-minus, bộ đệm jitter, dBFS, tắt mic/độ lợi/âm lượng, ghi WAV và phân tích Goertzel"
+  },
+  {
+    "bai": "BaiMR6.3_HoiThoaiVideo",
+    "chuong": 6,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Phòng hội thoại video nhiều client: khung nén zlib chia mảnh ≤ 1200 byte trên UDP, server ghép lưới (MCU), tắt/bật camera, giới hạn fps/độ phân giải gửi và nhận, chụp lưới PNG"
+  },
+  {
+    "bai": "BaiMR6.4_GameCaro",
+    "chuong": 6,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Caro 15×15 nhiều phòng qua TCP: sảnh, tạo/vào/xem phòng, server làm trọng tài, phát nước đi tới người xem, hết giờ mỗi nước, chơi lại; khám phá server bằng UDP broadcast"
+  },
+  {
+    "bai": "BaiMR7.1_TaiTiepHTTP",
+    "chuong": 7,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Tải tệp HTTP có tải tiếp: Range, If-Range, 206/416, thử lại có lùi thời gian, kiểm tra SHA-256"
+  },
+  {
+    "bai": "BaiMR8.1_TacTuChanDoan",
+    "chuong": 8,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Tác tử AI chẩn đoán mạng bằng gọi công cụ, có lớp kiểm soát (danh mục, lược đồ, chính sách đích, giới hạn vòng)"
+  },
+  {
+    "bai": "BaiMR8.2_KiemDuyetCauHinhAI",
+    "chuong": 8,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Kiểm duyệt cấu hình do LLM sinh: JSON, lược đồ, ngữ nghĩa, chính sách, vòng phản hồi"
+  },
+  {
+    "bai": "BaiMR8.3_ChongSlowloris",
+    "chuong": 8,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Phòng thủ tấn công từ chối dịch vụ mức ứng dụng kiểu Slowloris: hạn đọc tiêu đề, hạn rỗi, cỡ tiêu đề tối đa, giới hạn kết nối theo IP, trần toàn cục (503)"
+  },
+  {
+    "bai": "BaiMR8.4_ChongSSRF_MCP",
+    "chuong": 8,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Chống SSRF trong công cụ MCP fetch_url: allowlist giao thức, chặn dải nội bộ/loopback/link-local/metadata, phân giải một lần + nối đúng IP (chống DNS rebinding), kiểm lại mọi chặng chuyển hướng, giới hạn kích thước/thời gian/số hop, gỡ thông tin đăng nhập"
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "ServerTatAnToan.java", "Khach.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "ServerTatAnToan", "127.0.0.1", "43610", "--han-cho-ms", "2000"], "background": true, "wait": 1.0},
+    {"name": "A", "cmd": ["java", "-cp", "out", "Khach", "A", "127.0.0.1", "43610", "1500"], "background": true, "wait": 0.1},
+    {"name": "B", "cmd": ["java", "-cp", "out", "Khach", "B", "127.0.0.1", "43610", "4000"], "background": true, "wait": 0.1},
+    {"name": "C", "cmd": ["java", "-cp", "out", "Khach", "C", "127.0.0.1", "43610", "100"], "background": true, "wait": 1.0},
+    {"name": "quan_tri", "cmd": ["sh", "-c", "echo \"Gửi SIGTERM tới PID $(cat server.pid)\"; kill -TERM $(cat server.pid)"],
+     "show": ["sh", "-c", "kill -TERM $(cat server.pid)"], "wait": 0.3},
+    {"name": "D", "cmd": ["java", "-cp", "out", "Khach", "D", "127.0.0.1", "43610", "100"], "wait": 3.0}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server (hạn chờ tắt 2000 ms)",
+             "A": "Cửa sổ 2 – client A (việc 1500 ms)",
+             "B": "Cửa sổ 3 – client B (việc 4000 ms)",
+             "C": "Cửa sổ 4 – client C (việc ngắn rồi rỗi)",
+             "quan_tri": "Cửa sổ 5 – quản trị gửi SIGTERM",
+             "D": "Cửa sổ 6 – client D đến sau khi bắt đầu tắt"}
+}

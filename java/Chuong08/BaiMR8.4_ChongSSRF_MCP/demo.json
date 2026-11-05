@@ -1,0 +1,7 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "FetchTools.java", "McpServerSsrf.java"]],
+  "processes": [
+    {"name": "host", "cmd": ["python3", "mcp_test_client.py", "43840", "43841", "43842", "java", "-cp", "out", "McpServerSsrf"], "timeout": 60}
+  ],
+  "titles": {"host": "Cửa sổ dòng lệnh – client thử nghiệm MCP chống SSRF (META=43840, PUB=43841, REDIR=43842; server Java)"}
+}

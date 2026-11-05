@@ -1,0 +1,17 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "GiaoThuc.java", "ServerDoanSo.java", "NguoiChoi.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "ServerDoanSo", "127.0.0.1", "43330", "--so-nguoi", "4", "--het-gio-ms", "1500", "--seed", "2026", "--so-van", "1"], "background": true, "wait": 1.0},
+    {"name": "Binh", "cmd": ["java", "-cp", "out", "NguoiChoi", "Binh", "127.0.0.1", "43330", "--bot", "chia_doi", "--nghi-ms", "200"], "background": true, "wait": 0.8},
+    {"name": "Cuong", "cmd": ["java", "-cp", "out", "NguoiChoi", "Cuong", "127.0.0.1", "43330", "--bot", "nghich", "--nghi-ms", "200"], "background": true, "wait": 0.8},
+    {"name": "An", "cmd": ["java", "-cp", "out", "NguoiChoi", "An", "127.0.0.1", "43330"], "stdin": "abc\n40\n39\n", "background": true, "wait": 0.8},
+    {"name": "Dung", "cmd": ["java", "-cp", "out", "NguoiChoi", "Dung", "127.0.0.1", "43330", "--bot", "im_lang"], "background": true, "wait": 1.2},
+    {"name": "Em", "cmd": ["java", "-cp", "out", "NguoiChoi", "Em", "127.0.0.1", "43330", "--bot", "chia_doi"], "wait": 3.0}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server (cần 4 người, mỗi lượt 1500 ms, seed 2026)",
+             "Binh": "Cửa sổ 2 – Binh (bot chia đôi)",
+             "Cuong": "Cửa sổ 3 – Cuong (bot nghịch – gửi thông điệp sai)",
+             "An": "Cửa sổ 4 – An (người chơi, nhập từ bàn phím)",
+             "Dung": "Cửa sổ 5 – Dung (bot im lặng – hết giờ rồi rời)",
+             "Em": "Cửa sổ 6 – Em (đến muộn khi ván đang chơi)"}
+}
