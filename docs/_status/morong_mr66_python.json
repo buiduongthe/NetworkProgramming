@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.6_DauGia",
+    "chuong": 6,
+    "ngon_ngu": [
+      "python"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy"
+    },
+    "ten": "Đấu giá trực tuyến – n người cùng tranh một món hàng: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa loại trừ, lạc quan phiên bản + CAS, hàng đợi một luồng), sổ kiểm toán, đồng hồ phiên gia hạn chống bắn tỉa, bộ mô phỏng tải có rào xuất phát và pipelining",
+    "ghi_chu": "Bản tham chiếu và khung chung (chung.py, khach.py, phần KHUNG của mo_phong.py, giao_dien_chung.py) cho nhóm MR6.6–MR6.13 ở 4 ngôn ngữ còn lại. Kết quả (500 người × 5 lần, 200 kết nối, trễ 0–2 ms): khong_khoa 576 thành công, 553 sai phạm (552 giá thấp hơn, 1 giá cuối sai), 7196 yc/s; khoa 20 thành công, 0 sai phạm, 781 yc/s, p99 792 ms; lac_quan 33 thành công, 0 sai phạm, 88 xung đột, 8342 yc/s; hang_doi 15 thành công, 0 sai phạm, 819 yc/s, hàng đợi max 499. Phiên 5 s gia hạn 3 s: gia hạn hai lần, An thắng 5.500.000 đ, giá sau khi đóng bị từ chối. Giao diện: khong_khoa + trễ 0–20 ms, 3 người cùng '+1 bước' đều được chấp nhận cùng giá (sai phạm 3); khoa: người thứ hai bị từ chối. Đọc thêm: Kung & Robinson 1981 (ACM TODS 6(2)), Coffman và cộng sự 1971 (ACM Computing Surveys 3(2))."
+  }
+]
