@@ -1,0 +1,23 @@
+{
+  "env": {"LANGUAGE": "vi", "FYNE_SCALE": "1"},
+  "setup": [["go", "build", "-o", "out/app", "."],
+            ["go", "-C", "gui", "mod", "tidy"],
+            ["go", "-C", "gui", "build", "-o", "../out/app_gui", "."]],
+  "processes": [
+    {"name": "don_dong_bo", "cmd": ["out/app", "don_dong_bo"]},
+    {"name": "da_dong_bo", "cmd": ["out/app", "da_dong_bo"]},
+    {"name": "don_bat_dong_bo", "cmd": ["out/app", "don_bat_dong_bo"]},
+    {"name": "da_bat_dong_bo", "cmd": ["out/app", "da_bat_dong_bo"]},
+    {"name": "so_sanh", "cmd": ["out/app", "so_sanh"]},
+    {"name": "mot_loi", "cmd": ["out/app", "da_dong_bo", "--loi", "1", "--khan", "1.2"]},
+    {"name": "gui", "cmd": ["xvfb-run", "-a", "-s", "-screen 0 1400x1000x24", "out/app_gui", "--demo"],
+     "show": ["xvfb-run", "-a", "out/app_gui", "--demo"], "timeout": 90}
+  ],
+  "titles": {"don_dong_bo": "Cửa sổ 1 – đơn luồng, đồng bộ",
+             "da_dong_bo": "Cửa sổ 2 – đa luồng, đồng bộ (chen ngang, lát thời gian)",
+             "don_bat_dong_bo": "Cửa sổ 3 – đơn luồng, bất đồng bộ (vòng lặp sự kiện)",
+             "da_bat_dong_bo": "Cửa sổ 4 – đa luồng, bất đồng bộ (nhóm thợ)",
+             "so_sanh": "Cửa sổ 5 – so sánh bốn chế độ",
+             "mot_loi": "Cửa sổ 6 – đa luồng, đồng bộ trên 1 lõi",
+             "gui": "Cửa sổ 7 – ứng dụng Fyne, kịch bản --demo"}
+}

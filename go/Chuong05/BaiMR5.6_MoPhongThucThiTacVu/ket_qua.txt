@@ -1,0 +1,267 @@
+===== don_dong_bo =====
+$ out/app don_dong_bo
+=== Đơn luồng – đồng bộ (Single-threaded Sync) ===
+Tác vụ: T1 4.0 s, T2 3.0 s, T3 2.0 s; mỗi tác vụ: CPU 1/4 →
+  chờ I/O 1/2 → CPU phần còn lại; 2 lõi CPU; lát thời gian 0.5 s
+  T3 chờ T1, T2; CPU cuối T1 chia 2 nửa; việc khẩn U lúc 0.3 s
+
+Ký hiệu: 1 2 3 U tác vụ đang dùng CPU; ~ luồng bị chặn chờ I/O;
+  - sẵn sàng nhưng chờ lõi; . chờ join; I/O chờ: số I/O bất đồng
+  bộ đang chờ (không giữ luồng nào)
+  Luồng chính|1111111111~~~~~~~~~~~~~~~~~~~~11111111112222222~|
+              0.0                                          4.8 s
+  Luồng chính|~~~~~~~~~~~~~~2222222233333~~~~~~~~~~33333UUUUU|
+              4.8                                         9.5 s
+
+Nhật ký:
+   0.0 s  Luồng chính bắt đầu T1
+   0.3 s  U (việc khẩn, ưu tiên cao) đến
+   0.3 s  U xếp hàng: luồng chính bận, không chen ngang được
+   3.0 s  T1: chia CPU cuối 2 nửa, một luồng nên làm lần lượt
+   4.0 s  T1 xong lúc 4.0 s
+   4.0 s  Luồng chính bắt đầu T2
+   7.0 s  T2 xong lúc 7.0 s
+   7.0 s  Luồng chính bắt đầu T3
+   9.0 s  T3 xong lúc 9.0 s
+   9.0 s  Luồng chính bắt đầu U
+   9.5 s  U xong lúc 9.5 s
+
+  Tác vụ   Đến  Bắt đầu   Xong  Thời gian
+  T1       0.0      0.0    4.0       4.0 s
+  T2       0.0      4.0    7.0       7.0 s
+  T3       0.0      7.0    9.0       9.0 s
+  U        0.3      9.0    9.5       9.2 s
+  Hoàn tất lúc 9.5 s; số luồng 1; lõi bận 26 %
+  Chen ngang 0 lần; hết lát thời gian 0 lần; U chờ 8.7 s
+
+Nhận xét: một luồng, lời gọi chặn: khi chờ I/O luồng đứng
+  yên (~), lõi CPU bỏ không; tác vụ làm lần lượt theo thứ tự
+  đến nên việc khẩn U phải chờ tất cả.
+
+
+===== da_dong_bo =====
+$ out/app da_dong_bo
+=== Đa luồng – đồng bộ (Multi-threaded Sync) ===
+Tác vụ: T1 4.0 s, T2 3.0 s, T3 2.0 s; mỗi tác vụ: CPU 1/4 →
+  chờ I/O 1/2 → CPU phần còn lại; 2 lõi CPU; lát thời gian 0.5 s
+  T3 chờ T1, T2; CPU cuối T1 chia 2 nửa; việc khẩn U lúc 0.3 s
+
+Ký hiệu: 1 2 3 U tác vụ đang dùng CPU; ~ luồng bị chặn chờ I/O;
+  - sẵn sàng nhưng chờ lõi; . chờ join; I/O chờ: số I/O bất đồng
+  bộ đang chờ (không giữ luồng nào)
+  Luồng T1   |111--1111111~~~~~~~~~~~~~~~~~~~~11111           |
+  Luồng T2   |22222---22~~~~~~~~~~~~~~~2222222-----2          |
+  Luồng T3   |......................................33333~~~~~|
+  Luồng U    |   UUUUU                                        |
+  Luồng T1b  |                                11111           |
+              0.0                                          4.8 s
+  Luồng T1   |          |
+  Luồng T2   |          |
+  Luồng T3   |~~~~~33333|
+  Luồng U    |          |
+  Luồng T1b  |          |
+              4.8    5.8 s
+
+Nhật ký:
+   0.0 s  Luồng T3: T3 chờ T1 và T2 xong (join)
+   0.3 s  U (việc khẩn, ưu tiên cao) đến
+   0.3 s  tạo Luồng U
+   0.3 s  Luồng U CHEN NGANG: Luồng T1 tạm dừng, nhường lõi
+   0.5 s  Luồng T2 hết lát thời gian 0.5 s, nhường lõi
+   0.8 s  U xong lúc 0.8 s
+   3.2 s  T1: chia CPU cuối 2 nửa, Luồng T1b chạy nửa sau
+   3.2 s  Luồng T2 hết lát thời gian 0.5 s, nhường lõi
+   3.7 s  Luồng T1: hai nửa của T1 đã xong (join Luồng T1b)
+   3.7 s  T1 xong lúc 3.7 s
+   3.8 s  T2 xong lúc 3.8 s
+   3.8 s  Luồng T3: T1 và T2 đã xong (join), T3 chạy tiếp
+   5.8 s  T3 xong lúc 5.8 s
+
+  Tác vụ   Đến  Bắt đầu   Xong  Thời gian
+  T1       0.0      0.0    3.7       3.7 s
+  T2       0.0      0.0    3.8       3.8 s
+  T3       0.0      3.8    5.8       5.8 s
+  U        0.3      0.3    0.8       0.5 s
+  Hoàn tất lúc 5.8 s; số luồng 5; lõi bận 43 %
+  Chen ngang 1 lần; hết lát thời gian 2 lần; U chờ 0.0 s
+
+Nhận xét: mỗi tác vụ một luồng: I/O của luồng này chồng lên
+  CPU của luồng khác; luồng nhiều hơn lõi phải chờ lõi (-);
+  hệ điều hành chia lát thời gian và cho U (ưu tiên cao) chen
+  ngang ngay; T3 chờ join (.); nửa sau của T1 chạy song song
+  trên luồng T1b.
+
+
+===== don_bat_dong_bo =====
+$ out/app don_bat_dong_bo
+=== Đơn luồng – bất đồng bộ (Single-threaded Async) ===
+Tác vụ: T1 4.0 s, T2 3.0 s, T3 2.0 s; mỗi tác vụ: CPU 1/4 →
+  chờ I/O 1/2 → CPU phần còn lại; 2 lõi CPU; lát thời gian 0.5 s
+  T3 chờ T1, T2; CPU cuối T1 chia 2 nửa; việc khẩn U lúc 0.3 s
+
+Ký hiệu: 1 2 3 U tác vụ đang dùng CPU; ~ luồng bị chặn chờ I/O;
+  - sẵn sàng nhưng chờ lõi; . chờ join; I/O chờ: số I/O bất đồng
+  bộ đang chờ (không giữ luồng nào)
+  Vòng lặp   |11111111112222222UUUUU        111111111122222222|
+  I/O chờ    |          1111111222222222222211                |
+              0.0                                          4.8 s
+  Vòng lặp   |33333          33333|
+  I/O chờ    |     1111111111     |
+              4.8              6.8 s
+
+Nhật ký:
+   0.0 s  T3 chờ T1 và T2 xong (await), không giữ luồng nào
+   0.3 s  U (việc khẩn) đến – xếp hàng, không chen ngang được
+   2.2 s  U xong lúc 2.2 s
+   3.0 s  T1: chia CPU cuối 2 nửa, một luồng nên làm lần lượt
+   4.0 s  T1: hai nửa đã xong, hợp kết quả
+   4.0 s  T1 xong lúc 4.0 s
+   4.8 s  T2 xong lúc 4.8 s
+   4.8 s  T1 và T2 đã xong → T3 bắt đầu (await)
+   6.8 s  T3 xong lúc 6.8 s
+
+  Tác vụ   Đến  Bắt đầu   Xong  Thời gian
+  T1       0.0      0.0    4.0       4.0 s
+  T2       0.0      1.0    4.8       4.8 s
+  T3       0.0      4.8    6.8       6.8 s
+  U        0.3      1.7    2.2       1.9 s
+  Hoàn tất lúc 6.8 s; số luồng 1; lõi bận 36 %
+  Chen ngang 0 lần; hết lát thời gian 0 lần; U chờ 1.4 s
+
+Nhận xét: một luồng vẫn chồng được các lần chờ I/O (hàng
+  I/O chờ có nhiều việc cùng lúc) mà không cần thêm luồng;
+  nhưng bước CPU chạy hết mới nhường (hợp tác): U phải xếp
+  hàng, hai nửa của T1 chạy lần lượt – bất đồng bộ không
+  phải là song song.
+
+
+===== da_bat_dong_bo =====
+$ out/app da_bat_dong_bo
+=== Đa luồng – bất đồng bộ (Multi-threaded Async) ===
+Tác vụ: T1 4.0 s, T2 3.0 s, T3 2.0 s; mỗi tác vụ: CPU 1/4 →
+  chờ I/O 1/2 → CPU phần còn lại; 2 lõi CPU; lát thời gian 0.5 s
+  T3 chờ T1, T2; CPU cuối T1 chia 2 nửa; việc khẩn U lúc 0.3 s
+
+Ký hiệu: 1 2 3 U tác vụ đang dùng CPU; ~ luồng bị chặn chờ I/O;
+  - sẵn sàng nhưng chờ lõi; . chờ join; I/O chờ: số I/O bất đồng
+  bộ đang chờ (không giữ luồng nào)
+  Thợ 1      |1111111111            222222221111133333        |
+  Thợ 2      |2222222UUUUU                  11111             |
+  I/O chờ    |       11122222222222211111111          11111111|
+              0.0                                          4.8 s
+  Thợ 1      |  33333|
+  Thợ 2      |       |
+  I/O chờ    |11     |
+              4.8 5.5 s
+
+Nhật ký:
+   0.0 s  T3 chờ T1 và T2 xong (await), không giữ luồng nào
+   0.3 s  U (việc khẩn) đến – xếp hàng, không chen ngang được
+   1.2 s  U xong lúc 1.2 s
+   2.2 s  T2 chạy tiếp trên Thợ 1 (trước đó ở Thợ 2)
+   3.0 s  T2 xong lúc 3.0 s
+   3.0 s  T1: chia CPU cuối 2 nửa, chạy song song trên 2 thợ
+   3.5 s  T1: hai nửa đã xong, hợp kết quả
+   3.5 s  T1 xong lúc 3.5 s
+   3.5 s  T1 và T2 đã xong → T3 bắt đầu (await)
+   5.5 s  T3 xong lúc 5.5 s
+
+  Tác vụ   Đến  Bắt đầu   Xong  Thời gian
+  T1       0.0      0.0    3.5       3.5 s
+  T2       0.0      0.0    3.0       3.0 s
+  T3       0.0      3.5    5.5       5.5 s
+  U        0.3      0.7    1.2       0.9 s
+  Hoàn tất lúc 5.5 s; số luồng 2; lõi bận 45 %
+  Chen ngang 0 lần; hết lát thời gian 0 lần; U chờ 0.4 s
+
+Nhận xét: nhóm thợ + bất đồng bộ: I/O không giữ luồng, bước
+  CPU giao cho thợ rảnh nên một tác vụ có thể chạy tiếp trên
+  luồng khác sau khi chờ I/O; hai nửa của T1 chạy song song
+  trên 2 thợ; số luồng chỉ bằng số lõi.
+
+
+===== so_sanh =====
+$ out/app so_sanh
+=== So sánh bốn chế độ ===
+Tác vụ: T1 4.0 s, T2 3.0 s, T3 2.0 s; mỗi tác vụ: CPU 1/4 →
+  chờ I/O 1/2 → CPU phần còn lại; 2 lõi CPU; lát thời gian 0.5 s
+  T3 chờ T1, T2; CPU cuối T1 chia 2 nửa; việc khẩn U lúc 0.3 s
+
+  Chế độ         Hoàn tất Luồng Lõi bận  U chờ Chen Hết lát
+  đơn, đồng bộ      9.5 s     1    26 %  8.7 s    0       0
+  đa, đồng bộ       5.8 s     5    43 %  0.0 s    1       2
+  đơn, bất đ.bộ     6.8 s     1    36 %  1.4 s    0       0
+  đa, bất đ.bộ      5.5 s     2    45 %  0.4 s    0       0
+
+Ghi nhớ: đa luồng hệ điều hành chen ngang được (ưu tiên, lát
+  thời gian) nhưng tốn luồng; bất đồng bộ dùng ít luồng, chồng
+  được I/O nhưng chỉ nhường ở điểm await; nhóm thợ + bất đồng
+  bộ dùng hết các lõi mà số luồng vẫn bằng số lõi.
+
+===== mot_loi =====
+$ out/app da_dong_bo --loi 1 --khan 1.2
+=== Đa luồng – đồng bộ (Multi-threaded Sync) ===
+Tác vụ: T1 4.0 s, T2 3.0 s, T3 2.0 s; mỗi tác vụ: CPU 1/4 →
+  chờ I/O 1/2 → CPU phần còn lại; 1 lõi CPU; lát thời gian 0.5 s
+  T3 chờ T1, T2; CPU cuối T1 chia 2 nửa; việc khẩn U lúc 1.2 s
+
+Ký hiệu: 1 2 3 U tác vụ đang dùng CPU; ~ luồng bị chặn chờ I/O;
+  - sẵn sàng nhưng chờ lõi; . chờ join; I/O chờ: số I/O bất đồng
+  bộ đang chờ (không giữ luồng nào)
+  Luồng T1   |11111-----11-------111~~~~~~~~~~~~~~~~~~~~11111.|
+  Luồng T2   |-----22222-------22~~~~~~~~~~~~~~~22222222      |
+  Luồng T3   |................................................|
+  Luồng U    |            UUUUU                               |
+  Luồng T1b  |                                          -----1|
+              0.0                                          4.8 s
+  Luồng T1   |....                    |
+  Luồng T2   |                        |
+  Luồng T3   |....33333~~~~~~~~~~33333|
+  Luồng U    |                        |
+  Luồng T1b  |1111                    |
+              4.8                  7.2 s
+
+Nhật ký:
+   0.0 s  Luồng T3: T3 chờ T1 và T2 xong (join)
+   0.5 s  Luồng T1 hết lát thời gian 0.5 s, nhường lõi
+   1.0 s  Luồng T2 hết lát thời gian 0.5 s, nhường lõi
+   1.2 s  U (việc khẩn, ưu tiên cao) đến
+   1.2 s  tạo Luồng U
+   1.2 s  Luồng U CHEN NGANG: Luồng T1 tạm dừng, nhường lõi
+   1.7 s  U xong lúc 1.7 s
+   4.2 s  T1: chia CPU cuối 2 nửa, Luồng T1b chạy nửa sau
+   4.2 s  T2 xong lúc 4.2 s
+   5.2 s  Luồng T1: hai nửa của T1 đã xong (join Luồng T1b)
+   5.2 s  T1 xong lúc 5.2 s
+   5.2 s  Luồng T3: T1 và T2 đã xong (join), T3 chạy tiếp
+   7.2 s  T3 xong lúc 7.2 s
+
+  Tác vụ   Đến  Bắt đầu   Xong  Thời gian
+  T1       0.0      0.0    5.2       5.2 s
+  T2       0.0      0.5    4.2       4.2 s
+  T3       0.0      5.2    7.2       7.2 s
+  U        1.2      1.2    1.7       0.5 s
+  Hoàn tất lúc 7.2 s; số luồng 5; lõi bận 69 %
+  Chen ngang 1 lần; hết lát thời gian 2 lần; U chờ 0.0 s
+
+Nhận xét: mỗi tác vụ một luồng: I/O của luồng này chồng lên
+  CPU của luồng khác; luồng nhiều hơn lõi phải chờ lõi (-);
+  hệ điều hành chia lát thời gian và cho U (ưu tiên cao) chen
+  ngang ngay; T3 chờ join (.); nửa sau của T1 chạy song song
+  trên luồng T1b.
+
+
+===== gui =====
+$ xvfb-run -a out/app_gui --demo
+[gui] Bấm 'Đa luồng – đồng bộ', dừng ở 3.8 s: U đã chen ngang Luồng T1, hai nửa T1 chạy trên Luồng T1 và T1b
+[gui] Bấm 'Đa luồng – bất đồng bộ', chạy hết: T2 chạy tiếp trên thợ khác sau I/O
+[gui] Hoạt hình chạy xong sau 1.4 s thật, vẽ lại 47 lần (giao diện không đứng)
+[gui] Bấm 'So sánh 4 chế độ', tua tới cuối
+[gui]   đơn, đồng bộ   hoàn tất 9.5 s, luồng 1, U chờ 8.7 s, chen ngang 0
+[gui]   đa, đồng bộ    hoàn tất 5.8 s, luồng 5, U chờ 0.0 s, chen ngang 1
+[gui]   đơn, bất đ.bộ  hoàn tất 6.8 s, luồng 1, U chờ 1.4 s, chen ngang 0
+[gui]   đa, bất đ.bộ   hoàn tất 5.5 s, luồng 2, U chờ 0.4 s, chen ngang 0
+[gui] Bỏ việc khẩn, bấm 'Đa luồng – đồng bộ', dừng ở 3.3 s rồi bấm 'Chen ngang U ngay'
+[gui]   U đến 3.3 s, chờ 0.0 s, chen ngang 1 lần, hoàn tất 5.7 s
+[gui] Đã chụp cửa sổ: ket_qua_gui.png
+
