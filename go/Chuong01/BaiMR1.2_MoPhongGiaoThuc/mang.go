@@ -159,7 +159,8 @@ type Net struct {
 	member    map[string][]string // host -> các nhóm đã tham gia
 	dist      map[string]map[string]int
 	nh        map[string]map[string]string
-	hopTrace  bool
+	hopTrace  bool // in từng bước chuyển (tắt với TCP/UDP cho gọn)
+	quiet     bool // không in nhật ký (dùng khi chỉ cần chỉ số, ví dụ lệnh so_sanh)
 	onDeliver func(node string, p *Packet)
 	onLoss    func(p *Packet, a, b string)
 	hops      [][]any // dữ liệu cho hoạt hình HTML
@@ -201,7 +202,9 @@ func (n *Net) Run() {
 }
 
 func (n *Net) Log(text, node string) {
-	fmt.Printf("%7s ms  %s\n", fmtT(n.now), text)
+	if !n.quiet {
+		fmt.Printf("%7s ms  %s\n", fmtT(n.now), text)
+	}
 	n.notes = append(n.notes, []any{n.now, node, text})
 }
 

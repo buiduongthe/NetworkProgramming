@@ -5,7 +5,9 @@
 // sự kiện rời rạc (mang.go): không mở socket, không cần quyền quản trị, kết quả tất định theo seed.
 //
 //	out/app <kịch_bản> [--seed N] [--loss P] [--doan N] [--mat 20,20] [--html tệp.html]
-//	kịch_bản: tcp | udp | unicast | broadcast | multicast | anycast | tat_ca
+//	kịch_bản: tcp | udp | unicast | broadcast | multicast | anycast            (giao thức, kiểu truyền)
+//	          dong_bo | da_luong | nhom_luong | bat_dong_bo | phoi_hop   (bên trong máy chủ, maychu.go)
+//	          so_sanh (bảng so sánh 5 mô hình máy chủ) | tat_ca
 //	--seed  hạt giống bộ sinh ngẫu nhiên (mặc định 7)
 //	--loss  xác suất mất gói trên liên kết R2–R3, 0..1 (mặc định: 0; UDP: 0.2)
 //	--doan  số đoạn dữ liệu TCP (mặc định 40)
@@ -27,7 +29,7 @@ import (
 //go:embed khung_hoat_hinh.html
 var khungHTML string
 
-var order = []string{"tcp", "udp", "unicast", "broadcast", "multicast", "anycast"}
+var order = append([]string{"tcp", "udp", "unicast", "broadcast", "multicast", "anycast"}, mcOrder...)
 var titles = map[string]string{
 	"tcp":       "TCP – bắt tay, cửa sổ trượt, cwnd, mất gói, đóng FIN",
 	"udp":       "UDP – datagram, mất gói, sai thứ tự, không gửi lại",
@@ -35,6 +37,12 @@ var titles = map[string]string{
 	"broadcast": "Broadcast – gửi tràn trong LAN, dừng ở router",
 	"multicast": "Multicast – IGMP, chỉ giao cho thành viên nhóm",
 	"anycast":   "Anycast – máy phục vụ gần nhất, dự phòng khi hỏng",
+}
+
+func init() { // gộp tiêu đề các kịch bản bên trong máy chủ (maychu.go)
+	for k, v := range mcTitles {
+		titles[k] = v
+	}
 }
 
 type options struct {
@@ -50,6 +58,9 @@ type runData struct {
 	Notes   [][]any    `json:"notes"`
 	Changes [][]any    `json:"changes"`
 	Cwnd    [][2]int64 `json:"cwnd,omitempty"`
+	Lanes   [][]any    `json:"lanes,omitempty"` // các luồng của máy chủ: [tên, [[t0, t1, trạng thái, mã], …], [việc ngắn]]
+	IO      [][]any    `json:"io,omitempty"`    // I/O bất đồng bộ đang chờ: [[t0, t1, mã], …]
+	Beats   [][]int64  `json:"beats,omitempty"` // nhịp tim: [[dự kiến, thực tế], …]
 }
 
 func runOne(name string, o options) runData {
@@ -61,6 +72,12 @@ func runOne(name string, o options) runData {
 		n.links[[2]string{"R2", "R3"}].Loss = int(o.loss*1000 + 0.5)
 	}
 	rd := runData{ID: name, Title: titles[name]}
+	if mcTitles[name] != "" {
+		chayMayChu(n, name, &rd)
+		fmt.Println()
+		rd.Hops, rd.Notes, rd.Changes = n.hops, n.notes, n.changes
+		return rd
+	}
 	switch name {
 	case "tcp":
 		var drops []int
@@ -148,8 +165,9 @@ func writeHTML(path string, runs []runData) error {
 }
 
 func main() {
-	if len(os.Args) < 2 || (titles[os.Args[1]] == "" && os.Args[1] != "tat_ca") {
-		fmt.Println("Cách dùng: out/app <tcp|udp|unicast|broadcast|multicast|anycast|tat_ca>")
+	if len(os.Args) < 2 || (titles[os.Args[1]] == "" && os.Args[1] != "so_sanh" && os.Args[1] != "tat_ca") {
+		fmt.Println("Cách dùng: out/app <tcp|udp|unicast|broadcast|multicast|anycast")
+		fmt.Println("                    |dong_bo|da_luong|nhom_luong|bat_dong_bo|phoi_hop|so_sanh|tat_ca>")
 		fmt.Println("           [--seed N] [--loss P] [--doan N] [--mat 20,20] [--html tệp.html]")
 		os.Exit(1)
 	}
@@ -161,6 +179,10 @@ func main() {
 	fs.StringVar(&o.mat, "mat", "20,20", "các đoạn TCP bị ép mất")
 	fs.StringVar(&o.html, "html", "", "tệp HTML hoạt hình")
 	fs.Parse(os.Args[2:])
+	if os.Args[1] == "so_sanh" {
+		soSanh(o.seed)
+		return
+	}
 	names := []string{os.Args[1]}
 	if os.Args[1] == "tat_ca" {
 		names = order

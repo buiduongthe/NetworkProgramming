@@ -7,6 +7,12 @@
     {"name": "broadcast", "cmd": ["out/app", "broadcast"]},
     {"name": "multicast", "cmd": ["out/app", "multicast"]},
     {"name": "anycast", "cmd": ["out/app", "anycast"]},
+    {"name": "dong_bo", "cmd": ["out/app", "dong_bo"]},
+    {"name": "da_luong", "cmd": ["out/app", "da_luong"]},
+    {"name": "nhom_luong", "cmd": ["out/app", "nhom_luong"]},
+    {"name": "bat_dong_bo", "cmd": ["out/app", "bat_dong_bo"]},
+    {"name": "phoi_hop", "cmd": ["out/app", "phoi_hop"]},
+    {"name": "so_sanh", "cmd": ["out/app", "so_sanh"]},
     {"name": "html", "cmd": ["sh", "-c", "out/app tat_ca --html mo_phong.html | tail -n 1 && python3 chup_hoat_hinh.py mo_phong.html ket_qua_gui.png"],
      "show": ["out/app", "tat_ca", "--html", "mo_phong.html"], "timeout": 90}
   ],
@@ -16,5 +22,11 @@
              "broadcast": "Cửa sổ 4 – broadcast trong LAN",
              "multicast": "Cửa sổ 5 – multicast với IGMP",
              "anycast": "Cửa sổ 6 – anycast và dự phòng",
-             "html": "Cửa sổ 7 – sinh hoạt hình HTML, chụp bằng Playwright"}
+             "dong_bo": "Cửa sổ 7 – máy chủ đồng bộ, một luồng",
+             "da_luong": "Cửa sổ 8 – đa luồng, chờ lõi CPU, khóa",
+             "nhom_luong": "Cửa sổ 9 – nhóm luồng, hàng đợi, từ chối 503",
+             "bat_dong_bo": "Cửa sổ 10 – bất đồng bộ, vòng lặp bị chặn",
+             "phoi_hop": "Cửa sổ 11 – phối hợp vòng lặp và nhóm luồng",
+             "so_sanh": "Cửa sổ 12 – so sánh năm mô hình máy chủ",
+             "html": "Cửa sổ 13 – sinh hoạt hình HTML, chụp bằng Playwright"}
 }
