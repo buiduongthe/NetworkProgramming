@@ -1,0 +1,13 @@
+[
+  {
+    "bai": "BaiMR5.6_MoPhongThucThiTacVu",
+    "chuong": 5,
+    "ngon_ngu": [
+      "rust"
+    ],
+    "kiem_thu": {
+      "rust": "đã chạy"
+    },
+    "ten": "Mô phỏng thực thi tác vụ: đơn luồng/đa luồng × đồng bộ/bất đồng bộ, chen ngang, phụ thuộc, một việc trên hai luồng"
+  }
+]
