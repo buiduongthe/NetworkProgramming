@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Bài mở rộng MR1.2 – Mô phỏng giao thức và kiểu truyền: TCP, UDP, unicast, broadcast, multicast, anycast.
+ * Bài mở rộng MR1.2 – Mô phỏng giao thức, kiểu truyền và mô hình máy chủ: TCP, UDP, unicast, broadcast,
+ * multicast, anycast; đồng bộ, đa luồng, nhóm luồng, bất đồng bộ, phối hợp (MayChu.java).
  *
  * Bài mở rộng, không có trong giáo trình; minh họa trực quan Chương 1 (mô hình TCP/IP, tầng giao vận,
  * các kiểu địa chỉ) trước khi lập trình socket thật ở các chương sau. Toàn bộ chạy trong bộ mô phỏng
@@ -15,7 +16,9 @@ import java.util.Map;
  *
  * Biên dịch: javac -encoding UTF-8 -d out *.java
  * Chạy:      java -cp out MoPhong <kịch_bản> [--seed N] [--loss P] [--doan N] [--mat 20,20] [--html tệp.html]
- *   kịch_bản: tcp | udp | unicast | broadcast | multicast | anycast | tat_ca
+ *   kịch_bản: tcp | udp | unicast | broadcast | multicast | anycast            (giao thức, kiểu truyền)
+ *             dong_bo | da_luong | nhom_luong | bat_dong_bo | phoi_hop   (bên trong máy chủ)
+ *             so_sanh (bảng so sánh 5 mô hình máy chủ) | tat_ca
  *   --seed  hạt giống bộ sinh ngẫu nhiên (mặc định 7)
  *   --loss  xác suất mất gói trên liên kết R2–R3, 0..1 (mặc định: 0; UDP: 0.2)
  *   --doan  số đoạn dữ liệu TCP (mặc định 40)
@@ -31,6 +34,7 @@ public class MoPhong {
         TITLES.put("broadcast", "Broadcast – gửi tràn trong LAN, dừng ở router");
         TITLES.put("multicast", "Multicast – IGMP, chỉ giao cho thành viên nhóm");
         TITLES.put("anycast", "Anycast – máy phục vụ gần nhất, dự phòng khi hỏng");
+        TITLES.putAll(MayChu.TITLES);
     }
 
     static int seed = 7, doan = 40;
@@ -44,6 +48,15 @@ public class MoPhong {
         boolean lossSet = loss >= 0;
         if (lossSet) n.link("R2", "R3").loss = (int) (loss * 1000 + 0.5);
         Map<String, Object> rd = Json.obj("id", name, "title", TITLES.get(name));
+        if (MayChu.TITLES.containsKey(name)) {             // kịch bản bên trong máy chủ: không in bảng theo nút
+            Map<String, Object> extra = MayChu.chay(n, name);
+            System.out.println();
+            rd.put("hops", n.hops);
+            rd.put("notes", n.notes);
+            rd.put("changes", n.changes);
+            rd.putAll(extra);
+            return rd;
+        }
         List<Object> cwnd = null;
         switch (name) {
             case "tcp" -> {
@@ -91,9 +104,10 @@ public class MoPhong {
     }
 
     public static void main(String[] args) throws Exception {
-        if (args.length < 1 || (!TITLES.containsKey(args[0]) && !args[0].equals("tat_ca"))) {
-            System.out.println("Cách dùng: java -cp out MoPhong <tcp|udp|unicast|broadcast|multicast|anycast|tat_ca>");
-            System.out.println("           [--seed N] [--loss P] [--doan N] [--mat 20,20] [--html tệp.html]");
+        if (args.length < 1 || (!TITLES.containsKey(args[0]) && !args[0].equals("so_sanh") && !args[0].equals("tat_ca"))) {
+            System.out.println("Cách dùng: java -cp out MoPhong <kịch_bản> [--seed N] [--loss P] [--doan N] [--mat 20,20] [--html tệp.html]");
+            System.out.println("  kịch_bản: tcp | udp | unicast | broadcast | multicast | anycast");
+            System.out.println("            dong_bo | da_luong | nhom_luong | bat_dong_bo | phoi_hop | so_sanh | tat_ca");
             System.exit(1);
         }
         for (int i = 1; i + 1 < args.length; i += 2) {
@@ -106,6 +120,12 @@ public class MoPhong {
                 case "--html" -> html = v;
                 default -> { System.out.println("Tham số không hợp lệ: " + args[i]); System.exit(1); }
             }
+        }
+        if (args[0].equals("so_sanh")) {
+            Map<String, MayChu.ChiSo> kq = new LinkedHashMap<>();
+            for (String m : MayChu.TITLES.keySet()) kq.put(m, MayChu.chiSo(new Mang(seed), m));
+            MayChu.soSanh(kq);
+            return;
         }
         List<String> names = args[0].equals("tat_ca") ? new ArrayList<>(TITLES.keySet()) : List.of(args[0]);
         List<Object> runs = new ArrayList<>();

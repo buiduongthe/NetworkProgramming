@@ -135,6 +135,7 @@ final class Mang {
     Map<String, Map<String, Integer>> dist = new HashMap<>();
     Map<String, Map<String, String>> nh = new HashMap<>();
     boolean hopTrace = true;
+    boolean quiet = false;                                       // không in nhật ký (chỉ cần chỉ số, ví dụ lệnh so_sanh)
     BiConsumer<String, Packet> onDeliver;
     TriConsumer onLoss;
     final List<Object> hops = new ArrayList<>();                 // dữ liệu cho hoạt hình HTML
@@ -175,7 +176,7 @@ final class Mang {
     }
 
     void log(String text, String node) {
-        System.out.printf("%7s ms  %s%n", fmtT(now), text);
+        if (!quiet) System.out.printf("%7s ms  %s%n", fmtT(now), text);
         notes.add(List.of(now, node, text));
     }
 
