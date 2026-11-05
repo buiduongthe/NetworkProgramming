@@ -1,0 +1,182 @@
+===== server =====
+$ java -cp out ServerNganHang 127.0.0.1 43760
+[server] Lắng nghe 127.0.0.1:43760; chế độ khoa, trễ 0–2 ms
+[server] Đặt lại (khoa_ngay_tho=0)
+[server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
+[server] Lượt trước: khong_khoa, 2500 yc, tc 2304, sai phạm 815
+[server] Đặt lại (khoa_ngay_tho=0)
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 2500 yc, tc 2293, sai phạm 0
+[server] Đặt lại (khoa_ngay_tho=0)
+[server] Chế độ: lac_quan – Lạc quan (phiên bản + CAS)
+[server] Lượt trước: lac_quan, 2500 yc, tc 1241, sai phạm 0
+[server] Đặt lại (khoa_ngay_tho=0)
+[server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 2500 yc, tc 2240, sai phạm 0
+[server] Đặt lại (khoa_ngay_tho=1, so_tk=5)
+[server] khoa: 21 yc, tc 2, từ chối 0, sai phạm 0
+[server] khóa chết: u4 TK02→TK01, chờ TK02 quá 2 s
+[server] khóa chết: u20 TK02→TK05, chờ TK05 quá 2 s (+13 vụ)
+[server] khoa: 40 yc, tc 3, từ chối 28, sai phạm 0
+[server] khóa chết: u6 TK02→TK01, chờ TK01 quá 2 s (+13 vụ)
+[server] Lượt trước: khoa, 40 yc, tc 8, sai phạm 0
+[server] Đặt lại (khoa_ngay_tho=0)
+[server] An vào
+[server] Bình vào
+[server] khoa: 43 yc, tc 42, từ chối 1, sai phạm 0
+[server] Bình rời
+[server] An rời
+[server] Tổng kết (từ lần đặt lại cuối):
+[server]   Chế độ khoa, trễ xử lý 0–2 ms
+[server]   Yêu cầu 43: thành công 42, từ chối 1
+[server]   Xung đột 0, thử lại 0, hết lượt thử 0
+[server]   Hàng đợi max 0, chờ khóa quá hạn 0
+[server]   Xử lý µs: p50 7576 p95 27401 p99 30555
+[server]   Thông lượng 14 yc/s
+[server]   Sai phạm 0: tổng lệch 0, lệch TK 0, thấu chi 0
+[server]   Tổng tiền 25.000.000 đ (khớp), 5 tài khoản
+[server] Máy chủ đã dừng
+
+===== mp =====
+$ java -cp out MoPhong 127.0.0.1 43760 --n 500 --so-sanh
+[mo_phong] === khong_khoa: 500 người × 5 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2500 yc xong trong 0.86 s = 2894 yc/s
+[mo_phong] Khứ hồi ms: p50 68.9 p95 449.8 p99 625.8
+[mo_phong] Thành công 2304, từ chối 196
+[mo_phong]   lý do: khong_du 196
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 2300 p95 208980 p99 311278
+[mo_phong] Sai phạm 815: tổng lệch 1, lệch TK 10, thấu chi 804
+[mo_phong]   ví dụ: u392 TK10→TK01: TK10 còn -700.000 đ
+[mo_phong]   ví dụ: u392 TK10→TK01: TK10 còn -900.000 đ
+[mo_phong] Tổng tiền 58.900.000 đ, LỆCH +8.900.000 đ
+[mo_phong] === khoa: 500 người × 5 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2500 yc xong trong 2.02 s = 1239 yc/s
+[mo_phong] Khứ hồi ms: p50 150.0 p95 1130.3 p99 1398.3
+[mo_phong] Thành công 2293, từ chối 207
+[mo_phong]   lý do: khong_du 207
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 6188 p95 536353 p99 1111882
+[mo_phong] Sai phạm 0: tổng lệch 0, lệch TK 0, thấu chi 0
+[mo_phong] Tổng tiền 50.000.000 đ (khớp), 10 tài khoản
+[mo_phong] === lac_quan: 500 người × 5 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2500 yc xong trong 0.41 s = 6156 yc/s
+[mo_phong] Khứ hồi ms: p50 40.8 p95 119.9 p99 162.9
+[mo_phong] Thành công 1241, từ chối 1259
+[mo_phong]   lý do: xung_dot 989, khong_du 270
+[mo_phong] Máy chủ: xung đột 7170, thử lại 6181, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 7747 p95 48169 p99 69856
+[mo_phong] Sai phạm 0: tổng lệch 0, lệch TK 0, thấu chi 0
+[mo_phong] Tổng tiền 50.000.000 đ (khớp), 10 tài khoản
+[mo_phong] === hang_doi: 500 người × 5 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2500 yc xong trong 3.02 s = 827 yc/s
+[mo_phong] Khứ hồi ms: p50 596.7 p95 628.8 p99 642.4
+[mo_phong] Thành công 2240, từ chối 260
+[mo_phong]   lý do: khong_du 260
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 500
+[mo_phong] Máy chủ xử lý µs: p50 595294 p95 625397 p99 630537
+[mo_phong] Sai phạm 0: tổng lệch 0, lệch TK 0, thấu chi 0
+[mo_phong] Tổng tiền 50.000.000 đ (khớp), 10 tài khoản
+[mo_phong] Bảng so sánh (500 người × 5 lần, 200 kết nối):
+  Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+  khong_khoa         2304      815        0  2894   625.8
+  khoa               2293        0        0  1239  1398.3
+  lac_quan           1241        0     7170  6156   162.9
+  hang_doi           2240        0        0   827   642.4
+
+===== qt =====
+$ java -cp out Khach 127.0.0.1 43760 dat_lai khoa_ngay_tho=1 so_tk=5
+[quan_tri] > dat_lai khoa_ngay_tho=1 so_tk=5
+[quan_tri] OK
+
+===== kc =====
+$ java -cp out MoPhong 127.0.0.1 43760 --n 20 --lan 2
+[mo_phong] === khoa: 20 người × 2 lần, 20 kết nối ===
+[mo_phong] Rào xuất phát: 20/20 kết nối sẵn sàng -> bắn
+[mo_phong] 40 yc xong trong 6.01 s = 7 yc/s
+[mo_phong] Khứ hồi ms: p50 2003.1 p95 4003.1 p99 4009.6
+[mo_phong] Thành công 8, từ chối 32
+[mo_phong]   lý do: khoa_cho_lau 32
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 2001213 p95 4002781 p99 4006804
+[mo_phong] Sai phạm 0: tổng lệch 0, lệch TK 0, thấu chi 0
+[mo_phong] Tổng tiền 25.000.000 đ (khớp), 5 tài khoản
+
+===== tt =====
+$ java -cp out MoPhong 127.0.0.1 43760 --n 20 --lan 2 --dat-lai
+[mo_phong] === khoa: 20 người × 2 lần, 20 kết nối ===
+[mo_phong] Rào xuất phát: 20/20 kết nối sẵn sàng -> bắn
+[mo_phong] 40 yc xong trong 0.04 s = 967 yc/s
+[mo_phong] Khứ hồi ms: p50 8.6 p95 27.8 p99 32.9
+[mo_phong] Thành công 40, từ chối 0
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 7985 p95 27401 p99 30555
+[mo_phong] Sai phạm 0: tổng lệch 0, lệch TK 0, thấu chi 0
+[mo_phong] Tổng tiền 25.000.000 đ (khớp), 5 tài khoản
+
+===== A =====
+$ java -cp out NganHang An 127.0.0.1 43760 --thoi-gian 4
+[An] Đăng nhập TK01 – An (khoa)
+[An]   số dư 3.700.000 đ
+[An] > chuyển 500.000 đ TK01→TK02
+[An]   THÀNH CÔNG (4.2 ms), số dư 3.200.000 đ
+[An] + Nhận 300.000 đ từ TK02 (Bình), số dư 3.500.000 đ
+[An] > chuyển 9.000.000 đ TK01→TK03
+[An]   TỪ CHỐI (2 ms): không đủ số dư (TK01 còn 3.500.000 đ)
+
+===== B =====
+$ java -cp out NganHang 'Bình' 127.0.0.1 43760 --thoi-gian 3.5
+[Bình] Đăng nhập TK02 – Bình (khoa)
+[Bình]   số dư 4.400.000 đ
+[Bình] > chuyển 300.000 đ TK02→TK01
+[Bình]   THÀNH CÔNG (3.4 ms), số dư 4.600.000 đ
+[Bình] + Nhận 500.000 đ từ TK01 (An), số dư 4.600.000 đ
+[Bình] Số dư TK02: 4.600.000 đ
+
+===== gui =====
+$ xvfb-run -a java -cp out DemoGui 127.0.0.1 43762
+[demo] 1. Máy chủ: START SERVER (khoa, khóa theo thứ tự mã)
+[demo]    An, Bình, Chi: Kết nối (TK01, TK02, TK03)
+[demo] 2. An→Bình 500.000 đ và Bình→An 300.000 đ CÙNG LÚC
+[demo]    An: Chuyển thành công 500.000 đ tới TK02 – Bình
+[demo]    Bình: Chuyển thành công 300.000 đ tới TK01 – An
+[demo] 3. Bật 'khóa ngây thơ', Đặt lại; trễ 0–50 ms
+[demo]    An→Bình và Bình→An cùng lúc…
+[demo]    An: Khóa chết: chờ TK02 quá 2 s, đã hủy giao dịch
+[demo]    Bình: Chuyển thành công 300.000 đ tới TK01 – An
+[demo]    máy chủ: khóa chết phát hiện 1
+[demo]    Đã ghi ket_qua_gui_khoa_chet.png (107 KB)
+[demo] 4. Tắt 'khóa ngây thơ', Đặt lại; lặp lại chuyển chéo
+[demo]    An: Chuyển thành công 500.000 đ tới TK02 – Bình
+[demo]    Bình: Chuyển thành công 300.000 đ tới TK01 – An
+[demo] 5. Máy chủ: khong_khoa, trễ 0–20 ms; Đặt lại
+[demo]    An→Bình, Bình→Chi, Chi→An 1.000.000 đ cùng lúc
+[demo]    An: Chuyển thành công 1.000.000 đ tới TK02 – Bình
+[demo]    Bình: Chuyển thành công 1.000.000 đ tới TK03 – Chi
+[demo]    Chi: Chuyển thành công 1.000.000 đ tới TK01 – An
+[demo]    máy chủ: 3 yc, tc 3, từ chối 0, sai phạm 2
+[demo]    Tổng tiền 50.000.000 đ (khớp), 10 tài khoản
+[demo]    Đã ghi ket_qua_gui_tranh_chap.png (86 KB)
+[demo] 6. Máy chủ: khoa, trễ 0–2 ms; So sánh 4 chế độ
+[demo]   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+[demo]   khong_khoa         2334      695        0  4543   407.6
+[demo]   khoa               2347        0        0  1073  1448.3
+[demo]   lac_quan           1215        0     7362  9723   179.1
+[demo]   hang_doi           2230        0        0   713   741.2
+[demo]    Sai phạm: khong_khoa
+[demo]    Không sai phạm: khoa, lac_quan, hang_doi
+[demo] 7. Đặt lại; An chuyển 200.000 đ cho Chi
+[demo]    An: Chuyển thành công 200.000 đ tới TK03 – Chi
+[demo]    Chi: + Nhận 200.000 đ từ TK01 – An lúc 20:55:24
+[demo]    máy chủ: Tổng tiền 50.000.000 đ (khớp), 10 tài khoản
+[demo] 8. Chụp 4 cửa sổ
+[demo]    Đã ghi ket_qua_gui.png (143 KB)
+[demo] 9. Máy chủ: STOP SERVER
+[demo]    Bình: Mất kết nối máy chủ
+[demo] Kết thúc
+

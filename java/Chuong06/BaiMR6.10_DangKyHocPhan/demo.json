@@ -1,0 +1,25 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "Chung.java", "KetNoiKhach.java", "Khach.java", "MoPhong.java", "MayChu.java", "ServerDangKy.java", "DangKy.java", "GiaoDienChung.java", "DangKyGui.java", "ServerGui.java", "DemoGui.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "ServerDangKy", "127.0.0.1", "43740"], "background": true, "wait": 1.0},
+    {"name": "mp", "cmd": ["java", "-cp", "out", "MoPhong", "127.0.0.1", "43740", "--n", "2000", "--so-sanh"],
+     "timeout": 120, "wait": 0.3},
+    {"name": "qt", "cmd": ["java", "-cp", "out", "Khach", "127.0.0.1", "43740", "dat_lai", "si_so=2"],
+     "timeout": 10, "wait": 0.1},
+    {"name": "A", "cmd": ["java", "-cp", "out", "DangKy", "An", "127.0.0.1", "43740", "--thoi-gian", "6.5"],
+     "stdin": "@0.5 dk 123013-01\n@3 huy 123013-01\n", "background": true, "wait": 0.3},
+    {"name": "B", "cmd": ["java", "-cp", "out", "DangKy", "Bình", "127.0.0.1", "43740"],
+     "stdin": "@0.5 dk 123013-01 x2\n", "timeout": 10, "wait": 0.3},
+    {"name": "C", "cmd": ["java", "-cp", "out", "DangKy", "Chi", "127.0.0.1", "43740"],
+     "stdin": "dk 123013-01\n@2.5 dk 123013-01\n@3 xem\n", "timeout": 10, "wait": 2.0},
+    {"name": "gui", "cmd": ["xvfb-run", "-a", "-s", "-screen 0 2600x1700x24", "java", "-cp", "out", "DemoGui", "127.0.0.1", "43742"],
+     "show": ["xvfb-run", "-a", "java", "-cp", "out", "DemoGui", "127.0.0.1", "43742"], "timeout": 200}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ đăng ký học phần (đa luồng, chế độ khoa)",
+             "mp": "Cửa sổ 2 – mô phỏng 2000 sinh viên, 3 lớp × 50, so sánh 4 chế độ",
+             "qt": "Cửa sổ 3 – quản trị (đợt mới, sĩ số 2)",
+             "A": "Cửa sổ 4 – sinh viên An (đăng ký rồi hủy)",
+             "B": "Cửa sổ 5 – sinh viên Bình (bấm đúp)",
+             "C": "Cửa sổ 6 – sinh viên Chi (lớp đủ, chờ chỗ trống)",
+             "gui": "Cửa sổ 7 – ứng dụng giao diện (máy chủ + 3 cổng đăng ký)"}
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.11_FlashSale",
+    "chuong": 6,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Flash sale – 10 000 người cùng bấm MUA NGAY cho 100 sản phẩm: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp trên một ô kho nóng, giờ mở bán (đồng hồ đơn điệu, con_ms), hết hàng nhanh đọc không khóa, sổ kiểm toán (tồn âm, lệch sổ), bộ mô phỏng tải, trang flash sale Swing có đếm ngược",
+    "ghi_chu": "Bản Java (JDK 21, chỉ thư viện chuẩn; Swing, java.awt.Robot dưới xvfb-run). Khung chép nguyên từ MR6.6 bản Java. Cổng 43750 (GUI 43752). So sánh 10 000 người, 200 kết nối, trễ 0–1 ms: khong_khoa 1056 đơn, 2463 sai phạm (tồn âm 990, lệch sổ 1473; bán 1573/100 sp); khoa 66/0 (26254 yc/s); lac_quan 66/0, 528 xung đột (219426 yc/s); hang_doi 66/0 (4783 yc/s); ba chế độ an toàn bán đúng 100/100. Dòng lệnh giống hệt Python (chưa mở bán, chỉ còn 1, hết hàng). Chạy chéo: Python -> máy chủ Java (khong_khoa 1441/3429, còn lại 0) và Java -> máy chủ Python (khong_khoa 3213/7765, còn lại 0). Giao diện: khong_khoa + trễ 0–20 ms, kho 3: cả ba mua được, cùng mã đơn FS00001, bán 5/3 (sai phạm 6); khoa: An, Bình mua được, Chi 'HẾT HÀNG'. Bảng trong demo giao diện có dòng lac_quan 65 ký tự do yc/s 6 chữ số (định dạng khung chung)."
+  }
+]
