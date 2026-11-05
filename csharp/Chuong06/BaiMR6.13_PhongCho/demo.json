@@ -1,0 +1,25 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "server", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.13_PhongCho.dll", "server", "127.0.0.1", "42770"], "background": true, "wait": 0.8},
+    {"name": "mp", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.13_PhongCho.dll", "mo_phong", "127.0.0.1", "42770", "--n", "1000", "--so-sanh"],
+     "timeout": 120, "wait": 0.3},
+    {"name": "pc", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.13_PhongCho.dll", "so_sanh_pc", "127.0.0.1", "42770", "--n", "1000"],
+     "timeout": 120, "wait": 0.3},
+    {"name": "qt", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.13_PhongCho.dll", "khach", "127.0.0.1", "42770", "dat_lai", "toc_do=0.5", "dung_luong=1"],
+     "timeout": 10, "wait": 0.1},
+    {"name": "A", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.13_PhongCho.dll", "mua_ve", "An", "127.0.0.1", "42770", "--tu-dong", "--so-ve", "2", "--thoi-gian", "7"],
+     "background": true, "wait": 0.3},
+    {"name": "B", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.13_PhongCho.dll", "mua_ve", "Bình", "127.0.0.1", "42770", "--tu-dong", "--so-ve", "1", "--thoi-gian", "6.5"],
+     "stdin": "@0.4 mua 1\n", "background": true, "wait": 0.3},
+    {"name": "C", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.13_PhongCho.dll", "mua_ve", "Chi", "127.0.0.1", "42770", "--thoi-gian", "6.5"],
+     "stdin": "@0.1 xep_hang\n@5.6 mua2 4\n", "timeout": 20, "wait": 1.0}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ bán vé (đa luồng, chế độ khoa, phòng chờ bật)",
+             "mp": "Cửa sổ 2 – mô phỏng 1000 người, so sánh 4 chế độ",
+             "pc": "Cửa sổ 3 – so sánh tắt và bật phòng chờ (khoa, 1000 người)",
+             "qt": "Cửa sổ 4 – quản trị (cấp lượt 0,5 người/s để thấy hàng chờ)",
+             "A": "Cửa sổ 5 – An vào hàng, tới lượt tự mua 2 vé",
+             "B": "Cửa sổ 6 – Bình chen ngang rồi đợi lượt",
+             "C": "Cửa sổ 7 – Chi tới lượt bấm đúp nút mua"}
+}

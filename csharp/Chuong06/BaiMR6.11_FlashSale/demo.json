@@ -1,0 +1,22 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "server", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.11_FlashSale.dll", "server", "127.0.0.1", "42750"], "background": true, "wait": 0.8},
+    {"name": "mp", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.11_FlashSale.dll", "mo_phong", "127.0.0.1", "42750", "--n", "10000", "--so-sanh", "--tre-ms", "1"],
+     "timeout": 120, "wait": 0.3},
+    {"name": "qt", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.11_FlashSale.dll", "khach", "127.0.0.1", "42750", "dat_lai", "ton_dau=5", "mo_sau_s=3"],
+     "timeout": 10, "wait": 0.1},
+    {"name": "A", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.11_FlashSale.dll", "flash_sale", "An", "127.0.0.1", "42750", "--thoi-gian", "6"],
+     "stdin": "@1 mua 1\n@3.3 mua 2\n", "background": true, "wait": 0.3},
+    {"name": "B", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.11_FlashSale.dll", "flash_sale", "Bình", "127.0.0.1", "42750"],
+     "stdin": "@3.2 mua 2\n", "timeout": 10, "wait": 0.3},
+    {"name": "C", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.11_FlashSale.dll", "flash_sale", "Chi", "127.0.0.1", "42750"],
+     "stdin": "mua 2\n@0.5 mua 1\n@1 mua 1\n", "timeout": 10, "wait": 1.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ flash sale (đa luồng, chế độ khoa)",
+             "mp": "Cửa sổ 2 – mô phỏng 10 000 người, kho 100, so sánh 4 chế độ",
+             "qt": "Cửa sổ 3 – quản trị (kho 5, mở bán sau 3 s)",
+             "A": "Cửa sổ 4 – người mua An (bấm sớm, rồi mua 2)",
+             "B": "Cửa sổ 5 – người mua Bình",
+             "C": "Cửa sổ 6 – người mua Chi (còn 1, rồi hết hàng)"}
+}

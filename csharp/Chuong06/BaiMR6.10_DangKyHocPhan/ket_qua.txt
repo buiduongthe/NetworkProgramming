@@ -1,0 +1,140 @@
+===== server =====
+$ dotnet bin/Release/net10.0/BaiMR6.10_DangKyHocPhan.dll server 127.0.0.1 42740
+[server] Lắng nghe 127.0.0.1:42740; chế độ khoa, trễ 0–2 ms
+[server] Đặt lại
+[server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
+[server] Lượt trước: khong_khoa, 2207 yc, tc 2012, sai phạm 1850
+[server] Đặt lại
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 5695 yc, tc 184, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: lac_quan – Lạc quan (phiên bản + CAS)
+[server] Lượt trước: lac_quan, 5693 yc, tc 190, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
+[server] hang_doi: 5702 yc, tc 188, từ chối 3710, sai phạm 0
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 5702 yc, tc 189, sai phạm 0
+[server] Đặt lại (si_so=2)
+[server] An vào
+[server] Bình vào
+[server] An đăng ký 123013-01 (1/2)
+[server] Bình đăng ký 123013-01 (2/2)
+[server] Bình rời
+[server] Chi vào
+[server] khoa: 4 yc, tc 2, từ chối 2, sai phạm 0
+[server] An hủy 123013-01 (1/2)
+[server] Chi đăng ký 123013-01 (2/2)
+[server] Chi rời
+[server] An rời
+[server] khoa: 6 yc, tc 4, từ chối 2, sai phạm 0
+[server] Tổng kết (từ lần đặt lại cuối):
+[server]   Chế độ khoa, trễ xử lý 0–2 ms
+[server]   Yêu cầu 6: thành công 4, từ chối 2
+[server]   Xung đột 0, thử lại 0, hết lượt thử 0
+[server]   Hàng đợi max 0, chờ khóa quá hạn 0
+[server]   Xử lý µs: p50 149 p95 1255 p99 1255
+[server]   Thông lượng 2 yc/s
+[server]   Sai phạm 0: vượt sĩ số 0, ĐK trùng 0
+[server]   Đã ĐK 2/6 chỗ (3 lớp × 2)
+[server] Máy chủ đã dừng
+
+===== mp =====
+$ dotnet bin/Release/net10.0/BaiMR6.10_DangKyHocPhan.dll mo_phong 127.0.0.1 42740 --n 2000 --so-sanh
+[mo_phong] === khong_khoa: 2000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2207 yc xong trong 0.26 s = 8606 yc/s
+[mo_phong] Khứ hồi ms: p50 149.5 p95 214.2 p99 222.3
+[mo_phong] Thành công 2012, từ chối 195
+[mo_phong]   lý do: chua_dang_ky 192, da_dang_ky 2, lop_day 1
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 2296 p95 70159 p99 125730
+[mo_phong] Sai phạm 1850: vượt sĩ số 1832, ĐK trùng 18
+[mo_phong]   ví dụ: u299 ĐK lại 123005-01
+[mo_phong]   ví dụ: u499 ĐK lại 123013-01
+[mo_phong] Đã ĐK 1970/150 chỗ (3 lớp × 50)
+[mo_phong] === khoa: 2000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 5695 yc xong trong 2.84 s = 2003 yc/s
+[mo_phong] Khứ hồi ms: p50 743.1 p95 1288.2 p99 1531.3
+[mo_phong] Thành công 184, từ chối 5511
+[mo_phong]   lý do: lop_day 5506, da_dang_ky 5
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 86266 p95 244460 p99 353169
+[mo_phong] Sai phạm 0: vượt sĩ số 0, ĐK trùng 0
+[mo_phong] Đã ĐK 150/150 chỗ (3 lớp × 50)
+[mo_phong] === lac_quan: 2000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 5693 yc xong trong 0.46 s = 12510 yc/s
+[mo_phong] Khứ hồi ms: p50 65.3 p95 232.4 p99 348.5
+[mo_phong] Thành công 190, từ chối 5503
+[mo_phong]   lý do: lop_day 5273, xung_dot 227, da_dang_ky 3
+[mo_phong] Máy chủ: xung đột 2108, thử lại 1881, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 2108 p95 40473 p99 82733
+[mo_phong] Sai phạm 0: vượt sĩ số 0, ĐK trùng 0
+[mo_phong] Đã ĐK 150/150 chỗ (3 lớp × 50)
+[mo_phong] === hang_doi: 2000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 5702 yc xong trong 7.21 s = 791 yc/s
+[mo_phong] Khứ hồi ms: p50 2321.7 p95 2413.6 p99 2447.4
+[mo_phong] Thành công 189, từ chối 5513
+[mo_phong]   lý do: lop_day 5503, da_dang_ky 10
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 1996
+[mo_phong] Máy chủ xử lý µs: p50 2321258 p95 2413428 p99 2445907
+[mo_phong] Sai phạm 0: vượt sĩ số 0, ĐK trùng 0
+[mo_phong] Đã ĐK 149/150 chỗ (3 lớp × 50)
+[mo_phong] Bảng so sánh (2000 người × 1 lần, 200 kết nối):
+  Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+  khong_khoa         2012     1850        0  8606   222.3
+  khoa                184        0        0  2003  1531.3
+  lac_quan            190        0     2108 12510   348.5
+  hang_doi            189        0        0   791  2447.4
+
+===== qt =====
+$ dotnet bin/Release/net10.0/BaiMR6.10_DangKyHocPhan.dll khach 127.0.0.1 42740 dat_lai si_so=2
+[quan_tri] > dat_lai si_so=2
+[quan_tri] OK
+
+===== A =====
+$ dotnet bin/Release/net10.0/BaiMR6.10_DangKyHocPhan.dll dang_ky An 127.0.0.1 42740 --thoi-gian 6.5
+[An] Vào cổng đăng ký (khoa), sĩ số 2
+[An]   123013-01 Lập trình mạng    0/2
+[An]   123005-01 Quản trị mạng     0/2
+[An]   006124-01 Tin học cơ bản    0/2
+[An] > đăng ký 123013-01
+[An]   ĐĂNG KÝ 123013-01 thành công (1/2, 6.2 ms)
+[An] * An đăng ký 123013-01 (1/2)
+[An] * Bình đăng ký 123013-01 (2/2)
+[An] > hủy 123013-01
+[An]   HỦY 123013-01 thành công (1/2, 2.4 ms)
+[An] * An hủy 123013-01 (1/2)
+[An] * Chi đăng ký 123013-01 (2/2)
+
+===== B =====
+$ dotnet bin/Release/net10.0/BaiMR6.10_DangKyHocPhan.dll dang_ky 'Bình' 127.0.0.1 42740
+[Bình] Vào cổng đăng ký (khoa), sĩ số 2
+[Bình]   123013-01 Lập trình mạng    0/2
+[Bình]   123005-01 Quản trị mạng     0/2
+[Bình]   006124-01 Tin học cơ bản    0/2
+[Bình] * An đăng ký 123013-01 (1/2)
+[Bình] > đăng ký 123013-01 (bấm đúp: 2 yêu cầu)
+[Bình]   ĐĂNG KÝ 123013-01 thành công (2/2, 3.4 ms)
+[Bình]   123013-01: TỪ CHỐI – đã đăng ký lớp này
+[Bình] * Bình đăng ký 123013-01 (2/2)
+
+===== C =====
+$ dotnet bin/Release/net10.0/BaiMR6.10_DangKyHocPhan.dll dang_ky Chi 127.0.0.1 42740
+[Chi] Vào cổng đăng ký (khoa), sĩ số 2
+[Chi]   123013-01 Lập trình mạng    2/2
+[Chi]   123005-01 Quản trị mạng     0/2
+[Chi]   006124-01 Tin học cơ bản    0/2
+[Chi] > đăng ký 123013-01
+[Chi]   123013-01: TỪ CHỐI – lớp đã đủ
+[Chi] * An hủy 123013-01 (1/2)
+[Chi] > đăng ký 123013-01
+[Chi]   ĐĂNG KÝ 123013-01 thành công (2/2, 2.0 ms)
+[Chi] * Chi đăng ký 123013-01 (2/2)
+[Chi]   123013-01 Lập trình mạng    2/2 *
+[Chi]   123005-01 Quản trị mạng     0/2
+[Chi]   006124-01 Tin học cơ bản    0/2
+

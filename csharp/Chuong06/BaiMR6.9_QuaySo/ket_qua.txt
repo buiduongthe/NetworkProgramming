@@ -1,0 +1,151 @@
+===== server =====
+$ dotnet bin/Release/net10.0/BaiMR6.9_QuaySo.dll server 127.0.0.1 42730 --p 0.05
+[server] Lắng nghe 127.0.0.1:42730; chế độ khoa, trễ 0–2 ms
+[server] Đặt lại
+[server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
+[server] Đã trao hết quà sau 3732 lượt
+[server] Lượt trước: khong_khoa, 6000 yc, tc 5940, sai phạm 72
+[server] Đặt lại
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Đã trao hết quà sau 693 lượt
+[server] Lượt trước: khoa, 6000 yc, tc 5940, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: lac_quan – Lạc quan (phiên bản + CAS)
+[server] Đã trao hết quà sau 418 lượt
+[server] Lượt trước: lac_quan, 6000 yc, tc 5940, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
+[server] Đã trao hết quà sau 169 lượt
+[server] hang_doi: 6000 yc, tc 1245, từ chối 30, sai phạm 0
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 6000 yc, tc 5940, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
+[server] Đã trao hết quà sau 303 lượt
+[server] khong_khoa: 95210 yc, tc 94153, từ chối 1000, sai phạm 3
+[server] Lượt trước: khong_khoa, 100000 yc, tc 99000, sai phạm 3
+[server] Đặt lại
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Đã trao hết quà sau 209 lượt
+[server] Lượt trước: khoa, 100000 yc, tc 99000, sai phạm 0
+[server] khoa: 0 yc, tc 0, từ chối 0, sai phạm 0
+[server] Đặt lại (so_qua=1, p=1.0)
+[server] An vào
+[server] An trúng Xe đạp
+[server] Đã trao hết quà sau 1 lượt
+[server] An rời
+[server] Bình vào
+[server] Bình rời
+[server] Tổng kết (từ lần đặt lại cuối):
+[server]   Chế độ khoa, trễ xử lý 0–2 ms
+[server]   Yêu cầu 3: thành công 2, từ chối 1
+[server]   Xung đột 0, thử lại 0, hết lượt thử 0
+[server]   Hàng đợi max 0, chờ khóa quá hạn 0
+[server]   Xử lý µs: p50 2246 p95 2369 p99 2369
+[server]   Thông lượng 4 yc/s
+[server]   Sai phạm 0: thừa quà 0, quay 2 lần 0
+[server]   Trao 1/1 quà, 2 lượt, p 1
+[server] Máy chủ đã dừng
+
+===== mp =====
+$ dotnet bin/Release/net10.0/BaiMR6.9_QuaySo.dll mo_phong 127.0.0.1 42730 --n 6000 --so-sanh
+[mo_phong] === khong_khoa: 6000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 6000 yc xong trong 0.87 s = 6880 yc/s
+[mo_phong] Khứ hồi ms: p50 375.4 p95 723.6 p99 795.0
+[mo_phong] Thành công 5940, từ chối 60
+[mo_phong]   lý do: da_quay 60
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 3346 p95 72777 p99 329937
+[mo_phong] Sai phạm 72: thừa quà 72, quay 2 lần 0
+[mo_phong]   ví dụ: Nồi cơm điện: u140 rồi u2091
+[mo_phong]   ví dụ: Ba lô: u184 rồi u1074
+[mo_phong] Trao 82/10 quà, 5940 lượt, p 1/20
+[mo_phong] === khoa: 6000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 6000 yc xong trong 0.34 s = 17848 yc/s
+[mo_phong] Khứ hồi ms: p50 187.4 p95 289.1 p99 307.5
+[mo_phong] Thành công 5940, từ chối 60
+[mo_phong]   lý do: da_quay 60
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 2087 p95 13659 p99 195536
+[mo_phong] Sai phạm 0: thừa quà 0, quay 2 lần 0
+[mo_phong] Trao 10/10 quà, 5940 lượt, p 1/20
+[mo_phong] === lac_quan: 6000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 6000 yc xong trong 0.28 s = 21775 yc/s
+[mo_phong] Khứ hồi ms: p50 233.6 p95 276.6 p99 280.1
+[mo_phong] Thành công 5940, từ chối 60
+[mo_phong]   lý do: da_quay 60
+[mo_phong] Máy chủ: xung đột 46, thử lại 46, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 2152 p95 22134 p99 23838
+[mo_phong] Sai phạm 0: thừa quà 0, quay 2 lần 0
+[mo_phong] Trao 10/10 quà, 5940 lượt, p 1/20
+[mo_phong] === hang_doi: 6000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 6000 yc xong trong 7.83 s = 767 yc/s
+[mo_phong] Khứ hồi ms: p50 4014.6 p95 7469.3 p99 7727.6
+[mo_phong] Thành công 5940, từ chối 60
+[mo_phong]   lý do: da_quay 60
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 5994
+[mo_phong] Máy chủ xử lý µs: p50 4013580 p95 7422131 p99 7693135
+[mo_phong] Sai phạm 0: thừa quà 0, quay 2 lần 0
+[mo_phong] Trao 10/10 quà, 5940 lượt, p 1/20
+[mo_phong] Bảng so sánh (6000 người × 1 lần, 200 kết nối):
+  Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+  khong_khoa         5940       72        0  6880   795.0
+  khoa               5940        0        0 17848   307.5
+  lac_quan           5940        0       46 21775   280.1
+  hang_doi           5940        0        0   767  7727.6
+
+===== mp2 =====
+$ dotnet bin/Release/net10.0/BaiMR6.9_QuaySo.dll mo_phong 127.0.0.1 42730 --n 100000 --k 400 --che-do khong_khoa --dat-lai
+[mo_phong] === khong_khoa: 100000 người × 1 lần, 400 kết nối ===
+[mo_phong] Rào xuất phát: 400/400 kết nối sẵn sàng -> bắn
+[mo_phong] 100000 yc xong trong 3.86 s = 25895 yc/s
+[mo_phong] Khứ hồi ms: p50 1357.6 p95 2341.8 p99 2536.9
+[mo_phong] Thành công 99000, từ chối 1000
+[mo_phong]   lý do: da_quay 1000
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1584 p95 7896 p99 35848
+[mo_phong] Sai phạm 3: thừa quà 3, quay 2 lần 0
+[mo_phong]   ví dụ: Laptop: u1427 rồi u2226
+[mo_phong]   ví dụ: Phiếu 500k: u2222 rồi u4588
+[mo_phong] Trao 13/10 quà, 99000 lượt, p 1/20
+
+===== mp3 =====
+$ dotnet bin/Release/net10.0/BaiMR6.9_QuaySo.dll mo_phong 127.0.0.1 42730 --n 100000 --k 400 --che-do khoa --dat-lai
+[mo_phong] === khoa: 100000 người × 1 lần, 400 kết nối ===
+[mo_phong] Rào xuất phát: 400/400 kết nối sẵn sàng -> bắn
+[mo_phong] 100000 yc xong trong 3.15 s = 31763 yc/s
+[mo_phong] Khứ hồi ms: p50 735.7 p95 2100.7 p99 2434.8
+[mo_phong] Thành công 99000, từ chối 1000
+[mo_phong]   lý do: da_quay 1000
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1243 p95 5232 p99 24861
+[mo_phong] Sai phạm 0: thừa quà 0, quay 2 lần 0
+[mo_phong] Trao 10/10 quà, 99000 lượt, p 1/20
+
+===== qt =====
+$ dotnet bin/Release/net10.0/BaiMR6.9_QuaySo.dll khach 127.0.0.1 42730 dat_lai so_qua=1 p=1
+[quan_tri] > dat_lai so_qua=1 p=1
+[quan_tri] OK
+
+===== A =====
+$ dotnet bin/Release/net10.0/BaiMR6.9_QuaySo.dll quay_so An 127.0.0.1 42730
+[An] Vào vòng quay (khoa): còn 1/1 quà, p 1
+[An] > quay
+[An]   ma_yc 1: TRÚNG Xe đạp! (5.5 ms)
+[An] * An trúng Xe đạp
+[An] * Đã trao hết quà sau 1 lượt
+[An]   còn 0/1 quà
+
+===== B =====
+$ dotnet bin/Release/net10.0/BaiMR6.9_QuaySo.dll quay_so 'Bình' 127.0.0.1 42730
+[Bình] Vào vòng quay (khoa): còn 0/1 quà, p 1
+[Bình] > quay x2 (bấm đúp: 2 yêu cầu liền nhau)
+[Bình]   ma_yc 1: Chúc may mắn lần sau (7.2 ms)
+[Bình]   ma_yc 2: TỪ CHỐI: đã quay rồi (không trúng) (5.6 ms)
+[Bình] > gửi lại ma_yc 1
+[Bình]   (ma_yc 1, lap_lai) Chúc may mắn lần sau
+

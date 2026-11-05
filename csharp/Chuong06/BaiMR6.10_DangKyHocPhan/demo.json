@@ -1,0 +1,22 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "server", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.10_DangKyHocPhan.dll", "server", "127.0.0.1", "42740"], "background": true, "wait": 0.8},
+    {"name": "mp", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.10_DangKyHocPhan.dll", "mo_phong", "127.0.0.1", "42740", "--n", "2000", "--so-sanh"],
+     "timeout": 120, "wait": 0.3},
+    {"name": "qt", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.10_DangKyHocPhan.dll", "khach", "127.0.0.1", "42740", "dat_lai", "si_so=2"],
+     "timeout": 10, "wait": 0.1},
+    {"name": "A", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.10_DangKyHocPhan.dll", "dang_ky", "An", "127.0.0.1", "42740", "--thoi-gian", "6.5"],
+     "stdin": "@0.5 dk 123013-01\n@3 huy 123013-01\n", "background": true, "wait": 0.3},
+    {"name": "B", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.10_DangKyHocPhan.dll", "dang_ky", "Bình", "127.0.0.1", "42740"],
+     "stdin": "@0.5 dk 123013-01 x2\n", "timeout": 10, "wait": 0.3},
+    {"name": "C", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.10_DangKyHocPhan.dll", "dang_ky", "Chi", "127.0.0.1", "42740"],
+     "stdin": "dk 123013-01\n@2.5 dk 123013-01\n@3 xem\n", "timeout": 10, "wait": 2.0}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ đăng ký học phần (đa luồng, chế độ khoa)",
+             "mp": "Cửa sổ 2 – mô phỏng 2000 sinh viên, 3 lớp × 50, so sánh 4 chế độ",
+             "qt": "Cửa sổ 3 – quản trị (đợt mới, sĩ số 2)",
+             "A": "Cửa sổ 4 – sinh viên An (đăng ký rồi hủy)",
+             "B": "Cửa sổ 5 – sinh viên Bình (bấm đúp)",
+             "C": "Cửa sổ 6 – sinh viên Chi (lớp đủ, chờ chỗ trống)"}
+}

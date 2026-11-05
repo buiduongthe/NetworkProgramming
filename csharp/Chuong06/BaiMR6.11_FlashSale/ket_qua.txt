@@ -1,0 +1,146 @@
+===== server =====
+$ dotnet bin/Release/net10.0/BaiMR6.11_FlashSale.dll server 127.0.0.1 42750
+[server] Lắng nghe 127.0.0.1:42750; chế độ khoa, trễ 0–2 ms
+[server] Độ trễ xử lý: ngẫu nhiên 0–1 ms
+[server] Đặt lại (mo_sau_s=0.0)
+[server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
+[server] HẾT HÀNG sau 0.45 s mở bán
+[server] Độ trễ xử lý: ngẫu nhiên 0–1 ms
+[server] Lượt trước: khong_khoa, 10090 yc, tc 6233, sai phạm 15355
+[server] Đặt lại (mo_sau_s=0.0)
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] HẾT HÀNG sau 0.21 s mở bán
+[server] Độ trễ xử lý: ngẫu nhiên 0–1 ms
+[server] Lượt trước: khoa, 10000 yc, tc 67, sai phạm 0
+[server] Đặt lại (mo_sau_s=0.0)
+[server] Chế độ: lac_quan – Lạc quan (phiên bản + CAS)
+[server] HẾT HÀNG sau 0.18 s mở bán
+[server] Độ trễ xử lý: ngẫu nhiên 0–1 ms
+[server] Lượt trước: lac_quan, 10000 yc, tc 65, sai phạm 0
+[server] Đặt lại (mo_sau_s=0.0)
+[server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
+[server] HẾT HÀNG sau 0.41 s mở bán
+[server] hang_doi: 10001 yc, tc 65, từ chối 1452, sai phạm 0
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 10001 yc, tc 65, sai phạm 0
+[server] Đặt lại (ton_dau=5, mo_sau_s=3.0)
+[server] An vào
+[server] Bình vào
+[server] MỞ BÁN! 5 sản phẩm
+[server] An mua 2 – đơn FS00001, còn 3
+[server] Bình mua 2 – đơn FS00002, còn 1
+[server] Bình rời
+[server] khoa: 3 yc, tc 2, từ chối 1, sai phạm 0
+[server] Chi vào
+[server] Chi mua 1 – đơn FS00003, còn 0
+[server] HẾT HÀNG sau 2.10 s mở bán
+[server] Chi rời
+[server] An rời
+[server] Tổng kết (từ lần đặt lại cuối):
+[server]   Chế độ khoa, trễ xử lý 0–1 ms
+[server]   Yêu cầu 6: thành công 3, từ chối 3
+[server]   Xung đột 0, thử lại 0, hết lượt thử 0
+[server]   Hàng đợi max 0, chờ khóa quá hạn 0
+[server]   Xử lý µs: p50 177 p95 1362 p99 1362
+[server]   Thông lượng 1 yc/s
+[server]   Sai phạm 0: tồn âm 0, lệch sổ 0
+[server]   Bán 5/5 sp (3 đơn), tồn 0
+[server] Máy chủ đã dừng
+
+===== mp =====
+$ dotnet bin/Release/net10.0/BaiMR6.11_FlashSale.dll mo_phong 127.0.0.1 42750 --n 10000 --so-sanh --tre-ms 1
+[mo_phong] === khong_khoa: 10000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 10090 yc xong trong 0.47 s = 21635 yc/s
+[mo_phong] Khứ hồi ms: p50 279.5 p95 423.8 p99 448.5
+[mo_phong] Thành công 6233, từ chối 3857
+[mo_phong]   lý do: het_hang 3767, khong_du 90
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1258 p95 17938 p99 97829
+[mo_phong] Sai phạm 15355: tồn âm 6164, lệch sổ 9191
+[mo_phong]   ví dụ: u145 mua 1: bán 101/100
+[mo_phong]   ví dụ: u127 mua 1: bán 102/100
+[mo_phong] Bán 9291/100 sp (6233 đơn), tồn 0
+[mo_phong] === khoa: 10000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 10000 yc xong trong 0.83 s = 12118 yc/s
+[mo_phong] Khứ hồi ms: p50 414.2 p95 720.5 p99 788.1
+[mo_phong] Thành công 67, từ chối 9933
+[mo_phong]   lý do: het_hang 9933
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 2 p95 18 p99 387096
+[mo_phong] Sai phạm 0: tồn âm 0, lệch sổ 0
+[mo_phong] Bán 100/100 sp (67 đơn), tồn 0
+[mo_phong] === lac_quan: 10000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 10000 yc xong trong 0.30 s = 33233 yc/s
+[mo_phong] Khứ hồi ms: p50 137.9 p95 246.3 p99 269.6
+[mo_phong] Thành công 65, từ chối 9935
+[mo_phong]   lý do: het_hang 9905, xung_dot 30
+[mo_phong] Máy chủ: xung đột 308, thử lại 278, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 2 p95 7 p99 26404
+[mo_phong] Sai phạm 0: tồn âm 0, lệch sổ 0
+[mo_phong] Bán 100/100 sp (65 đơn), tồn 0
+[mo_phong] === hang_doi: 10000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 10001 yc xong trong 6.54 s = 1530 yc/s
+[mo_phong] Khứ hồi ms: p50 3596.3 p95 6228.6 p99 6455.3
+[mo_phong] Thành công 65, từ chối 9936
+[mo_phong]   lý do: het_hang 9935, khong_du 1
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 9988
+[mo_phong] Máy chủ xử lý µs: p50 3542468 p95 6121084 p99 6361911
+[mo_phong] Sai phạm 0: tồn âm 0, lệch sổ 0
+[mo_phong] Bán 100/100 sp (65 đơn), tồn 0
+[mo_phong] Bảng so sánh (10000 người × 1 lần, 200 kết nối):
+  Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+  khong_khoa         6233    15355        0 21635   448.5
+  khoa                 67        0        0 12118   788.1
+  lac_quan             65        0      308 33233   269.6
+  hang_doi             65        0        0  1530  6455.3
+
+===== qt =====
+$ dotnet bin/Release/net10.0/BaiMR6.11_FlashSale.dll khach 127.0.0.1 42750 dat_lai ton_dau=5 mo_sau_s=3
+[quan_tri] > dat_lai ton_dau=5 mo_sau_s=3
+[quan_tri] OK
+
+===== A =====
+$ dotnet bin/Release/net10.0/BaiMR6.11_FlashSale.dll flash_sale An 127.0.0.1 42750 --thoi-gian 6
+[An] Vào trang sale (khoa): Tai nghe không dây TWS Pro
+[An]   1.990.000 đ -> 199.000 đ, kho 5/5
+[An]   mở bán sau 2.8 s
+[An] > MUA NGAY 1 sản phẩm
+[An]   TỪ CHỐI: chưa mở bán, còn 1.8 s
+[An] * MỞ BÁN! 5 sản phẩm
+[An] > MUA NGAY 2 sản phẩm
+[An]   ĐẶT HÀNG OK: đơn FS00001, 398.000 đ (2.1 ms)
+[An] * An mua 2 – đơn FS00001, còn 3
+[An] * Bình mua 2 – đơn FS00002, còn 1
+[An] * Chi mua 1 – đơn FS00003, còn 0
+[An] * HẾT HÀNG sau 2.10 s mở bán
+[An]   kho: HẾT HÀNG
+
+===== B =====
+$ dotnet bin/Release/net10.0/BaiMR6.11_FlashSale.dll flash_sale 'Bình' 127.0.0.1 42750
+[Bình] Vào trang sale (khoa): Tai nghe không dây TWS Pro
+[Bình]   1.990.000 đ -> 199.000 đ, kho 5/5
+[Bình]   mở bán sau 2.5 s
+[Bình] * MỞ BÁN! 5 sản phẩm
+[Bình] * An mua 2 – đơn FS00001, còn 3
+[Bình] > MUA NGAY 2 sản phẩm
+[Bình]   ĐẶT HÀNG OK: đơn FS00002, 398.000 đ (7.5 ms)
+[Bình] * Bình mua 2 – đơn FS00002, còn 1
+
+===== C =====
+$ dotnet bin/Release/net10.0/BaiMR6.11_FlashSale.dll flash_sale Chi 127.0.0.1 42750
+[Chi] Vào trang sale (khoa): Tai nghe không dây TWS Pro
+[Chi]   1.990.000 đ -> 199.000 đ, kho 1/5
+[Chi] > MUA NGAY 2 sản phẩm
+[Chi]   TỪ CHỐI: chỉ còn 1 sản phẩm
+[Chi] > MUA NGAY 1 sản phẩm
+[Chi]   ĐẶT HÀNG OK: đơn FS00003, 199.000 đ (2.0 ms)
+[Chi] * Chi mua 1 – đơn FS00003, còn 0
+[Chi] * HẾT HÀNG sau 2.10 s mở bán
+[Chi]   kho: HẾT HÀNG
+[Chi] > MUA NGAY 1 sản phẩm
+[Chi]   TỪ CHỐI: hết hàng
+

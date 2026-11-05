@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>BaiMR6_11</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Thư mục GiaoDien là dự án WinForms riêng (net10.0-windows), không biên dịch vào bản dòng lệnh -->
+    <Compile Remove="GiaoDien/**" />
+    <None Remove="GiaoDien/**" />
+    <EmbeddedResource Remove="GiaoDien/**" />
+  </ItemGroup>
+</Project>
