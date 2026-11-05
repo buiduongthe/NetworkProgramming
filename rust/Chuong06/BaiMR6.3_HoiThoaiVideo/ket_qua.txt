@@ -2,15 +2,15 @@
 $ ../../target/release/mr6_3_hoi_thoai_video server 127.0.0.1 44630 44631
 [server] TCP 127.0.0.1:44630 điều khiển; UDP :44631 video
 [server] Khung 160x120 RGB 57600 B, nén zlib, mảnh ≤ 1200 B
-[server] #1 B vào phòng từ 127.0.0.1:42052
+[server] #1 B vào phòng từ 127.0.0.1:54684
 [server]   => B vào phòng
-[server] #1 B đăng ký UDP 127.0.0.1:55330
-[server] #2 C vào phòng từ 127.0.0.1:42066
+[server] #1 B đăng ký UDP 127.0.0.1:43687
+[server] #2 C vào phòng từ 127.0.0.1:54696
 [server]   => C vào phòng
-[server] #2 C đăng ký UDP 127.0.0.1:56393
-[server] #3 A vào phòng từ 127.0.0.1:42072
+[server] #2 C đăng ký UDP 127.0.0.1:32902
+[server] #3 A vào phòng từ 127.0.0.1:54700
 [server]   => A vào phòng
-[server] #3 A đăng ký UDP 127.0.0.1:46426
+[server] #3 A đăng ký UDP 127.0.0.1:55209
 [server] t=2.8s > tat_camera tat_ca
 [server]   => server tắt camera tất cả
 [server] C xin bật camera -> từ chối (server đang tắt)
@@ -30,8 +30,8 @@ $ ../../target/release/mr6_3_hoi_thoai_video server 127.0.0.1 44630 44631
 [server]                      giới hạn vào        ra (lưới)
 [server]  #  tên camera       fps 1/n  fps  kbit  fps  kbit
 [server]  1  B   tắt (tự tắt)   2   1    0     0   10  1201
-[server]  2  C   mở            10   4   10    50   10  1201
-[server]  3  A   mở            10   1   10   648    6   373
+[server]  2  C   mở            10   4    9    45   10  1201
+[server]  3  A   mở            10   1    9   583    6   373
 [server] #3 A rời phòng
 [server]   => A rời phòng
 [server] #1 B rời phòng
@@ -43,7 +43,7 @@ $ ../../target/release/mr6_3_hoi_thoai_video server 127.0.0.1 44630 44631
 [server]  #  tên mảnh khung hỏng mảnh mất  bỏ:tắt vượt fps
 [server]         nhận    đủ        mất hẳn
 [server]  1  B    186    21    3    3    0      0      1
-[server]  2  C    183    75    0    0    0      0      1
+[server]  2  C    184    76    0    0    0      0      1
 [server]  3  A    452    64    0    0    0      0      1
 
 ===== B =====
@@ -55,7 +55,7 @@ $ ../../target/release/mr6_3_hoi_thoai_video khach B 127.0.0.1 44630 --thoi-gian
 [khach B] Sự kiện: B vào phòng
 [khach B] Sự kiện: C vào phòng
 [khach B] Sự kiện: A vào phòng
-[khach B]  1s gửi 11 fps  740 | nhận 11 fps  1501, mất 0
+[khach B]  1s gửi 11 fps  740 | nhận 11 fps  1561, mất 0
 [khach B] Camera: tắt (server), gửi tối đa 10 fps, 1/1
 [khach B] Sự kiện: server tắt camera tất cả
 [khach B]  2s gửi  9 fps  600 | nhận 10 fps  2053, mất 0
@@ -73,9 +73,9 @@ $ ../../target/release/mr6_3_hoi_thoai_video khach B 127.0.0.1 44630 --thoi-gian
 [khach B] Sự kiện: server bật camera tất cả (B vẫn tự tắt)
 [khach B]  5s gửi  1 fps   66 | nhận 10 fps  1366, mất 0
 [khach B]  6s gửi  0 fps    0 | nhận 10 fps  1194, mất 0
-[khach B]  7s gửi  0 fps    0 | nhận 10 fps  1206, mất 0
+[khach B]  7s gửi  0 fps    0 | nhận 10 fps  1207, mất 0
 [khach B] Sự kiện: A rời phòng
-[khach B]  8s gửi  0 fps    0 | nhận 10 fps  1054, mất 0
+[khach B]  8s gửi  0 fps    0 | nhận 10 fps   981, mất 0
 [khach B] Kết thúc sau 8.5 s
 [khach B] Gửi 24 khung = 189 mảnh, giả lập mất 3 mảnh
 [khach B] Nhận 86 khung đủ, hỏng 0, mất hẳn 0, mảnh mất 0
@@ -91,7 +91,7 @@ $ ../../target/release/mr6_3_hoi_thoai_video khach C 127.0.0.1 44630 --thoi-gian
 [khach C]  1s gửi 11 fps  657 | nhận 11 fps  2038, mất 0
 [khach C] Camera: tắt (server), gửi tối đa 10 fps, 1/1
 [khach C] Sự kiện: server tắt camera tất cả
-[khach C]  2s gửi  7 fps  424 | nhận 10 fps  1707, mất 0
+[khach C]  2s gửi  7 fps  424 | nhận 10 fps  1708, mất 0
 [khach C] > bat_camera
 [khach C] Bị từ chối: server đang tắt camera của bạn
 [khach C] Camera: mở, gửi tối đa 10 fps, 1/1
@@ -108,10 +108,10 @@ $ ../../target/release/mr6_3_hoi_thoai_video khach C 127.0.0.1 44630 --thoi-gian
 [khach C]  6s gửi 10 fps   50 | nhận 10 fps  1201, mất 0
 [khach C]  7s gửi 10 fps   50 | nhận 10 fps  1204, mất 0
 [khach C] Sự kiện: A rời phòng
-[khach C]  8s gửi 10 fps   50 | nhận 10 fps   909, mất 0
+[khach C]  8s gửi 10 fps   50 | nhận 10 fps   835, mất 0
 [khach C] Sự kiện: B rời phòng
 [khach C] Kết thúc sau 8.5 s
-[khach C] Gửi 75 khung = 183 mảnh, giả lập mất 0 mảnh
+[khach C] Gửi 76 khung = 184 mảnh, giả lập mất 0 mảnh
 [khach C] Nhận 86 khung đủ, hỏng 0, mất hẳn 0, mảnh mất 0
 
 ===== A =====
@@ -126,7 +126,7 @@ $ ../../target/release/mr6_3_hoi_thoai_video khach A 127.0.0.1 44630 --thoi-gian
 [khach A] Đã chụp out/chup_1.png (320x240)
 [khach A] Camera: tắt (server), gửi tối đa 10 fps, 1/1
 [khach A] Sự kiện: server tắt camera tất cả
-[khach A]  2s gửi  5 fps  327 | nhận 10 fps  1357, mất 0
+[khach A]  2s gửi  5 fps  327 | nhận 10 fps  1359, mất 0
 [khach A] > chup 2. SERVER TAT CAMERA TAT CA
 [khach A] Đã chụp out/chup_2.png (320x240)
 [khach A] Camera: mở, gửi tối đa 10 fps, 1/1
@@ -137,7 +137,7 @@ $ ../../target/release/mr6_3_hoi_thoai_video khach A 127.0.0.1 44630 --thoi-gian
 [khach A] > chup 3. SERVER: C DO PHAN GIAI 1/4, B TOI DA 2 FPS
 [khach A] Đã chụp out/chup_3.png (320x240)
 [khach A] Sự kiện: B tự tắt camera
-[khach A]  4s gửi 10 fps  650 | nhận 10 fps  1740, mất 0
+[khach A]  4s gửi 10 fps  650 | nhận 10 fps  1802, mất 0
 [khach A] Camera: mở, gửi tối đa 10 fps, 1/1
 [khach A] Sự kiện: server bật camera tất cả (B vẫn tự tắt)
 [khach A] > chup 4. B TU TAT; SERVER BAT TAT CA NHUNG B VAN TAT
@@ -155,4 +155,72 @@ $ ../../target/release/mr6_3_hoi_thoai_video khach A 127.0.0.1 44630 --thoi-gian
 [khach A] Gửi 64 khung = 452 mảnh, giả lập mất 0 mảnh
 [khach A] Nhận 63 khung đủ, hỏng 0, mất hẳn 0, mảnh mất 0
 [khach A] Đã ghép 5 ảnh chụp vào ket_qua_video.png (688x710)
+
+===== gui =====
+$ xvfb-run -a ../../target/release/mr6_3_hoi_thoai_video demo_gui 44635 44636 ket_qua_gui.png
+[demo] Một tiến trình: Camera Server + 3 Camera Client, cổng TCP 44635, UDP 44636
+[demo] t=0.5s  bước 1: Server: bấm START SERVER
+[server] TCP 127.0.0.1:44635 điều khiển; UDP :44636 video
+[server] Khung 160x120 RGB 57600 B, nén zlib, mảnh ≤ 1200 B
+[demo]   Server đã được khởi động tại 127.0.0.1:44635 (UDP 44636)
+[demo] t=1.1s  bước 2: A, B, C: bấm Kết nối
+[server] #1 A vào phòng từ 127.0.0.1:51232
+[server]   => A vào phòng
+[server]   => A tự tắt camera
+[server] #1 A đăng ký UDP 127.0.0.1:52611
+[server] #2 B vào phòng từ 127.0.0.1:51238
+[server]   => B vào phòng
+[server]   => B tự tắt camera
+[server] #2 B đăng ký UDP 127.0.0.1:56934
+[server] #3 C vào phòng từ 127.0.0.1:51244
+[server]   => C vào phòng
+[server]   => C tự tắt camera
+[server] #3 C đăng ký UDP 127.0.0.1:41136
+[demo] t=2.0s  bước 3: A, B: chọn "Camera giả lập", C: chọn "Mẫu thử ffmpeg (testsrc)"; cả ba bấm START
+[demo]   A: camera GIẢ LẬP – khung tổng hợp
+[demo]   B: camera GIẢ LẬP – khung tổng hợp
+[server]   => A tự bật camera
+[server]   => B tự bật camera
+[demo]   C: camera THẬT (ffmpeg) – Mẫu thử ffmpeg (testsrc)
+[server]   => C tự bật camera
+[demo] t=3.0s  bước 4: Server: chọn ô B, bấm Tắt camera
+[server]   => server tắt camera B
+[demo] t=3.4s  bước 5: B: bấm CANCEL
+[server]   => B tự tắt camera
+[demo] t=3.7s  bước 6: B: bấm START (xin bật lại khi server đang tắt)
+[server] B xin bật camera -> từ chối (server đang tắt)
+[demo] t=4.0s  bước 7: Server: C độ phân giải gửi 1/2; A fps gửi tối đa 5
+[server]   => server đặt độ phân giải C = 1/2
+[server]   => server giới hạn A gửi tối đa 5 fps
+[demo] t=4.4s  bước 8: A: chọn nhận lưới 1/2, fps nhận 8
+[server] A chọn nhận 10 fps, độ phân giải 1/2
+[server] A chọn nhận 8 fps, độ phân giải 1/2
+[demo] t=7.1s  bước 9: Đo số liệu và chụp cửa sổ
+[demo] Số liệu client (mỗi giây gần nhất):
+[demo]   tên camera        gửi fps kbit/s  giới hạn  nhận fps kbit/s  lưới      trạng thái
+[demo]   A   mở                  5     338   5fps 1/1         8     303  160x120   Đã kết nối – mã 1
+[demo]   B   tắt (cả hai)        0       0  10fps 1/1         9     970  320x240   Bị từ chối: server đang tắt camera của bạn
+[demo]   C   mở                  7      86  10fps 1/2        10    1077  320x240   Đã kết nối – mã 3
+[demo] Số liệu server: fps chung 10, số client 3
+[demo]   #1 A   camera mở            giới hạn  5 fps 1/1  vào   5 fps   339 kbit/s  ra (lưới)   8 fps   301 kbit/s
+[demo]   #2 B   camera tắt (server)  giới hạn 10 fps 1/1  vào   0 fps     0 kbit/s  ra (lưới)  10 fps  1077 kbit/s
+[demo]   #3 C   camera mở            giới hạn 10 fps 1/2  vào   8 fps    98 kbit/s  ra (lưới)  10 fps  1077 kbit/s
+[demo] Đã chụp cửa sổ 1520x1110 -> ket_qua_gui.png
+[server]   => A tự tắt camera
+[server]   => B tự tắt camera
+[server] Tổng kết luồng vào (từ client tới server):
+[server]  #  tên mảnh khung hỏng mảnh mất  bỏ:tắt vượt fps
+[server]         nhận    đủ        mất hẳn
+[server]  1  A    301    38    0    0    0      0      1
+[server]  2  B     77    11    0    0    0      0      1
+[server]  3  C    112    41    0    0    0      0      0
+[server] Dừng server
+[server]   => C tự tắt camera
+[server] #3 C rời phòng
+[server]   => C rời phòng
+[server] #1 A rời phòng
+[server]   => A rời phòng
+[server] #2 B rời phòng
+[server]   => B rời phòng
+[demo] Kết thúc
 

@@ -10,3 +10,5 @@ ctrlc = "=3.4.7"
 miniz_oxide = "=0.8.9"   # nén/giải nén zlib (RFC 1950) thuần Rust, thay cho mô-đun zlib của Python
 serde_json = { version = "=1.0.154", features = ["preserve_order"] }
 socket2 = "=0.5.10"      # đặt SO_RCVBUF lớn cho socket UDP (std không có hàm này)
+# --- Ứng dụng giao diện (server_gui, khach_gui, demo_gui); camera thật qua tiến trình ffmpeg ---
+eframe = { version = "=0.29.1", default-features = false, features = ["default_fonts", "glow", "x11", "wayland"] }

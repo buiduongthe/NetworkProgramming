@@ -9,10 +9,13 @@
      "background": true, "wait": 0.2, "stdin": "@2.4 bat_camera\n"},
     {"name": "A", "cmd": ["../../target/release/mr6_3_hoi_thoai_video", "khach", "A", "127.0.0.1", "44630", "--thoi-gian", "7.3", "--ghep", "ket_qua_video.png"],
      "stdin": "@1.2 chup 1. BAN DAU: 3 CAMERA BAT, 10 FPS\n@2.3 chup 2. SERVER TAT CAMERA TAT CA\n@3.6 chup 3. SERVER: C DO PHAN GIAI 1/4, B TOI DA 2 FPS\n@4.6 chup 4. B TU TAT; SERVER BAT TAT CA NHUNG B VAN TAT\n@5.0 nhan_do_phan_giai 2\n@5.0 nhan_fps 5\n@5.8 chup 5. A TU CHON NHAN 1/2, 5 FPS\n",
-     "timeout": 20, "wait": 1.5}
+     "timeout": 20, "wait": 1.5},
+    {"name": "gui", "cmd": ["xvfb-run", "-a", "-s", "-screen 0 1600x1200x24", "../../target/release/mr6_3_hoi_thoai_video", "demo_gui", "44635", "44636", "ket_qua_gui.png"],
+     "show": ["xvfb-run", "-a", "../../target/release/mr6_3_hoi_thoai_video", "demo_gui", "44635", "44636", "ket_qua_gui.png"], "timeout": 60}
   ],
   "titles": {"server": "Cửa sổ 1 – server video – ghép lưới, bảng điều khiển",
              "B": "Cửa sổ 2 – client B (giả lập mất 2% mảnh gửi)",
              "C": "Cửa sổ 3 – client C",
-             "A": "Cửa sổ 4 – client A (chụp lưới trước/sau mỗi lệnh)"}
+             "A": "Cửa sổ 4 – client A (chụp lưới trước/sau mỗi lệnh)",
+             "gui": "Cửa sổ 5 – ứng dụng giao diện (Camera Server + 3 Camera Client; C dùng ffmpeg testsrc)"}
 }

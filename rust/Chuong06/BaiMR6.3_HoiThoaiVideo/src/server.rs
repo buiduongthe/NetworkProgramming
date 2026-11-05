@@ -16,6 +16,9 @@
 //!   6. Server tự thực thi: bỏ khung của camera đang tắt, bỏ khung đến nhanh hơn fps cho phép,
 //!      bỏ datagram sai địa chỉ nguồn.
 //!
+//! Phần lõi (MayChu: khởi động, nhận, ghép lưới, xử lý lệnh) dùng chung cho bản dòng lệnh và ứng
+//! dụng giao diện (server_gui.rs) – giao diện hiển thị ô `o` của từng client thành lưới 4×4.
+//!
 //! Lệnh bảng điều khiển (stdin; "@t lệnh" = chờ tới giây thứ t):
 //!   tat_camera <tên|tat_ca>   bat_camera <tên|tat_ca>   fps_toi_da <tên|tat_ca> <n>
 //!   do_phan_giai <tên|tat_ca> <1|2|4>   fps_chung <n>   trang_thai   thoat
@@ -24,53 +27,50 @@ use crate::chung::*;
 use serde_json::{json, Value};
 use std::collections::BTreeMap;
 use std::io::{self, BufRead, BufReader};
-use std::net::{IpAddr, SocketAddr, TcpListener, TcpStream, ToSocketAddrs, UdpSocket};
+use std::net::{IpAddr, Shutdown, SocketAddr, TcpListener, TcpStream, ToSocketAddrs, UdpSocket};
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, LazyLock, Mutex};
 use std::thread;
 use std::time::Duration;
 
 const FPS_MAC_DINH: u32 = 10;
 
-fn log(text: &str) {
-    println!("[server] {text}");
-}
-
-struct Khach {
-    ma: u16,
-    ten: String,
-    conn: TcpStream,
-    ip: IpAddr,
-    udp: Option<SocketAddr>,
-    tu_tat: bool,     // client tự tắt camera
-    server_tat: bool, // server tắt camera
-    fps_toi_da: u32,  // giới hạn gửi do server đặt
-    chia: usize,      // độ phân giải gửi = 1/chia mỗi chiều
-    nhan_fps: u32,    // tham số nhận do client chọn
-    nhan_chia: usize,
-    ghep: GhepKhung,
-    o: Option<Vec<u8>>, // ô 160×120 đã phóng to, có nhãn – dùng khi ghép lưới
-    luc_nhan_cuoi: f64,
-    bo_vuot_fps: u64,
-    bo_tat: u64,
-    sai_nguon: u64,
-    dem_khung: u64, // cửa sổ 1 giây để đo fps, kbit/s vào
-    dem_byte: u64,
-    fps_vao: f64,
-    kbps_vao: f64,
-    so_khung_ra: u32, // số khung lưới đã gửi cho client này
-    han_gui_ra: f64,
-    dem_ra: u64,
-    byte_ra: u64,
-    fps_ra: f64,
-    kbps_ra: f64,
+pub struct Khach {
+    pub ma: u16,
+    pub ten: String,
+    pub conn: TcpStream,
+    pub ip: IpAddr,
+    pub udp: Option<SocketAddr>,
+    pub tu_tat: bool,     // client tự tắt camera
+    pub server_tat: bool, // server tắt camera
+    pub fps_toi_da: u32,  // giới hạn gửi do server đặt
+    pub chia: usize,      // độ phân giải gửi = 1/chia mỗi chiều
+    pub nhan_fps: u32,    // tham số nhận do client chọn
+    pub nhan_chia: usize,
+    pub ghep: GhepKhung,
+    pub o: Option<Vec<u8>>, // ô 160×120 đã phóng to, có nhãn – dùng khi ghép lưới
+    pub luc_nhan_cuoi: f64,
+    pub bo_vuot_fps: u64,
+    pub bo_tat: u64,
+    pub sai_nguon: u64,
+    pub dem_khung: u64, // cửa sổ 1 giây để đo fps, kbit/s vào
+    pub dem_byte: u64,
+    pub fps_vao: f64,
+    pub kbps_vao: f64,
+    pub so_khung_ra: u32, // số khung lưới đã gửi cho client này
+    pub han_gui_ra: f64,
+    pub dem_ra: u64,
+    pub byte_ra: u64,
+    pub fps_ra: f64,
+    pub kbps_ra: f64,
 }
 
 impl Khach {
-    fn cam_mo(&self) -> bool {
+    pub fn cam_mo(&self) -> bool {
         !self.tu_tat && !self.server_tat // quy tắc 1
     }
 
-    fn ly_do(&self) -> &'static str {
+    pub fn ly_do(&self) -> &'static str {
         match (self.cam_mo(), self.tu_tat, self.server_tat) {
             (true, _, _) => "mở",
             (_, true, true) => "tắt (cả hai)",
@@ -114,24 +114,95 @@ impl Khach {
     }
 }
 
-struct Phong {
-    khach: BTreeMap<u16, Khach>, // theo mã = thứ tự vào phòng
-    da_roi: Vec<Khach>,
+pub struct Phong {
+    pub khach: BTreeMap<u16, Khach>, // theo mã = thứ tự vào phòng
+    pub da_roi: Vec<Khach>,
     ma_moi: u16,
-    fps_chung: u32, // giới hạn fps đầu ra chung cho mọi người nhận
+    pub fps_chung: u32, // giới hạn fps đầu ra chung cho mọi người nhận
 }
 
-static PHONG: LazyLock<Mutex<Phong>> = LazyLock::new(|| Mutex::new(Phong { khach: BTreeMap::new(), da_roi: Vec::new(), ma_moi: 0, fps_chung: FPS_MAC_DINH }));
+/// Lõi server: trạng thái phòng + hàm ghi nhật ký + cờ đang chạy.
+pub struct MayChu {
+    pub phong: Mutex<Phong>,
+    ghi_log: Box<dyn Fn(&str) + Send + Sync>,
+    chay: AtomicBool,
+    cong_udp: u16,
+}
 
-fn phat_su_kien(p: &Phong, text: &str) {
-    log(&format!("  => {text}"));
-    for k in p.khach.values() {
-        k.gui(json!({"loai": "su_kien", "noi_dung": text}));
+impl MayChu {
+    pub fn log(&self, text: &str) {
+        (self.ghi_log)(text);
+    }
+
+    pub fn dang_chay(&self) -> bool {
+        self.chay.load(Ordering::SeqCst)
+    }
+
+    fn phat_su_kien(&self, p: &Phong, text: &str) {
+        self.log(&format!("  => {text}"));
+        for k in p.khach.values() {
+            k.gui(json!({"loai": "su_kien", "noi_dung": text}));
+        }
+    }
+
+    /// Server tắt (true) / bật (false) camera của các client `ds` (quy tắc 2, 3).
+    pub fn tat_camera(&self, p: &mut Phong, ds: &[u16], tat: bool, ai: &str) {
+        for ma in ds {
+            if let Some(k) = p.khach.get_mut(ma) {
+                k.server_tat = tat;
+                k.gui_camera();
+            }
+        }
+        if tat {
+            self.phat_su_kien(p, &format!("server tắt camera {ai}"));
+        } else {
+            let van_tat: Vec<String> = ds.iter().filter_map(|m| p.khach.get(m)).filter(|k| k.tu_tat).map(|k| k.ten.clone()).collect();
+            let them = if van_tat.is_empty() { String::new() } else { format!(" ({} vẫn tự tắt)", van_tat.join(", ")) };
+            self.phat_su_kien(p, &format!("server bật camera {ai}{them}"));
+        }
+    }
+
+    /// Giới hạn fps gửi (quy tắc 4); `n_chu` là số như người dùng gõ (để in sự kiện).
+    pub fn dat_fps_toi_da(&self, p: &mut Phong, ds: &[u16], n: i64, n_chu: &str, ai: &str) {
+        for ma in ds {
+            if let Some(k) = p.khach.get_mut(ma) {
+                k.fps_toi_da = n.clamp(1, 30) as u32;
+                k.gui_camera();
+            }
+        }
+        self.phat_su_kien(p, &format!("server giới hạn {ai} gửi tối đa {n_chu} fps"));
+    }
+
+    pub fn dat_do_phan_giai(&self, p: &mut Phong, ds: &[u16], d: usize, ai: &str) {
+        for ma in ds {
+            if let Some(k) = p.khach.get_mut(ma) {
+                k.chia = d;
+                k.gui_camera();
+            }
+        }
+        self.phat_su_kien(p, &format!("server đặt độ phân giải {ai} = 1/{d}"));
+    }
+
+    pub fn dat_fps_chung(&self, p: &mut Phong, n: i64) {
+        p.fps_chung = n.clamp(1, 30) as u32;
+        for k in p.khach.values() {
+            k.gui_nhan(p.fps_chung);
+        }
+        self.phat_su_kien(p, &format!("server đặt fps chung tối đa {}", p.fps_chung));
+    }
+
+    /// Dừng server: luồng nền thấy cờ và thoát; đóng kết nối TCP để client biết.
+    pub fn dung_lai(&self) {
+        self.chay.store(false, Ordering::SeqCst);
+        for k in self.phong.lock().unwrap().khach.values() {
+            let _ = k.conn.shutdown(Shutdown::Both);
+        }
     }
 }
 
 // ---------------------------------------------------------------- Kênh điều khiển TCP
-fn phuc_vu(conn: TcpStream, cong_udp: u16) {
+fn phuc_vu(mc: Arc<MayChu>, conn: TcpStream) {
+    let cong_udp = mc.cong_udp;
     let addr = conn.peer_addr().unwrap();
     let mut lines = BufReader::new(conn.try_clone().unwrap()).lines();
     let tin: Value = lines.next().and_then(|l| l.ok()).and_then(|l| serde_json::from_str(&l).ok()).unwrap_or(Value::Null);
@@ -140,7 +211,7 @@ fn phuc_vu(conn: TcpStream, cong_udp: u16) {
         _ => return,
     };
     let ma = {
-        let mut p = PHONG.lock().unwrap();
+        let mut p = mc.phong.lock().unwrap();
         p.ma_moi += 1;
         let ma = p.ma_moi;
         let k = Khach {
@@ -173,28 +244,28 @@ fn phuc_vu(conn: TcpStream, cong_udp: u16) {
             kbps_ra: 0.0,
         };
         k.gui(json!({"loai": "chao", "ma": ma, "cong_udp": cong_udp, "rong": RONG, "cao": CAO}));
-        log(&format!("#{ma} {ten} vào phòng từ {addr}"));
+        mc.log(&format!("#{ma} {ten} vào phòng từ {addr}"));
         let fc = p.fps_chung;
         p.khach.insert(ma, k);
         let k = p.khach.get_mut(&ma).unwrap();
         k.gui_camera();
         k.gui_nhan(fc);
-        phat_su_kien(&p, &format!("{ten} vào phòng"));
+        mc.phat_su_kien(&p, &format!("{ten} vào phòng"));
         ma
     };
     for line in lines.map_while(Result::ok) {
         let Ok(tin) = serde_json::from_str::<Value>(&line) else { break };
-        xu_ly_tin_client(&mut PHONG.lock().unwrap(), ma, &tin);
+        xu_ly_tin_client(&mc, &mut mc.phong.lock().unwrap(), ma, &tin);
     }
-    let mut p = PHONG.lock().unwrap();
+    let mut p = mc.phong.lock().unwrap();
     if let Some(k) = p.khach.remove(&ma) {
-        log(&format!("#{ma} {} rời phòng", k.ten));
+        mc.log(&format!("#{ma} {} rời phòng", k.ten));
         p.da_roi.push(k);
-        phat_su_kien(&p, &format!("{ten} rời phòng"));
+        mc.phat_su_kien(&p, &format!("{ten} rời phòng"));
     }
 }
 
-fn xu_ly_tin_client(p: &mut Phong, ma: u16, tin: &Value) {
+fn xu_ly_tin_client(mc: &MayChu, p: &mut Phong, ma: u16, tin: &Value) {
     let fc = p.fps_chung;
     let Some(k) = p.khach.get_mut(&ma) else { return };
     let ten = k.ten.clone();
@@ -208,7 +279,7 @@ fn xu_ly_tin_client(p: &mut Phong, ma: u16, tin: &Value) {
             k.tu_tat = false;
             if k.server_tat {
                 // quy tắc 2
-                log(&format!("{ten} xin bật camera -> từ chối (server đang tắt)"));
+                mc.log(&format!("{ten} xin bật camera -> từ chối (server đang tắt)"));
                 k.gui(json!({"loai": "tu_choi", "ly_do": "server đang tắt camera của bạn"}));
                 None
             } else {
@@ -223,29 +294,29 @@ fn xu_ly_tin_client(p: &mut Phong, ma: u16, tin: &Value) {
                 Some(c) => if c == 2 { 2 } else { 1 },
                 None => k.nhan_chia,
             };
-            log(&format!("{ten} chọn nhận {} fps, độ phân giải 1/{}", k.nhan_fps, k.nhan_chia));
+            mc.log(&format!("{ten} chọn nhận {} fps, độ phân giải 1/{}", k.nhan_fps, k.nhan_chia));
             k.gui_nhan(fc);
             None
         }
         _ => None,
     };
     if let Some(s) = su_kien {
-        phat_su_kien(p, &s);
+        mc.phat_su_kien(p, &s);
     }
 }
 
 // ---------------------------------------------------------------- Kênh dữ liệu UDP
-fn nhan_udp(sock: Arc<UdpSocket>) {
+fn nhan_udp(mc: Arc<MayChu>, sock: Arc<UdpSocket>) {
     let mut buf = [0u8; 2048];
-    loop {
+    while mc.dang_chay() {
         let Ok((n, addr)) = sock.recv_from(&mut buf) else { continue };
         let Some(m) = tach_header(&buf[..n]) else { continue };
         let now = bay_gio();
-        let mut p = PHONG.lock().unwrap();
+        let mut p = mc.phong.lock().unwrap();
         let Some(k) = p.khach.get_mut(&m.ma) else { continue };
         if k.udp.is_none() && addr.ip() == k.ip {
             k.udp = Some(addr);
-            log(&format!("#{} {} đăng ký UDP {addr}", k.ma, k.ten));
+            mc.log(&format!("#{} {} đăng ký UDP {addr}", k.ma, k.ten));
         }
         if Some(addr) != k.udp {
             k.sai_nguon += 1; // quy tắc 6
@@ -298,12 +369,12 @@ fn ghep_luoi(ds: &[&Vec<u8>]) -> (Vec<u8>, usize, usize) {
 
 /// Mỗi 5 ms kiểm tra: người nhận nào tới hạn (theo fps nhận) thì ghép lưới, thu nhỏ theo độ phân
 /// giải nhận, nén, chia mảnh và gửi. Mỗi giây tính lại fps, kbit/s.
-fn vong_gui(sock: Arc<UdpSocket>) {
+fn vong_gui(mc: Arc<MayChu>, sock: Arc<UdpSocket>) {
     let mut moc_do = bay_gio();
-    loop {
+    while mc.dang_chay() {
         let now = bay_gio();
         {
-            let mut p = PHONG.lock().unwrap();
+            let mut p = mc.phong.lock().unwrap();
             let fc = p.fps_chung;
             let mut viec = Vec::new(); // (mã người nhận, độ phân giải nhận)
             for k in p.khach.values() {
@@ -347,18 +418,56 @@ fn vong_gui(sock: Arc<UdpSocket>) {
     }
 }
 
-// ---------------------------------------------------------------- Bảng điều khiển
+/// Mở cổng TCP/UDP, khởi động các luồng nền, trả về lõi server.
+pub fn khoi_dong(host: &str, cong_tcp: u16, cong_udp: u16, ghi_log: Box<dyn Fn(&str) + Send + Sync>) -> io::Result<Arc<MayChu>> {
+    LazyLock::force(&T0);
+    let srv = TcpListener::bind((host, cong_tcp))?;
+    let dia_chi = (host, cong_udp).to_socket_addrs()?.next().ok_or(io::ErrorKind::AddrNotAvailable)?;
+    let udp = Arc::new(udp_dem_lon(dia_chi)?); // đệm nhận lớn: mảnh đến dồn dập
+    // không chặn mãi: để luồng nền thấy được lệnh dừng (STOP SERVER)
+    srv.set_nonblocking(true)?;
+    udp.set_read_timeout(Some(Duration::from_millis(100)))?;
+    let mc = Arc::new(MayChu {
+        phong: Mutex::new(Phong { khach: BTreeMap::new(), da_roi: Vec::new(), ma_moi: 0, fps_chung: FPS_MAC_DINH }),
+        ghi_log,
+        chay: AtomicBool::new(true),
+        cong_udp,
+    });
+    mc.log(&format!("TCP {host}:{cong_tcp} điều khiển; UDP :{cong_udp} video"));
+    mc.log(&format!("Khung {RONG}x{CAO} RGB {} B, nén zlib, mảnh ≤ 1200 B", RONG * CAO * 3));
+    let m = Arc::clone(&mc);
+    thread::spawn(move || {
+        while m.dang_chay() {
+            match srv.accept() {
+                Ok((conn, _)) => {
+                    conn.set_nonblocking(false).ok(); // Windows: socket nhận kế thừa chế độ không chặn
+                    conn.set_nodelay(true).ok();
+                    let m2 = Arc::clone(&m);
+                    thread::spawn(move || phuc_vu(m2, conn));
+                }
+                Err(_) => thread::sleep(Duration::from_millis(10)),
+            }
+        }
+    });
+    let (m1, u1) = (Arc::clone(&mc), Arc::clone(&udp));
+    thread::spawn(move || nhan_udp(m1, u1));
+    let m2 = Arc::clone(&mc);
+    thread::spawn(move || vong_gui(m2, udp));
+    Ok(mc)
+}
+
+// ---------------------------------------------------------------- Bảng điều khiển (dòng lệnh)
 fn chon(p: &Phong, ten: &str) -> Vec<u16> {
     p.khach.values().filter(|k| ten == "tat_ca" || k.ten == ten).map(|k| k.ma).collect()
 }
 
-fn lenh_server(dong: &str) -> bool {
+fn lenh_server(mc: &MayChu, dong: &str) -> bool {
     let w: Vec<&str> = dong.split_whitespace().collect();
     if w.is_empty() {
         return true;
     }
-    log(&format!("t={:.1}s > {dong}", bay_gio()));
-    let mut p = PHONG.lock().unwrap();
+    mc.log(&format!("t={:.1}s > {dong}", bay_gio()));
+    let mut p = mc.phong.lock().unwrap();
     let ai = match w.get(1) {
         Some(&"tat_ca") => "tất cả".to_string(),
         Some(x) => x.to_string(),
@@ -368,56 +477,30 @@ fn lenh_server(dong: &str) -> bool {
     match w.as_slice() {
         [lenh @ ("tat_camera" | "bat_camera"), ten] => {
             let ds = chon(&p, ten);
-            for ma in &ds {
-                let k = p.khach.get_mut(ma).unwrap();
-                k.server_tat = *lenh == "tat_camera";
-                k.gui_camera();
-            }
-            if *lenh == "tat_camera" {
-                phat_su_kien(&p, &format!("server tắt camera {ai}"));
-            } else {
-                // quy tắc 3
-                let van_tat: Vec<String> = ds.iter().filter_map(|m| p.khach.get(m)).filter(|k| k.tu_tat).map(|k| k.ten.clone()).collect();
-                let them = if van_tat.is_empty() { String::new() } else { format!(" ({} vẫn tự tắt)", van_tat.join(", ")) };
-                phat_su_kien(&p, &format!("server bật camera {ai}{them}"));
-            }
+            mc.tat_camera(&mut p, &ds, *lenh == "tat_camera", &ai);
         }
         ["fps_toi_da", ten, n] if n.parse::<i64>().is_ok() => {
-            for ma in chon(&p, ten) {
-                let k = p.khach.get_mut(&ma).unwrap();
-                k.fps_toi_da = n.parse::<i64>().unwrap().clamp(1, 30) as u32;
-                k.gui_camera();
-            }
-            phat_su_kien(&p, &format!("server giới hạn {ai} gửi tối đa {n} fps"));
+            let ds = chon(&p, ten);
+            mc.dat_fps_toi_da(&mut p, &ds, n.parse().unwrap(), n, &ai);
         }
         ["do_phan_giai", ten, d @ ("1" | "2" | "4")] => {
-            for ma in chon(&p, ten) {
-                let k = p.khach.get_mut(&ma).unwrap();
-                k.chia = d.parse().unwrap();
-                k.gui_camera();
-            }
-            phat_su_kien(&p, &format!("server đặt độ phân giải {ai} = 1/{d}"));
+            let ds = chon(&p, ten);
+            mc.dat_do_phan_giai(&mut p, &ds, d.parse().unwrap(), &ai);
         }
-        ["fps_chung", n] if n.parse::<i64>().is_ok() => {
-            p.fps_chung = n.parse::<i64>().unwrap().clamp(1, 30) as u32;
-            for k in p.khach.values() {
-                k.gui_nhan(p.fps_chung);
-            }
-            phat_su_kien(&p, &format!("server đặt fps chung tối đa {}", p.fps_chung));
-        }
-        ["trang_thai"] => in_trang_thai(&p, fc),
+        ["fps_chung", n] if n.parse::<i64>().is_ok() => mc.dat_fps_chung(&mut p, n.parse().unwrap()),
+        ["trang_thai"] => in_trang_thai(mc, &p, fc),
         ["thoat"] => return false,
-        _ => log("lệnh không hợp lệ"),
+        _ => mc.log("lệnh không hợp lệ"),
     }
     true
 }
 
-fn in_trang_thai(p: &Phong, fc: u32) {
-    log(&format!("Trạng thái: {} client, fps chung {fc}", p.khach.len()));
-    log("                     giới hạn vào        ra (lưới)");
-    log(" #  tên camera       fps 1/n  fps  kbit  fps  kbit");
+fn in_trang_thai(mc: &MayChu, p: &Phong, fc: u32) {
+    mc.log(&format!("Trạng thái: {} client, fps chung {fc}", p.khach.len()));
+    mc.log("                     giới hạn vào        ra (lưới)");
+    mc.log(" #  tên camera       fps 1/n  fps  kbit  fps  kbit");
     for k in p.khach.values() {
-        log(&format!(
+        mc.log(&format!(
             "{:2}  {:<3} {:<12} {:3} {:3} {:4.0} {:5.0} {:4.0} {:5.0}",
             k.ma,
             k.ten,
@@ -432,51 +515,37 @@ fn in_trang_thai(p: &Phong, fc: u32) {
     }
 }
 
-fn in_tong_ket(p: &Phong) {
-    log("Tổng kết luồng vào (từ client tới server):");
-    log(" #  tên mảnh khung hỏng mảnh mất  bỏ:tắt vượt fps");
-    log("        nhận    đủ        mất hẳn");
+pub fn in_tong_ket(mc: &MayChu, p: &Phong) {
+    mc.log("Tổng kết luồng vào (từ client tới server):");
+    mc.log(" #  tên mảnh khung hỏng mảnh mất  bỏ:tắt vượt fps");
+    mc.log("        nhận    đủ        mất hẳn");
     let mut ds: Vec<&Khach> = p.khach.values().chain(p.da_roi.iter()).collect();
     ds.sort_by_key(|k| k.ma);
     for k in ds {
         let g = &k.ghep;
-        log(&format!(
+        mc.log(&format!(
             "{:2}  {:<3} {:4} {:5} {:4} {:4} {:4} {:6} {:6}",
             k.ma, k.ten, g.manh_nhan, g.khung_du, g.khung_hong, g.manh_mat, g.khung_mat_han, k.bo_tat, k.bo_vuot_fps
         ));
     }
 }
 
-fn dung() -> ! {
-    log("Dừng server (Ctrl+C)");
-    in_tong_ket(&PHONG.lock().unwrap());
+fn dung(mc: &MayChu) -> ! {
+    mc.log("Dừng server (Ctrl+C)");
+    in_tong_ket(mc, &mc.phong.lock().unwrap());
     std::process::exit(0)
 }
 
 pub fn run(args: &[String]) {
-    LazyLock::force(&T0);
     let host = args.first().cloned().unwrap_or_else(|| "127.0.0.1".into());
     let cong_tcp: u16 = args.get(1).and_then(|p| p.parse().ok()).unwrap_or(41630);
     let cong_udp: u16 = args.get(2).and_then(|p| p.parse().ok()).unwrap_or(41631);
-    let fail = |e: io::Error| -> ! {
-        log(&format!("lỗi: {e}"));
+    let mc = khoi_dong(&host, cong_tcp, cong_udp, Box::new(|text| println!("[server] {text}"))).unwrap_or_else(|e| {
+        println!("[server] lỗi: {e}");
         std::process::exit(1)
-    };
-    let srv = TcpListener::bind((host.as_str(), cong_tcp)).unwrap_or_else(|e| fail(e));
-    let dia_chi = (host.as_str(), cong_udp).to_socket_addrs().unwrap_or_else(|e| fail(e)).next().unwrap();
-    let udp = Arc::new(udp_dem_lon(dia_chi).unwrap_or_else(|e| fail(e))); // đệm nhận lớn: mảnh đến dồn dập
-    ctrlc::set_handler(|| dung()).expect("Không cài được hàm bắt Ctrl+C");
-    log(&format!("TCP {host}:{cong_tcp} điều khiển; UDP :{cong_udp} video"));
-    log(&format!("Khung {RONG}x{CAO} RGB {} B, nén zlib, mảnh ≤ 1200 B", RONG * CAO * 3));
-    thread::spawn(move || {
-        for conn in srv.incoming().flatten() {
-            conn.set_nodelay(true).ok();
-            thread::spawn(move || phuc_vu(conn, cong_udp));
-        }
     });
-    let u1 = Arc::clone(&udp);
-    thread::spawn(move || nhan_udp(u1));
-    thread::spawn(move || vong_gui(udp));
+    let m = Arc::clone(&mc);
+    ctrlc::set_handler(move || dung(&m)).expect("Không cài được hàm bắt Ctrl+C");
     for dong in io::stdin().lock().lines().map_while(Result::ok) {
         let mut dong = dong.split('#').next().unwrap_or("").trim().to_string();
         if let Some(r) = dong.strip_prefix('@') {
@@ -487,8 +556,8 @@ pub fn run(args: &[String]) {
             }
             dong = lenh.trim().to_string();
         }
-        if !dong.is_empty() && !lenh_server(&dong) {
-            dung();
+        if !dong.is_empty() && !lenh_server(&mc, &dong) {
+            dung(&mc);
         }
     }
     loop {

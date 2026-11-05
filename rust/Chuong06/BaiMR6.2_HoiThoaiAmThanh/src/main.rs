@@ -1,15 +1,24 @@
 //! Bài mở rộng MR6.2 – Phòng hội thoại âm thanh nhiều client (trộn tiếng "mix-minus").
 //!
-//! Chạy (một chương trình, ba vai trò):
+//! Chạy (một chương trình; ba vai trò dòng lệnh + ba vai trò giao diện):
 //!   cargo run -q --release -- server [host] [cổng_tcp] [cổng_udp]
 //!   cargo run -q --release -- khach <tên> <host> <cổng_tcp> [--tan-so 440] [--bien-do 0.25] [--wav tệp.wav]
 //!                                   [--ghi out/ghi.wav] [--thoi-gian 10] [--mat-goi 0.05] [--dem 3]
 //!   cargo run -q --release -- phan_tich <tệp.wav> <tần_số:nhãn> ... [--cua-so 1.0] [--nguong -50]
+//! Ứng dụng giao diện (egui; micro/loa thật qua cpal, không có thì giả lập):
+//!   cargo run -q --release -- server_gui [ip] [cổng_tcp] [cổng_udp]
+//!   cargo run -q --release -- khach_gui [tên] [ip] [cổng_tcp] [--tan-so 440]
+//!   cargo run -q --release -- demo_gui [cổng_tcp] [cổng_udp] [ảnh.png]   (kịch bản tự thao tác + chụp)
 
 mod chung;
+mod demo_gui;
+mod gui_chung;
 mod khach;
+mod khach_gui;
 mod phan_tich;
 mod server;
+mod server_gui;
+mod thiet_bi;
 
 use std::collections::HashMap;
 
@@ -51,8 +60,11 @@ fn main() {
         Some("server") => server::run(rest),
         Some("khach") => khach::run(Args::parse(rest, &["mic", "loa"])),
         Some("phan_tich") => phan_tich::run(Args::parse(rest, &[])),
+        Some("server_gui") => server_gui::run(rest),
+        Some("khach_gui") => khach_gui::run(Args::parse(rest, &[])),
+        Some("demo_gui") => demo_gui::run(rest),
         _ => {
-            eprintln!("Cách dùng: mr6_2_hoi_thoai_am_thanh server|khach|phan_tich ...");
+            eprintln!("Cách dùng: mr6_2_hoi_thoai_am_thanh server|khach|phan_tich|server_gui|khach_gui|demo_gui ...");
             std::process::exit(2);
         }
     }
