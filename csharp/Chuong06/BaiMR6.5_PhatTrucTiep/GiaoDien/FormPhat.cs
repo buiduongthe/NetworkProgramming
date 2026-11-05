@@ -13,6 +13,7 @@ sealed class FormPhat : Form
     readonly HangDoiGiaoDien ui = new();
     public MayPhat? Lop;
     readonly System.Windows.Forms.Timer nhip = new() { Interval = 100 }, moiGiay = new() { Interval = 1000 };
+    readonly System.Windows.Forms.Timer henThamSo = new() { Interval = 400 };   // hẹn giờ áp dụng FPS/GOP (chờ người dùng ngừng bấm)
     long? tsDaVe;
     string nhanTt = "chưa kết nối";
     public readonly List<(string Ma, string Ten)> DsCam = [], DsMic = [];
@@ -131,12 +132,14 @@ sealed class FormPhat : Form
         BtnTaoMau.Click += (_, _) => TaoMau();
         nhip.Tick += (_, _) => CapNhat();
         moiGiay.Tick += (_, _) => Lop?.ThongKeGiay();                // cập nhật kbit/s của giây vừa qua
+        henThamSo.Tick += (_, _) => { henThamSo.Stop(); ApThamSoThat(); };   // chỉ chạy một lần sau mỗi lần hẹn
         nhip.Start();
         moiGiay.Start();
         FormClosing += (_, _) =>
         {
             nhip.Stop();
             moiGiay.Stop();
+            henThamSo.Stop();
             ui.Dispose();
             Lop?.Dong();
         };
@@ -257,7 +260,15 @@ sealed class FormPhat : Form
         CboCam.Enabled = CboMic.Enabled = true;
     }
 
+    /// <summary>Giữ nút mũi tên của ô FPS/GOP sẽ đổi giá trị liên tục: chỉ áp dụng (và gửi thong_tin) khi giá trị
+    /// đứng yên 400 ms – tránh gửi hàng chục thông điệp cho mỗi lần đổi.</summary>
     void ApThamSo()
+    {
+        henThamSo.Stop();       // đếm lại 400 ms từ lần đổi mới nhất
+        henThamSo.Start();
+    }
+
+    void ApThamSoThat()
     {
         if (Lop is { DangPhat: true }) Lop.DatThamSo((int)NumFps.Value, (int)NumGop.Value);
     }

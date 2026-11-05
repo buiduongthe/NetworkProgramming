@@ -140,6 +140,7 @@ pub struct PhatApp {
     luong_mic: Option<cpal::Stream>, // luồng cpal của micro thật (giữ để còn thu)
     moc_giay: f64,
     hop_thoai: HopThoaiTep,
+    cho_tham_so: Option<(f64, u32, u32)>, // (thời điểm đổi cuối, fps, GOP) đang chờ áp dụng (chờ người dùng ngừng bấm)
 }
 
 impl PhatApp {
@@ -185,6 +186,7 @@ impl PhatApp {
             luong_mic: None,
             moc_giay: bay_gio(),
             hop_thoai: HopThoaiTep { mo: false, nhap: thu_muc.to_string_lossy().into_owned(), thu_muc, moi_tep: false, chon: None },
+            cho_tham_so: None,
         }
     }
 
@@ -290,9 +292,24 @@ impl PhatApp {
         }
     }
 
+    /// Giữ nút/kéo ô FPS/GOP sẽ đổi giá trị liên tục: chỉ ghi lại thời điểm đổi cuối và giá trị chờ; mỗi khung vẽ
+    /// `ap_tham_so_neu_den_han` mới áp dụng (và gửi thong_tin) khi giá trị đứng yên 400 ms – tránh gửi hàng chục
+    /// thông điệp cho mỗi lần đổi.
     fn ap_tham_so(&mut self) {
+        self.cho_tham_so = Some((bay_gio(), self.fps.clamp(1, 30), self.gop.clamp(1, 300)));
+    }
+
+    fn ap_tham_so_neu_den_han(&mut self, ctx: &egui::Context) {
+        let Some((luc, fps, gop)) = self.cho_tham_so else { return };
+        let da_qua = bay_gio() - luc;
+        if da_qua < 0.4 {
+            // chưa đủ 400 ms: hẹn vẽ lại đúng lúc hết hạn để không phụ thuộc nhịp vẽ của cửa sổ chứa
+            ctx.request_repaint_after(Duration::from_secs_f64(0.4 - da_qua));
+            return;
+        }
+        self.cho_tham_so = None;
         if let Some(l) = self.lop.as_ref().filter(|l| l.dang_phat()) {
-            l.dat_tham_so(self.fps.clamp(1, 30), self.gop.clamp(1, 300));
+            l.dat_tham_so(fps, gop);
         }
     }
 
@@ -376,6 +393,7 @@ impl PhatApp {
         if let Some(d) = self.hop_thoai.ve(ui.ctx()) {
             self.dat_tep(&d);
         }
+        self.ap_tham_so_neu_den_han(ui.ctx()); // FPS/GOP đã đứng yên 400 ms -> áp dụng
         if bay_gio() - self.moc_giay >= 1.0 {
             self.moc_giay = bay_gio();
             if let Some(l) = &self.lop {

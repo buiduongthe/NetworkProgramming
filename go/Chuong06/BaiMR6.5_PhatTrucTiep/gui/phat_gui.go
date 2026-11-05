@@ -60,6 +60,7 @@ type cuaSoPhat struct {
 	dinhKy                 *thongKeDinhKy
 	tsDaVe                 int64
 	dong                   chan struct{}
+	henThamSo              *time.Timer // hẹn giờ áp dụng FPS/GOP (chờ người dùng ngừng bấm)
 }
 
 func moCuaSoPhat(a fyne.App, ten, host string, cong int) *cuaSoPhat {
@@ -139,6 +140,9 @@ func moCuaSoPhat(a fyne.App, ten, host string, cong int) *cuaSoPhat {
 	p.w.SetFixedSize(true)
 	p.w.SetOnClosed(func() {
 		close(p.dong)
+		if p.henThamSo != nil {
+			p.henThamSo.Stop()
+		}
 		if p.lop != nil {
 			go p.lop.Dong()
 		}
@@ -333,7 +337,18 @@ func (p *cuaSoPhat) lamDungPhat() {
 	p.chonMic.Enable()
 }
 
+// apThamSo – đổi FPS/GOP liên tục (giữ Enter, gõ sửa nhiều lần): chỉ áp dụng (và gửi thong_tin) khi giá
+// trị đứng yên 400 ms – tránh gửi hàng chục thông điệp cho mỗi lần đổi. Hàm hẹn giờ chạy ở goroutine
+// riêng nên chuyển về luồng giao diện bằng fyne.Do trước khi đọc ô nhập.
 func (p *cuaSoPhat) apThamSo() {
+	if p.henThamSo == nil {
+		p.henThamSo = time.AfterFunc(400*time.Millisecond, func() { fyne.Do(p.apThamSoThat) })
+		return
+	}
+	p.henThamSo.Reset(400 * time.Millisecond) // đếm lại 400 ms từ lần đổi mới nhất
+}
+
+func (p *cuaSoPhat) apThamSoThat() {
 	if p.lop != nil && p.lop.DangPhat() {
 		p.lop.DatThamSo(p.so(p.fps, tt.FpsMacDinh, 30), p.so(p.gop, tt.GopMacDinh, 300))
 	}
