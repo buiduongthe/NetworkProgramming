@@ -1,0 +1,9 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "41555"], "background": true, "wait": 1.0},
+    {"name": "tai", "cmd": ["out/app", "tai", "127.0.0.1", "41555"], "timeout": 60, "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server, goroutine vòng-lặp + nhóm worker tính + luồng cảm biến",
+             "tai": "Cửa sổ 2 – máy tạo tải, so sánh ba chế độ, hạn chót, cảm biến"}
+}

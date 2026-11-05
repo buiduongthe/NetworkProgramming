@@ -1,0 +1,9 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server", "cmd": ["../../target/release/mr5_5_phoi_hop_da_luong_bat_dong_bo", "server", "127.0.0.1", "44550"], "background": true, "wait": 1.0},
+    {"name": "tai", "cmd": ["../../target/release/mr5_5_phoi_hop_da_luong_bat_dong_bo", "tai", "127.0.0.1", "44550"], "timeout": 60, "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server tokio một luồng + spawn_blocking + nhóm luồng std riêng + luồng cảm biến",
+             "tai": "Cửa sổ 2 – máy tạo tải, so sánh ba chế độ, hạn chót, cảm biến"}
+}

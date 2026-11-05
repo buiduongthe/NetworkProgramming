@@ -1,0 +1,17 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "NhatKy.java", "DichVu.java", "MayChu.java", "Khoa.java", "HangDoi.java", "Luong.java"]],
+  "processes": [
+    {"name": "dichvu", "cmd": ["java", "-cp", "out", "Luong", "dich-vu", "127.0.0.1", "43540"], "background": true, "wait": 1.0},
+    {"name": "server", "cmd": ["java", "-cp", "out", "Luong", "server", "127.0.0.1", "43541"], "background": true, "wait": 1.0},
+    {"name": "luong", "cmd": ["java", "-cp", "out", "Luong", "luong", "127.0.0.1", "43540"], "timeout": 60},
+    {"name": "hangdoi", "cmd": ["java", "-cp", "out", "Luong", "hang-doi", "127.0.0.1", "43540"], "timeout": 60},
+    {"name": "tai", "cmd": ["java", "-cp", "out", "Luong", "tai", "127.0.0.1", "43541"], "timeout": 60, "wait": 0.5},
+    {"name": "khoa", "cmd": ["java", "-cp", "out", "Luong", "khoa", "127.0.0.1", "43543"], "timeout": 60}
+  ],
+  "titles": {"dichvu": "Cửa sổ 1 – dịch vụ thử (mỗi kết nối một luồng)",
+             "server": "Cửa sổ 2 – server đa luồng A (mỗi client một luồng) và B (ThreadPoolExecutor + hàng đợi)",
+             "luong": "Cửa sổ 3 – (a) tạo/chạy/chờ luồng, (e) semaphore, (g) nhật ký, luồng ảo",
+             "hangdoi": "Cửa sổ 4 – (d) nhà sản xuất – người tiêu dùng, poison pill",
+             "tai": "Cửa sổ 5 – (b) máy tạo tải, 6 client tới máy chủ A và B",
+             "khoa": "Cửa sổ 6 – (c) tranh chấp dữ liệu, (f) bế tắc"}
+}

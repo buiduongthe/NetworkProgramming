@@ -1,0 +1,17 @@
+{
+  "setup": [["go", "build", "-o", "out/app", "."]],
+  "processes": [
+    {"name": "dichvu", "cmd": ["out/app", "dich-vu", "127.0.0.1", "41545"], "background": true, "wait": 0.8},
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "41546"], "background": true, "wait": 0.8},
+    {"name": "luong", "cmd": ["out/app", "luong", "127.0.0.1", "41545"], "timeout": 60},
+    {"name": "hangdoi", "cmd": ["out/app", "hang-doi", "127.0.0.1", "41545"], "timeout": 60},
+    {"name": "tai", "cmd": ["out/app", "tai", "127.0.0.1", "41546"], "timeout": 60, "wait": 0.5},
+    {"name": "khoa", "cmd": ["out/app", "khoa", "127.0.0.1", "41548"], "timeout": 60}
+  ],
+  "titles": {"dichvu": "Cửa sổ 1 – dịch vụ thử (mỗi kết nối một goroutine)",
+             "server": "Cửa sổ 2 – server A (mỗi client một goroutine) và B (nhóm worker + hàng đợi)",
+             "luong": "Cửa sổ 3 – (a) tạo/chạy/chờ goroutine, (e) semaphore, (g) nhật ký",
+             "hangdoi": "Cửa sổ 4 – (d) nhà sản xuất – người tiêu dùng, poison pill",
+             "tai": "Cửa sổ 5 – (b) máy tạo tải, 6 client tới máy chủ A và B",
+             "khoa": "Cửa sổ 6 – (c) tranh chấp dữ liệu, (f) bế tắc"}
+}

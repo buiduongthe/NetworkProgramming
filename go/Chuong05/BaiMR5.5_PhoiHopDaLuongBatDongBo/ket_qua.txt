@@ -1,0 +1,67 @@
+===== server =====
+$ out/app server 127.0.0.1 41555
+[server] lắng nghe 127.0.0.1:41555; vòng lặp sự kiện trên goroutine "vòng-lặp", nhóm tính 2 goroutine,
+  nhịp tim 10 ms, luồng cảm biến mỗi 50 ms, chế độ C giới hạn 4 yêu cầu
+Đặc thù Go: không có vòng lặp sự kiện dựng sẵn – goroutine vòng-lặp sở hữu trạng thái và select trên
+  các kênh; runtime tự đưa lời gọi chặn sang luồng HĐH khác nên chỉ cần gọi hàm chặn trong goroutine riêng.
+[  1.198 s] vòng-lặp        | BAM 1 (chan): nhận 65536 byte, 400 vòng, hạn 10000 ms
+[  1.236 s] vòng-lặp        | BAM 1: băm xong trên vòng-lặp, trả lời OK
+[server] đợt "A. CPU ngay trên vòng lặp": 16 yêu cầu
+  giai đoạn      luồng đã chạy
+  nhận/trả lời   goroutine kết nối (đọc/ghi socket), vòng-lặp (điều phối)
+  tra cứu cũ     vòng-lặp
+  băm SHA-256    vòng-lặp
+  trễ nhịp tối đa 142.7 ms; nhóm tính tối đa 0 việc
+  cảm biến 13 mẫu, trễ giao tối đa 217.1 ms
+[  1.627 s] vòng-lặp        | BAM 1 (tach): nhận 65536 byte, 400 vòng, hạn 10000 ms
+[  1.765 s] vòng-lặp        | BAM 1: băm xong trên tính-1, trả lời OK
+[server] đợt "B. đẩy sang nhóm luồng": 16 yêu cầu
+  giai đoạn      luồng đã chạy
+  nhận/trả lời   goroutine kết nối (đọc/ghi socket), vòng-lặp (điều phối)
+  tra cứu cũ     16 goroutine riêng (mỗi lời gọi một goroutine)
+  băm SHA-256    tính-1, tính-2
+  trễ nhịp tối đa 15.1 ms; nhóm tính tối đa 16 việc
+  cảm biến 2 mẫu, trễ giao tối đa 0.0 ms
+[  1.800 s] vòng-lặp        | BAM 1 (gioihan): nhận 65536 byte, 400 vòng, hạn 10000 ms
+[  2.028 s] vòng-lặp        | BAM 1: băm xong trên tính-1, trả lời OK
+[server] đợt "C. nhóm luồng + áp lực ngược": 16 yêu cầu
+  giai đoạn      luồng đã chạy
+  nhận/trả lời   goroutine kết nối (đọc/ghi socket), vòng-lặp (điều phối)
+  tra cứu cũ     16 goroutine riêng (mỗi lời gọi một goroutine)
+  băm SHA-256    tính-1, tính-2
+  trễ nhịp tối đa 13.0 ms; nhóm tính tối đa 4 việc
+  cảm biến 5 mẫu, trễ giao tối đa 0.2 ms
+[  2.042 s] vòng-lặp        | BAM 101 (tach): nhận 65536 byte, 400 vòng, hạn 1000 ms
+[  2.080 s] vòng-lặp        | BAM 101: băm xong trên tính-1, trả lời OK
+[  2.081 s] vòng-lặp        | BAM 102 (tach): nhận 65536 byte, 3200 vòng, hạn 30 ms
+[  2.112 s] vòng-lặp        | BAM 102: quá hạn 30 ms → trả HETGIO, bật cờ hủy cho luồng tính
+[server] BAM 102: luồng tính thấy cờ hủy → dừng ở vòng 231
+[  2.112 s] vòng-lặp        | CAMBIEN 201: kết quả gửi qua kênh từ goroutine cảm-biến, giá trị 54
+[  2.113 s] vòng-lặp        | CAMBIEN 202: kết quả gửi qua kênh từ goroutine cảm-biến, giá trị 91
+
+===== tai =====
+$ out/app tai 127.0.0.1 41555
+Máy tạo tải: 16 yêu cầu đồng thời mỗi đợt, mỗi yêu cầu 64 KB, băm SHA-256 400 vòng (≈ 26 MB dữ liệu băm)
+Đợt A. CPU ngay trên vòng lặp: 16/16 OK, 0.62 s, 25.7 yc/s, 1 giá trị băm khác nhau
+Đợt B. đẩy sang nhóm luồng: 16/16 OK, 0.17 s, 94.9 yc/s, 1 giá trị băm khác nhau
+Đợt C. nhóm luồng + áp lực ngược: 16/16 OK, 0.25 s, 64.8 yc/s, 1 giá trị băm khác nhau
+
+  Chế độ             Thời gian   yc/s  Trễ nhịp  Cảm biến  Nhóm
+  A. chặn vòng lặp      0.62 s   25.7  142.7 ms  217.1 ms     0
+  B. nhóm luồng         0.17 s   94.9   15.1 ms    0.0 ms    16
+  C. + áp lực ngược     0.25 s   64.8   13.0 ms    0.2 ms     4
+  (Trễ nhịp, Cảm biến: độ trễ tối đa của nhịp tim 10 ms và của
+   mẫu cảm biến; Nhóm: số việc ở nhóm tính cùng lúc, tối đa)
+Băm kiểm tra (16 hex đầu): 6a1122caf3193141 – giống nhau ở mọi bản ngôn ngữ
+Nhận xét: A chặn vòng lặp → nhịp tim, mẫu cảm biến và mọi kết nối khác đều đứng chờ; B, C giữ
+  vòng lặp thông suốt; C chỉ cho 4 việc vào nhóm 2 luồng, phần còn lại chờ
+  bất đồng bộ ở cổng vào – hàng đợi của nhóm luồng không phình theo tải.
+
+(d) Hạn chót và hủy xuyên ranh giới async → luồng (chế độ tach):
+  yêu cầu 101 (400 vòng, hạn 1000 ms): OK sau 38 ms
+  yêu cầu 102 (3200 vòng, hạn 30 ms): HETGIO sau 32 ms
+
+(c) Luồng nền giao kết quả vào vòng lặp sự kiện:
+  CAMBIEN 201 → giá trị 54, future do luồng cảm-biến hoàn tất
+  CAMBIEN 202 → giá trị 91, future do luồng cảm-biến hoàn tất
+

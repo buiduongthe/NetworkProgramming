@@ -1,0 +1,9 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Chung.java", "VongLap.java", "MayChu.java", "PhoiHop.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "PhoiHop", "server", "127.0.0.1", "43550"], "background": true, "wait": 1.5},
+    {"name": "tai", "cmd": ["java", "-cp", "out", "PhoiHop", "tai", "127.0.0.1", "43550"], "timeout": 60, "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server, vòng lặp Selector + nhóm luồng tính + luồng ảo + luồng cảm biến",
+             "tai": "Cửa sổ 2 – máy tạo tải, so sánh ba chế độ, hạn chót, cảm biến"}
+}

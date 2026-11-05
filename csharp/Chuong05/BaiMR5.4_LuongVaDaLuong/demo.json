@@ -1,0 +1,17 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "dichvu", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR5.4_LuongVaDaLuong.dll", "dich-vu", "127.0.0.1", "42545"], "background": true, "wait": 1.0},
+    {"name": "server", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR5.4_LuongVaDaLuong.dll", "server", "127.0.0.1", "42546"], "background": true, "wait": 1.0},
+    {"name": "luong", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR5.4_LuongVaDaLuong.dll", "luong", "127.0.0.1", "42545"], "timeout": 60},
+    {"name": "hangdoi", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR5.4_LuongVaDaLuong.dll", "hang-doi", "127.0.0.1", "42545"], "timeout": 60},
+    {"name": "tai", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR5.4_LuongVaDaLuong.dll", "tai", "127.0.0.1", "42546"], "timeout": 60, "wait": 0.5},
+    {"name": "khoa", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR5.4_LuongVaDaLuong.dll", "khoa", "127.0.0.1", "42548"], "timeout": 60}
+  ],
+  "titles": {"dichvu": "Cửa sổ 1 – dịch vụ thử (mỗi kết nối một luồng)",
+             "server": "Cửa sổ 2 – server đa luồng A (mỗi client một luồng) và B (nhóm luồng + hàng đợi)",
+             "luong": "Cửa sổ 3 – (a) tạo/chạy/chờ luồng, (e) semaphore, (g) nhật ký theo luồng",
+             "hangdoi": "Cửa sổ 4 – (d) nhà sản xuất – người tiêu dùng, poison pill",
+             "tai": "Cửa sổ 5 – (b) máy tạo tải, 6 client tới máy chủ A và B",
+             "khoa": "Cửa sổ 6 – (c) tranh chấp dữ liệu, (f) bế tắc"}
+}

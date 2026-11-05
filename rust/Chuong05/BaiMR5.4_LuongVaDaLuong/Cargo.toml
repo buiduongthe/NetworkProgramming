@@ -1,0 +1,8 @@
+[package]
+name = "mr5_4_luong_va_da_luong"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR5.4 – Luồng và đa luồng trong chương trình mạng (chỉ thư viện chuẩn)"
+publish = false
+
+[dependencies]

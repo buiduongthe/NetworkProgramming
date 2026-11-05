@@ -1,0 +1,9 @@
+{
+  "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
+  "processes": [
+    {"name": "server", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR5.5_PhoiHopDaLuongBatDongBo.dll", "server", "127.0.0.1", "42550"], "background": true, "wait": 2.0},
+    {"name": "tai", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR5.5_PhoiHopDaLuongBatDongBo.dll", "tai", "127.0.0.1", "42550"], "timeout": 60, "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server, vòng lặp một luồng (SynchronizationContext) + ThreadPool + luồng cảm biến",
+             "tai": "Cửa sổ 2 – máy tạo tải, so sánh ba chế độ, hạn chót, cảm biến"}
+}

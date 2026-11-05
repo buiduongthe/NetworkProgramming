@@ -1,0 +1,8 @@
+{
+  "processes": [
+    {"name": "server", "cmd": ["python3", "phoi_hop.py", "server", "127.0.0.1", "41550"], "background": true, "wait": 1.0},
+    {"name": "tai", "cmd": ["python3", "phoi_hop.py", "tai", "127.0.0.1", "41550"], "timeout": 60, "wait": 0.5}
+  ],
+  "titles": {"server": "Cửa sổ 1 – server asyncio + nhóm luồng tính, nhóm luồng chặn, luồng cảm biến",
+             "tai": "Cửa sổ 2 – máy tạo tải, so sánh ba chế độ, hạn chót, cảm biến"}
+}

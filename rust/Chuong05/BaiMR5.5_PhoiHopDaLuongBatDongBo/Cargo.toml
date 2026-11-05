@@ -1,0 +1,10 @@
+[package]
+name = "mr5_5_phoi_hop_da_luong_bat_dong_bo"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR5.5 – Phối hợp đa luồng và bất đồng bộ trong server mạng"
+publish = false
+
+[dependencies]
+sha2 = "=0.10.9"
+tokio = { version = "=1.47.1", features = ["rt", "macros", "net", "io-util", "time", "sync"] }

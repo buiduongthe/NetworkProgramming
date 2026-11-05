@@ -1,0 +1,17 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "dichvu", "cmd": ["../../target/release/mr5_4_luong_va_da_luong", "dich-vu", "127.0.0.1", "44540"], "background": true, "wait": 0.8},
+    {"name": "server", "cmd": ["../../target/release/mr5_4_luong_va_da_luong", "server", "127.0.0.1", "44541"], "background": true, "wait": 0.8},
+    {"name": "luong", "cmd": ["../../target/release/mr5_4_luong_va_da_luong", "luong", "127.0.0.1", "44540"], "timeout": 60},
+    {"name": "hangdoi", "cmd": ["../../target/release/mr5_4_luong_va_da_luong", "hang-doi", "127.0.0.1", "44540"], "timeout": 60},
+    {"name": "tai", "cmd": ["../../target/release/mr5_4_luong_va_da_luong", "tai", "127.0.0.1", "44541"], "timeout": 60, "wait": 0.5},
+    {"name": "khoa", "cmd": ["../../target/release/mr5_4_luong_va_da_luong", "khoa", "127.0.0.1", "44543"], "timeout": 60}
+  ],
+  "titles": {"dichvu": "Cửa sổ 1 – dịch vụ thử (mỗi kết nối một luồng)",
+             "server": "Cửa sổ 2 – server đa luồng A (mỗi client một luồng) và B (nhóm luồng + sync_channel)",
+             "luong": "Cửa sổ 3 – (a) tạo/chạy/chờ luồng, (e) semaphore, (g) nhật ký theo luồng",
+             "hangdoi": "Cửa sổ 4 – (d) nhà sản xuất – người tiêu dùng, poison pill",
+             "tai": "Cửa sổ 5 – (b) máy tạo tải, 6 client tới máy chủ A và B",
+             "khoa": "Cửa sổ 6 – (c) tranh chấp dữ liệu, (f) bế tắc"}
+}

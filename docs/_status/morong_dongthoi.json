@@ -1,0 +1,42 @@
+[
+  {
+    "bai": "BaiMR5.4_LuongVaDaLuong",
+    "chuong": 5,
+    "ngon_ngu": [
+      "csharp",
+      "java",
+      "python",
+      "rust",
+      "go"
+    ],
+    "kiem_thu": {
+      "csharp": "đã chạy",
+      "java": "đã chạy",
+      "python": "đã chạy",
+      "rust": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "Luồng và đa luồng trong chương trình mạng: tạo/chạy/chờ luồng, tham số, kết quả; server mỗi client một luồng và nhóm luồng + hàng đợi giới hạn (503); tranh chấp dữ liệu (khóa, nguyên tử, bảng đồng thời) có đếm số cập nhật bị mất; nhà sản xuất – người tiêu dùng trên một socket với poison pill; semaphore giới hạn kết nối ra; bế tắc và thứ tự lấy khóa; nhật ký theo luồng (thread-local)",
+    "ghi_chu": "Sáu vai trò (dich-vu, server, luong, hang-doi, tai, khoa), cùng giao thức dòng văn bản ở cả 5 ngôn ngữ, đã chạy chéo (client Python/Go/C# với dịch vụ Java, server Rust). Thông điệp giống nhau; Go thay 'luồng' bằng 'goroutine'/'worker', mỗi bản có một đoạn 'Đặc thù' (GIL; ThreadPool; luồng ảo Java: nhóm 10 luồng 1,06 s so với luồng ảo 0,18 s cho 100 lời gọi 100 ms; Rust cấm data race nên bản không khóa dùng load/store trên AtomicU64; Go M:N, GOMAXPROCS, LockOSThread). Mất cập nhật khi không khóa (8000 lần): Python 608, Go 24, C# 2900, Java 3892, Rust 1275 (thay đổi theo lần chạy). Rust chỉ dùng std. Cổng: Python 41540–41543, Go 41545–41548, C# 42545–42548 (42540–42541 bị chương trình thử của nhóm khác chiếm tạm khi chạy), Java 43540–43543, Rust 44540–44543. Đọc thêm: tài liệu threading/queue (Python), Effective Go + Go Memory Model, Microsoft Learn Managed threading, Java Concurrency + JEP 444, Rust Book ch. 16."
+  },
+  {
+    "bai": "BaiMR5.5_PhoiHopDaLuongBatDongBo",
+    "chuong": 5,
+    "ngon_ngu": [
+      "csharp",
+      "java",
+      "python",
+      "rust",
+      "go"
+    ],
+    "kiem_thu": {
+      "csharp": "đã chạy",
+      "java": "đã chạy",
+      "python": "đã chạy",
+      "rust": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "Phối hợp đa luồng và bất đồng bộ: server vòng lặp sự kiện đẩy việc CPU (băm SHA-256) sang nhóm luồng, gọi hàm thư viện cũ kiểu chặn an toàn, luồng nền giao kết quả vào vòng lặp, hủy/hạn chót xuyên ranh giới, áp lực ngược bằng semaphore; đo nhịp tim 10 ms cho ba chế độ chặn vòng lặp / đẩy sang nhóm luồng / + áp lực ngược",
+    "ghi_chu": "Vòng lặp: Python asyncio; C# SynchronizationContext một luồng tự dựng (VongLap) + Task.Run, ConcurrentExclusiveSchedulerPair giới hạn 2 việc băm, Channel<T>, TaskCompletionSource, WaitAsync + CancellationToken, minh họa bế tắc .Wait() và ConfigureAwait(false); Java Selector một luồng + CompletableFuture.supplyAsync(nhóm riêng) + luồng ảo cho hàm chặn + orTimeout; Rust tokio current_thread + spawn_blocking + nhóm std::thread riêng + oneshot/blocking_send + timeout (crate tokio 1.47.1, sha2 0.10.9); Go goroutine vòng lặp kiểu actor + select + context.WithTimeout/AfterFunc + LockOSThread cho luồng cảm biến. Giá trị băm 6a1122caf3193141 giống nhau ở 5 bản; đã chạy chéo (Python→Go, Rust→Java, C#→Go). Trễ nhịp tối đa A/B/C (ms): Python 748/32,5/5,3; Go 143/15/13 (select chọn ngẫu nhiên nên nhịp chen được giữa các yêu cầu); C# 586/10/18; Java 691/17,5/5,3; Rust 605/4,1/1,6 – máy kiểm thử 2 CPU, có tải từ các nhóm khác nên dao động. Cổng: Python 41550, Go 41555, C# 42550, Java 43550, Rust 44550. Đọc thêm: asyncio-dev, Microsoft Learn TAP/Channels + ConfigureAwait FAQ, CompletableFuture/Selector/JEP 444, tokio Bridging with sync code, Go context."
+  }
+]
