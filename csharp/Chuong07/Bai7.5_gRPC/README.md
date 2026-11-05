@@ -33,8 +33,15 @@ dotnet run -- client 127.0.0.1 5002 1000
 Phiên bản gói có thể nâng lên bản mới hơn cùng dòng 2.x (Grpc.*) và 3.x (Google.Protobuf).
 
 
+## Kết quả thực thi
+Đã chạy trên Windows 11 x64 (tháng 11/2026) bằng `tools/demo_windows.ps1`, .NET SDK 10.0.403, gói NuGet Grpc.AspNetCore 2.67.0. Bốn cửa sổ: server, server cố ý chậm 2 giây, client hạn chót 2 s và client hạn chót 1 s.
+
+![Kết quả thực thi](ket_qua.png)
+
+Kết quả khớp với bản Python: `LookupRequest{term: "TCP"}` mã hóa thành 5 byte `0A 03 54 43 50`; `Lookup('XYZ')` nhận `NOT_FOUND`; client hạn chót 1 s gọi server chậm 2 s nhận `DEADLINE_EXCEEDED`, còn server ghi nhận lời gọi bị hủy; luồng `Watch(prefix='HTTP')` nhận ba mục.
+
 ## Ghi chú
-- Trạng thái kiểm thử: **chưa chạy trong môi trường biên soạn** – môi trường không truy cập được nuget.org để tải gói gRPC; chưa có ảnh kết quả. Mã viết theo cách dùng chuẩn của Grpc.AspNetCore và Grpc.Net.Client; kết quả mong đợi giống bản Python (cùng thông điệp in ra).
+- Trạng thái kiểm thử: đã chạy trên Windows 11 (xem Kết quả thực thi). Lỗi `DEADLINE_EXCEEDED` do chính client sinh ra nên không có lời mô tả từ server; client in “hết hạn chót phía client”.
 - Trường `term` của thông điệp `Term` trùng tên lớp nên trình sinh mã C# đặt tên thuộc tính là `Term_`.
 - Kestrel được cấu hình `HttpProtocols.Http2` trên cổng không TLS (h2c); `GrpcChannel.ForAddress("http://…")` trên .NET 5 trở lên gọi được h2c mà không cần thiết lập thêm.
 - `RAISE RpcError(NOT_FOUND, …)` là `throw new RpcException(new Status(StatusCode.NotFound, …))`; `ctx.cancelled` là `ctx.CancellationToken`; hạn chót truyền qua `grpc-timeout` làm `Task.Delay(…, ctx.CancellationToken)` bị hủy.
@@ -42,4 +49,4 @@ Phiên bản gói có thể nâng lên bản mới hơn cùng dòng 2.x (Grpc.*)
 - Mã giả dùng `https://glossary.local:5001` (HTTP/2 trên TLS); bài chạy HTTP/2 không mã hóa (h2c) trên máy cục bộ cho phòng thí nghiệm. Triển khai thật phải dùng TLS (Chương 8).
 - `CHANGES_FEED()` được mô phỏng bằng danh sách cố định HTTP/2, QUIC, HTTP/3, gRPC, HTTPS, mỗi 0,5 giây một mục; `Watch(prefix='HTTP')` nhận ba mục.
 - Tham số thứ ba của server là độ trễ cố ý của `Lookup` (ms), dùng cho bài tập hạn chót; mặc định 0.
-- Kiểm thử: Linux, .NET SDK 10.0.114.
+- Kiểm thử: Windows 11, .NET SDK 10.0.403; GitHub Actions biên dịch trên Ubuntu.

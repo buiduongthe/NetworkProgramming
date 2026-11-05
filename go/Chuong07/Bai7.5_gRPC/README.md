@@ -7,7 +7,7 @@
 | Kế thừa | Mã giả 3.7 (nhánh "lookup" của PROCESS_REQUEST thành phương thức Lookup) |
 | Thư viện | NGOẠI LỆ thư viện: `google.golang.org/grpc` v1.68.1, `google.golang.org/protobuf` v1.35.2; công cụ `protoc`, `protoc-gen-go`, `protoc-gen-go-grpc` |
 
-> **Trạng thái: chưa chạy.** Môi trường biên soạn không tải được mô-đun Go từ Internet (`proxy.golang.org` không phân giải được; `GOPROXY=direct` bị chặn khi truy cập `google.golang.org`) và không có `protoc-gen-go`, `protoc-gen-go-grpc`. Vì vậy chưa sinh được mã từ `tra_cuu.proto`, chưa biên dịch và chưa có `ket_qua.txt`, `ket_qua.png`. Mã nghiệp vụ được viết theo API của grpc-go 1.68 và mã do protoc-gen-go-grpc 1.5 sinh; cần kiểm tra lại khi chạy trên máy có mạng.
+> **Trạng thái:** đã chạy trên Windows 11 (Go 1.27.3, protoc 36.2, protoc-gen-go 1.35.2, protoc-gen-go-grpc 1.5.1). Môi trường biên soạn trên Linux không tải được mô-đun Go nên bài được chạy trên máy Windows của tác giả; GitHub Actions biên dịch trên Ubuntu.
 
 ## Mục tiêu
 Cài đặt phần nghiệp vụ của dịch vụ gRPC theo hợp đồng `tra_cuu.proto` (Mục 7.4.2): kiểu `GlossaryService` nhúng kiểu cơ sở do công cụ sinh, phương thức unary `Lookup` (báo `NOT_FOUND` bằng mã trạng thái gRPC) và phương thức luồng từ server `Watch` (lọc theo tiền tố, dừng khi client hủy); phía client gọi `Lookup` có hạn chót và đọc luồng `Watch`. Client in cách mã hóa Protocol Buffers của `LookupRequest{term: "TCP"}` để đối chiếu với ví dụ 5 byte `0A 03 54 43 50` của giáo trình. Bài tập “Dịch vụ gRPC có hạn chót” được minh họa bằng server cố ý chậm 2 giây và client đặt hạn chót 1 giây.
@@ -19,7 +19,7 @@ Cài đặt phần nghiệp vụ của dịch vụ gRPC theo hợp đồng `tra_
 - `main.go` – chọn vai trò `server`, `client`.
 - `go.mod` – mô-đun Go riêng của bài (mô-đun gốc `go/` chỉ dùng thư viện chuẩn). `go.sum` được tạo bởi `go mod tidy`.
 - `glossaryv1/tra_cuu.pb.go`, `glossaryv1/tra_cuu_grpc.pb.go` – mã sinh từ `tra_cuu.proto` (tạo ở bước chuẩn bị, không lưu trong kho, có trong `.gitignore`).
-- `demo.json` – kịch bản chạy minh họa (dùng với `tools/demo.py`; chưa chạy thử).
+- `demo.json` – kịch bản chạy minh họa (dùng với `tools/demo.py` trên Linux hoặc `tools/demo_windows.ps1` trên Windows).
 
 ## Cách chạy
 Chuẩn bị (cần mạng, Go 1.24, `protoc` 3.x trở lên):
@@ -45,7 +45,11 @@ out/app client 127.0.0.1 5002 1000
 ```
 
 ## Kết quả thực thi
-Chưa có (xem trạng thái ở đầu tệp). Kết quả mong đợi, theo bản Python đã chạy của cùng bài: `LookupRequest{term: "TCP"}` mã hóa thành `0A 03 54 43 50`; `Lookup('TCP')` thành công, `Lookup('XYZ')` nhận `NOT_FOUND`, `Watch` trả ba thuật ngữ HTTP/2, HTTP/3, HTTPS; với server chậm, hai lời gọi `Lookup` nhận `DEADLINE_EXCEEDED` và server ghi nhận bị hủy.
+Đã chạy trên Windows 11 x64 (tháng 11/2026) bằng `tools/demo_windows.ps1`, Go 1.27.3. Bốn cửa sổ: server, server cố ý chậm 2 giây, client hạn chót 2 s và client hạn chót 1 s.
+
+![Kết quả thực thi](ket_qua.png)
+
+Kết quả khớp với bản Python: `LookupRequest{term: "TCP"}` mã hóa thành 5 byte `0A 03 54 43 50`; `Lookup('XYZ')` nhận `NOT_FOUND`; client hạn chót 1 s gọi server chậm 2 s nhận `DEADLINE_EXCEEDED`, còn server ghi nhận lời gọi bị hủy; luồng `Watch(prefix='HTTP')` nhận ba mục.
 
 ## Ghi chú
 - Kiểu `UnimplementedGlossaryServer`, giao diện `Glossary_WatchServer`, hàm `RegisterGlossaryServer`, `NewGlossaryClient` do `protoc-gen-go-grpc` sinh (tương ứng `GlossaryBase`, `GlossaryClient` của mã giả). Go không có kế thừa lớp: `EXTENDS GlossaryBase` là nhúng (embedding) kiểu cơ sở vào struct.

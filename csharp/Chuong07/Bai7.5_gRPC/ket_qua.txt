@@ -1,0 +1,45 @@
+===== server =====
+$ dotnet bin/Release/net10.0/Bai7.5_gRPC.dll server 127.0.0.1 9771
+[server] Dịch vụ gRPC glossary.v1.Glossary tại 127.0.0.1:9771 (độ trễ Lookup 0 ms)
+[server] Lookup('TCP') -> OK
+[server] Lookup('XYZ') -> NOT_FOUND
+[server] Watch(prefix='HTTP') bắt đầu
+[server] Watch: gửi HTTP/2
+[server] Watch: gửi HTTP/3
+[server] Watch: gửi HTTPS
+[server] Watch kết thúc
+
+===== server_cham =====
+$ dotnet bin/Release/net10.0/Bai7.5_gRPC.dll server 127.0.0.1 9772 2000
+[server] Dịch vụ gRPC glossary.v1.Glossary tại 127.0.0.1:9772 (độ trễ Lookup 2000 ms)
+[server] Lookup('TCP') bị hủy: client đã hết hạn chót
+[server] Lookup('XYZ') bị hủy: client đã hết hạn chót
+[server] Watch(prefix='HTTP') bắt đầu
+[server] Watch: gửi HTTP/2
+[server] Watch: gửi HTTP/3
+[server] Watch: gửi HTTPS
+[server] Watch kết thúc
+
+===== client =====
+$ dotnet bin/Release/net10.0/Bai7.5_gRPC.dll client 127.0.0.1 9771
+[client] LookupRequest{term: "TCP"} = 0A03544350 (5 byte)
+[client] Gọi Lookup với hạn chót 2000 ms
+[client] Lookup('TCP') -> TCP: Giao thức vận chuyển hướng kết nối
+[client] Lookup('XYZ') -> lỗi NotFound: Không có XYZ
+[client] Gọi Watch(prefix='HTTP'), nhận luồng:
+[client]   HTTP/2 – Thuật ngữ mới: HTTP/2
+[client]   HTTP/3 – Thuật ngữ mới: HTTP/3
+[client]   HTTPS – Thuật ngữ mới: HTTPS
+[client] Kết thúc
+
+===== client_cham =====
+$ dotnet bin/Release/net10.0/Bai7.5_gRPC.dll client 127.0.0.1 9772 1000
+[client] LookupRequest{term: "TCP"} = 0A03544350 (5 byte)
+[client] Gọi Lookup với hạn chót 1000 ms
+[client] Lookup('TCP') -> lỗi DeadlineExceeded: hết hạn chót phía client
+[client] Lookup('XYZ') -> lỗi DeadlineExceeded: hết hạn chót phía client
+[client] Gọi Watch(prefix='HTTP'), nhận luồng:
+[client]   HTTP/2 – Thuật ngữ mới: HTTP/2
+[client]   HTTP/3 – Thuật ngữ mới: HTTP/3
+[client]   HTTPS – Thuật ngữ mới: HTTPS
+[client] Kết thúc

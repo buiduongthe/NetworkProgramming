@@ -1,6 +1,6 @@
 # Danh mục bài và ánh xạ với mã giả trong giáo trình
 
-Tổng số: 39 bài × 5 ngôn ngữ = 195 phiên bản; 191 phiên bản đã chạy và có ảnh kết quả thực thi.
+Tổng số: 39 bài × 5 ngôn ngữ = 195 phiên bản; 195 phiên bản đã chạy và có ảnh kết quả thực thi.
 Ký hiệu: ✔ đã chạy trong môi trường kiểm thử; ○ chưa chạy (xem lý do bên dưới). Mỗi ô là liên kết tới thư mục bài.
 Giáo trình chỉ dẫn chiếu bản C#, Java, Python; bản Rust, Go là phần bổ sung của kho mã.
 
@@ -44,7 +44,7 @@ Giáo trình chỉ dẫn chiếu bản C#, Java, Python; bản Rust, Go là ph�
 |---|---|---|---|:-:|:-:|:-:|:-:|:-:|
 | `Bai5.1_KhungBatDongBo` | Các hàm gửi, nhận khung JSON bất đồng bộ | 5.1 | 5.2.4 | [✔](../csharp/Chuong05/Bai5.1_KhungBatDongBo/) | [✔](../java/Chuong05/Bai5.1_KhungBatDongBo/) | [✔](../python/Chuong05/Bai5.1_KhungBatDongBo/) | [✔](../rust/Chuong05/Bai5.1_KhungBatDongBo/) | [✔](../go/Chuong05/Bai5.1_KhungBatDongBo/) |
 | `Bai5.2_QuetCongBatDongBo` | Kiểm tra nhiều cổng đồng thời có giới hạn | 5.2 | 5.2.5 | [✔](../csharp/Chuong05/Bai5.2_QuetCongBatDongBo/) | [✔](../java/Chuong05/Bai5.2_QuetCongBatDongBo/) | [✔](../python/Chuong05/Bai5.2_QuetCongBatDongBo/) | [✔](../rust/Chuong05/Bai5.2_QuetCongBatDongBo/) | [✔](../go/Chuong05/Bai5.2_QuetCongBatDongBo/) |
-| `Bai5.3_GiaoDienBatDongBo` | Ứng dụng tra cứu có giao diện bất đồng bộ | 5.3, 5.4 | 5.3.2 | [○](../csharp/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](../java/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](../python/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](../rust/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](../go/Chuong05/Bai5.3_GiaoDienBatDongBo/) |
+| `Bai5.3_GiaoDienBatDongBo` | Ứng dụng tra cứu có giao diện bất đồng bộ | 5.3, 5.4 | 5.3.2 | [✔](../csharp/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](../java/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](../python/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](../rust/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](../go/Chuong05/Bai5.3_GiaoDienBatDongBo/) |
 | `Bai5.4_ChatClient` | Lớp dịch vụ ChatClient bất đồng bộ | 5.5 | 5.3.3 | [✔](../csharp/Chuong05/Bai5.4_ChatClient/) | [✔](../java/Chuong05/Bai5.4_ChatClient/) | [✔](../python/Chuong05/Bai5.4_ChatClient/) | [✔](../rust/Chuong05/Bai5.4_ChatClient/) | [✔](../go/Chuong05/Bai5.4_ChatClient/) |
 | `Bai5.5_TaiTepTienTrinh` | Tải tệp bất đồng bộ có báo cáo tiến trình và hủy | 5.6 | 5.3.4 | [✔](../csharp/Chuong05/Bai5.5_TaiTepTienTrinh/) | [✔](../java/Chuong05/Bai5.5_TaiTepTienTrinh/) | [✔](../python/Chuong05/Bai5.5_TaiTepTienTrinh/) | [✔](../rust/Chuong05/Bai5.5_TaiTepTienTrinh/) | [✔](../go/Chuong05/Bai5.5_TaiTepTienTrinh/) |
 | `Bai5.6_HanChotThuLai` | Hạn chót, hủy và thử lại có lùi thời gian | 5.7, 5.8 | 5.4.2 | [✔](../csharp/Chuong05/Bai5.6_HanChotThuLai/) | [✔](../java/Chuong05/Bai5.6_HanChotThuLai/) | [✔](../python/Chuong05/Bai5.6_HanChotThuLai/) | [✔](../rust/Chuong05/Bai5.6_HanChotThuLai/) | [✔](../go/Chuong05/Bai5.6_HanChotThuLai/) |
@@ -69,7 +69,7 @@ Giáo trình chỉ dẫn chiếu bản C#, Java, Python; bản Rust, Go là ph�
 | `Bai7.2_RestServer` | Server REST tối giản trên HTTP/1.1 | 7.2 | 7.2.3 | [✔](../csharp/Chuong07/Bai7.2_RestServer/) | [✔](../java/Chuong07/Bai7.2_RestServer/) | [✔](../python/Chuong07/Bai7.2_RestServer/) | [✔](../rust/Chuong07/Bai7.2_RestServer/) | [✔](../go/Chuong07/Bai7.2_RestServer/) |
 | `Bai7.3_WebSocket` | Server WebSocket tối giản và client thử | 7.3, 7.4 | 7.3.2 | [✔](../csharp/Chuong07/Bai7.3_WebSocket/) | [✔](../java/Chuong07/Bai7.3_WebSocket/) | [✔](../python/Chuong07/Bai7.3_WebSocket/) | [✔](../rust/Chuong07/Bai7.3_WebSocket/) | [✔](../go/Chuong07/Bai7.3_WebSocket/) |
 | `Bai7.4_SSE` | Bộ đọc luồng Server-Sent Events và server SSE nhỏ | 7.5 | 7.3.3 | [✔](../csharp/Chuong07/Bai7.4_SSE/) | [✔](../java/Chuong07/Bai7.4_SSE/) | [✔](../python/Chuong07/Bai7.4_SSE/) | [✔](../rust/Chuong07/Bai7.4_SSE/) | [✔](../go/Chuong07/Bai7.4_SSE/) |
-| `Bai7.5_gRPC` | Dịch vụ gRPC tra cứu thuật ngữ (Lookup, Watch) | 7.6 | 7.4.3 | [○](../csharp/Chuong07/Bai7.5_gRPC/) | [○](../java/Chuong07/Bai7.5_gRPC/) | [✔](../python/Chuong07/Bai7.5_gRPC/) | [✔](../rust/Chuong07/Bai7.5_gRPC/) | [○](../go/Chuong07/Bai7.5_gRPC/) |
+| `Bai7.5_gRPC` | Dịch vụ gRPC tra cứu thuật ngữ (Lookup, Watch) | 7.6 | 7.4.3 | [✔](../csharp/Chuong07/Bai7.5_gRPC/) | [✔](../java/Chuong07/Bai7.5_gRPC/) | [✔](../python/Chuong07/Bai7.5_gRPC/) | [✔](../rust/Chuong07/Bai7.5_gRPC/) | [✔](../go/Chuong07/Bai7.5_gRPC/) |
 | `Bai7.6_SMTP` | Phiên gửi thư SMTP có STARTTLS và AUTH PLAIN | 7.7 | 7.5.1 | [✔](../csharp/Chuong07/Bai7.6_SMTP/) | [✔](../java/Chuong07/Bai7.6_SMTP/) | [✔](../python/Chuong07/Bai7.6_SMTP/) | [✔](../rust/Chuong07/Bai7.6_SMTP/) | [✔](../go/Chuong07/Bai7.6_SMTP/) |
 | `Bai7.7_Ping` | Gửi ICMP Echo Request và đo thời gian khứ hồi | 7.8 | 7.5.3 | [✔](../csharp/Chuong07/Bai7.7_Ping/) | [✔](../java/Chuong07/Bai7.7_Ping/) | [✔](../python/Chuong07/Bai7.7_Ping/) | [✔](../rust/Chuong07/Bai7.7_Ping/) | [✔](../go/Chuong07/Bai7.7_Ping/) |
 | `Bai7.8_MQTT` | Thiết bị cảm biến và bảng theo dõi dùng MQTT | 7.9 | 7.5.5 | [✔](../csharp/Chuong07/Bai7.8_MQTT/) | [✔](../java/Chuong07/Bai7.8_MQTT/) | [✔](../python/Chuong07/Bai7.8_MQTT/) | [✔](../rust/Chuong07/Bai7.8_MQTT/) | [✔](../go/Chuong07/Bai7.8_MQTT/) |
@@ -111,7 +111,4 @@ Xem [BaiMoRong.md](BaiMoRong.md).
 
 ## Phiên bản chưa chạy trong môi trường kiểm thử
 
-- `csharp/Chuong05/Bai5.3_GiaoDienBatDongBo` (C#): chưa chạy – WinForms cần Windows (net10.0-windows không biên dịch được trên Linux); KhungJson.cs, LookupServer.cs đã biên dịch thử
-- `csharp/Chuong07/Bai7.5_gRPC` (C#): chưa chạy – cần NuGet (Grpc.AspNetCore, Grpc.Net.Client, Google.Protobuf, Grpc.Tools)
-- `java/Chuong07/Bai7.5_gRPC` (Java): chưa chạy – cần Maven Central (grpc-java 1.68.1, protoc 3.25.5)
-- `go/Chuong07/Bai7.5_gRPC` (Go): chưa chạy: Mô-đun Go riêng (go.mod lồng) cần google.golang.org/grpc v1.68.1, protobuf v1.35.2: proxy.golang.org không phân giải được, GOPROXY=direct bị chặn (google.golang.org trả Forbidden); không có protoc-gen-go/protoc-gen-go-grpc nên chưa sinh glossaryv1/, chưa biên dịch. README ghi lệnh protoc với tham số M (giữ nguyên tra_cuu.proto).
+Không có: mọi phiên bản đều đã chạy và có ảnh kết quả.

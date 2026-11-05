@@ -32,8 +32,16 @@ mvn -q exec:java -Dexec.mainClass=GlossaryClient -Dexec.args="127.0.0.1 5002 100
 ```
 
 
+## Kết quả thực thi
+Đã chạy trên Windows 11 x64 (tháng 11/2026) bằng `tools/demo_windows.ps1`, Eclipse Temurin JDK 21.0.13, Apache Maven 3.9.9. Bốn cửa sổ: server, server cố ý chậm 2 giây, client hạn chót 2 s và client hạn chót 1 s.
+
+![Kết quả thực thi](ket_qua.png)
+
+Kết quả khớp với bản Python: `LookupRequest{term: "TCP"}` mã hóa thành 5 byte `0A 03 54 43 50`; `Lookup('XYZ')` nhận `NOT_FOUND`; client hạn chót 1 s gọi server chậm 2 s nhận `DEADLINE_EXCEEDED`, còn server ghi nhận lời gọi bị hủy; luồng `Watch(prefix='HTTP')` nhận ba mục.
+
 ## Ghi chú
-- Trạng thái kiểm thử: **chưa chạy trong môi trường biên soạn** – môi trường không truy cập được Maven Central để tải grpc-java và protoc; chưa có ảnh kết quả. Mã viết theo cách dùng chuẩn của grpc-java; kết quả mong đợi giống bản Python (cùng thông điệp in ra).
+- Trạng thái kiểm thử: đã chạy trên Windows 11 (xem Kết quả thực thi). Thứ tự dòng của server chậm khác bản Python vì `Lookup` bị hủy chạy song song với `Watch` trên các luồng của grpc-java.
+- **Đường dẫn có ký tự Unicode trên Windows:** `protoc` do `protobuf-maven-plugin` gọi không đọc được đường dẫn như `D:\…\Lập trình mạng\…` (báo `Invalid file name pattern or missing input file`). Cách khắc phục: đặt dự án ở đường dẫn không dấu; `tools/demo_windows.ps1` tự chép bài sang `%TEMP%` khi `demo.json` có `"ascii_path": true`.
 - NGOẠI LỆ về cấu trúc: bài dùng bố cục Maven chuẩn (`src/main/java`, `src/main/proto`) thay cho `javac` trên thư mục bài; lớp nghiệp vụ vẫn ở gói mặc định, lớp sinh ra ở gói `glossary.v1`.
 - Mã giả dùng gọi bất đồng bộ; bản Java dùng stub chặn cho gọn (grpc-java cũng có `GlossaryStub` bất đồng bộ và `GlossaryFutureStub`). Server chờ trên luồng của grpc-java và kiểm tra `ServerCallStreamObserver.isCancelled()` thay cho `ctx.cancelled`.
 - `Grpc.newServerBuilderForPort` lắng nghe mọi địa chỉ; tham số `host` của server chỉ dùng để in.
@@ -42,4 +50,4 @@ mvn -q exec:java -Dexec.mainClass=GlossaryClient -Dexec.args="127.0.0.1 5002 100
 - Mã giả dùng `https://glossary.local:5001` (HTTP/2 trên TLS); bài chạy HTTP/2 không mã hóa (h2c) trên máy cục bộ cho phòng thí nghiệm. Triển khai thật phải dùng TLS (Chương 8).
 - `CHANGES_FEED()` được mô phỏng bằng danh sách cố định HTTP/2, QUIC, HTTP/3, gRPC, HTTPS, mỗi 0,5 giây một mục; `Watch(prefix='HTTP')` nhận ba mục.
 - Tham số thứ ba của server là độ trễ cố ý của `Lookup` (ms), dùng cho bài tập hạn chót; mặc định 0.
-- Kiểm thử: Linux, OpenJDK 21.0.12.1.
+- Kiểm thử: Windows 11, Temurin JDK 21.0.13, Maven 3.9.9; GitHub Actions biên dịch trên Ubuntu.

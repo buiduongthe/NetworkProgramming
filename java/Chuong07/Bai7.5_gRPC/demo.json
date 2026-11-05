@@ -1,0 +1,70 @@
+{
+  "ascii_path": true,
+  "setup": [
+    [
+      "mvn",
+      "-q",
+      "-B",
+      "compile",
+      "exec:help"
+    ]
+  ],
+  "env": {
+    "MAVEN_OPTS": "-Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 -Dfile.encoding=UTF-8"
+  },
+  "processes": [
+    {
+      "name": "server",
+      "cmd": [
+        "mvn",
+        "-q",
+        "exec:java",
+        "-Dexec.mainClass=GlossaryServer",
+        "-Dexec.args=127.0.0.1 9781"
+      ],
+      "background": true,
+      "wait": 10.0
+    },
+    {
+      "name": "server_cham",
+      "cmd": [
+        "mvn",
+        "-q",
+        "exec:java",
+        "-Dexec.mainClass=GlossaryServer",
+        "-Dexec.args=127.0.0.1 9782 2000"
+      ],
+      "background": true,
+      "wait": 10.0
+    },
+    {
+      "name": "client",
+      "cmd": [
+        "mvn",
+        "-q",
+        "exec:java",
+        "-Dexec.mainClass=GlossaryClient",
+        "-Dexec.args=127.0.0.1 9781"
+      ],
+      "timeout": 90
+    },
+    {
+      "name": "client_cham",
+      "cmd": [
+        "mvn",
+        "-q",
+        "exec:java",
+        "-Dexec.mainClass=GlossaryClient",
+        "-Dexec.args=127.0.0.1 9782 1000"
+      ],
+      "timeout": 90,
+      "wait": 3.0
+    }
+  ],
+  "titles": {
+    "server": "Cửa sổ 1 – server",
+    "server_cham": "Cửa sổ 2 – server chậm 2 giây",
+    "client": "Cửa sổ 3 – client, hạn chót 2 s",
+    "client_cham": "Cửa sổ 4 – client, hạn chót 1 s"
+  }
+}

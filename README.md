@@ -4,7 +4,7 @@ Kho mã nguồn đi kèm **Giáo trình Lập trình mạng** (Trường Đại 
 
 > **English summary.** Companion source code for the Vietnamese textbook *Network Programming*. Every pseudocode listing in the book is implemented in C#, Java and Python (the languages referenced by the book) and additionally in Rust and Go, using the standard socket APIs, from TCP/UDP client–server basics to asynchronous I/O, multi-client servers, broadcast/multicast, HTTP, WebSocket, SSE, gRPC, SMTP, ICMP, MQTT, LLM APIs, the Model Context Protocol (MCP) and TLS. Each example is self-contained, commented, and ships with a reproducible demo script and a screenshot of its real output.
 
-Quy mô: <!-- THONG_KE -->39 bài × 5 ngôn ngữ = 195 chương trình; 191 chương trình đã chạy và có ảnh kết quả thực thi; 19 bài mở rộng<!-- /THONG_KE -->.
+Quy mô: <!-- THONG_KE -->39 bài × 5 ngôn ngữ = 195 chương trình; 195 chương trình đã chạy và có ảnh kết quả thực thi; 19 bài mở rộng<!-- /THONG_KE -->.
 
 ## Mục lục
 - [Mục tiêu và nguyên tắc thiết kế](#mục-tiêu-và-nguyên-tắc-thiết-kế)
@@ -155,7 +155,7 @@ Ký hiệu: ✔ đã chạy và có ảnh kết quả; ○ chưa chạy trong m�
 |---|---|---|---|:-:|:-:|:-:|:-:|:-:|
 | `Bai5.1_KhungBatDongBo` | Các hàm gửi, nhận khung JSON bất đồng bộ | 5.1 | 5.2.4 | [✔](csharp/Chuong05/Bai5.1_KhungBatDongBo/) | [✔](java/Chuong05/Bai5.1_KhungBatDongBo/) | [✔](python/Chuong05/Bai5.1_KhungBatDongBo/) | [✔](rust/Chuong05/Bai5.1_KhungBatDongBo/) | [✔](go/Chuong05/Bai5.1_KhungBatDongBo/) |
 | `Bai5.2_QuetCongBatDongBo` | Kiểm tra nhiều cổng đồng thời có giới hạn | 5.2 | 5.2.5 | [✔](csharp/Chuong05/Bai5.2_QuetCongBatDongBo/) | [✔](java/Chuong05/Bai5.2_QuetCongBatDongBo/) | [✔](python/Chuong05/Bai5.2_QuetCongBatDongBo/) | [✔](rust/Chuong05/Bai5.2_QuetCongBatDongBo/) | [✔](go/Chuong05/Bai5.2_QuetCongBatDongBo/) |
-| `Bai5.3_GiaoDienBatDongBo` | Ứng dụng tra cứu có giao diện bất đồng bộ | 5.3, 5.4 | 5.3.2 | [○](csharp/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](java/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](python/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](rust/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](go/Chuong05/Bai5.3_GiaoDienBatDongBo/) |
+| `Bai5.3_GiaoDienBatDongBo` | Ứng dụng tra cứu có giao diện bất đồng bộ | 5.3, 5.4 | 5.3.2 | [✔](csharp/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](java/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](python/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](rust/Chuong05/Bai5.3_GiaoDienBatDongBo/) | [✔](go/Chuong05/Bai5.3_GiaoDienBatDongBo/) |
 | `Bai5.4_ChatClient` | Lớp dịch vụ ChatClient bất đồng bộ | 5.5 | 5.3.3 | [✔](csharp/Chuong05/Bai5.4_ChatClient/) | [✔](java/Chuong05/Bai5.4_ChatClient/) | [✔](python/Chuong05/Bai5.4_ChatClient/) | [✔](rust/Chuong05/Bai5.4_ChatClient/) | [✔](go/Chuong05/Bai5.4_ChatClient/) |
 | `Bai5.5_TaiTepTienTrinh` | Tải tệp bất đồng bộ có báo cáo tiến trình và hủy | 5.6 | 5.3.4 | [✔](csharp/Chuong05/Bai5.5_TaiTepTienTrinh/) | [✔](java/Chuong05/Bai5.5_TaiTepTienTrinh/) | [✔](python/Chuong05/Bai5.5_TaiTepTienTrinh/) | [✔](rust/Chuong05/Bai5.5_TaiTepTienTrinh/) | [✔](go/Chuong05/Bai5.5_TaiTepTienTrinh/) |
 | `Bai5.6_HanChotThuLai` | Hạn chót, hủy và thử lại có lùi thời gian | 5.7, 5.8 | 5.4.2 | [✔](csharp/Chuong05/Bai5.6_HanChotThuLai/) | [✔](java/Chuong05/Bai5.6_HanChotThuLai/) | [✔](python/Chuong05/Bai5.6_HanChotThuLai/) | [✔](rust/Chuong05/Bai5.6_HanChotThuLai/) | [✔](go/Chuong05/Bai5.6_HanChotThuLai/) |
@@ -180,7 +180,7 @@ Ký hiệu: ✔ đã chạy và có ảnh kết quả; ○ chưa chạy trong m�
 | `Bai7.2_RestServer` | Server REST tối giản trên HTTP/1.1 | 7.2 | 7.2.3 | [✔](csharp/Chuong07/Bai7.2_RestServer/) | [✔](java/Chuong07/Bai7.2_RestServer/) | [✔](python/Chuong07/Bai7.2_RestServer/) | [✔](rust/Chuong07/Bai7.2_RestServer/) | [✔](go/Chuong07/Bai7.2_RestServer/) |
 | `Bai7.3_WebSocket` | Server WebSocket tối giản và client thử | 7.3, 7.4 | 7.3.2 | [✔](csharp/Chuong07/Bai7.3_WebSocket/) | [✔](java/Chuong07/Bai7.3_WebSocket/) | [✔](python/Chuong07/Bai7.3_WebSocket/) | [✔](rust/Chuong07/Bai7.3_WebSocket/) | [✔](go/Chuong07/Bai7.3_WebSocket/) |
 | `Bai7.4_SSE` | Bộ đọc luồng Server-Sent Events và server SSE nhỏ | 7.5 | 7.3.3 | [✔](csharp/Chuong07/Bai7.4_SSE/) | [✔](java/Chuong07/Bai7.4_SSE/) | [✔](python/Chuong07/Bai7.4_SSE/) | [✔](rust/Chuong07/Bai7.4_SSE/) | [✔](go/Chuong07/Bai7.4_SSE/) |
-| `Bai7.5_gRPC` | Dịch vụ gRPC tra cứu thuật ngữ (Lookup, Watch) | 7.6 | 7.4.3 | [○](csharp/Chuong07/Bai7.5_gRPC/) | [○](java/Chuong07/Bai7.5_gRPC/) | [✔](python/Chuong07/Bai7.5_gRPC/) | [✔](rust/Chuong07/Bai7.5_gRPC/) | [○](go/Chuong07/Bai7.5_gRPC/) |
+| `Bai7.5_gRPC` | Dịch vụ gRPC tra cứu thuật ngữ (Lookup, Watch) | 7.6 | 7.4.3 | [✔](csharp/Chuong07/Bai7.5_gRPC/) | [✔](java/Chuong07/Bai7.5_gRPC/) | [✔](python/Chuong07/Bai7.5_gRPC/) | [✔](rust/Chuong07/Bai7.5_gRPC/) | [✔](go/Chuong07/Bai7.5_gRPC/) |
 | `Bai7.6_SMTP` | Phiên gửi thư SMTP có STARTTLS và AUTH PLAIN | 7.7 | 7.5.1 | [✔](csharp/Chuong07/Bai7.6_SMTP/) | [✔](java/Chuong07/Bai7.6_SMTP/) | [✔](python/Chuong07/Bai7.6_SMTP/) | [✔](rust/Chuong07/Bai7.6_SMTP/) | [✔](go/Chuong07/Bai7.6_SMTP/) |
 | `Bai7.7_Ping` | Gửi ICMP Echo Request và đo thời gian khứ hồi | 7.8 | 7.5.3 | [✔](csharp/Chuong07/Bai7.7_Ping/) | [✔](java/Chuong07/Bai7.7_Ping/) | [✔](python/Chuong07/Bai7.7_Ping/) | [✔](rust/Chuong07/Bai7.7_Ping/) | [✔](go/Chuong07/Bai7.7_Ping/) |
 | `Bai7.8_MQTT` | Thiết bị cảm biến và bảng theo dõi dùng MQTT | 7.9 | 7.5.5 | [✔](csharp/Chuong07/Bai7.8_MQTT/) | [✔](java/Chuong07/Bai7.8_MQTT/) | [✔](python/Chuong07/Bai7.8_MQTT/) | [✔](rust/Chuong07/Bai7.8_MQTT/) | [✔](go/Chuong07/Bai7.8_MQTT/) |
@@ -230,7 +230,7 @@ Các bài dưới đây bổ sung chủ đề thực tiễn, gợi ý từ các 
 - **Đặt tên.** `ChuongNN/BaiN.k_TenKhongDau`; C#: một dự án mỗi bài, vai trò chọn bằng tham số (`server`, `client`…); Java: gói mặc định, một lớp `main` cho mỗi vai trò; Python: một tệp cho mỗi vai trò; Rust, Go: một chương trình mỗi bài, vai trò chọn bằng tham số như C#.
 
 ## Kiểm thử
-- Môi trường kiểm thử: Ubuntu 24.04 (Linux x86-64), .NET SDK 10.0.114, OpenJDK 21.0.12, Python 3.13.18 (Python 3.12 với Tk 8.6 cho giao diện), Rust 1.97.0, Go 1.24.7, mosquitto 2.0.18; tháng 11/2026.
+- Môi trường kiểm thử: Ubuntu 24.04 (Linux x86-64), .NET SDK 10.0.114, OpenJDK 21.0.12, Python 3.13.18 (Python 3.12 với Tk 8.6 cho giao diện), Rust 1.97.0, Go 1.24.7, mosquitto 2.0.18; các bài cần Windows hoặc cần tải thư viện (C# 5.3 WinForms; C#, Java, Go 7.5 gRPC) chạy trên Windows 11 x64 với .NET SDK 10.0.403, Temurin JDK 21.0.13, Maven 3.9.9, Go 1.27.3, protoc 36.2 bằng `tools/demo_windows.ps1`; tháng 11/2026.
 - Mỗi phiên bản ✔ được biên dịch và chạy theo `demo.json`; ảnh kết quả phản ánh đúng đầu ra của lần chạy đó.
 - Quy trình GitHub Actions (`.github/workflows/build.yml`) biên dịch lại toàn bộ C#, Java, Rust, Go và kiểm tra cú pháp Python sau mỗi lần đẩy mã, gồm cả dự án Windows Forms (trên máy Windows) và dự án gRPC (có NuGet, Maven).
 - Một số kết quả phụ thuộc môi trường mạng (phân giải tên miền công cộng, cổng bị lọc, ICMP); README của bài ghi rõ khi kết quả trên máy khác có thể khác.

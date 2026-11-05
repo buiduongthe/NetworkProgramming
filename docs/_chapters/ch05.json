@@ -36,7 +36,7 @@
     ],
     "muc": "5.3.2",
     "kiem_thu": {
-      "csharp": "chưa chạy – WinForms cần Windows (net10.0-windows không biên dịch được trên Linux); KhungJson.cs, LookupServer.cs đã biên dịch thử",
+      "csharp": "đã chạy (Windows 11, .NET SDK 10.0.403, tools/demo_windows.ps1)",
       "java": "đã chạy",
       "python": "đã chạy"
     },

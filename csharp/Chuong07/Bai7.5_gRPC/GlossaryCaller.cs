@@ -42,7 +42,9 @@ static class GlossaryCaller
         }
         catch (RpcException e)                                          // NOT_FOUND, DEADLINE_EXCEEDED, UNAVAILABLE…
         {
-            Console.WriteLine($"[client] Lookup('{term}') -> lỗi {e.StatusCode}: {e.Status.Detail}");
+            // DEADLINE_EXCEEDED do chính client sinh ra nên không có lời mô tả từ server
+            string detail = e.Status.Detail is { Length: > 0 } d ? d : "hết hạn chót phía client";
+            Console.WriteLine($"[client] Lookup('{term}') -> lỗi {e.StatusCode}: {detail}");
         }
     }
 }

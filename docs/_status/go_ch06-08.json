@@ -56,8 +56,8 @@
   },
   {
     "bai": "Bai7.5_gRPC",
-    "kiem_thu": "chưa chạy",
-    "ghi_chu": "Mô-đun Go riêng (go.mod lồng) cần google.golang.org/grpc v1.68.1, protobuf v1.35.2: proxy.golang.org không phân giải được, GOPROXY=direct bị chặn (google.golang.org trả Forbidden); không có protoc-gen-go/protoc-gen-go-grpc nên chưa sinh glossaryv1/, chưa biên dịch. README ghi lệnh protoc với tham số M (giữ nguyên tra_cuu.proto)."
+    "kiem_thu": "đã chạy",
+    "ghi_chu": "Mô-đun Go riêng (go.mod lồng), grpc-go v1.68.1; chạy trên Windows 11 bằng tools/demo_windows.ps1 (Go 1.27.3, protoc 36.2)."
   },
   {
     "bai": "Bai7.6_SMTP",

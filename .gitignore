@@ -18,6 +18,8 @@ __pycache__/
 .venv/
 venv/
 .pytest_cache/
+.ruff_cache/
+.mypy_cache/
 *.egg-info/
 
 # Rust (thư mục build dùng chung rust/target)
@@ -59,3 +61,5 @@ desktop.ini
 
 # Tệp tiện ích cục bộ trên máy tác giả
 PUSH_LEN_GITHUB.bat
+CHAY_DEMO_WINDOWS.bat
+CHAY_DEMO_*.bat

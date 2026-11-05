@@ -72,7 +72,7 @@ def notes(data):
                 v = b['kiem_thu'][k]
                 if not v.startswith('đã chạy'):
                     out.append(f"- `{k}/Chuong{ch:02d}/{b['bai']}` ({name}): {v}")
-    return '\n'.join(out)
+    return '\n'.join(out) if out else 'Không có: mọi phiên bản đều đã chạy và có ảnh kết quả.'
 
 
 def main():

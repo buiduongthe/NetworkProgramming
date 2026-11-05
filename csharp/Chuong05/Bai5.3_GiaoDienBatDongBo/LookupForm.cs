@@ -25,6 +25,15 @@ class LookupForm : Form
     NetworkStream? conn;                                                 // conn: trường của cửa sổ
     int ticks;
 
+    // Truy cập cho kịch bản minh họa tự động (DemoGui.cs)
+    internal TextBox TxtPort => txtPort;
+    internal TextBox TxtTerm => txtTerm;
+    internal TextBox TxtResult => txtResult;
+    internal Button BtnConnect => btnConnect;
+    internal Button BtnLookup => btnLookup;
+    internal Label LblStatus => lblStatus;
+    internal int Ticks => ticks;
+
     public LookupForm(string host, int port)
     {
         Text = "Tra cứu thuật ngữ – Bài 5.3";
