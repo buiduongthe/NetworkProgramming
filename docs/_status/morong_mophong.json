@@ -10,7 +10,7 @@
       "python": "đã chạy",
       "go": "đã chạy"
     },
-    "ten": "Mô phỏng sự kiện rời rạc các giao thức và kiểu truyền: TCP (bắt tay, cwnd, gửi lại nhanh, RTO, FIN), UDP, unicast, broadcast, multicast/IGMP, anycast; hoạt hình HTML",
+    "ten": "Mô phỏng sự kiện rời rạc các giao thức và kiểu truyền: TCP (bắt tay, cwnd, gửi lại nhanh, RTO, FIN), UDP, unicast, broadcast, multicast/IGMP, anycast; bên trong máy chủ: đồng bộ một luồng, đa luồng (chờ lõi CPU, khóa), nhóm luồng + hàng đợi (503), bất đồng bộ (vòng lặp sự kiện, nhịp tim), phối hợp vòng lặp + nhóm luồng; bảng so sánh; hoạt hình HTML",
     "ghi_chu": "Không mở socket; tất định theo seed (xorshift32 tự viết) – bản Python và Go in kết quả trùng từng ký tự (đã so sánh với nhiều seed và --loss). Hoạt hình mo_phong.html (JavaScript thuần, không CDN) do chương trình sinh, chụp bằng Playwright thành ket_qua_gui.png. TCP rút gọn theo Reno: RTO cố định 100 ms, không thổi phồng cwnd khi khôi phục nhanh. Đọc thêm: RFC 9293, 5681, 6298, 768, 919, 1112, 2236, 4541, 4786; Grigorik 2013, Ch. 2–3."
   },
   {

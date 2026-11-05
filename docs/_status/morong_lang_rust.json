@@ -20,7 +20,7 @@
     "kiem_thu": {
       "rust": "đã chạy"
     },
-    "ten": "Mô phỏng sự kiện rời rạc các giao thức và kiểu truyền: TCP (bắt tay, cwnd, gửi lại nhanh, RTO, FIN), UDP, unicast, broadcast, multicast/IGMP, anycast; hoạt hình HTML",
+    "ten": "Mô phỏng sự kiện rời rạc các giao thức và kiểu truyền: TCP (bắt tay, cwnd, gửi lại nhanh, RTO, FIN), UDP, unicast, broadcast, multicast/IGMP, anycast; bên trong máy chủ: đồng bộ một luồng, đa luồng (chờ lõi CPU, khóa), nhóm luồng + hàng đợi (503), bất đồng bộ (vòng lặp sự kiện, nhịp tim), phối hợp vòng lặp + nhóm luồng; bảng so sánh; hoạt hình HTML",
     "ghi_chu": "Bộ mô phỏng sự kiện dùng enum Ev + trait App thay cho closure; RNG xorshift32. Đầu ra và tệp HTML hoạt hình byte-khớp bản Python."
   },
   {
