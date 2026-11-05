@@ -171,6 +171,15 @@ sealed class MayPhat
             (camera, mic) = (cam, m);
             fps = Math.Clamp(fpsMoi ?? fps, 1, 30);
             gop = Math.Clamp(gopMoi ?? gop, 1, 300);
+            tt = ThongTin();
+        }
+        // thong_tin đi TCP, gói phương tiện đi UDP trên luồng khác: gửi thong_tin trước và chờ 20 ms để máy chủ kịp
+        // chuyển sang "đang phát" – nếu không, khung I #0 có thể tới trước, bị bỏ vì "chưa phát", và bộ đệm GOP rỗng
+        // tới khung I kế tiếp.
+        Gui(tt);
+        Thread.Sleep(20);
+        lock (khoa)
+        {
             t0 = Now;
             so = seq = nAm = 0;
             (soICuoi, truoc) = (null, null);
@@ -178,9 +187,7 @@ sealed class MayPhat
             LamMoiThongKe();
             dangPhat = true;
             cam.DatFps(fps);
-            tt = ThongTin();
         }
-        Gui(tt);
         bao($"Bắt đầu phát {Rong}x{Cao} {fps} fps GOP {gop}");
     }
 
