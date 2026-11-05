@@ -181,6 +181,7 @@ public class ServerVideoGui {
     /** Ghi nhật ký – gọi được từ mọi luồng. */
     void ghiLog(String s) {
         String dong = "[" + LocalTime.now().format(GIO) + "] " + s + "\n";
+        System.out.print("[server-gui] " + dong);                    // cũng in ra dòng lệnh (ghi được vào tệp)
         SwingUtilities.invokeLater(() -> {
             txtLog.append(dong);
             if (txtLog.getLineCount() > 500) {

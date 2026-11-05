@@ -310,6 +310,7 @@ public class ServerAmThanhGui {
     /** Ghi nhật ký – gọi được từ mọi luồng (tự chuyển sang EDT). */
     void ghiLog(String s) {
         String dong = "[" + LocalTime.now().format(GIO) + "] " + s + "\n";
+        System.out.print("[server-gui] " + dong);                    // cũng in ra dòng lệnh (ghi được vào tệp)
         SwingUtilities.invokeLater(() -> {
             txtLog.append(dong);
             if (txtLog.getLineCount() > 500) {                       // giữ tối đa 500 dòng
