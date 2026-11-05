@@ -145,21 +145,21 @@ func runClient(ten, host string, cong int, args []string) {
 				return
 			}
 			h, payload, ok := tachHeader(buf[:n])
-			if !ok || h.loai != loaiManh {
+			if !ok || h.Loai != loaiManh {
 				continue
 			}
 			khoa.Lock()
-			nen := ghep.them(h, payload, time.Now())
+			nen := ghep.Them(h, payload, time.Now())
 			khoa.Unlock()
 			if nen == nil {
 				continue
 			}
 			anh, err := giaiNen(nen)
-			if err != nil || len(anh) != int(h.w)*int(h.h)*3 {
+			if err != nil || len(anh) != int(h.W)*int(h.H)*3 {
 				continue
 			}
 			khoa.Lock()
-			xem = &anhChup{int(h.w), int(h.h), anh, ""}
+			xem = &anhChup{int(h.W), int(h.H), anh, ""}
 			khungNhan++
 			byteNhan += len(nen)
 			khoa.Unlock()
@@ -234,7 +234,7 @@ func runClient(ten, host string, cong int, args []string) {
 			if hanGui.Before(bayGio) {
 				hanGui = bayGio
 			}
-			anh, w, h := thuNho(camera.layKhung(soKhung), rong, cao, d) // giảm độ phân giải rồi nén
+			anh, w, h := thuNho(camera.LayKhung(soKhung), rong, cao, d) // giảm độ phân giải rồi nén
 			nen := nenZlib(anh)
 			for _, g := range chiaManh(chao.Ma, uint32(soKhung), w, h, nen) {
 				guiManh++
@@ -256,7 +256,7 @@ func runClient(ten, host string, cong int, args []string) {
 			mocDo = mocDo.Add(time.Second)
 			giay++
 			khoa.Lock()
-			kn, bn, mat := khungNhan, byteNhan, ghep.manhMat
+			kn, bn, mat := khungNhan, byteNhan, ghep.ManhMat
 			khungNhan, byteNhan = 0, 0
 			khoa.Unlock()
 			log("%2ds gửi %2d fps %4.0f | nhận %2d fps %5.0f, mất %d", giay, demGui,
@@ -273,7 +273,7 @@ func runClient(ten, host string, cong int, args []string) {
 	log("Gửi %d khung = %d mảnh, giả lập mất %d mảnh", guiKhung, guiManh, boGiaLap)
 	khoa.Lock()
 	g := ghep
-	log("Nhận %d khung đủ, hỏng %d, mất hẳn %d, mảnh mất %d", g.khungDu, g.khungHong, g.khungMatHan, g.manhMat)
+	log("Nhận %d khung đủ, hỏng %d, mất hẳn %d, mảnh mất %d", g.KhungDu, g.KhungHong, g.KhungMatHan, g.ManhMat)
 	khoa.Unlock()
 	if *ghepRa != "" && len(dsChup) > 0 {
 		W, H, err := ghepAnh(*ghepRa, dsChup)

@@ -78,7 +78,7 @@ func (k *khach) gui(v any) {
 func (k *khach) guiMic() {
 	k.gui(map[string]any{"loai": "mic", "mo": k.micMo(), "ly_do": k.lyDo()})
 	if !k.micMo() {
-		k.boDem.xoa() // bỏ phần âm thanh còn trong bộ đệm
+		k.boDem.Xoa() // bỏ phần âm thanh còn trong bộ đệm
 	}
 }
 
@@ -118,6 +118,7 @@ func phucVu(c net.Conn) {
 	khoa.Unlock()
 	k.gui(map[string]any{"loai": "chao", "ma": k.ma, "cong_udp": congUDP, "tan_so_mau": tanSoMau,
 		"khung_ms": khungMs})
+	k.gui(map[string]any{"loai": "do_loi", "gia_tri": k.doLoi}) // client hiện "Server Vol"
 	khoa.Lock()
 	slog("#%d %s vào phòng từ %s", k.ma, k.ten, addr)
 	k.guiMic()
@@ -177,7 +178,7 @@ func nhanUDP(sock *net.UDPConn) {
 			continue
 		}
 		khoa.Lock()
-		k := dsKhach[g.ssrc]
+		k := dsKhach[g.Ssrc]
 		switch {
 		case k == nil:
 		case k.udp == nil && addr.IP.String() != k.ip:
@@ -188,11 +189,11 @@ func nhanUDP(sock *net.UDPConn) {
 			}
 			if addr.String() != k.udp.String() { // quy tắc 6: sai nguồn
 				k.saiNguon++
-			} else if g.pt == ptAmThanh && len(g.payload) == byteMoiKhung {
+			} else if g.Pt == ptAmThanh && len(g.Payload) == byteMoiKhung {
 				if !k.micMo() { // quy tắc 6: mic tắt
 					k.biChan++
 				} else {
-					k.boDem.nhanGoi(g.seq, g.ts, g.payload, time.Since(t0).Seconds())
+					k.boDem.NhanGoi(g.Seq, g.Ts, g.Payload, time.Since(t0).Seconds())
 				}
 			}
 		}
@@ -211,7 +212,7 @@ func vongTron(sock *net.UDPConn) {
 		for _, k := range dsKhach {
 			var p []byte
 			if k.micMo() {
-				p = k.boDem.lay()
+				p = k.boDem.Lay()
 			}
 			if p == nil {
 				k.mucVao = math.Inf(-1)
@@ -314,6 +315,7 @@ func lenhServer(dong string) bool {
 		g, _ := strconv.ParseFloat(p[2], 64)
 		for _, k := range chon(p[1]) {
 			k.doLoi = g
+			k.gui(map[string]any{"loai": "do_loi", "gia_tri": g}) // báo client (chỉ để hiển thị)
 		}
 		phatSuKien(fmt.Sprintf("server đặt độ lợi %s = %.2f", p[1], g))
 	case p[0] == "am_luong_chung" && len(p) == 2:
@@ -334,7 +336,7 @@ func inTrangThai() {
 	slog(" #  tên mic          lợi   mức vào            mất  jit.")
 	for _, k := range danhSach(dsKhach, nil) {
 		slog("%2d  %-3s %s %4.2f %s %s %3d %4.1fms", k.ma, k.ten, padPhai(k.lyDo(), 12), k.doLoi,
-			chuDB(k.mucVao, 5), thanhMuc(k.mucVao, 10), k.boDem.mat(), k.boDem.jitterMs())
+			chuDB(k.mucVao, 5), thanhMuc(k.mucVao, 10), k.boDem.Mat(), k.boDem.JitterMs())
 	}
 }
 
@@ -348,8 +350,8 @@ func inTongKet() {
 	slog(" #  tên gói vào mất trễ thiếu cạn bị chặn cắt ngọn")
 	for _, k := range danhSach(dsKhach, daRoi) {
 		b := k.boDem
-		slog("%2d  %-3s %7d %3d %4d %5d %3d %7d %8d", k.ma, k.ten, b.nhan, b.mat(), b.tre, b.thieu,
-			b.can, k.biChan, k.catNgon)
+		slog("%2d  %-3s %7d %3d %4d %5d %3d %7d %8d", k.ma, k.ten, b.Nhan, b.Mat(), b.Tre, b.Thieu,
+			b.Can, k.biChan, k.catNgon)
 	}
 }
 

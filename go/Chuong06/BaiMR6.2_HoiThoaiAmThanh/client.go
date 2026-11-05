@@ -152,9 +152,9 @@ func runClient(ten, host string, cong int, args []string) {
 			if err != nil {
 				return
 			}
-			if g, ok := tachRTP(buf[:n]); ok && g.pt == ptAmThanh {
+			if g, ok := tachRTP(buf[:n]); ok && g.Pt == ptAmThanh {
 				khoa.Lock()
-				boDem.nhanGoi(g.seq, g.ts, g.payload, time.Since(t0).Seconds())
+				boDem.NhanGoi(g.Seq, g.Ts, g.Payload, time.Since(t0).Seconds())
 				khoa.Unlock()
 			}
 		}
@@ -227,7 +227,7 @@ func runClient(ten, host string, cong int, args []string) {
 		ts += mauMoiKhung // nhãn thời gian tăng theo thời gian thực, kể cả khi tắt mic
 		// 2. Nhận và phát
 		khoa.Lock()
-		p := boDem.lay()
+		p := boDem.Lay()
 		khoa.Unlock()
 		mau := make([]int16, mauMoiKhung)
 		if p != nil {
@@ -263,8 +263,8 @@ func runClient(ten, host string, cong int, args []string) {
 	khoa.Lock()
 	defer khoa.Unlock()
 	b := boDem
-	log("Nhận %d gói, mất %d, trễ %d, jitter %.2f ms", b.nhan, b.mat(), b.tre, b.jitterMs())
-	log("Phát: thiếu %d khung, cạn %d lần, đệm %d khung = %d ms", b.thieu, b.can, *dem, *dem*khungMs)
+	log("Nhận %d gói, mất %d, trễ %d, jitter %.2f ms", b.Nhan, b.Mat(), b.Tre, b.JitterMs())
+	log("Phát: thiếu %d khung, cạn %d lần, đệm %d khung = %d ms", b.Thieu, b.Can, *dem, *dem*khungMs)
 	if *ghi != "" {
 		os.MkdirAll(filepath.Dir(*ghi), 0o755)
 		if err := ghiWAV(*ghi, banGhi); err != nil {

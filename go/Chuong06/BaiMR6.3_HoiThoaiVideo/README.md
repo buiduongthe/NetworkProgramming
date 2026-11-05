@@ -4,7 +4,7 @@
 |---|---|
 | Loại | **Bài mở rộng** – không có trong giáo trình, không có mã giả tương ứng |
 | Liên hệ với giáo trình | Bài mở rộng MR6.2 (hội thoại âm thanh); Chương 6: Bài 6.1 (server đa luồng), Bài 6.4 (server chat); Chương 4: Bài 4.1 (UDP); Chương 3: Bài 3.2 (định khung thông điệp) |
-| Thư viện | Thư viện chuẩn Go: `net`, `sync`, `compress/zlib`, `image/png`, `encoding/binary`, `encoding/json` |
+| Thư viện | Bản dòng lệnh: chỉ thư viện chuẩn Go (`net`, `sync`, `compress/zlib`, `image/png`, `encoding/binary`, `encoding/json`). Ứng dụng giao diện (`gui/`, mô-đun riêng): Fyne v2.6.3 (cần cgo/gcc); camera thật qua chương trình ngoài `ffmpeg` (`os/exec`) |
 | Bản ngôn ngữ khác | [C#](../../../csharp/Chuong06/BaiMR6.3_HoiThoaiVideo/), [Java](../../../java/Chuong06/BaiMR6.3_HoiThoaiVideo/), [Python](../../../python/Chuong06/BaiMR6.3_HoiThoaiVideo/), [Rust](../../../rust/Chuong06/BaiMR6.3_HoiThoaiVideo/) |
 
 ## Mục tiêu
@@ -33,10 +33,14 @@ Cùng ý tưởng với MR6.2 nhưng cho hình ảnh: n client gửi khung hình
 
 ## Cấu trúc tệp
 - `main.go` – chọn vai trò: `server`, `khach`.
-- `chung.go` – header datagram, `chiaManh`, `ghepKhung`, phông chữ bitmap 5×7, tô/vẽ chữ, thu nhỏ/phóng to, camera tổng hợp, nén/giải nén zlib, `ghiPNG`.
+- `video/giaothuc.go` – gói dùng chung (bản dòng lệnh và giao diện): header datagram, `ChiaManh`, `GhepKhung`, phông chữ bitmap 5×7, tô/vẽ chữ, thu nhỏ/phóng to, camera tổng hợp, nén/giải nén zlib, `GhiPNG`. Go không cho nhập gói `main`, nên phần chung nằm ở gói con để mô-đun `gui/` dùng lại.
+- `chung.go` – đặt tên ngắn (bí danh) cho các hàm, kiểu của gói `video` để `server.go`, `client.go` đọc gọn.
 - `server.go` – server: goroutine cho mỗi kết nối TCP, goroutine nhận UDP (ghép mảnh, kiểm tra quyền, vẽ ô), goroutine ghép lưới và gửi theo hạn của từng người nhận, bảng điều khiển, tổng kết khi nhận SIGINT/SIGTERM.
 - `client.go` – client: vòng gửi theo fps cho phép, goroutine nhận lưới, lệnh `chup`, ghép ảnh chụp (`-ghep`).
-- `demo.json`, `ket_qua.txt`, `ket_qua.png` – kịch bản và kết quả thực thi thật; `ket_qua_video.png` – 5 ảnh lưới do client A chụp trong lần chạy đó.
+- `video/phong.go`, `video/khach.go` – lõi server/client dạng đối tượng cho ứng dụng giao diện: cùng giao thức, cùng 6 quy tắc; server trả ảnh mới nhất của từng client để vẽ lưới.
+- `video/thietbi.go` – liệt kê camera, thu camera thật qua `ffmpeg` (khung thô 160×120 RGB từ stdout), tự chuyển sang "Camera giả lập" khi lỗi; `an_windows.go`/`an_khac.go` – chạy ffmpeg không bật cửa sổ console trên Windows.
+- `gui/` – ứng dụng giao diện Fyne (mô-đun Go riêng, `go.mod` có `replace` về mô-đun gốc): `main.go` (vai trò `server_gui`, `client_gui`, `demo_gui`), `server_gui.go`, `client_gui.go`, `demo_gui.go`, `chung_gui.go`.
+- `demo.json`, `ket_qua.txt`, `ket_qua.png` – kịch bản và kết quả thực thi thật; `ket_qua_video.png` – 5 ảnh lưới do client A chụp trong lần chạy đó; `ket_qua_gui.png` – ảnh các cửa sổ giao diện do `demo_gui` chụp.
 
 ## Cách chạy
 Trong thư mục bài (Windows: `out\app.exe` thay cho `out/app`):
@@ -51,9 +55,57 @@ Lệnh server: `tat_camera tat_ca`, `tat_camera B`, `bat_camera tat_ca`, `fps_to
 
 Tùy chọn client (đặt sau ba tham số vị trí): `-fps 10`, `-mat-goi 0.02`, `-thoi-gian`.
 
-**Không có camera thật:** thư viện chuẩn Go không có API camera (cần gói ngoài, ví dụ gọi V4L2/OpenCV qua cgo), nên bản Go chỉ dùng camera tổng hợp; muốn dùng camera thật, chạy client Python với `--camera` vào server Go.
+**Bản dòng lệnh không dùng camera thật:** thư viện chuẩn Go không có API camera, nên chương trình dòng lệnh chỉ dùng camera tổng hợp. Muốn dùng camera thật, dùng **ứng dụng giao diện** dưới đây (camera qua tiến trình `ffmpeg`).
 
 Tái lập kết quả từ thư mục gốc của kho: `python3 tools/demo.py go/Chuong06/BaiMR6.3_HoiThoaiVideo`.
+
+## Ứng dụng giao diện
+
+![Ứng dụng giao diện – Camera Server và ba Camera Client](ket_qua_gui.png)
+
+Ảnh trên do `demo_gui` tự thao tác và chụp (Linux, Xvfb, **Camera giả lập**). Một chương trình `out/app_gui` có ba vai trò:
+
+```bash
+out/app_gui server_gui [host] [cổng_tcp] [cổng_udp]      # mặc định 127.0.0.1 41635 41636
+out/app_gui client_gui [tên] [host] [cổng_tcp]
+out/app_gui demo_gui   [host] [cổng_tcp] [cổng_udp] [ảnh.png]   # tự bấm nút, chụp cửa sổ
+```
+
+**Camera Server** – lưới 4×4 ô, mỗi client một ô (theo thứ tự vào phòng): hình mới nhất server nhận được, tên, fps và kbit/s vào, **chấm đỏ** và chữ "CAMERA TẮT" khi camera tắt. Khung phải: IP, cổng, START SERVER/STOP SERVER; danh sách client; với client đang chọn: *Tắt camera*/*Bật camera* (lệnh tắt của server), fps gửi tối đa (1–15), độ phân giải gửi (1/1, 1/2, 1/4); fps chung; nhật ký; thanh trạng thái. Không thêm thông điệp nào vào giao thức: lưới trên cửa sổ server vẽ từ chính các ảnh server đã giải nén để ghép lưới gửi đi (MCU).
+
+**Camera Client** – *Kết nối server* (IP, cổng, tên, Kết nối/Ngắt kết nối); *Camera* (chọn camera thật hoặc "Camera giả lập", START = tự bật, CANCEL = tự tắt, nhãn **[THIẾT BỊ THẬT]**/**[GIẢ LẬP]**); khung xem trước đúng hình đang gửi (đã thu nhỏ theo yêu cầu server rồi phóng lại); khung "Lưới nhận từ server" với fps nhận (1–15) và độ phân giải nhận (1/1, 1/2); thanh trạng thái ("Đang truyền dữ liệu camera…", fps, kbit/s gửi và nhận).
+
+**Camera thật hay giả lập.** Camera chỉ mở khi bấm START. Liệt kê: Windows `ffmpeg -hide_banner -list_devices true -f dshow -i dummy` (đọc stderr, dòng `"Tên" (video)`), Linux các tệp `/dev/video*`, macOS `ffmpeg -f avfoundation -list_devices true -i ""`. Thu: `ffmpeg -f dshow -i video="Tên"` (Linux `-f v4l2 -i /dev/video0`, macOS `-f avfoundation -framerate 30 -i 0`) `-vf scale=160:120,fps=15 -pix_fmt rgb24 -f rawvideo pipe:1`; goroutine đọc đủ từng khối 57 600 byte (một khung), giữ khung mới nhất; vòng gửi lấy khung đó theo fps cho phép rồi đi đúng đường gửi sẵn có (thu nhỏ, nén zlib, chia mảnh ≤ 1200 byte). Không có ffmpeg/camera, hoặc ffmpeg dừng → "Camera giả lập" (khung tổng hợp như bản dòng lệnh).
+
+**Luồng (thread) và quy tắc chạm điều khiển:**
+
+```
+ luồng giao diện Fyne ──bấm nút──> go func(){ net.Dial / mở ffmpeg … } ──fyne.Do──┐
+   ▲  (chỉ luồng này đọc/ghi widget, canvas.Image)                                 │
+   └── fyne.Do(vẽ ảnh, chữ) <── goroutine hẹn giờ 100 ms: Phong/Khach.TrangThai() ◄┘
+                                     │ (khóa sync.Mutex; ảnh chỉ chép khi có khung mới)
+ lõi video.Phong / Khach: goroutine TCP · goroutine nhận UDP + ghép mảnh · vòng gửi theo fps
+                                     │
+ goroutine đọc stdout ffmpeg ──> "khung mới nhất" (khóa) ──> vòng gửi
+```
+
+Chỉ luồng giao diện được chạm vào widget (Fyne ≥ 2.6 bắt buộc): hàm xử lý sự kiện không làm việc chặn (kết nối, mở ffmpeg chạy trong goroutine), goroutine nền chỉ gửi hàm vẽ qua `fyne.Do`.
+
+**Cài đặt trên Windows** (một lần):
+```powershell
+winget install -e --id GoLang.Go
+winget install -e --id BrechtSanders.WinLibs.POSIX.UCRT   # gcc cho cgo (Fyne cần), mở lại terminal
+winget install -e --id Gyan.FFmpeg                        # ffmpeg (camera)
+go env -w CGO_ENABLED=1
+cd go\Chuong06\BaiMR6.3_HoiThoaiVideo
+go -C gui mod tidy                                        # tải Fyne, tạo gui\go.sum (cần mạng)
+go -C gui build -ldflags -H=windowsgui -o ..\out\app_gui.exe .
+out\app_gui.exe server_gui 127.0.0.1 41635 41636
+out\app_gui.exe client_gui A 127.0.0.1 41635
+```
+**Linux**: `sudo apt install gcc libgl1-mesa-dev xorg-dev ffmpeg`, rồi `go -C gui mod tidy && go -C gui build -o ../out/app_gui .`. macOS: `xcode-select --install`, `brew install ffmpeg` (lần đầu macOS hỏi quyền dùng camera cho terminal).
+
+Client giao diện nối được với server dòng lệnh (của Go hay ngôn ngữ khác trong kho) và ngược lại.
 
 ## Kết quả thực thi
 ![Kết quả thực thi](ket_qua.png)
@@ -70,12 +122,15 @@ Tái lập kết quả từ thư mục gốc của kho: `python3 tools/demo.py g
 
 Luồng của B giả lập mất 2 % mảnh: server đếm được khung hỏng và mảnh mất (bảng tổng kết), các khung đó bị bỏ, lưới vẫn hiện khung đủ gần nhất của B.
 
+**Ứng dụng giao diện** (cửa sổ 5 trong `ket_qua.txt`/`ket_qua.png`, ảnh `ket_qua_gui.png`) chạy trong container Linux dưới Xvfb, không có camera (`/dev/video*` không có) → cả ba client dùng **Camera giả lập**. `demo_gui` bấm START SERVER, ba client Kết nối và START; sau 2,5 s mỗi client gửi 10 fps ≈ 630–700 kbit/s, nhận lưới 320×240 ≈ 2070 kbit/s. Server chọn B → *Tắt camera*; chọn C → fps gửi tối đa 5, độ phân giải 1/2; B bấm CANCEL → START và **bị từ chối**; C chọn nhận 5 fps, 1/2. Sau 3 s: ô B có chấm đỏ "CAMERA TẮT", vào 0 kbit/s; C vào 5 fps ≈ 88 kbit/s (1/4 số điểm ảnh × 1/2 số khung so với ≈ 700), C nhận lưới 160×120 ở 5 fps ≈ 200 kbit/s; A vẫn nhận 10 fps ≈ 1100 kbit/s. Không mất mảnh nào trên máy cục bộ. Camera thật trên Windows: chưa chạy – cần máy tác giả.
+
 ## Ghi chú
 - Số fps/kbit/s đo theo cửa sổ 1 giây không thẳng hàng với thời điểm lệnh, nên giây chuyển tiếp có giá trị trung gian; ở 5 fps một cửa sổ có thể đếm được 5 hoặc 6 khung.
 - Nén zlib không mất dữ liệu kém xa codec video thật: H.264/VP8/AV1 nén có mất dữ liệu và chỉ gửi phần thay đổi giữa các khung (nén liên khung), đạt chất lượng tương đương ở vài chục kbit/s cho khung nhỏ như thế này. Video thật còn cần SRTP để mã hóa, điều khiển tắc nghẽn để tự giảm tốc khi mạng nghẽn, và đồng bộ hình–tiếng theo nhãn thời gian.
 - Server ghép lưới và nén lại cho từng người nhận mỗi khung; với nhiều client hơn, CPU server sẽ là nút thắt – đó chính là lý do hệ thống lớn dùng SFU. `%-12s` của `fmt` đếm byte nên cột tiếng Việt được căn theo số ký tự bằng `padPhai`.
 - Giao thức (header, JSON, zlib) giống hệt bản Python: client Python nối được vào server Go và ngược lại (đã thử). `compress/zlib` mức `BestSpeed` của Go cho dung lượng lớn hơn khoảng 20 % so với `zlib.compress(…, 1)` của Python, nên số kbit/s của bản Go cao hơn.
-- Kiểm thử: Linux, Go 1.24.7 (`gofmt`, `go vet` sạch).
+- Kiểm thử: Linux, Go 1.24.7 (`gofmt`, `go vet` sạch, cả `GOOS=windows go vet` cho gói `video`); giao diện: Fyne v2.6.3, Xvfb + Mesa llvmpipe, ffmpeg 6.1.
+- `demo_gui` chụp cửa sổ dưới Xvfb bằng ImageMagick `import -window root` (lần lượt chỉ hiện một cửa sổ), vì `Canvas().Capture()` với OpenGL phần mềm trả về ảnh trắng; trên Windows/macOS dùng `Canvas().Capture()`. Trên Windows, `demo_windows.ps1` bỏ qua bài này nếu thiếu `xvfb-run` – chạy `out\app_gui.exe demo_gui` trực tiếp để có ảnh.
 
 ## Bài tập gợi ý
 1. Thêm `fps_chung 3` vào kịch bản server và quan sát fps nhận của mọi client; giải thích vì sao `nhan_fps 30` của client vẫn không vượt được giới hạn này.
@@ -83,7 +138,9 @@ Luồng của B giả lập mất 2 % mảnh: server đếm được khung hỏn
 3. Bỏ ô của chính người nhận khỏi lưới (giống mix-minus) và đo băng thông tiết kiệm được.
 4. Hiển thị video trực tiếp: phục vụ khung lưới mới nhất dưới dạng PNG qua `net/http` (`/khung.png`) và một trang HTML tự tải lại ảnh mỗi 100 ms.
 5. Thay zlib bằng `image/jpeg` (nén có mất dữ liệu, có tham số chất lượng): so sánh kbit/s ở chất lượng 30, 60, 90 và thêm lệnh server `chat_luong <tên> <q>`.
-6. Nâng cao: chuyển server sang kiến trúc SFU – chuyển tiếp nguyên mảnh của từng người, client tự ghép lưới; giới hạn fps nhận bằng cách server bỏ cả khung (mọi mảnh có cùng số khung). So sánh CPU server và độ trễ với bản MCU.
+6. Giao diện: nhấp đúp vào một ô của lưới server để phóng to camera đó trong cửa sổ riêng (`a.NewWindow`), cập nhật từ cùng goroutine hẹn giờ qua `fyne.Do`; đóng cửa sổ thì dừng cập nhật.
+7. Giao diện: thêm vào client một ô chọn kích thước thu từ camera thật (160×120, 320×240) – sửa bộ lọc `-vf scale=…` của ffmpeg và hằng `Rong`, `Cao` thành tham số; đo kbit/s và giải thích vì sao phải đổi cả phía server.
+8. Nâng cao: chuyển server sang kiến trúc SFU – chuyển tiếp nguyên mảnh của từng người, client tự ghép lưới; giới hạn fps nhận bằng cách server bỏ cả khung (mọi mảnh có cùng số khung). So sánh CPU server và độ trễ với bản MCU.
 
 ## Đọc thêm
 - RFC 9000 – *QUIC: A UDP-Based Multiplexed and Secure Transport*, mục 14 (kích thước datagram 1200 byte).
@@ -92,5 +149,6 @@ Luồng của B giả lập mất 2 % mảnh: server đếm được khung hỏn
 - RFC 1950, RFC 1951 – định dạng zlib và DEFLATE.
 - W3C, *Portable Network Graphics (PNG) Specification* (Second Edition), 2003 (cấu trúc khối, CRC, bộ lọc hàng).
 - Tài liệu Go: [`compress/zlib`](https://pkg.go.dev/compress/zlib), [`image/png`](https://pkg.go.dev/image/png), [`net`](https://pkg.go.dev/net).
+- Fyne: [Getting started](https://docs.fyne.io/started/), [Goroutines – `fyne.Do`](https://docs.fyne.io/started/goroutines); FFmpeg: [thiết bị vào dshow/v4l2/avfoundation](https://ffmpeg.org/ffmpeg-devices.html).
 
 Mã nguồn của bài được viết mới cho kho này.

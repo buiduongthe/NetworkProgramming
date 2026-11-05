@@ -225,7 +225,7 @@ func nhanUDP(sock *net.UDPConn) {
 }
 
 func xuLyManh(h header, payload []byte, addr *net.UDPAddr, bayGio time.Time) {
-	k := dsKhach[h.ma]
+	k := dsKhach[h.Ma]
 	if k == nil {
 		return
 	}
@@ -237,10 +237,10 @@ func xuLyManh(h header, payload []byte, addr *net.UDPAddr, bayGio time.Time) {
 		k.saiNguon++
 		return
 	}
-	if h.loai != loaiManh {
+	if h.Loai != loaiManh {
 		return
 	}
-	nen := k.ghep.them(h, payload, bayGio)
+	nen := k.ghep.Them(h, payload, bayGio)
 	if nen == nil {
 		return
 	}
@@ -253,7 +253,7 @@ func xuLyManh(h header, payload []byte, addr *net.UDPAddr, bayGio time.Time) {
 		return
 	}
 	anh, err := giaiNen(nen)
-	w, c := int(h.w), int(h.h)
+	w, c := int(h.W), int(h.H)
 	if err != nil || w == 0 || w*c*3 != len(anh) || rong%w != 0 || w*cao != c*rong {
 		return // kích thước không hợp lệ
 	}
@@ -434,8 +434,8 @@ func inTongKet() {
 	slog("        nhận    đủ        mất hẳn")
 	for _, k := range danhSach(daRoi) {
 		g := k.ghep
-		slog("%2d  %-3s %4d %5d %4d %4d %4d %6d %6d", k.ma, k.ten, g.manhNhan, g.khungDu, g.khungHong,
-			g.manhMat, g.khungMatHan, k.boTat, k.boVuotFps)
+		slog("%2d  %-3s %4d %5d %4d %4d %4d %6d %6d", k.ma, k.ten, g.ManhNhan, g.KhungDu, g.KhungHong,
+			g.ManhMat, g.KhungMatHan, k.boTat, k.boVuotFps)
 	}
 }
 
