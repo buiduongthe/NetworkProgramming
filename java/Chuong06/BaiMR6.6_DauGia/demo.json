@@ -1,0 +1,22 @@
+{
+  "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "Chung.java", "KetNoiKhach.java", "Khach.java", "MoPhong.java", "MayChu.java", "ServerDauGia.java", "DauGia.java", "GiaoDienChung.java", "DauGiaGui.java", "ServerGui.java", "DemoGui.java"]],
+  "processes": [
+    {"name": "server", "cmd": ["java", "-cp", "out", "ServerDauGia", "127.0.0.1", "43700"], "background": true, "wait": 1.0},
+    {"name": "mp", "cmd": ["java", "-cp", "out", "MoPhong", "127.0.0.1", "43700", "--n", "500", "--so-sanh"],
+     "timeout": 120, "wait": 0.3},
+    {"name": "qt", "cmd": ["java", "-cp", "out", "Khach", "127.0.0.1", "43700", "dat_lai", "thoi_gian_s=5", "gia_han_s=3"],
+     "timeout": 10, "wait": 0.1},
+    {"name": "A", "cmd": ["java", "-cp", "out", "DauGia", "An", "127.0.0.1", "43700", "--thoi-gian", "11"],
+     "stdin": "@1 tang 1\n@6.6 tang 1\n", "background": true, "wait": 0.3},
+    {"name": "B", "cmd": ["java", "-cp", "out", "DauGia", "Bình", "127.0.0.1", "43700", "--thoi-gian", "10.4"],
+     "stdin": "@0.5 tang 2\n@3.6 tang 1\n@10 tang 1\n", "timeout": 20, "wait": 1.0},
+    {"name": "gui", "cmd": ["xvfb-run", "-a", "-s", "-screen 0 2600x1700x24", "java", "-cp", "out", "DemoGui", "127.0.0.1", "43702"],
+     "show": ["xvfb-run", "-a", "java", "-cp", "out", "DemoGui", "127.0.0.1", "43702"], "timeout": 150}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ đấu giá (đa luồng, chế độ khoa)",
+             "mp": "Cửa sổ 2 – mô phỏng 500 người × 5 lần, so sánh 4 chế độ",
+             "qt": "Cửa sổ 3 – quản trị (mở phiên 5 s, gia hạn 3 s)",
+             "A": "Cửa sổ 4 – người trả giá An",
+             "B": "Cửa sổ 5 – người trả giá Bình (trả giá phút cuối)",
+             "gui": "Cửa sổ 6 – ứng dụng giao diện (máy chủ + 3 phòng đấu giá)"}
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.8_DatVePhim",
+    "chuong": 6,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Đặt vé xem phim – giữ chỗ có thời hạn (TTL), n người cùng tranh một ghế: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa theo từng ghế nhiều ô theo thứ tự, lạc quan phiên bản + CAS, hàng đợi một luồng), luồng dọn ghế quá hạn, sổ kiểm toán (ghế trùng, thanh toán sai), bộ mô phỏng tải, ứng dụng đặt vé Swing có sơ đồ phòng chiếu",
+    "ghi_chu": "Bản Java (JDK 21, chỉ thư viện chuẩn; Swing, java.awt.Robot dưới xvfb-run). Khung chép nguyên từ MR6.6 bản Java. Cổng 43720 (GUI 43722). Kết quả (trễ 0–2 ms, 200 kết nối): 500 người giữ ghế nóng E7: khong_khoa 6 thành công, 5 sai phạm (ghế trùng 4, thanh toán sai 1); khoa, lac_quan (2 xung đột), hang_doi 2/0. 300 người × 3 lần, nhiều ghế: khong_khoa 149/6; khoa 148/0 với 47223 yc/s (khóa theo ghế + đa lõi thật, gấp >50 lần hang_doi 827 yc/s); lac_quan 160/0 (13 xung đột); hang_doi 154/0; cả 4 chế độ bán hết 96/96 ghế. TTL 3 s: An hết hạn, Bình mua E7 (S1930-E7), An và Chi thanh toán muộn bị từ chối đúng lý do (dòng in giống hệt Python). Chạy chéo: Python -> máy chủ Java (khong_khoa 30/29, còn lại 2/0) và Java -> máy chủ Python (khong_khoa 4/2, còn lại 2/0), lệnh xem in sơ đồ giống hệt. Giao diện: khong_khoa + trễ 0–20 ms, An và Bình cùng 'ĐÃ GIỮ E8', An thấy 'Ghế E8 đã bị Bình lấy mất!' (sai phạm 1); khoa: 1 giữ được, 2 bị từ chối; TTL 6 s: F5, F6 hết hạn rồi Bình mua. Đọc thêm: Kung & Robinson 1981, Coffman và cộng sự 1971."
+  }
+]

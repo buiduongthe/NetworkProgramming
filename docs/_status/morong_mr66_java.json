@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.6_DauGia",
+    "chuong": 6,
+    "ngon_ngu": [
+      "java"
+    ],
+    "kiem_thu": {
+      "java": "đã chạy"
+    },
+    "ten": "Đấu giá trực tuyến – n người cùng tranh một món hàng: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa loại trừ ReentrantLock, lạc quan phiên bản + CAS, hàng đợi một luồng LinkedBlockingQueue), sổ kiểm toán, đồng hồ phiên gia hạn chống bắn tỉa, bộ mô phỏng tải có rào xuất phát (CyclicBarrier) và pipelining",
+    "ghi_chu": "Bản Java (JDK 21, chỉ thư viện chuẩn; giao diện Swing, chụp bằng java.awt.Robot dưới xvfb-run). Khung Java (Chung.java, KetNoiKhach.java, Khach.java, GiaoDienChung.java, phần KHUNG của MoPhong.java) dùng chung cho MR6.6–MR6.13. Cổng 43700 (GUI 43702). Kết quả (500 người × 5 lần, 200 kết nối, trễ 0–2 ms): khong_khoa 278 thành công, 181 sai phạm (giá thấp hơn), 4090 yc/s; khoa 59/0, 656 yc/s, p99 1362 ms; lac_quan 65/0, 112 xung đột, 7441 yc/s; hang_doi 14/0, 739 yc/s, hàng đợi max 500. Phiên 5 s gia hạn 3 s: gia hạn hai lần, An thắng 5.500.000 đ, giá sau khi đóng bị từ chối. Chạy chéo: mô phỏng + dau_gia.py Python -> máy chủ Java (khong_khoa 433/354, 3 chế độ còn lại 0 sai phạm) và MoPhong + DauGia Java -> máy chủ Python (khong_khoa 485/317, còn lại 0). Giao diện: khong_khoa + trễ 0–20 ms, 3 người cùng '+1 bước' đều được chấp nhận cùng giá (sai phạm 3); khoa: người thứ hai bị từ chối; so sánh 4 chế độ trong GUI; phiên 8 s gia hạn 2 lần, An thắng. Đọc thêm: Kung & Robinson 1981 (ACM TODS 6(2)), Coffman và cộng sự 1971 (ACM Computing Surveys 3(2))."
+  }
+]
