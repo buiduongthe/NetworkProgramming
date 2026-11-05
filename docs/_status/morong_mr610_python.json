@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.10_DangKyHocPhan",
+    "chuong": 6,
+    "ngon_ngu": [
+      "python"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy"
+    },
+    "ten": "Đăng ký học phần – 2000 sinh viên tranh 3 lớp × 50 chỗ: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa theo lớp, lạc quan phiên bản + CAS, hàng đợi một luồng), đăng ký/hủy, sổ kiểm toán (vượt sĩ số, ĐK trùng), cổng đăng ký học phần như thật, bộ mô phỏng tải có rào xuất phát và pipelining",
+    "ghi_chu": "Khung chép nguyên từ MR6.6 (chỉ đổi dòng đầu docstring khach.py và cổng mặc định trong main của mo_phong.py). Mỗi lớp một ô {sv: frozenset}. So sánh 2000 sinh viên (thử lớp kế khi đủ, 10 % hủy, người thứ 100k dùng tên người trước), 200 kết nối, trễ 0–2 ms: khong_khoa 1212 thành công, 1046 sai phạm (vượt sĩ số 1032, ĐK trùng 14; sổ ghi 1166/150 chỗ, 99 lượt hủy bị từ chối vì mất cập nhật), 7235 yc/s; khoa 186, 0, 2047 yc/s; lac_quan 182, 0, 4529 xung đột (584 hết lượt thử), 5484 yc/s; hang_doi 172, 0, 816 yc/s. Dòng lệnh (sĩ số 2): Bình bấm đúp -> 'đã đăng ký lớp này', Chi 'lớp đã đủ' rồi được nhận sau khi An hủy. Giao diện: khong_khoa + trễ 0–20 ms, sĩ số 1, ba người cùng 'thành công', danh sách chỉ còn 1 tên, hai cửa sổ báo 'đã bị MẤT' (sai phạm 2); khoa: một người được, hai người 'Lớp đã đủ'."
+  }
+]

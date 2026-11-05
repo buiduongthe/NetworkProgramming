@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.11_FlashSale",
+    "chuong": 6,
+    "ngon_ngu": [
+      "python"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy"
+    },
+    "ten": "Flash sale – 10 000 người cùng bấm MUA NGAY cho kho 100 sản phẩm: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa, lạc quan phiên bản + CAS, hàng đợi một luồng), đếm ngược mở bán, kiểm tra hết hàng nhanh không khóa, sổ kiểm toán (tồn âm, lệch sổ), trang flash sale như thật, bộ mô phỏng tải có rào xuất phát và pipelining",
+    "ghi_chu": "Khung chép nguyên từ MR6.6 (chỉ đổi dòng đầu docstring khach.py và cổng mặc định trong main của mo_phong.py). Một ô 'kho' {ton, da_ban, so_don}; giờ mở bán và 'hết hàng nhanh' kiểm tra ngoài vùng găng. So sánh 10 000 người × 1 đơn (1–2 sp), kho 100, 200 kết nối, trễ 0–1 ms (để hang_doi < 10 s): khong_khoa 8282 đơn, 20414 sai phạm (tồn âm 8214, lệch sổ 12200; bán 12300/100), 9141 yc/s; khoa 62 đơn, 0, 22496 yc/s, cháy hàng sau 0,17 s; lac_quan 68, 0, 673 xung đột, 21448 yc/s; hang_doi 62, 0, 1430 yc/s, hàng đợi max 9986. Dòng lệnh (kho 5, mở sau 3 s): bấm sớm 'chưa mở bán, còn 1.8 s', 'chỉ còn 1 sản phẩm', 'hết hàng'. Giao diện: khong_khoa + trễ 0–20 ms, kho 3, ba người cùng mua được 5 sp, cùng mã đơn FS00001 (sai phạm 4); khoa: Chi 'HẾT HÀNG'. Dòng 'Lượt trước' của máy chủ (định dạng khung) dài 66 ký tự khi sai phạm 5 chữ số."
+  }
+]

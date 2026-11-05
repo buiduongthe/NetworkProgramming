@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.9_QuaySo",
+    "chuong": 6,
+    "ngon_ngu": [
+      "python"
+    ],
+    "kiem_thu": {
+      "python": "đã chạy"
+    },
+    "ten": "Quay số trúng thưởng – 100 000 lượt quay tranh 10 món quà: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa theo tài nguyên, lạc quan phiên bản + CAS, hàng đợi một luồng), mỗi người quay 1 lần (idempotency theo tên và theo ma_yc), sổ kiểm toán, vòng quay may mắn hoạt hình, bộ mô phỏng tải 100 000 người trên 400 kết nối",
+    "ghi_chu": "Khung chép nguyên từ MR6.6 (chỉ đổi dòng đầu docstring khach.py và cổng mặc định trong main của mo_phong.py). Ô 'qua' (kho quà) + ô 'ng:<tên>' mỗi người; rút thăm ngoài vùng găng; lượt không trúng chỉ khóa ô của mình. Demo p = 1/20 (mặc định 1/2000). So sánh 6000 người, 200 kết nối, trễ 0–2 ms: khong_khoa 5952 thành công, 66 sai phạm (thừa quà 54, quay 2 lần 12; trao 64/10 quà), 10294 yc/s; khoa 5940, 0, 9300 yc/s; lac_quan 5940, 0, 34 xung đột, 10562 yc/s; hang_doi 5940, 0, 821 yc/s, hàng đợi max 5994. 100 000 người trên 400 kết nối: khong_khoa 7314 yc/s, trao 14/10 quà (thừa quà 4); khoa 6566 yc/s, 0 sai phạm; 1000 thiết bị thứ hai bị từ chối da_quay. Dòng lệnh: bấm đúp -> lượt 2 'đã quay rồi', gui_lai ma_yc -> lap_lai. Giao diện: khong_khoa + trễ 0–20 ms, 1 quà p = 1, An và Bình cùng trúng một Xe đạp, Bình quay 2 lần (sai phạm 2); khoa: đúng một người trúng. Dòng 5 s/'Lượt trước' của máy chủ (định dạng khung) dài 65–66 ký tự khi tới 100 000 yc."
+  }
+]
