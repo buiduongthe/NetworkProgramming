@@ -138,6 +138,13 @@ class MayPhat:
             self.camera, self.mic = camera, mic
             self.fps = max(1, min(30, int(fps or self.fps)))
             self.gop = max(1, min(300, int(gop or self.gop)))
+            tin = self._thong_tin()
+        # thong_tin đi TCP, gói phương tiện đi UDP trên luồng khác: gửi thong_tin trước và chờ 20 ms để máy
+        # chủ kịp chuyển sang "đang phát" – nếu không, khung I #0 có thể tới trước, bị bỏ vì "chưa phát",
+        # và bộ đệm GOP rỗng tới khung I kế tiếp.
+        self.gui(tin)
+        time.sleep(0.02)
+        with self.khoa:
             self.t0 = time.monotonic()
             self.so = self.seq = self.n_am = 0
             self.so_i_cuoi, self.truoc = None, None
@@ -146,7 +153,6 @@ class MayPhat:
             self.dang_phat = True
             if hasattr(camera, "dat_fps"):
                 camera.dat_fps(self.fps)
-        self.gui(self._thong_tin())
         self.bao(f"Bắt đầu phát {RONG}x{CAO} {self.fps} fps GOP {self.gop}")
 
     def dat_tham_so(self, fps, gop):
