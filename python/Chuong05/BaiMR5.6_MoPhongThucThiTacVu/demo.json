@@ -1,0 +1,19 @@
+{
+  "processes": [
+    {"name": "don_dong_bo", "cmd": ["python3", "mo_phong.py", "don_dong_bo"]},
+    {"name": "da_dong_bo", "cmd": ["python3", "mo_phong.py", "da_dong_bo"]},
+    {"name": "don_bat_dong_bo", "cmd": ["python3", "mo_phong.py", "don_bat_dong_bo"]},
+    {"name": "da_bat_dong_bo", "cmd": ["python3", "mo_phong.py", "da_bat_dong_bo"]},
+    {"name": "so_sanh", "cmd": ["python3", "mo_phong.py", "so_sanh"]},
+    {"name": "mot_loi", "cmd": ["python3", "mo_phong.py", "da_dong_bo", "--loi", "1", "--khan", "1.2"]},
+    {"name": "gui", "cmd": ["xvfb-run", "-a", "-s", "-screen 0 1280x900x24", "/usr/bin/python3.12", "ung_dung.py", "--demo"],
+     "show": ["xvfb-run", "-a", "python3", "ung_dung.py", "--demo"], "timeout": 60}
+  ],
+  "titles": {"don_dong_bo": "Cửa sổ 1 – đơn luồng, đồng bộ",
+             "da_dong_bo": "Cửa sổ 2 – đa luồng, đồng bộ (chen ngang, lát thời gian)",
+             "don_bat_dong_bo": "Cửa sổ 3 – đơn luồng, bất đồng bộ (vòng lặp sự kiện)",
+             "da_bat_dong_bo": "Cửa sổ 4 – đa luồng, bất đồng bộ (nhóm thợ)",
+             "so_sanh": "Cửa sổ 5 – so sánh bốn chế độ",
+             "mot_loi": "Cửa sổ 6 – đa luồng, đồng bộ trên 1 lõi",
+             "gui": "Cửa sổ 7 – ứng dụng Tkinter, kịch bản --demo"}
+}
