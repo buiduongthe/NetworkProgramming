@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.5_PhatTrucTiep",
+    "chuong": 6,
+    "ngon_ngu": [
+      "rust"
+    ],
+    "kiem_thu": {
+      "rust": "đã chạy (Linux, Rust 1.97.0, tools/demo.py: dòng lệnh server_phat/phat/xem và giao diện egui demo_gui dưới Xvfb + Mesa llvmpipe; chạy chéo với Python cả hai chiều)"
+    },
+    "ten": "Phát trực tiếp âm thanh + video 1→n từ camera hoặc tệp video: máy chủ SFU nhân bản gói, khung I/P (zlib + XOR), bộ đệm GOP, xin khung khóa (PLI), đồng bộ tiếng-hình với âm thanh làm đồng hồ chủ, đăng ký theo lớp",
+    "ghi_chu": "Gói Cargo mr6_5_phat_truc_tiep (một chương trình: server_phat, phat, xem, server_gui, phat_gui, xem_gui, demo_gui); crate ghim bằng = và Cargo.lock: miniz_oxide 0.8.9, serde_json 1.0.154, socket2 0.5.10, ctrlc 3.4.7, chrono 0.4.41, eframe/egui 0.29.1, cpal 0.15.3. Cổng 44650/44651 (GUI 44652/44653). Kết quả: B vào muộn khi bộ đệm GOP bật hiện khung đầu sau 107 ms, C khi tắt 1596 ms; D mất 3 % gói: 4 lần đứng hình, hồi phục sau PLI 96–100 ms; A lệch tiếng-hình +2 ms khi bật, −78 ms khi tắt (bộ đệm jitter 5 khung); hệ số nhân bản 4,00 với 4 người xem; phát tệp mẫu mp4 (giao diện): lệch +0 ms. Chạy chéo: (a) máy phát Python + máy chủ Rust + người xem Rust và Python; (b) máy phát Rust + máy chủ Python + người xem Python – giải mã I/P, PLI qua lại, lệch +2/+3 ms khi đồng bộ. Thiết bị: camera/tệp qua ffmpeg, micro/loa qua cpal (máy kiểm thử Linux không có camera/âm thanh – đã thử nhánh lùi về giả lập); hộp thoại Chọn tệp vẽ bằng egui. Đọc thêm: RFC 3550 6.4.1, 3551, 4585 6.3.1, 7667, 6184 mục 8, 8085."
+  }
+]
