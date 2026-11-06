@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.8_DatVePhim",
+    "chuong": 6,
+    "ngon_ngu": [
+      "rust"
+    ],
+    "kiem_thu": {
+      "rust": "đã chạy (Linux, Rust 1.97.0, tools/demo.py: dòng lệnh server/mo_phong/khach/<người dùng> và giao diện egui demo_gui dưới Xvfb + Mesa llvmpipe; chạy chéo với Python cả hai chiều)"
+    },
+    "ten": "Đặt vé xem phim – phòng chiếu 8 × 12 ghế, giữ chỗ có thời hạn (TTL 30 s, luồng nền dọn ghế quá hạn), thanh toán, nhả ghế: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (khóa theo từng ghế, nhiều ghế khóa theo thứ tự), sổ kiểm toán đếm ghế trùng và thanh toán sai, bộ mô phỏng tải ghế nóng và nhiều ghế, ứng dụng sơ đồ ghế cập nhật trực tiếp",
+    "ghi_chu": "Bản Rust. Gói Cargo mr6_8_dat_ve_phim (một chương trình: server, mo_phong, khach, dat_ve, server_gui, dat_ve_gui, demo_gui); crate ghim bằng = và Cargo.lock: serde_json 1.0.154 (preserve_order), socket2 0.5.10, ctrlc 3.4.7, chrono 0.4.41, miniz_oxide 0.8.9, eframe/egui 0.29.1. Khung Rust (chung.rs, khach.rs, mo_phong.rs, server.rs, gui_chung.rs) chép nguyên ở 8 bài; nghiệp vụ ở may_chu.rs (trait NghiepVu, LuatKiemToan) và nguoi_ao.rs. khong_khoa an toàn bộ nhớ: Mutex<Arc<V>> giữ rất ngắn + AtomicU64 phiên bản; khoa: khóa ô FIFO có hạn chờ 2 s (Mutex + Condvar); lac_quan: khóa CAS ngắn + compare_exchange; hang_doi: kênh mpsc một luồng. Cổng 44720 (GUI 44722). Kết quả (200 kết nối, trễ 0–2 ms): 500 người giữ ghế nóng E7: khong_khoa 15 thành công, 14 sai phạm (13 ghế trùng, 1 thanh toán sai); khoa/lac_quan/hang_doi 2/0. 300 người × 3 lần, nhiều ghế: khong_khoa 147/25; khoa 146/0, 16572 yc/s (khóa theo từng ghế chạy song song); lac_quan 152/0, 37068 yc/s; hang_doi 150/0, 846 yc/s; 96/96 ghế bán. TTL 3 s: An hết hạn, Bình giữ và mua E7, An bị từ chối 'không do bạn giữ', Chi 'đã hết hạn'. Chạy chéo: mô phỏng Rust -> máy chủ Python (khong_khoa 12/10, còn lại 0), mô phỏng Python -> máy chủ Rust (khong_khoa 3/1, còn lại 0); An, Chi (Python) + Bình (Rust) kịch bản TTL trên máy chủ Rust. Giao diện: khong_khoa + trễ 0–20 ms, cả ba 'ĐÃ GIỮ E8' (sai phạm 2), hai người thấy 'bị … lấy mất'; so sánh 4 chế độ (khong_khoa 5/3); giữ chỗ 6 s hết hạn tự nhả, mua F5 F6, G7 G8. Đọc thêm: Kung & Robinson 1981, Coffman và cộng sự 1971."
+  }
+]

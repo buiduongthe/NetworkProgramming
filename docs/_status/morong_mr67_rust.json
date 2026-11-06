@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.7_DatXe",
+    "chuong": 6,
+    "ngon_ngu": [
+      "rust"
+    ],
+    "kiem_thu": {
+      "rust": "đã chạy (Linux, Rust 1.97.0, tools/demo.py: dòng lệnh server/mo_phong/khach/<người dùng> và giao diện egui demo_gui dưới Xvfb + Mesa llvmpipe; chạy chéo với Python cả hai chiều)"
+    },
+    "ten": "Đặt xe – n người cùng bấm 'Đặt xe' cho m xe mỗi xe một chỗ: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa loại trừ nhiều ô theo thứ tự, lạc quan phiên bản + CAS, hàng đợi một luồng), sổ kiểm toán đếm trùng chỗ, bộ mô phỏng tải có rào xuất phát và pipelining, ứng dụng gọi xe có bản đồ và xe chạy hoạt hình",
+    "ghi_chu": "Bản Rust. Gói Cargo mr6_7_dat_xe (một chương trình: server, mo_phong, khach, dat_xe, server_gui, dat_xe_gui, demo_gui); crate ghim bằng = và Cargo.lock: serde_json 1.0.154 (preserve_order), socket2 0.5.10, ctrlc 3.4.7, chrono 0.4.41, miniz_oxide 0.8.9, eframe/egui 0.29.1. Khung Rust (chung.rs, khach.rs, mo_phong.rs, server.rs, gui_chung.rs) chép nguyên ở 8 bài; nghiệp vụ ở may_chu.rs (trait NghiepVu, LuatKiemToan) và nguoi_ao.rs. khong_khoa an toàn bộ nhớ: Mutex<Arc<V>> giữ rất ngắn + AtomicU64 phiên bản; khoa: khóa ô FIFO có hạn chờ 2 s (Mutex + Condvar); lac_quan: khóa CAS ngắn + compare_exchange; hang_doi: kênh mpsc một luồng. Cổng 44710 (GUI 44712). Kết quả (200 kết nối, trễ 0–2 ms): 1000 người / 1 xe: khong_khoa 10 thành công, 9 trùng chỗ; khoa 1/0, 823 yc/s; lac_quan 1/0, 4 xung đột, 18072 yc/s; hang_doi 1/0, hàng đợi max 991. 2000 người / 10 xe: khong_khoa 35/25; khoa 10/0; lac_quan 10/0, 65 xung đột; hang_doi 10/0, hàng đợi max 1987. Dòng lệnh 1 xe: An đặt, Bình hết chỗ, An hủy, Bình đặt được, An hết chỗ, 0 sai phạm. Chạy chéo: mô phỏng Rust -> máy chủ Python (khong_khoa 26/25, còn lại 0), mô phỏng Python -> máy chủ Rust (khong_khoa 8/7, còn lại 0); người gọi xe Rust + Python trên máy chủ Python. Giao diện: khong_khoa + trễ 0–20 ms, cả ba được báo đặt thành công cho 1 xe (sai phạm 2), hai người thấy 'đã nhận khách khác'; so sánh 4 chế độ với 3 xe (khong_khoa 15/12); 3 xe – mỗi người một xe, xe chạy hoạt hình. Đọc thêm: Kung & Robinson 1981, Coffman và cộng sự 1971."
+  }
+]

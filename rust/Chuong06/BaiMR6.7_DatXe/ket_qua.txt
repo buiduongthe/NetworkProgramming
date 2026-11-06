@@ -1,0 +1,259 @@
+===== server =====
+$ ../../target/release/mr6_7_dat_xe server 127.0.0.1 44710
+[server] Lắng nghe 127.0.0.1:44710; chế độ khoa, trễ 0–2 ms
+[server] Đặt lại
+[server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
+[server] Lượt trước: khong_khoa, 1000 yc, tc 10, sai phạm 9
+[server] Đặt lại
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 1000 yc, tc 1, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: lac_quan – Lạc quan (phiên bản + CAS)
+[server] Lượt trước: lac_quan, 1000 yc, tc 1, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 1000 yc, tc 1, sai phạm 0
+[server] Đặt lại (so_xe=10)
+[server] Đặt lại
+[server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
+[server] Lượt trước: khong_khoa, 2000 yc, tc 35, sai phạm 25
+[server] Đặt lại
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] khoa: 966 yc, tc 10, từ chối 756, sai phạm 0
+[server] Lượt trước: khoa, 2000 yc, tc 10, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: lac_quan – Lạc quan (phiên bản + CAS)
+[server] Lượt trước: lac_quan, 2000 yc, tc 10, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 2000 yc, tc 10, sai phạm 0
+[server] Đặt lại (so_xe=1)
+[server] An vào
+[server] Bình vào
+[server] khoa: 0 yc, tc 0, từ chối 0, sai phạm 0
+[server] Xe 1 (Hùng) nhận khách An
+[server] An hủy chuyến, xe 1 trống
+[server] Xe 1 (Hùng) nhận khách Bình
+[server] Bình hủy chuyến, xe 1 trống
+[server] Bình rời
+[server] khoa: 6 yc, tc 4, từ chối 2, sai phạm 0
+[server] An rời
+[server] Tổng kết (từ lần đặt lại cuối):
+[server]   Chế độ khoa, trễ xử lý 0–2 ms
+[server]   Yêu cầu 6: thành công 4, từ chối 2
+[server]   Xung đột 0, thử lại 0, hết lượt thử 0
+[server]   Hàng đợi max 0, chờ khóa quá hạn 0
+[server]   Xử lý µs: p50 1497 p95 2402 p99 2402
+[server]   Thông lượng 1 yc/s
+[server]   Sai phạm 0: trùng chỗ 0
+[server]   Đã đặt 0/1 xe, 2 lượt báo đặt được
+[server] Máy chủ đã dừng
+
+===== mp =====
+$ ../../target/release/mr6_7_dat_xe mo_phong 127.0.0.1 44710 --n 1000 --so-sanh
+[mo_phong] === khong_khoa: 1000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 1000 yc xong trong 0.05 s = 21855 yc/s
+[mo_phong] Khứ hồi ms: p50 12.2 p95 31.0 p99 35.3
+[mo_phong] Thành công 10, từ chối 990
+[mo_phong]   lý do: het_cho 990
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1950 p95 5147 p99 11518
+[mo_phong] Sai phạm 9: trùng chỗ 9
+[mo_phong]   ví dụ: xe 1: u140 khi u158 đang đặt
+[mo_phong]   ví dụ: xe 1: u9 khi u140 đang đặt
+[mo_phong] Đã đặt 1/1 xe, 10 lượt báo đặt được
+[mo_phong] === khoa: 1000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 1000 yc xong trong 1.22 s = 823 yc/s
+[mo_phong] Khứ hồi ms: p50 602.1 p95 1151.4 p99 1198.0
+[mo_phong] Thành công 1, từ chối 999
+[mo_phong]   lý do: het_cho 999
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 239444 p95 255709 p99 258396
+[mo_phong] Sai phạm 0: trùng chỗ 0
+[mo_phong] Đã đặt 1/1 xe, 1 lượt báo đặt được
+[mo_phong] === lac_quan: 1000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 1000 yc xong trong 0.06 s = 18072 yc/s
+[mo_phong] Khứ hồi ms: p50 10.1 p95 31.5 p99 37.5
+[mo_phong] Thành công 1, từ chối 999
+[mo_phong]   lý do: het_cho 999
+[mo_phong] Máy chủ: xung đột 4, thử lại 4, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1860 p95 15504 p99 19321
+[mo_phong] Sai phạm 0: trùng chỗ 0
+[mo_phong] Đã đặt 1/1 xe, 1 lượt báo đặt được
+[mo_phong] === hang_doi: 1000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 1000 yc xong trong 1.17 s = 857 yc/s
+[mo_phong] Khứ hồi ms: p50 568.5 p95 1092.0 p99 1144.7
+[mo_phong] Thành công 1, từ chối 999
+[mo_phong]   lý do: het_cho 999
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 991
+[mo_phong] Máy chủ xử lý µs: p50 568309 p95 1091929 p99 1144566
+[mo_phong] Sai phạm 0: trùng chỗ 0
+[mo_phong] Đã đặt 1/1 xe, 1 lượt báo đặt được
+[mo_phong] Bảng so sánh (1000 người × 1 lần, 200 kết nối):
+  Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+  khong_khoa           10        9        0 21855    35.3
+  khoa                  1        0        0   823  1198.0
+  lac_quan              1        0        4 18072    37.5
+  hang_doi              1        0        0   857  1144.7
+
+===== qt10 =====
+$ ../../target/release/mr6_7_dat_xe khach 127.0.0.1 44710 dat_lai so_xe=10
+[quan_tri] > dat_lai so_xe=10
+[quan_tri] OK
+
+===== mp10 =====
+$ ../../target/release/mr6_7_dat_xe mo_phong 127.0.0.1 44710 --n 2000 --so-sanh
+[mo_phong] === khong_khoa: 2000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2000 yc xong trong 0.05 s = 42226 yc/s
+[mo_phong] Khứ hồi ms: p50 15.2 p95 43.3 p99 52.6
+[mo_phong] Thành công 35, từ chối 1965
+[mo_phong]   lý do: het_cho 1965
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1712 p95 5527 p99 29730
+[mo_phong] Sai phạm 25: trùng chỗ 25
+[mo_phong]   ví dụ: xe 7: u3 khi u32 đang đặt
+[mo_phong]   ví dụ: xe 5: u11 khi u59 đang đặt
+[mo_phong] Đã đặt 10/10 xe, 35 lượt báo đặt được
+[mo_phong] === khoa: 2000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2000 yc xong trong 2.45 s = 815 yc/s
+[mo_phong] Khứ hồi ms: p50 1154.9 p95 2318.2 p99 2420.4
+[mo_phong] Thành công 10, từ chối 1990
+[mo_phong]   lý do: het_cho 1990
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 240672 p95 268234 p99 273369
+[mo_phong] Sai phạm 0: trùng chỗ 0
+[mo_phong] Đã đặt 10/10 xe, 10 lượt báo đặt được
+[mo_phong] === lac_quan: 2000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2000 yc xong trong 0.10 s = 20647 yc/s
+[mo_phong] Khứ hồi ms: p50 11.2 p95 40.3 p99 45.1
+[mo_phong] Thành công 10, từ chối 1990
+[mo_phong]   lý do: het_cho 1990
+[mo_phong] Máy chủ: xung đột 65, thử lại 65, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1412 p95 4271 p99 6308
+[mo_phong] Sai phạm 0: trùng chỗ 0
+[mo_phong] Đã đặt 10/10 xe, 10 lượt báo đặt được
+[mo_phong] === hang_doi: 2000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2000 yc xong trong 2.38 s = 839 yc/s
+[mo_phong] Khứ hồi ms: p50 1178.6 p95 2265.3 p99 2357.5
+[mo_phong] Thành công 10, từ chối 1990
+[mo_phong]   lý do: het_cho 1990
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 1987
+[mo_phong] Máy chủ xử lý µs: p50 1178400 p95 2265115 p99 2357384
+[mo_phong] Sai phạm 0: trùng chỗ 0
+[mo_phong] Đã đặt 10/10 xe, 10 lượt báo đặt được
+[mo_phong] Bảng so sánh (2000 người × 1 lần, 200 kết nối):
+  Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+  khong_khoa           35       25        0 42226    52.6
+  khoa                 10        0        0   815  2420.4
+  lac_quan             10        0       65 20647    45.1
+  hang_doi             10        0        0   839  2357.5
+
+===== qt1 =====
+$ ../../target/release/mr6_7_dat_xe khach 127.0.0.1 44710 dat_lai so_xe=1
+[quan_tri] > dat_lai so_xe=1
+[quan_tri] OK
+
+===== A =====
+$ ../../target/release/mr6_7_dat_xe dat_xe An 127.0.0.1 44710 --thoi-gian 5.5
+[An] Mở ứng dụng (khoa): 1/1 xe trống
+[An]   đón: Lê Lợi × Lý Tự Trọng
+[An]   đến: Đồng Khởi × Lê Thánh Tôn
+[An] > Đặt xe – đang tìm tài xế… (dự kiến 62.000 đ)
+[An]   ĐẶT THÀNH CÔNG – tài xế Hùng (0.6 ms)
+[An]   51A-123.45, xe trắng, đến sau 8 phút, cước 62.000 đ
+[An] * Xe 1 (Hùng) nhận khách An
+[An] Xe trống: 0/1
+[An] > Hủy chuyến
+[An]   Đã hủy, xe 1 (Hùng) trống
+[An] * An hủy chuyến, xe 1 trống
+[An] Xe trống: 1/1
+[An] * Xe 1 (Hùng) nhận khách Bình
+[An] Xe trống: 0/1
+[An] > Đặt xe – đang tìm tài xế… (dự kiến 62.000 đ)
+[An]   HẾT CHỖ: hết chỗ – không còn xe trống
+[An] * Bình hủy chuyến, xe 1 trống
+[An] Xe trống: 1/1
+
+===== B =====
+$ ../../target/release/mr6_7_dat_xe dat_xe 'Bình' 127.0.0.1 44710
+[Bình] Mở ứng dụng (khoa): 1/1 xe trống
+[Bình]   đón: Nguyễn Huệ × Nguyễn Du
+[Bình]   đến: Lê Lợi × Lý Tự Trọng
+[Bình] * Xe 1 (Hùng) nhận khách An
+[Bình] Xe trống: 0/1
+[Bình] > Đặt xe – đang tìm tài xế… (dự kiến 52.000 đ)
+[Bình]   HẾT CHỖ: hết chỗ – không còn xe trống
+[Bình] * An hủy chuyến, xe 1 trống
+[Bình] Xe trống: 1/1
+[Bình] > Đặt xe – đang tìm tài xế… (dự kiến 52.000 đ)
+[Bình]   ĐẶT THÀNH CÔNG – tài xế Hùng (1.6 ms)
+[Bình]   51A-123.45, xe trắng, đến sau 8 phút, cước 52.000 đ
+[Bình] * Xe 1 (Hùng) nhận khách Bình
+[Bình] Xe trống: 0/1
+[Bình] > Hủy chuyến
+[Bình]   Đã hủy, xe 1 (Hùng) trống
+[Bình] * Bình hủy chuyến, xe 1 trống
+[Bình] Xe trống: 1/1
+
+===== gui =====
+$ xvfb-run -a ../../target/release/mr6_7_dat_xe demo_gui 127.0.0.1 44712
+[demo] 1. Máy chủ: START SERVER (chế độ khoa, 1 xe)
+[demo]    An, Bình, Chi: Kết nối
+[demo] 2. An, Bình, Chi CÙNG bấm 'ĐẶT XE'
+[demo]    An: Đặt thành công – tài xế Hùng
+[demo]    Bình: Hết chỗ – không còn xe trống
+[demo]    Chi: Hết chỗ – không còn xe trống
+[demo]    máy chủ: 3 yc, tc 1, từ chối 2, sai phạm 0
+[demo] 3. An bấm 'Hủy chuyến'
+[demo]    An: Đã hủy chuyến
+[demo]    máy chủ: Đã đặt 0/1 xe, 1 lượt báo đặt được
+[demo] 4. Máy chủ: khong_khoa, độ trễ xử lý 0–20 ms (CSDL chậm)
+[demo]    An, Bình, Chi CÙNG bấm 'ĐẶT XE'
+[demo]    An nhận: Đặt thành công – tài xế Hùng
+[demo]    Bình nhận: Đặt thành công – tài xế Hùng
+[demo]    Chi nhận: Đặt thành công – tài xế Hùng
+[demo]    …sau cap_nhat của máy chủ:
+[demo]    An: Tài xế Hùng đã nhận khách khác (Chi)!
+[demo]    Bình: Tài xế Hùng đã nhận khách khác (Chi)!
+[demo]    Chi: Đặt thành công – tài xế Hùng
+[demo]    máy chủ: 7 yc, tc 5, từ chối 2, sai phạm 2
+[demo]      ví dụ: xe 1: An khi Bình đang đặt
+[demo]      ví dụ: xe 1: Chi khi An đang đặt
+[demo]    xe 1 chở: Chi
+[demo]    Đã ghi ket_qua_gui_tranh_chap.png (195 KB)
+[demo] 5. Máy chủ: khoa, trễ 0–2 ms, đặt lại 3 xe
+[demo]    So sánh 4 chế độ (1000 người)
+[demo]   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+[demo]   khong_khoa           15       12        0 12114    39.6
+[demo]   khoa                  3        0        0   794  1237.2
+[demo]   lac_quan              3        0       24 22740    38.9
+[demo]   hang_doi              3        0        0   817  1207.3
+[demo]    Sai phạm: khong_khoa
+[demo]    Không sai phạm: khoa, lac_quan, hang_doi
+[demo] 6. Đặt lại (3 xe); An, Bình, Chi CÙNG bấm 'ĐẶT XE'
+[demo]    An: Đặt thành công – tài xế Hùng
+[demo]    Bình: Tài xế Minh đã đón bạn – đang đi
+[demo]    Chi: Đặt thành công – tài xế Lan
+[demo]    An: Hùng 51A-123.45, đến sau 8 phút
+[demo]    Bình: Minh 51F-246.80, đến sau 2 phút
+[demo]    Chi: Lan 51G-678.90, đến sau 10 phút
+[demo]    máy chủ: Đã đặt 3/3 xe, 3 lượt báo đặt được
+[demo] 7. Chụp 4 cửa sổ
+[demo]    Đã ghi ket_qua_gui.png (363 KB)
+[demo]    An: Đã tới nơi – bấm Hoàn tất chuyến
+[demo]    Bình: Đã tới nơi – bấm Hoàn tất chuyến
+[demo]    Chi: Đã tới nơi – bấm Hoàn tất chuyến
+[demo] 8. Máy chủ: STOP SERVER
+[demo]    Bình: Mất kết nối máy chủ
+[demo] Kết thúc
+

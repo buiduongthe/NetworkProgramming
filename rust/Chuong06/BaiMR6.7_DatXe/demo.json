@@ -1,0 +1,21 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server", "cmd": ["../../target/release/mr6_7_dat_xe", "server", "127.0.0.1", "44710"], "background": true, "wait": 0.8},
+    {"name": "mp", "cmd": ["../../target/release/mr6_7_dat_xe", "mo_phong", "127.0.0.1", "44710", "--n", "1000", "--so-sanh"], "timeout": 120, "wait": 0.3},
+    {"name": "qt10", "cmd": ["../../target/release/mr6_7_dat_xe", "khach", "127.0.0.1", "44710", "dat_lai", "so_xe=10"], "timeout": 10, "wait": 0.1},
+    {"name": "mp10", "cmd": ["../../target/release/mr6_7_dat_xe", "mo_phong", "127.0.0.1", "44710", "--n", "2000", "--so-sanh"], "timeout": 120, "wait": 0.3},
+    {"name": "qt1", "cmd": ["../../target/release/mr6_7_dat_xe", "khach", "127.0.0.1", "44710", "dat_lai", "so_xe=1"], "timeout": 10, "wait": 0.1},
+    {"name": "A", "cmd": ["../../target/release/mr6_7_dat_xe", "dat_xe", "An", "127.0.0.1", "44710", "--thoi-gian", "5.5"], "stdin": "@0.5 dat\n@2.5 huy\n@4.3 dat\n", "background": true, "wait": 0.3},
+    {"name": "B", "cmd": ["../../target/release/mr6_7_dat_xe", "dat_xe", "Bình", "127.0.0.1", "44710"], "stdin": "@1.2 dat\n@3.2 dat\n@4.6 huy\n", "timeout": 20, "wait": 1.0},
+    {"name": "gui", "cmd": ["xvfb-run", "-a", "-s", "-screen 0 2600x1700x24", "../../target/release/mr6_7_dat_xe", "demo_gui", "127.0.0.1", "44712"], "show": ["xvfb-run", "-a", "../../target/release/mr6_7_dat_xe", "demo_gui", "127.0.0.1", "44712"], "timeout": 120}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ đặt xe (chế độ khoa)",
+             "mp": "Cửa sổ 2 – 1000 người đặt 1 xe, 4 chế độ",
+             "qt10": "Cửa sổ 3 – quản trị (đặt lại 10 xe)",
+             "mp10": "Cửa sổ 4 – 2000 người đặt 10 xe, 4 chế độ",
+             "qt1": "Cửa sổ 5 – quản trị (đặt lại 1 xe)",
+             "A": "Cửa sổ 6 – người gọi xe An",
+             "B": "Cửa sổ 7 – Bình (hết chỗ, đặt được sau khi An hủy)",
+             "gui": "Cửa sổ 8 – giao diện (máy chủ + 3 ứng dụng)"}
+}
