@@ -1,6 +1,6 @@
 //! Bài mở rộng MR6.11 – Bộ mô phỏng tải: n người dùng ảo trên k kết nối, rào xuất phát, pipelining.
 //!
-//! Tệp này là phần KHUNG, GIỐNG NHAU ở 8 bài tranh chấp; phần NGHIỆP VỤ (NguCanh, NguoiAo,
+//! Tệp này là phần KHUNG, GIỐNG NHAU ở 9 bài tranh chấp; phần NGHIỆP VỤ (NguCanh, NguoiAo,
 //! SO_LAN_MAC_DINH, tham_so_dat_lai) ở nguoi_ao.rs.
 //!
 //! Một lượt: kết nối k socket (người i đi trên kết nối i mod k; kết nối chào kèm "so_nguoi"), mọi luồng

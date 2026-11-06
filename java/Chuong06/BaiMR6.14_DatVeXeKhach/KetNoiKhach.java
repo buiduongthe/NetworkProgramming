@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 /**
  * Bài mở rộng MR6.14 – Lõi client dùng chung (giao diện người dùng, bộ mô phỏng, quản trị).
  *
- * Tệp này GIỐNG NHAU ở các bài tranh chấp (MR6.6–MR6.13). Không có gì về nghiệp vụ.
+ * Tệp này GIỐNG NHAU ở các bài tranh chấp (MR6.6–MR6.14). Không có gì về nghiệp vụ.
  *   ketNoi(...)       chào, đọc trả lời chào và cap_nhat đầu tiên (đồng bộ) -> trangThai
  *   guiYc(loai, khiKq, truong)   gửi một yêu cầu (tự đánh ma_yc), KHÔNG chờ: khiKq(tin, rttMs) được gọi khi có
  *                     trả lời cùng ma_yc (pipelining: gửi tiếp được ngay)

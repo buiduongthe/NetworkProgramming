@@ -1,6 +1,6 @@
 //! Bài mở rộng MR6.9 – Lõi client dùng chung (giao diện người dùng, bộ mô phỏng, quản trị) + dòng lệnh quản trị.
 //!
-//! Tệp này GIỐNG NHAU ở cả 8 bài tranh chấp (MR6.6–MR6.13). Không có gì về nghiệp vụ.
+//! Tệp này GIỐNG NHAU ở cả 9 bài tranh chấp (MR6.6–MR6.14). Không có gì về nghiệp vụ.
 //!
 //! KetNoiKhach – một kết nối TCP:
 //!   ket_noi(...)      chào, đọc trả lời chào và cap_nhat đầu tiên (đồng bộ) -> trang_thai

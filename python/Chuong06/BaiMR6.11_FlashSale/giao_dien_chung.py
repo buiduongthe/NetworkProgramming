@@ -1,6 +1,6 @@
-"""Thành phần giao diện Tkinter dùng chung cho nhóm bài tranh chấp MR6.6–MR6.13 (bài đầu: MR6.6 Đấu giá).
+"""Thành phần giao diện Tkinter dùng chung cho nhóm bài tranh chấp MR6.6–MR6.14 (bài đầu: MR6.6 Đấu giá).
 
-Tệp này GIỐNG NHAU ở cả 8 bài (chép nguyên). Gồm:
+Tệp này GIỐNG NHAU ở cả 9 bài (chép nguyên). Gồm:
   - Tiện ích (như MR6.5): HangDoiGiaoDien, NhatKy, ThongKeDinhKy, nut, khung_nhom, nhan, o_nhap.
   - CuaSoServerCoSo: bảng điều khiển máy chủ đủ mọi phần chung – START/STOP, 4 nút chọn chế độ, độ trễ
     xử lý, chỉ số trực tiếp (yc/s, thành công, từ chối, xung đột, hàng đợi, độ trễ, SAI PHẠM tô đỏ),

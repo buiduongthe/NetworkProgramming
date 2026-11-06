@@ -1,6 +1,6 @@
 
 //!
-//! Tệp này GIỐNG NHAU ở cả 8 bài (chép nguyên). Gồm:
+//! Tệp này GIỐNG NHAU ở cả 9 bài (chép nguyên). Gồm:
 //!   - Tiện ích (như MR6.5): phông chữ có dấu, kiểu sáng nền xanh, nut, nhom, NhatKy, ThongKeDinhKy,
 //!     thanh_trang_thai, o_nhap, PNG viết tay, chụp/cắt/ghép ảnh cửa sổ.
 //!   - CuaSoServer<N, T>: bảng điều khiển máy chủ đủ mọi phần chung – START/STOP, 4 nút chọn chế độ, độ
@@ -15,7 +15,7 @@
 //! CHỈ luồng giao diện chạm vào trạng thái của cửa sổ. Luồng mạng/mô phỏng đưa việc vào hàng sự kiện
 //! (Mutex<VecDeque>) hoặc ghi NhatKy rồi gọi request_repaint(); số liệu máy chủ đọc định kỳ (250 ms).
 
-#![allow(dead_code)] // khung chung của 8 bài: mỗi bài không dùng hết
+#![allow(dead_code)] // khung chung của 9 bài: mỗi bài không dùng hết
 
 use crate::chung::*;
 use crate::khach::KetNoiKhach;

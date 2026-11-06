@@ -2,7 +2,7 @@
 
 | Thông tin | Nội dung |
 |---|---|
-| Loại | **Bài mở rộng**, không có trong giáo trình và không có mã giả tương ứng. Bài đầu của nhóm "tranh chấp tài nguyên" MR6.6–MR6.13 |
+| Loại | **Bài mở rộng**, không có trong giáo trình và không có mã giả tương ứng. Bài đầu của nhóm "tranh chấp tài nguyên" MR6.6–MR6.14 |
 | Liên hệ với giáo trình | Chương 6: Bài 6.1 (server đa luồng, một luồng mỗi kết nối), Bài 6.7 (kiểm thử tải); Chương 3: Bài 3.2 (định khung thông điệp theo dòng); bài mở rộng MR5.4/MR5.5 (luồng, đồng bộ) |
 | Thư viện | .NET 10 BCL: `System.Net.Sockets` (`TcpListener`, `Socket`), `System.Threading` (`Thread`, `lock`/`Monitor`, `Interlocked`, `Volatile`, `Barrier`, `ManualResetEventSlim`), `System.Collections.Concurrent` (`BlockingCollection`, `ConcurrentQueue`), `System.Text.Json.Nodes`; bản giao diện: Windows Forms (`net10.0-windows`). Không dùng gói NuGet |
 | Bản ngôn ngữ khác | [Python](../../../python/Chuong06/BaiMR6.6_DauGia/), [Java](../../../java/Chuong06/BaiMR6.6_DauGia/), [Rust](../../../rust/Chuong06/BaiMR6.6_DauGia/), [Go](../../../go/Chuong06/BaiMR6.6_DauGia/) |
@@ -10,7 +10,7 @@
 ## Mục tiêu
 Bài mô phỏng một phòng đấu giá trực tuyến. Một món hàng có giá khởi điểm và bước giá. **n người cùng trả giá**, và giá chỉ được nhận khi **≥ giá hiện tại + bước giá**. Đồng hồ đếm ngược đóng phiên; ai trả giá trong 10 giây cuối thì phiên được **gia hạn 10 giây** (đóng mềm, chống "bắn tỉa" phút cuối). Hết giờ, máy chủ công bố người thắng. Máy chủ TCP đa luồng (một `Thread` mỗi kết nối) giữ trạng thái. Mỗi lần trả giá là một thao tác "đọc → kiểm tra (giả lập độ trễ cơ sở dữ liệu 0–2 ms) → ghi", xử lý theo **bốn cách** chọn được ngay lúc đang chạy: không khóa, khóa loại trừ, điều khiển đồng thời lạc quan, hàng đợi một luồng. **Sổ kiểm toán** độc lập đếm sai phạm, còn **bộ mô phỏng tải** (500 người × 5 lần trên 200 kết nối, rào xuất phát, pipelining) cho thấy bằng số liệu thật: chỉ chế độ không khóa sinh sai phạm, ba chế độ còn lại cho 0 sai phạm nhưng khác nhau về thông lượng và độ trễ.
 
-Bản C# dùng **đúng giao thức, mã lỗi, câu chữ và định dạng dòng in** của bản Python: máy chủ C# phục vụ được bộ mô phỏng/người dùng Python và ngược lại. Phần khung (`Chung.cs`, `Khach.cs`, phần KHUNG của `MoPhong.cs`, `GiaoDien/GiaoDienChung.cs`) dùng chung cho các bài MR6.6–MR6.13.
+Bản C# dùng **đúng giao thức, mã lỗi, câu chữ và định dạng dòng in** của bản Python: máy chủ C# phục vụ được bộ mô phỏng/người dùng Python và ngược lại. Phần khung (`Chung.cs`, `Khach.cs`, phần KHUNG của `MoPhong.cs`, `GiaoDien/GiaoDienChung.cs`) dùng chung cho các bài MR6.6–MR6.14.
 
 ## Kiến thức chính
 Số liệu dưới đây lấy từ `ket_qua.txt`, là một lần chạy thật trên máy cục bộ (127.0.0.1, .NET 10 trên Linux, độ trễ xử lý ngẫu nhiên 0–2 ms). Mỗi lần chạy, số liệu lệch đi đôi chút.
@@ -110,7 +110,7 @@ dotnet run -c Release -- dau_gia_gui Bình 127.0.0.1 42702
 ## Ghi chú
 - **Chạy chéo đã kiểm tra:** bộ mô phỏng C# → máy chủ Python (khong_khoa 478 thành công / 452 sai phạm; khoa 15 / 0; lac_quan 34 / 0, 89 xung đột; hang_doi 12 / 0) và bộ mô phỏng Python → máy chủ C# (616 / 541; 126 / 0; 79 / 0, 41 xung đột; 16 / 0); người trả giá Python với máy chủ C# (phiên 4 s: chấp nhận, kết thúc, "BẠN THẮNG!").
 - `Thread.Sleep` chỉ nhận số nguyên mili giây, nên độ trễ giả lập "ngẫu nhiên 0–2 ms" được làm tròn ngẫu nhiên (1,3 ms → 1 ms với xác suất 0,7, 2 ms với xác suất 0,3): trung bình vẫn đúng. Trên Windows, chương trình gọi `timeBeginPeriod(1)` (winmm) để `Thread.Sleep(1)` ngủ ≈ 1 ms thay vì ≈ 15,6 ms.
-- Đổi chế độ hoặc đặt lại đi qua "cổng" `TamDung()` (`Monitor.Wait`/`PulseAll`): đóng cổng, chờ mọi thao tác đang chạy và đang xếp hàng xong, rồi mới đổi. Đặt lại dựng một bảng ô mới rồi thay nguyên bảng, nên luồng hiển thị không bao giờ đọc phải bảng đang dựng dở. Bảng ô là `ConcurrentDictionary` để bài có thể thêm ô khi đang chạy (MR6.9 thêm ô cho từng người quay, MR6.13 thêm ô lượt mua) mà không phải chép cả bảng; khung này giống hệt nhau ở cả tám bài MR6.6–MR6.13.
+- Đổi chế độ hoặc đặt lại đi qua "cổng" `TamDung()` (`Monitor.Wait`/`PulseAll`): đóng cổng, chờ mọi thao tác đang chạy và đang xếp hàng xong, rồi mới đổi. Đặt lại dựng một bảng ô mới rồi thay nguyên bảng, nên luồng hiển thị không bao giờ đọc phải bảng đang dựng dở. Bảng ô là `ConcurrentDictionary` để bài có thể thêm ô khi đang chạy (MR6.9 thêm ô cho từng người quay, MR6.13 thêm ô lượt mua) mà không phải chép cả bảng; khung này giống hệt nhau ở cả chín bài MR6.6–MR6.14.
 - "Xử lý µs" ở máy chủ tính từ lúc đọc xong yêu cầu tới lúc gửi trả lời (`Stopwatch`), gồm cả thời gian chờ khóa/hàng đợi. Phân vị tính theo hạng gần nhất trên tối đa 200 000 mẫu từ lần đặt lại cuối. Số thực in bằng `CultureInfo.InvariantCulture` (dấu chấm) ở mọi máy.
 - Kiểm thử: bản dòng lệnh chạy trên Linux (.NET 10.0.114). Ứng dụng WinForms đã kiểm tra biên dịch với assembly tham chiếu WinForms, **chưa chạy – cần Windows**.
 

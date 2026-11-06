@@ -107,6 +107,7 @@ python3 dat_ve_xe_gui.py Bình 127.0.0.1 41782
 ![Kết quả thực thi](ket_qua.png)
 
 ## Ghi chú
+- **Chạy chéo đã thử** (500 người cùng giữ giường nóng D01, so sánh 4 chế độ; thứ tự `khong_khoa` / `khoa` / `lac_quan` / `hang_doi`, mỗi cặp là thành công / sai phạm): bộ mô phỏng Python → máy chủ C#: 93 / 134, 6 / 0, 6 / 0 (10 xung đột), 4 / 0; C# → Python: 9 / 5, 4 / 0, 4 / 0, 6 / 0; Java → Rust: 7 / 1, 4 / 0, 4 / 0, 6 / 0; Rust → Go: 27 / 36, 6 / 0, 4 / 0, 4 / 0; Go → Java: 20 / 23, 6 / 0, 4 / 0, 6 / 0. Bốn người dùng dòng lệnh Python (An), Java (Chi), Rust (Bình) và Go (Dũng, giữ và mua T05, T06 Bảo Lộc → Nha Trang, 600.000 đ) cùng chạy kịch bản giữ chỗ 3 s trên máy chủ C#: diễn biến giống hệt lượt chạy một ngôn ngữ, sổ kiểm toán 0 sai phạm, `Bán 6/120 chỗ-chặng, giữ 0, sổ 4 vé`.
 - Python có GIL nên các luồng không chạy song song thật. Tranh chấp vẫn xảy ra vì luồng nhả GIL trong lúc `time.sleep` (giả lập truy vấn cơ sở dữ liệu), và lợi thế của khóa theo từng ô ở Python đến từ việc các luồng *cùng chờ* cơ sở dữ liệu (giả lập). Bản C#, Java, Rust, Go chạy đa lõi thật.
 - Ở tình huống nhiều chỗ, `khong_khoa` kết thúc với "Bán 93/120 chỗ-chặng, giữ 20, sổ 74 vé": hai mươi ô bị "giữ mồ côi" bởi những người đã bị đè (họ thanh toán thì bị từ chối), và các ô này chỉ trống lại sau 30 s. Ba chế độ đúng bán được 116–118/120 chỗ-chặng (96–101 vé). Đây là hệ quả thực tế của tranh chấp: chỗ không bán được dù có người muốn mua.
 - `THAM_SO_DAT_LAI = {}`: `--so-sanh` đặt lại sơ đồ xe mà vẫn giữ loại xe, thời hạn và ghế nóng hiện tại của máy chủ.
@@ -118,3 +119,10 @@ python3 dat_ve_xe_gui.py Bình 127.0.0.1 41782
 2. Chạy tình huống nhiều chỗ với đoạn luôn là cả tuyến (`NguCanh.doan` trả về `(0, 3)`). Thông lượng của `khoa` và số xung đột của `lac_quan` thay đổi thế nào? Giải thích bằng số ô mỗi yêu cầu chạm vào.
 3. Thêm thao tác `doi_cho` (đổi từ chỗ đang giữ sang chỗ khác, nguyên tử: chỉ nhả chỗ cũ khi giữ được chỗ mới). Những ô nào phải khóa cùng lúc? Sắp thứ tự thế nào để không khóa chết?
 4. Thêm luật "giường tầng dưới ưu tiên người cao tuổi": người dùng mang cờ `uu_tien` mới giữ được D01–D20 trong 10 phút đầu mở bán. Luật này đặt ở `_xu_ly_yeu_cau` hay trong hàm thuần `xu_ly`? Vì sao?
+
+## Đọc thêm
+- H. T. Kung, J. T. Robinson (1981). *On Optimistic Methods for Concurrency Control*. ACM Transactions on Database Systems 6(2).
+- E. G. Coffman, M. J. Elphick, A. Shoshani (1971). *System Deadlocks*. ACM Computing Surveys 3(2): điều kiện khóa chết và cách phòng bằng thứ tự khóa (giữ nhiều chỗ cho nhiều chặng = khóa nhiều ô theo thứ tự tên ô).
+- Tài liệu Python: [`threading`](https://docs.python.org/3/library/threading.html) (Lock, Condition, Barrier), [`queue`](https://docs.python.org/3/library/queue.html), [`time.monotonic`](https://docs.python.org/3/library/time.html#time.monotonic), [`socket`](https://docs.python.org/3/library/socket.html), [`tkinter`](https://docs.python.org/3/library/tkinter.html) (`Canvas`, `OptionMenu`).
+
+Mã nguồn của bài được viết mới cho kho này.

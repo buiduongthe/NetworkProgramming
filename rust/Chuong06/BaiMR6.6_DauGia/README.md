@@ -2,7 +2,7 @@
 
 | Thông tin | Nội dung |
 |---|---|
-| Loại | **Bài mở rộng**, không có trong giáo trình và không có mã giả tương ứng. Đây là bài đầu của nhóm "tranh chấp tài nguyên" MR6.6–MR6.13 |
+| Loại | **Bài mở rộng**, không có trong giáo trình và không có mã giả tương ứng. Đây là bài đầu của nhóm "tranh chấp tài nguyên" MR6.6–MR6.14 |
 | Liên hệ với giáo trình | Chương 6: Bài 6.1 (server đa luồng, một luồng mỗi kết nối), Bài 6.7 (kiểm thử tải); Chương 3: Bài 3.2 (định khung thông điệp theo dòng); bài mở rộng MR5.4/MR5.5 (luồng, đồng bộ) |
 | Thư viện | Thư viện chuẩn Rust: `std::net` (TCP), `std::thread`, `std::sync` (`Mutex`, `RwLock`, `Condvar`, `AtomicU64`, `AtomicBool`, `mpsc`); crate `serde_json` 1.0.154 (bật `preserve_order` để giữ thứ tự khóa như `dict` của Python), `socket2` 0.5.10 (socket nghe với backlog 1024), `ctrlc` 3.4.7, `chrono` 0.4.41 (giờ địa phương), `miniz_oxide` 0.8.9 (nén zlib cho bộ ghi PNG viết tay). Ứng dụng giao diện: `eframe`/`egui` 0.29.1 (OpenGL qua `glow`). Mọi crate ghim bằng `=` và `Cargo.lock` |
 | Bản ngôn ngữ khác | [Python](../../../python/Chuong06/BaiMR6.6_DauGia/), [C#](../../../csharp/Chuong06/BaiMR6.6_DauGia/), [Java](../../../java/Chuong06/BaiMR6.6_DauGia/), [Go](../../../go/Chuong06/BaiMR6.6_DauGia/) |
@@ -10,7 +10,7 @@
 ## Mục tiêu
 Bài mô phỏng một phòng đấu giá trực tuyến. Một món hàng có giá khởi điểm và bước giá. **n người cùng trả giá**, và giá chỉ được nhận khi **≥ giá hiện tại + bước giá**. Đồng hồ đếm ngược đóng phiên; ai trả giá trong 10 giây cuối thì phiên được **gia hạn 10 giây** (đóng mềm, chống "bắn tỉa" phút cuối). Hết giờ, máy chủ công bố người thắng. Máy chủ TCP đa luồng (một luồng `std::thread` mỗi kết nối) giữ trạng thái. Mỗi lần trả giá là một thao tác "đọc → kiểm tra (giả lập độ trễ cơ sở dữ liệu 0–2 ms) → ghi", và thao tác này được xử lý theo **bốn cách** chọn được ngay lúc đang chạy: không khóa, khóa loại trừ, điều khiển đồng thời lạc quan, hàng đợi một luồng. **Sổ kiểm toán** độc lập đếm sai phạm, còn **bộ mô phỏng tải** (500 người × 5 lần trên 200 kết nối, có rào xuất phát và pipelining) cho thấy bằng số liệu thật: chỉ chế độ không khóa sinh sai phạm, ba chế độ còn lại cho 0 sai phạm nhưng khác nhau về thông lượng và độ trễ.
 
-Giao thức, câu chữ và định dạng dòng in giống hệt bản Python, nên máy chủ, bộ mô phỏng và người dùng viết bằng các ngôn ngữ khác nhau chạy chung được (đã thử chạy chéo với bản Python, xem Ghi chú). Phần khung (`chung.rs`, `khach.rs`, `mo_phong.rs`, `server.rs`, `gui_chung.rs`) dùng chung cho cả 8 bài MR6.6–MR6.13 và được chép nguyên (chỉ khác dòng đầu). Bài sau chỉ viết thêm nghiệp vụ.
+Giao thức, câu chữ và định dạng dòng in giống hệt bản Python, nên máy chủ, bộ mô phỏng và người dùng viết bằng các ngôn ngữ khác nhau chạy chung được (đã thử chạy chéo với bản Python, xem Ghi chú). Phần khung (`chung.rs`, `khach.rs`, `mo_phong.rs`, `server.rs`, `gui_chung.rs`) dùng chung cho cả 9 bài MR6.6–MR6.14 và được chép nguyên (chỉ khác dòng đầu). Bài sau chỉ viết thêm nghiệp vụ.
 
 ## Kiến thức chính
 Số liệu dưới đây lấy từ `ket_qua.txt`, là một lần chạy thật trên máy cục bộ (127.0.0.1, Rust 1.97, 2 lõi, độ trễ xử lý ngẫu nhiên 0–2 ms). Mỗi lần chạy, số liệu lệch đi đôi chút.
@@ -52,7 +52,7 @@ Mã lỗi chung: `khong_co`, `loi`, `khoa_cho_lau`, `xung_dot`, `sai_du_lieu`, `
 
 ## Cấu trúc tệp
 Gói Cargo `mr6_6_dau_gia` (một chương trình, chọn vai trò bằng lệnh con):
-- **Khung chung (chép nguyên ở 8 bài):** `src/chung.rs` (giao thức, `Args`, `ThongKe`, `KhoTranhChap` 4 chế độ + cổng `tam_dung`, `SoKiemToan` + trait `LuatKiemToan`, `MayChu<N>` + trait `NghiepVu`, định dạng in `dong_thong_ke`, `bang_so_sanh`, `tien`), `src/khach.rs` (`KetNoiKhach` pipelining, `QuanTri`, lệnh `khach`), `src/mo_phong.rs` (`chay_luot`, `so_sanh`, rào xuất phát `Rao`), `src/server.rs` (vòng lệnh máy chủ), `src/gui_chung.rs` (`CuaSoServer<N, T>` + trait `TaiNguyen`, `CuaSoNguoiDung<U>` + trait `UngDung`, `NhatKy`, `KichBan`, `MayChup`, `ghep_anh`, PNG viết tay, bút vẽ đa giác/đường cong).
+- **Khung chung (chép nguyên ở 9 bài):** `src/chung.rs` (giao thức, `Args`, `ThongKe`, `KhoTranhChap` 4 chế độ + cổng `tam_dung`, `SoKiemToan` + trait `LuatKiemToan`, `MayChu<N>` + trait `NghiepVu`, định dạng in `dong_thong_ke`, `bang_so_sanh`, `tien`), `src/khach.rs` (`KetNoiKhach` pipelining, `QuanTri`, lệnh `khach`), `src/mo_phong.rs` (`chay_luot`, `so_sanh`, rào xuất phát `Rao`), `src/server.rs` (vòng lệnh máy chủ), `src/gui_chung.rs` (`CuaSoServer<N, T>` + trait `TaiNguyen`, `CuaSoNguoiDung<U>` + trait `UngDung`, `NhatKy`, `KichBan`, `MayChup`, `ghep_anh`, PNG viết tay, bút vẽ đa giác/đường cong).
 - **Nghiệp vụ:** `src/may_chu.rs` (`DauGia: NghiepVu`, `LuatDauGia: LuatKiemToan`, tùy chọn dòng lệnh, cổng mặc định), `src/nguoi_ao.rs` (`NguCanh`, `NguoiAo`, `SO_LAN_MAC_DINH`, `tham_so_dat_lai`), `src/dau_gia.rs` (người trả giá dòng lệnh).
 - **Giao diện:** `src/server_gui.rs` (khung "Tài nguyên"), `src/dau_gia_gui.rs` (phòng đấu giá, bình gốm vẽ bằng bút vẽ egui), `src/demo_gui.rs` (kịch bản tự thao tác + chụp), `src/main.rs`.
 - `Cargo.toml`, `Cargo.lock`, `demo.json`, `ket_qua.txt`, `ket_qua.png`, `ket_qua_gui.png`, `ket_qua_gui_tranh_chap.png` – kịch bản và kết quả thực thi thật.

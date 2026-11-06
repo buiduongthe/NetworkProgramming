@@ -1,8 +1,8 @@
-// Gói tranhchap – khung dùng chung cho nhóm bài mở rộng "tranh chấp tài nguyên" MR6.6–MR6.13 (bài
+// Gói tranhchap – khung dùng chung cho nhóm bài mở rộng "tranh chấp tài nguyên" MR6.6–MR6.14 (bài
 // đầu: MR6.6 Đấu giá) và nghiệp vụ của bài.
 //
 // Các tệp giaothuc.go, thongke.go, kho.go, sokiemtoan.go, maychu.go, khach.go, mophong.go GIỐNG NHAU ở
-// cả 8 bài (chép nguyên, như chung.py/khach.py/mo_phong.py của bản Python); nghiệp vụ riêng của từng
+// cả 9 bài (chép nguyên, như chung.py/khach.py/mo_phong.py của bản Python); nghiệp vụ riêng của từng
 // bài nằm ở nghiepvu.go (máy chủ + sổ kiểm toán) và nguoiao.go (người dùng ảo của bộ mô phỏng).
 //
 //  1. Giao thức (tệp này): GuiJSON, MaHoa, DocDong (mỗi dòng một JSON UTF-8 kết thúc "\n", tối đa

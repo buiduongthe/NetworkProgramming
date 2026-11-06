@@ -1,6 +1,6 @@
 package tranhchap
 
-// Đo đạc: phân vị theo hạng gần nhất, số liệu máy chủ từ lần đặt lại gần nhất (khung chung MR6.6–MR6.13).
+// Đo đạc: phân vị theo hạng gần nhất, số liệu máy chủ từ lần đặt lại gần nhất (khung chung MR6.6–MR6.14).
 
 import (
 	"math"

@@ -2,7 +2,7 @@
 
 | Thông tin | Nội dung |
 |---|---|
-| Loại | **Bài mở rộng**, không có trong giáo trình và không có mã giả tương ứng. Thuộc nhóm "tranh chấp tài nguyên" MR6.6–MR6.13, dùng chung khung của [MR6.6](../BaiMR6.6_DauGia/) |
+| Loại | **Bài mở rộng**, không có trong giáo trình và không có mã giả tương ứng. Thuộc nhóm "tranh chấp tài nguyên" MR6.6–MR6.14, dùng chung khung của [MR6.6](../BaiMR6.6_DauGia/) |
 | Liên hệ với giáo trình | Chương 6: Bài 6.1 (server đa luồng, một luồng mỗi kết nối), Bài 6.7 (kiểm thử tải); Chương 3: Bài 3.2 (định khung thông điệp theo dòng); bài mở rộng MR5.4/MR5.5 (luồng, đồng bộ) |
 | Thư viện | JDK 21, chỉ thư viện chuẩn: `java.net`, `java.util.concurrent` (`ReentrantLock`, `LinkedBlockingQueue`, `CyclicBarrier`, `AtomicLong`), `PriorityQueue` (hàng chờ theo số thứ tự), `ArrayDeque`; bản giao diện dùng thêm Swing (`CardLayout` cho ba trang, `JProgressBar`, `JSpinner`, `AlphaComposite`), `java.awt.Robot`, `javax.imageio`. `Json.java` tự viết |
 | Bản ngôn ngữ khác | [C#](../../../csharp/Chuong06/BaiMR6.13_PhongCho/), [Python](../../../python/Chuong06/BaiMR6.13_PhongCho/), [Rust](../../../rust/Chuong06/BaiMR6.13_PhongCho/), [Go](../../../go/Chuong06/BaiMR6.13_PhongCho/) |

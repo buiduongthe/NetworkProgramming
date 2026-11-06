@@ -11,7 +11,7 @@ using System.Text.Json.Nodes;
 
 namespace BaiMR6_13;
 
-// Khung dùng chung cho nhóm bài mở rộng "tranh chấp tài nguyên" MR6.6–MR6.13 (bài đầu: MR6.6 Đấu giá).
+// Khung dùng chung cho nhóm bài mở rộng "tranh chấp tài nguyên" MR6.6–MR6.14 (bài đầu: MR6.6 Đấu giá).
 //
 // Tệp này GIỐNG NHAU ở các bài (chỉ khác dòng namespace); nghiệp vụ riêng của từng bài nằm ở MayChu.cs (lớp con
 // của MayChuCoSo, lớp con của SoKiemToan) và phần "NGHIỆP VỤ" của MoPhong.cs. Bảng ô của KhoTranhChap là ConcurrentDictionary

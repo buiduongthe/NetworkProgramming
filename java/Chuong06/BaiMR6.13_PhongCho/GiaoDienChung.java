@@ -49,7 +49,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * Bài mở rộng MR6.13 – Thành phần giao diện Swing dùng chung cho nhóm bài tranh chấp MR6.6–MR6.13.
+ * Bài mở rộng MR6.13 – Thành phần giao diện Swing dùng chung cho nhóm bài tranh chấp MR6.6–MR6.14.
  *
  * Tệp này GIỐNG NHAU ở các bài (chép nguyên). Gồm:
  *   - Tiện ích (như MR6.5): caiDat, khungNhom, hang, nut, nhan, oNhap, KhungVe, NhatKy, ThongKeDinhKy.

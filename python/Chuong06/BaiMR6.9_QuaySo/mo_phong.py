@@ -1,6 +1,6 @@
 """Bài mở rộng MR6.9 – Bộ mô phỏng tải: n người dùng ảo trên k kết nối, rào xuất phát, pipelining.
 
-Phần KHUNG (từ "KHUNG" trở xuống) giống nhau ở 8 bài tranh chấp; mỗi bài chỉ sửa phần NGHIỆP VỤ:
+Phần KHUNG (từ "KHUNG" trở xuống) giống nhau ở 9 bài tranh chấp; mỗi bài chỉ sửa phần NGHIỆP VỤ:
   - NguCanh: điều một kết nối biết về trạng thái chung (ở đây: số quà còn lại), cập nhật từ cap_nhat;
   - NguoiAo: kịch bản của MỘT người dùng ảo: quay `lan` lần (mặc định 1). Người thứ 100, 200, 300…
     dùng TÊN của người liền trước (một người quay trên hai thiết bị cùng lúc) – máy chủ phải từ chối
@@ -65,7 +65,7 @@ class NguoiAo:
         return self._quay()
 
 
-# ===================================================================== KHUNG (giống nhau ở 8 bài)
+# ===================================================================== KHUNG (giống nhau ở 9 bài)
 class KetQuaKetNoi:
     def __init__(self):
         self.rtt, self.ok, self.tu_choi, self.ly_do = [], 0, 0, collections.Counter()

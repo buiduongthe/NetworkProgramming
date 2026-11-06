@@ -2,7 +2,7 @@
 
 | Thông tin | Nội dung |
 |---|---|
-| Loại | **Bài mở rộng**, không có trong giáo trình và không có mã giả tương ứng. Đây là bài đầu của nhóm "tranh chấp tài nguyên" MR6.6–MR6.13 |
+| Loại | **Bài mở rộng**, không có trong giáo trình và không có mã giả tương ứng. Đây là bài đầu của nhóm "tranh chấp tài nguyên" MR6.6–MR6.14 |
 | Liên hệ với giáo trình | Chương 6: Bài 6.1 (server đa luồng, một luồng mỗi kết nối), Bài 6.7 (kiểm thử tải); Chương 3: Bài 3.2 (định khung thông điệp theo dòng); bài mở rộng MR5.4/MR5.5 (luồng, đồng bộ) |
 | Thư viện | Bản dòng lệnh: chỉ thư viện chuẩn Go (`net`, `sync`, `sync/atomic`, `encoding/json`, `bufio`, `math/rand/v2`, `os/signal`). Ứng dụng giao diện (`gui/`, mô-đun riêng): Fyne v2.6.3 (cần cgo/gcc); kịch bản demo giao diện trên Linux cần Xvfb và ImageMagick (`import`) để chụp cửa sổ |
 | Bản ngôn ngữ khác | [Python](../../../python/Chuong06/BaiMR6.6_DauGia/), [C#](../../../csharp/Chuong06/BaiMR6.6_DauGia/), [Java](../../../java/Chuong06/BaiMR6.6_DauGia/), [Rust](../../../rust/Chuong06/BaiMR6.6_DauGia/) |
@@ -10,7 +10,7 @@
 ## Mục tiêu
 Bài mô phỏng một phòng đấu giá trực tuyến. Một món hàng có giá khởi điểm và bước giá. **n người cùng trả giá**, và giá chỉ được nhận khi **≥ giá hiện tại + bước giá**. Đồng hồ đếm ngược đóng phiên; ai trả giá trong 10 giây cuối thì phiên được **gia hạn 10 giây** (đóng mềm, chống "bắn tỉa" phút cuối). Hết giờ, máy chủ công bố người thắng. Máy chủ TCP đa luồng (một goroutine mỗi kết nối) giữ trạng thái. Mỗi lần trả giá là một thao tác "đọc → kiểm tra (giả lập độ trễ cơ sở dữ liệu 0–2 ms) → ghi", và thao tác này được xử lý theo **bốn cách** chọn được ngay lúc đang chạy: không khóa, khóa loại trừ, điều khiển đồng thời lạc quan, hàng đợi một goroutine. **Sổ kiểm toán** độc lập đếm sai phạm, còn **bộ mô phỏng tải** (500 người × 5 lần trên 200 kết nối, có rào xuất phát và pipelining) cho thấy bằng số liệu thật: chỉ chế độ không khóa sinh sai phạm, ba chế độ còn lại cho 0 sai phạm nhưng khác nhau về thông lượng và độ trễ.
 
-Giao thức, câu chữ và định dạng dòng in giống hệt bản Python, nên máy chủ, bộ mô phỏng và người dùng viết bằng các ngôn ngữ khác nhau chạy chung được (đã thử chạy chéo với bản Python, xem Ghi chú). Phần khung (các tệp `tranhchap/` trừ `nghiepvu.go`, `nguoiao.go`; `chung_cli.go`; `gui/chung_gui.go`, `gui/ve.go`) dùng chung cho cả 8 bài MR6.6–MR6.13. Bài sau chép khung này và chỉ viết thêm nghiệp vụ.
+Giao thức, câu chữ và định dạng dòng in giống hệt bản Python, nên máy chủ, bộ mô phỏng và người dùng viết bằng các ngôn ngữ khác nhau chạy chung được (đã thử chạy chéo với bản Python, xem Ghi chú). Phần khung (các tệp `tranhchap/` trừ `nghiepvu.go`, `nguoiao.go`; `chung_cli.go`; `gui/chung_gui.go`, `gui/ve.go`) dùng chung cho cả 9 bài MR6.6–MR6.14. Bài sau chép khung này và chỉ viết thêm nghiệp vụ.
 
 ## Kiến thức chính
 Số liệu dưới đây lấy từ `ket_qua.txt`, là một lần chạy thật trên máy cục bộ (127.0.0.1, Go 1.24, độ trễ xử lý ngẫu nhiên 0–2 ms). Mỗi lần chạy, số liệu lệch đi đôi chút.
@@ -52,7 +52,7 @@ Mã lỗi chung: `khong_co`, `loi`, `khoa_cho_lau`, `xung_dot`, `sai_du_lieu`, `
 
 ## Cấu trúc tệp
 - `tranhchap/` (gói lõi, dùng chung với giao diện) – **khung chung**: `giaothuc.go` (dòng JSON giữ thứ tự khóa, `DocDong` giới hạn 64 KB, `DocLenhStdin`, `DocThamSo`, các hàm in `DongThongKe`, `BangSoSanh`, `Tien`), `thongke.go` (`PhanVi`, `ThongKe`), `kho.go` (`KhoTranhChap`: 4 chế độ, cổng `TamDung`), `sokiemtoan.go`, `maychu.go` (`MayChuCoSo`, giao diện `NghiepVu`), `khach.go` (`KetNoiKhach` pipelining, `QuanTri`), `mophong.go` (`ChayLuot`, `SoSanh`, rào xuất phát); **nghiệp vụ**: `nghiepvu.go` (`MayChuDauGia`, luật sổ kiểm toán), `nguoiao.go` (`nguCanh`, `nguoiAo`, `ThamSoDatLai`).
-- `main.go` (lệnh con `server`, `mo_phong`, `khach`, `dau_gia`), `chung_cli.go` (vòng lệnh máy chủ, công cụ quản trị, bộ mô phỏng – chung 8 bài), `server.go` (tùy chọn của máy chủ đấu giá), `dau_gia.go` (người trả giá).
+- `main.go` (lệnh con `server`, `mo_phong`, `khach`, `dau_gia`), `chung_cli.go` (vòng lệnh máy chủ, công cụ quản trị, bộ mô phỏng – chung 9 bài), `server.go` (tùy chọn của máy chủ đấu giá), `dau_gia.go` (người trả giá).
 - `gui/` – ứng dụng giao diện Fyne (mô-đun Go riêng, `go.mod` có `replace` về mô-đun gốc): `chung_gui.go` (khung chung: `cuaSoServerCoSo`, `cuaSoNguoiDungCoSo`, bảng so sánh, chụp/ghép ảnh, `giuVe`), `ve.go` (bút vẽ ảnh khử răng cưa), `server_gui.go`, `dau_gia_gui.go`, `demo_gui.go`, `main.go`.
 - `demo.json`, `ket_qua.txt`, `ket_qua.png`, `ket_qua_gui.png`, `ket_qua_gui_tranh_chap.png` – kịch bản và kết quả thực thi thật.
 

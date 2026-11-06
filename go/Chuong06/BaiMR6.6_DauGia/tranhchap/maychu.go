@@ -1,6 +1,6 @@
 package tranhchap
 
-// MayChuCoSo – khung máy chủ TCP đa luồng (một goroutine mỗi kết nối) của nhóm MR6.6–MR6.13: chào,
+// MayChuCoSo – khung máy chủ TCP đa luồng (một goroutine mỗi kết nối) của nhóm MR6.6–MR6.14: chào,
 // quản trị, ma_yc lặp lại (idempotency), đẩy cap_nhat gộp tối đa 10 lần/giây. Nghiệp vụ (nghiepvu.go)
 // viết giao diện NghiepVu:
 //

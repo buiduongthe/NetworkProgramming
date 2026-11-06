@@ -1,7 +1,7 @@
 package tranhchap
 
 // SoKiemToan – ghi mọi giao dịch ĐƯỢC CHẤP NHẬN (dưới khóa riêng của sổ – không ảnh hưởng tranh chấp
-// của kho) và đếm sai phạm (khung chung MR6.6–MR6.13). Nghiệp vụ đặt danh sách TenSaiPham và viết hai
+// của kho) và đếm sai phạm (khung chung MR6.6–MR6.14). Nghiệp vụ đặt danh sách TenSaiPham và viết hai
 // luật (giao diện LuatKiemToan):
 //
 //	KiemTra(so, gd)        – gọi khi ghi từng giao dịch (theo thứ tự ghi sổ), gọi so.SaiPham(ma, moTa);

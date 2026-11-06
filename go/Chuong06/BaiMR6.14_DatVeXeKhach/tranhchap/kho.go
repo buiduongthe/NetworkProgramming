@@ -1,7 +1,7 @@
 package tranhchap
 
 // KhoTranhChap – kho các ô tài nguyên; mọi thao tác GHI đi qua ThucHien() và được xử lý theo chế độ
-// hiện tại (khung chung MR6.6–MR6.13).
+// hiện tại (khung chung MR6.6–MR6.14).
 //
 // Nghiệp vụ viết hàm THUẦN  xuLy(doc) -> (kq, ghi):
 //   - doc: {khóa ô: giá trị đọc được} cho các ô trong cacKhoa;

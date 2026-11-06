@@ -1,6 +1,6 @@
 package main
 
-// Phần dòng lệnh dùng chung của nhóm MR6.6–MR6.13 (giống nhau ở 8 bài, như server.py/khach.py/
+// Phần dòng lệnh dùng chung của nhóm MR6.6–MR6.14 (giống nhau ở 9 bài, như server.py/khach.py/
 // mo_phong.py của bản Python): vòng lệnh của máy chủ, công cụ quản trị, bộ mô phỏng tải.
 
 import (

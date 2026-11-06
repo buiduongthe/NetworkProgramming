@@ -1,6 +1,6 @@
 package tranhchap
 
-// Bộ mô phỏng tải – KHUNG (giống nhau ở 8 bài tranh chấp): n người dùng ảo trên k kết nối, rào xuất
+// Bộ mô phỏng tải – KHUNG (giống nhau ở 9 bài tranh chấp): n người dùng ảo trên k kết nối, rào xuất
 // phát, pipelining. Phần NGHIỆP VỤ ở nguoiao.go: nguCanh (điều một kết nối biết về trạng thái chung),
 // nguoiAo (kịch bản của MỘT người dùng ảo), SoLanMacDinh, ThamSoDatLai.
 //

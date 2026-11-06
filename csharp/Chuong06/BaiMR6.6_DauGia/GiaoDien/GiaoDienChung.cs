@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace BaiMR6_6;
 
-// Thành phần giao diện WinForms dùng chung cho nhóm bài tranh chấp MR6.6–MR6.13 (bài đầu: MR6.6 Đấu giá).
+// Thành phần giao diện WinForms dùng chung cho nhóm bài tranh chấp MR6.6–MR6.14 (bài đầu: MR6.6 Đấu giá).
 //
 // Tệp này GIỐNG NHAU ở các bài (chỉ khác dòng namespace) – như giao_dien_chung.py của bản Python. Gồm:
 //   - Tiện ích: GD (màu, nút, nhãn, ô nhập, nhóm, chụp và ghép ảnh), HangDoiGiaoDien, NhatKy, ThongKeDinhKy.

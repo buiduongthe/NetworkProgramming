@@ -1,6 +1,6 @@
 """Bài mở rộng MR6.10 – Bộ mô phỏng tải: n người dùng ảo trên k kết nối, rào xuất phát, pipelining.
 
-Phần KHUNG (từ "KHUNG" trở xuống) giống nhau ở 8 bài tranh chấp; mỗi bài chỉ sửa phần NGHIỆP VỤ:
+Phần KHUNG (từ "KHUNG" trở xuống) giống nhau ở 9 bài tranh chấp; mỗi bài chỉ sửa phần NGHIỆP VỤ:
   - NguCanh: danh sách mã lớp (từ cap_nhat đầu tiên);
   - NguoiAo: kịch bản của MỘT sinh viên ảo: muốn `lan` lớp (mặc định 1). Thứ tự ưu tiên các lớp xáo
     ngẫu nhiên theo tên (cùng tên -> cùng thứ tự); đăng ký lớp đầu, "lớp đã đủ" thì thử lớp kế tiếp;
@@ -78,7 +78,7 @@ class NguoiAo:
         return self._tiep()
 
 
-# ===================================================================== KHUNG (giống nhau ở 8 bài)
+# ===================================================================== KHUNG (giống nhau ở 9 bài)
 class KetQuaKetNoi:
     def __init__(self):
         self.rtt, self.ok, self.tu_choi, self.ly_do = [], 0, 0, collections.Counter()

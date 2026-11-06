@@ -1,6 +1,6 @@
-"""Khung dùng chung cho nhóm bài mở rộng "tranh chấp tài nguyên" MR6.6–MR6.13 (bài đầu: MR6.6 Đấu giá).
+"""Khung dùng chung cho nhóm bài mở rộng "tranh chấp tài nguyên" MR6.6–MR6.14 (bài đầu: MR6.6 Đấu giá).
 
-Tệp này GIỐNG NHAU ở cả 8 bài (chép nguyên, không sửa); nghiệp vụ riêng của từng bài nằm ở may_chu.py
+Tệp này GIỐNG NHAU ở cả 9 bài (chép nguyên, không sửa); nghiệp vụ riêng của từng bài nằm ở may_chu.py
 (lớp con của MayChuCoSo, lớp con của SoKiemToan) và phần "NGHIỆP VỤ" của mo_phong.py. Gồm:
   1. Giao thức: gui_json, doc_dong (mỗi dòng một JSON UTF-8 kết thúc "\\n", tối đa 64 KB), ten_hop_le,
      doc_lenh_stdin ("@t lệnh"), doc_tham_so ("khoa=gia_tri").

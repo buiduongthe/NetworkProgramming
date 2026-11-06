@@ -36,7 +36,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
 /**
- * Bài mở rộng MR6.10 – Khung dùng chung cho nhóm bài "tranh chấp tài nguyên" MR6.6–MR6.13 (bản Java).
+ * Bài mở rộng MR6.10 – Khung dùng chung cho nhóm bài "tranh chấp tài nguyên" MR6.6–MR6.14 (bản Java).
  *
  * Tệp này GIỐNG NHAU ở các bài tranh chấp (chép nguyên, chỉ đổi dòng đầu); nghiệp vụ riêng nằm ở MayChu.java
  * (lớp con của MayChuCoSo, lớp con của SoKiemToan) và phần "NGHIỆP VỤ" của MoPhong.java. Gồm:

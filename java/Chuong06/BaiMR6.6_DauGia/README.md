@@ -2,7 +2,7 @@
 
 | Thông tin | Nội dung |
 |---|---|
-| Loại | **Bài mở rộng**, không có trong giáo trình và không có mã giả tương ứng. Đây là bài đầu của nhóm "tranh chấp tài nguyên" MR6.6–MR6.13 |
+| Loại | **Bài mở rộng**, không có trong giáo trình và không có mã giả tương ứng. Đây là bài đầu của nhóm "tranh chấp tài nguyên" MR6.6–MR6.14 |
 | Liên hệ với giáo trình | Chương 6: Bài 6.1 (server đa luồng, một luồng mỗi kết nối), Bài 6.7 (kiểm thử tải); Chương 3: Bài 3.2 (định khung thông điệp theo dòng); bài mở rộng MR5.4/MR5.5 (luồng, đồng bộ) |
 | Thư viện | JDK 21, chỉ thư viện chuẩn: `java.net.ServerSocket`/`Socket`, `java.util.concurrent` (`ReentrantLock.tryLock`, `LinkedBlockingQueue`, `CyclicBarrier`, `CountDownLatch`, `ConcurrentHashMap`, `AtomicLong`, `ThreadLocalRandom`), `synchronized`/`wait`/`notifyAll`, `LockSupport.parkNanos`; bản giao diện dùng thêm Swing, `java.awt.Robot` (chụp cửa sổ), `javax.imageio`. `Json.java` tự viết (chép từ MR6.5 bản Java) – không thư viện ngoài |
 | Bản ngôn ngữ khác | [C#](../../../csharp/Chuong06/BaiMR6.6_DauGia/), [Python](../../../python/Chuong06/BaiMR6.6_DauGia/), [Rust](../../../rust/Chuong06/BaiMR6.6_DauGia/), [Go](../../../go/Chuong06/BaiMR6.6_DauGia/) |
@@ -10,7 +10,7 @@
 ## Mục tiêu
 Bài mô phỏng một phòng đấu giá trực tuyến. Một món hàng có giá khởi điểm và bước giá. **n người cùng trả giá**, và giá chỉ được nhận khi **≥ giá hiện tại + bước giá**. Đồng hồ đếm ngược đóng phiên; ai trả giá trong 10 giây cuối thì phiên được **gia hạn 10 giây** (đóng mềm, chống "bắn tỉa" phút cuối). Hết giờ, máy chủ công bố người thắng. Máy chủ TCP **đa luồng thật** (một luồng nền tảng mỗi kết nối, chạy song song trên nhiều lõi) giữ trạng thái. Mỗi lần trả giá là một thao tác "đọc → kiểm tra (giả lập độ trễ cơ sở dữ liệu 0–2 ms) → ghi", xử lý theo **bốn cách** chọn được ngay lúc đang chạy: không khóa, khóa loại trừ, điều khiển đồng thời lạc quan, hàng đợi một luồng. **Sổ kiểm toán** độc lập đếm sai phạm, còn **bộ mô phỏng tải** (500 người × 5 lần trên 200 kết nối, rào xuất phát và pipelining) cho thấy bằng số liệu thật: chỉ chế độ không khóa sinh sai phạm.
 
-Bản Java chuyển ngữ đúng bản Python: cùng giao thức (chạy chéo được với máy chủ/khách Python), cùng hành vi, cùng dòng in. Phần khung (`Chung.java`, `KetNoiKhach.java`, `Khach.java`, phần KHUNG của `MoPhong.java`, `GiaoDienChung.java`) dùng chung cho các bài MR6.6–MR6.13 bản Java.
+Bản Java chuyển ngữ đúng bản Python: cùng giao thức (chạy chéo được với máy chủ/khách Python), cùng hành vi, cùng dòng in. Phần khung (`Chung.java`, `KetNoiKhach.java`, `Khach.java`, phần KHUNG của `MoPhong.java`, `GiaoDienChung.java`) dùng chung cho các bài MR6.6–MR6.14 bản Java.
 
 ## Kiến thức chính
 Số liệu dưới đây lấy từ `ket_qua.txt`, là một lần chạy thật trên máy cục bộ (127.0.0.1, OpenJDK 21, 2 lõi, độ trễ xử lý ngẫu nhiên 0–2 ms). Mỗi lần chạy, số liệu lệch đi đôi chút.

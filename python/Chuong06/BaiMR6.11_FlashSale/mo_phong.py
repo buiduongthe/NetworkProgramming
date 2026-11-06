@@ -1,6 +1,6 @@
 """Bài mở rộng MR6.11 – Bộ mô phỏng tải: n người dùng ảo trên k kết nối, rào xuất phát, pipelining.
 
-Phần KHUNG (từ "KHUNG" trở xuống) giống nhau ở 8 bài tranh chấp; mỗi bài chỉ sửa phần NGHIỆP VỤ:
+Phần KHUNG (từ "KHUNG" trở xuống) giống nhau ở 9 bài tranh chấp; mỗi bài chỉ sửa phần NGHIỆP VỤ:
   - NguCanh: không cần gì (máy chủ quyết định tồn kho);
   - NguoiAo: kịch bản của MỘT người mua ảo: đặt `lan` đơn (mặc định 1), mỗi đơn 1–2 sản phẩm (ngẫu
     nhiên); "chỉ còn 1" thì đặt lại với số lượng còn lại; hết hàng thì thôi.
@@ -67,7 +67,7 @@ class NguoiAo:
         return self._mua()
 
 
-# ===================================================================== KHUNG (giống nhau ở 8 bài)
+# ===================================================================== KHUNG (giống nhau ở 9 bài)
 class KetQuaKetNoi:
     def __init__(self):
         self.rtt, self.ok, self.tu_choi, self.ly_do = [], 0, 0, collections.Counter()

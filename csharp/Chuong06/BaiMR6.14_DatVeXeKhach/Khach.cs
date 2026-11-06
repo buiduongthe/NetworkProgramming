@@ -6,7 +6,7 @@ namespace BaiMR6_14;
 
 // Bài mở rộng MR6.14 – Lõi client dùng chung (giao diện người dùng, bộ mô phỏng, quản trị) + dòng lệnh quản trị.
 //
-// Tệp này GIỐNG NHAU ở các bài tranh chấp (MR6.6–MR6.13, chỉ khác dòng namespace). Không có gì về nghiệp vụ.
+// Tệp này GIỐNG NHAU ở các bài tranh chấp (MR6.6–MR6.14, chỉ khác dòng namespace). Không có gì về nghiệp vụ.
 //
 // KetNoiKhach – một kết nối TCP:
 //   KetNoi(...)       chào, đọc trả lời chào và cap_nhat đầu tiên (đồng bộ) -> TrangThai

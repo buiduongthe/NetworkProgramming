@@ -1,6 +1,6 @@
 
 //!
-//! Tệp này GIỐNG NHAU ở cả 8 bài (chép nguyên, chỉ sửa dòng đầu); nghiệp vụ riêng của từng bài nằm ở
+//! Tệp này GIỐNG NHAU ở cả 9 bài (chép nguyên, chỉ sửa dòng đầu); nghiệp vụ riêng của từng bài nằm ở
 //! may_chu.rs (kiểu cài đặt `NghiepVu` và `LuatKiemToan`) và nguoi_ao.rs (người dùng ảo của bộ mô phỏng).
 //! Gồm:
 //!   1. Giao thức: gui_json, doc_dong (mỗi dòng một JSON UTF-8 kết thúc "\n", tối đa 64 KB), ten_hop_le,
@@ -36,7 +36,7 @@
 //! có data race, không UB) nhưng chuỗi "đọc – nghỉ – xử lý – ghi" thì không, nên chế độ khong_khoa vẫn
 //! lộ đúng lỗi mất cập nhật mà bài muốn minh họa.
 
-#![allow(dead_code)] // khung chung của 8 bài: mỗi bài không dùng hết
+#![allow(dead_code)] // khung chung của 9 bài: mỗi bài không dùng hết
 
 use serde_json::{json, Map, Value};
 use std::cell::Cell;

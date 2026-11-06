@@ -1,6 +1,6 @@
 package main
 
-// Thành phần giao diện Fyne dùng chung cho nhóm bài tranh chấp MR6.6–MR6.13 (bài đầu: MR6.6 Đấu giá) –
+// Thành phần giao diện Fyne dùng chung cho nhóm bài tranh chấp MR6.6–MR6.14 (bài đầu: MR6.6 Đấu giá) –
 // tệp này GIỐNG NHAU ở các bài (chỉ khác đường dẫn gói tranhchap), như giao_dien_chung.py. Gồm:
 //   - Tiện ích (như MR6.5): chủ đề sáng, nhatKy, thongKeDinhKy, nut, nhom, oNhap, oMau, bảng cột cố định,
 //     chụp cửa sổ, ghép ảnh, giuVe (chống "cửa sổ trắng" trên Windows khi dùng SetFixedSize).
