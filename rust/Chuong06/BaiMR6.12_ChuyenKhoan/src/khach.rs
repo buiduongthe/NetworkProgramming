@@ -107,6 +107,7 @@ impl KetNoiKhach {
         *self.chao.lock().unwrap() = Some(tin.clone());
         *self.trang_thai.lock().unwrap() = doc_dong(&mut tep).map_err(|e| e.to_string())?; // máy chủ gửi ngay một cap_nhat sau lời chào
         let _ = sock.set_read_timeout(None);
+        let _ = tep.get_ref().set_read_timeout(None); // Windows: bản sao (try_clone) giữ thời hạn riêng, phải gỡ cả ở đây
         self.gui.lock().unwrap().sock = Some(sock);
         *self.doc.lock().unwrap() = Some(tep);
         self.mo.store(true, Ordering::SeqCst);

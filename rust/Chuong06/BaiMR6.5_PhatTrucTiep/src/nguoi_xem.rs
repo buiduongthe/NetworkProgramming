@@ -411,7 +411,8 @@ impl NguoiXem {
         let tcp = ket_noi_tcp(host, cong).map_err(|e| e.to_string())?;
         let r = (|| -> Result<(u32, bool, UdpSocket, BufReader<TcpStream>), String> {
             let mut tep = BufReader::new(tcp.try_clone().map_err(|e| e.to_string())?);
-            tcp.set_read_timeout(Some(Duration::from_secs(5))).map_err(|e| e.to_string())?;
+            // đặt trên bản sao dùng để đọc (Windows: mỗi bản sao giữ thời hạn riêng)
+            tep.get_ref().set_read_timeout(Some(Duration::from_secs(5))).map_err(|e| e.to_string())?;
             gui_json(&tcp, &json!({"loai": "chao", "vai_tro": "xem", "ten": self.ten})).map_err(|e| e.to_string())?;
             let tl = doc_dong(&mut tep).map_err(|e| e.to_string())?.unwrap_or_default();
             if chuoi(&tl, "loai") == "loi" {
@@ -420,7 +421,7 @@ impl NguoiXem {
             if chuoi(&tl, "loai") != "chao" {
                 return Err("server không trả lời 'chao'".into());
             }
-            tcp.set_read_timeout(None).map_err(|e| e.to_string())?;
+            tep.get_ref().set_read_timeout(None).map_err(|e| e.to_string())?;
             let ma = tl.get("ma").and_then(Value::as_u64).ok_or("thiếu 'ma'")? as u32;
             let cong_udp = tl.get("cong_udp").and_then(Value::as_u64).ok_or("thiếu 'cong_udp'")? as u16;
             let phat = tl.get("phat").is_some_and(la_dung);

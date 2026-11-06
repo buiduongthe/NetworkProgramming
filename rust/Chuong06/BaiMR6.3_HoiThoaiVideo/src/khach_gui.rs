@@ -405,13 +405,16 @@ fn ket_noi(cs: &Arc<Mutex<ChiaSe>>, phien: u64, ten: &str, host: &str, cong: u16
     let tcp = TcpStream::connect_timeout(&addr, Duration::from_secs(3))?;
     tcp.set_nodelay(true).ok();
     gui_json(&tcp, &json!({"loai": "vao", "ten": ten}))?;
-    tcp.set_read_timeout(Some(Duration::from_secs(5)))?;
-    let mut lines = BufReader::new(tcp.try_clone()?).lines();
-    let chao: Value = lines.next().and_then(|l| l.ok()).and_then(|l| serde_json::from_str(&l).ok()).unwrap_or(Value::Null);
+    // Thời hạn đặt trên đúng bản sao dùng để đọc: trên Windows, mỗi bản sao (try_clone) giữ thời hạn riêng
+    let mut doc = BufReader::new(tcp.try_clone()?);
+    doc.get_ref().set_read_timeout(Some(Duration::from_secs(5)))?;
+    let mut dong = String::new();
+    let chao: Value = doc.read_line(&mut dong).ok().and_then(|_| serde_json::from_str(dong.trim_end()).ok()).unwrap_or(Value::Null);
     if chao["loai"] != "chao" {
         return Err(std::io::Error::other("server không chào (sai giao thức?)"));
     }
-    tcp.set_read_timeout(None)?;
+    doc.get_ref().set_read_timeout(None)?;
+    let lines = doc.lines();
     let ma = chao["ma"].as_u64().unwrap_or(0) as u16;
     let dich = (host, chao["cong_udp"].as_u64().unwrap_or(0) as u16).to_socket_addrs()?.next().ok_or(std::io::ErrorKind::AddrNotAvailable)?;
     let udp = Arc::new(udp_dem_lon((if dich.is_ipv4() { "0.0.0.0:0" } else { "[::]:0" }).parse().unwrap())?);
