@@ -488,6 +488,14 @@ def chay_bai(thu_muc, tuy_chon):
     cac_thu_muc = [thu_muc] + ([os.path.dirname(thu_muc)] if os.path.basename(thu_muc) == 'GiaoDien' else [])
     truoc = chup_ket_qua(cac_thu_muc)
     bat_dau = time.time()
+    try:
+        kq, ghi_chu, moi = _chay(spec, thu_muc, cwd, env, setup, ds, rel)
+    finally:                     # luôn đổi ảnh chương trình vừa ghi thành *_windows.* và trả lại tệp Linux
+        sinh = doi_ten_ket_qua(truoc, cac_thu_muc, bat_dau)
+    return kq, ghi_chu, list(dict.fromkeys(moi + sinh))
+
+
+def _chay(spec, thu_muc, cwd, env, setup, ds, rel):
     chay = ChayBai(thu_muc, env)
     # bước chuẩn bị
     log_setup = os.path.join(thu_muc, '.log_setup.txt')
@@ -542,13 +550,13 @@ def chay_bai(thu_muc, tuy_chon):
     titles = dict(spec.get('titles', {}), **spec.get('titles_windows', {}))
     ra_png = os.path.join(thu_muc, 'ket_qua' + DUOI + '.png')
     r = subprocess.run([sys.executable, os.path.join(HERE, 'render_output.py'), '--kieu', 'windows', '-o', ra_png]
-                       + [f"{titles.get(n, n)}:{logs[n]}" for n in logs], capture_output=True, text=True)
+                       + [f"{titles.get(n, n)}:{logs[n]}" for n in logs], capture_output=True, text=True,
+                       encoding='utf-8', errors='replace', env=dict(os.environ, PYTHONIOENCODING='utf-8'))
     for duong in logs.values():
         os.remove(duong)
     if r.returncode != 0:
         return 'LỖI', 'vẽ ảnh: ' + (r.stderr.strip().splitlines() or ['?'])[-1], []
-    moi = [os.path.relpath(ra_txt, GOC), os.path.relpath(ra_png, GOC)] + doi_ten_ket_qua(truoc, cac_thu_muc, bat_dau)
-    moi = list(dict.fromkeys(moi))
+    moi = [os.path.relpath(ra_txt, GOC), os.path.relpath(ra_png, GOC)]
     txt = open(ra_txt, encoding='utf-8').read()
     canh_bao = []
     for mau in ('Traceback (most recent call last)', 'Unhandled exception', 'Exception in thread', 'panicked at',

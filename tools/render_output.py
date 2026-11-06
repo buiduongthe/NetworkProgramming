@@ -10,6 +10,7 @@ Mỗi đối số "tiêu đề:tệp" là một cửa sổ; các cửa sổ đư
 """
 import argparse
 import os
+import sys
 from PIL import Image, ImageDraw, ImageFont
 
 WINDIR = os.environ.get('WINDIR', r'C:\Windows')
@@ -46,6 +47,9 @@ def panel_windows(title, text, font, width_chars):
     d.rectangle([0, 0, w, 28], fill=W_BAR)
     d.rectangle([10, 9, 22, 19], outline=W_TITLE)              # biểu tượng cửa sổ dòng lệnh
     d.line([12, 12, 15, 14], fill=W_TITLE); d.line([12, 16, 15, 14], fill=W_TITLE)
+    cho = w - 3 * 46 - 40                                      # chỗ cho tiêu đề, không đè lên nút
+    while title and font.getlength(title) > cho:
+        title = title[:-2].rstrip() + '…'
     d.text((32, 6), title, font=font, fill=W_TITLE)
     x = w - 3 * 46                                             # — ☐ ✕ (mỗi nút rộng 46 px)
     d.line([x + 18, 14, x + 28, 14], fill=W_TITLE)
@@ -78,6 +82,8 @@ def panel(title, text, font, width_chars):
 
 
 def main():
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')   # Windows: tránh lỗi bảng mã khi in tiếng Việt
     ap = argparse.ArgumentParser()
     ap.add_argument('-o', '--out', required=True)
     ap.add_argument('--cols', type=int, default=0, help='số ký tự mỗi dòng (mặc định tự tính)')
