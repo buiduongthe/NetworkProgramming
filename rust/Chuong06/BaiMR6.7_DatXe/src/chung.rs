@@ -1,4 +1,4 @@
-//! Bài mở rộng MR6.7 – Khung dùng chung cho nhóm bài "tranh chấp tài nguyên" MR6.6–MR6.13.
+
 //!
 //! Tệp này GIỐNG NHAU ở cả 8 bài (chép nguyên, chỉ sửa dòng đầu); nghiệp vụ riêng của từng bài nằm ở
 //! may_chu.rs (kiểu cài đặt `NghiepVu` và `LuatKiemToan`) và nguoi_ao.rs (người dùng ảo của bộ mô phỏng).
@@ -626,6 +626,27 @@ impl<V: Send + Sync + 'static> KhoTranhChap<V> {
         b.ds = ds.into_iter().map(|(k, v)| (k, Arc::new(O::moi(v)))).collect();
     }
 
+    /// Thêm (hoặc thay) MỘT ô khi đang chạy – ví dụ ô của một người lần đầu xuất hiện (MR6.9, MR6.10).
+    /// Chỉ đẩy ô mới vào cuối bảng và chỉ mục (O(1) khấu hao) dưới khóa ghi rất ngắn – KHÔNG chép lại cả
+    /// bảng: với 100 000 người, chép cả bảng mỗi lần thêm một ô sẽ thành O(n²).
+    pub fn dat_o(&self, khoa: &str, v: V) {
+        let o = Arc::new(O::moi(v));
+        let mut b = self.o.write().unwrap();
+        match b.chi_muc.get(khoa) {
+            Some(&i) => b.ds[i].1 = o,
+            None => {
+                let i = b.ds.len();
+                b.chi_muc.insert(khoa.to_string(), i);
+                b.ds.push((khoa.to_string(), o));
+            }
+        }
+    }
+
+    /// Có ô `khoa` chưa.
+    pub fn co_o(&self, khoa: &str) -> bool {
+        self.o.read().unwrap().chi_muc.contains_key(khoa)
+    }
+
     /// Đọc không khóa ô (để hiển thị): giá trị được thay nguyên Arc nên luôn là một bản trọn vẹn.
     pub fn doc(&self, khoa: &str) -> Arc<V> {
         let b = self.o.read().unwrap();
@@ -1116,6 +1137,15 @@ impl<N: NghiepVu> MayChu<N> {
     }
     pub fn ts_str(&self, k: &str) -> String {
         self.tham_so.lock().unwrap().get(k).map(py_str).unwrap_or_default()
+    }
+    /// Đổi MỘT tham số ngay khi đang chạy, không đặt lại phiên (ví dụ tốc độ cấp lượt của MR6.13 –
+    /// như self.tham_so[k] = v của bản Python). Kiểm tra bằng kiem_tham_so trước khi đổi.
+    pub fn dat_mot_tham_so(&self, k: &str, v: Value) -> Result<(), String> {
+        let md = N::tham_so_mac_dinh();
+        let v = ep_kieu(md.get(k).ok_or_else(|| format!("tham số lạ: {k}"))?, &v)?;
+        N::kiem_tham_so(&obj(json!({ k: v.clone() })))?;
+        self.tham_so.lock().unwrap().insert(k.to_string(), v);
+        Ok(())
     }
     pub fn dang_chay(&self) -> bool {
         self.chay.load(Ordering::SeqCst)

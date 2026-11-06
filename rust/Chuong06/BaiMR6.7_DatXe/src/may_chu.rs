@@ -282,3 +282,13 @@ pub fn diem_truong(o: &Value, k: &str) -> Option<Diem> {
     let a = o.get(k)?.as_array()?;
     Some((a.first()?.as_f64()?, a.get(1)?.as_f64()?))
 }
+
+// Ba chỗ nối với server.rs (bài này không dùng): cờ dòng lệnh không kèm giá trị, dòng báo sau khi lắng nghe,
+// lệnh bàn phím riêng của bài (MR6.12, MR6.13 có dùng).
+pub const CO_DONG_LENH: &[&str] = &[];
+
+pub fn sau_khoi_dong(_a: &Args, _log: &dyn Fn(&str)) {}
+
+pub fn lenh_rieng(_sv: &Arc<MayChu<NV>>, _p: &[&str]) -> Option<Result<(), String>> {
+    None
+}

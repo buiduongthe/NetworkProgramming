@@ -369,3 +369,13 @@ fn da_ghi(mc: &MayChu<DatVe>, loai: &'static str, kq: &mut Obj, that: bool) {
     }
     mc.bao_doi();
 }
+
+// Ba chỗ nối với server.rs (bài này không dùng): cờ dòng lệnh không kèm giá trị, dòng báo sau khi lắng nghe,
+// lệnh bàn phím riêng của bài (MR6.12, MR6.13 có dùng).
+pub const CO_DONG_LENH: &[&str] = &[];
+
+pub fn sau_khoi_dong(_a: &Args, _log: &dyn Fn(&str)) {}
+
+pub fn lenh_rieng(_sv: &Arc<MayChu<NV>>, _p: &[&str]) -> Option<Result<(), String>> {
+    None
+}

@@ -1,4 +1,4 @@
-//! Bài mở rộng MR6.8 – Thành phần giao diện (egui) dùng chung cho nhóm bài tranh chấp MR6.6–MR6.13.
+
 //!
 //! Tệp này GIỐNG NHAU ở cả 8 bài (chép nguyên). Gồm:
 //!   - Tiện ích (như MR6.5): phông chữ có dấu, kiểu sáng nền xanh, nut, nhom, NhatKy, ThongKeDinhKy,
@@ -412,7 +412,8 @@ impl<N: NghiepVu, T: TaiNguyen<N>> CuaSoServer<N, T> {
         self.chay_nen(true);
     }
 
-    fn xong_mo_phong(&mut self, hang: Vec<HangSoSanh>) {
+    /// Hiện kết quả một lượt mô phỏng lên bảng (kịch bản demo gọi lại để hiện lại bảng so sánh 4 chế độ).
+    pub fn xong_mo_phong(&mut self, hang: Vec<HangSoSanh>) {
         self.dang_mo_phong = false;
         self.nhan_mo_phong = ("xong".into(), XANH_DAM);
         if hang.is_empty() {

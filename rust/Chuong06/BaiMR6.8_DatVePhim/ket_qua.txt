@@ -3,7 +3,7 @@ $ ../../target/release/mr6_8_dat_ve_phim server 127.0.0.1 44720
 [server] Lắng nghe 127.0.0.1:44720; chế độ khoa, trễ 0–2 ms
 [server] Đặt lại
 [server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
-[server] Lượt trước: khong_khoa, 514 yc, tc 15, sai phạm 14
+[server] Lượt trước: khong_khoa, 533 yc, tc 34, sai phạm 32
 [server] Đặt lại
 [server] Chế độ: khoa – Khóa loại trừ (mutex)
 [server] Lượt trước: khoa, 501 yc, tc 2, sai phạm 0
@@ -17,23 +17,23 @@ $ ../../target/release/mr6_8_dat_ve_phim server 127.0.0.1 44720
 [server] Đặt lại (ghe_nong=)
 [server] Đặt lại
 [server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
-[server] Lượt trước: khong_khoa, 872 yc, tc 147, sai phạm 25
+[server] Lượt trước: khong_khoa, 873 yc, tc 161, sai phạm 34
 [server] Đặt lại
 [server] Chế độ: khoa – Khóa loại trừ (mutex)
-[server] Lượt trước: khoa, 848 yc, tc 146, sai phạm 0
+[server] Lượt trước: khoa, 840 yc, tc 146, sai phạm 0
 [server] Đặt lại
 [server] Chế độ: lac_quan – Lạc quan (phiên bản + CAS)
-[server] Lượt trước: lac_quan, 872 yc, tc 152, sai phạm 0
+[server] Lượt trước: lac_quan, 860 yc, tc 150, sai phạm 0
 [server] Đặt lại
 [server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
 [server] Chế độ: khoa – Khóa loại trừ (mutex)
-[server] Lượt trước: khoa, 835 yc, tc 150, sai phạm 0
+[server] Lượt trước: khoa, 832 yc, tc 150, sai phạm 0
 [server] Đặt lại (ttl_s=3.0, ghe_nong=E7)
 [server] An vào
 [server] Chi vào
 [server] An giữ E7 (3 s)
-[server] khoa: 1 yc, tc 1, từ chối 0, sai phạm 0
 [server] Bình vào
+[server] khoa: 1 yc, tc 1, từ chối 0, sai phạm 0
 [server] Chi giữ F5, F6 (3 s)
 [server] Hết hạn giữ E7 (An), ghế trống lại
 [server] Hết hạn giữ F5 (Chi), ghế trống lại
@@ -49,7 +49,7 @@ $ ../../target/release/mr6_8_dat_ve_phim server 127.0.0.1 44720
 [server]   Yêu cầu 7: thành công 4, từ chối 3
 [server]   Xung đột 0, thử lại 0, hết lượt thử 0
 [server]   Hàng đợi max 0, chờ khóa quá hạn 0
-[server]   Xử lý µs: p50 1410 p95 2170 p99 2170
+[server]   Xử lý µs: p50 1216 p95 2065 p99 2065
 [server]   Thông lượng 2 yc/s
 [server]   Sai phạm 0: ghế trùng 0, thanh toán sai 0
 [server]   Đã bán 1/96 ghế, đang giữ 0, sổ 1 vé
@@ -59,52 +59,52 @@ $ ../../target/release/mr6_8_dat_ve_phim server 127.0.0.1 44720
 $ ../../target/release/mr6_8_dat_ve_phim mo_phong 127.0.0.1 44720 --n 500 --so-sanh
 [mo_phong] === khong_khoa: 500 người × 1 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
-[mo_phong] 514 yc xong trong 0.03 s = 19922 yc/s
-[mo_phong] Khứ hồi ms: p50 4.5 p95 12.7 p99 15.0
-[mo_phong] Thành công 15, từ chối 499
-[mo_phong]   lý do: da_ban 414, dang_giu 72, khong_giu 13
+[mo_phong] 533 yc xong trong 0.03 s = 19480 yc/s
+[mo_phong] Khứ hồi ms: p50 5.0 p95 15.8 p99 21.9
+[mo_phong] Thành công 34, từ chối 499
+[mo_phong]   lý do: dang_giu 238, da_ban 229, khong_giu 32
 [mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
-[mo_phong] Máy chủ xử lý µs: p50 1805 p95 4458 p99 7110
-[mo_phong] Sai phạm 14: ghế trùng 13, thanh toán sai 1
-[mo_phong]   ví dụ: E7 giữ cho u15 khi u65 đang giữ
-[mo_phong]   ví dụ: E7 giữ cho u41 khi u15 đang giữ
+[mo_phong] Máy chủ xử lý µs: p50 1631 p95 5488 p99 12862
+[mo_phong] Sai phạm 32: ghế trùng 32, thanh toán sai 0
+[mo_phong]   ví dụ: E7 giữ cho u8 khi u130 đang giữ
+[mo_phong]   ví dụ: E7 giữ cho u121 khi u8 đang giữ
 [mo_phong] Đã bán 1/96 ghế, đang giữ 0, sổ 1 vé
 [mo_phong] === khoa: 500 người × 1 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
-[mo_phong] 501 yc xong trong 0.58 s = 863 yc/s
-[mo_phong] Khứ hồi ms: p50 293.6 p95 554.8 p99 574.2
+[mo_phong] 501 yc xong trong 0.58 s = 862 yc/s
+[mo_phong] Khứ hồi ms: p50 290.7 p95 544.0 p99 570.2
 [mo_phong] Thành công 2, từ chối 499
-[mo_phong]   lý do: da_ban 276, dang_giu 223
+[mo_phong]   lý do: dang_giu 266, da_ban 233
 [mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
-[mo_phong] Máy chủ xử lý µs: p50 203609 p95 234040 p99 238090
+[mo_phong] Máy chủ xử lý µs: p50 219526 p95 235733 p99 237387
 [mo_phong] Sai phạm 0: ghế trùng 0, thanh toán sai 0
 [mo_phong] Đã bán 1/96 ghế, đang giữ 0, sổ 1 vé
 [mo_phong] === lac_quan: 500 người × 1 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
-[mo_phong] 501 yc xong trong 0.03 s = 16971 yc/s
-[mo_phong] Khứ hồi ms: p50 13.1 p95 25.0 p99 26.7
+[mo_phong] 501 yc xong trong 0.03 s = 17887 yc/s
+[mo_phong] Khứ hồi ms: p50 9.7 p95 19.8 p99 25.2
 [mo_phong] Thành công 2, từ chối 499
-[mo_phong]   lý do: dang_giu 367, da_ban 132
-[mo_phong] Máy chủ: xung đột 23, thử lại 23, hàng đợi max 0
-[mo_phong] Máy chủ xử lý µs: p50 1999 p95 21207 p99 22882
+[mo_phong]   lý do: dang_giu 376, da_ban 123
+[mo_phong] Máy chủ: xung đột 27, thử lại 27, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 2495 p95 13521 p99 15438
 [mo_phong] Sai phạm 0: ghế trùng 0, thanh toán sai 0
 [mo_phong] Đã bán 1/96 ghế, đang giữ 0, sổ 1 vé
 [mo_phong] === hang_doi: 500 người × 1 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
-[mo_phong] 501 yc xong trong 0.59 s = 854 yc/s
-[mo_phong] Khứ hồi ms: p50 288.8 p95 556.7 p99 579.0
+[mo_phong] 501 yc xong trong 0.58 s = 862 yc/s
+[mo_phong] Khứ hồi ms: p50 290.9 p95 545.2 p99 574.7
 [mo_phong] Thành công 2, từ chối 499
-[mo_phong]   lý do: da_ban 316, dang_giu 183
-[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 496
-[mo_phong] Máy chủ xử lý µs: p50 288688 p95 556595 p99 578814
+[mo_phong]   lý do: da_ban 327, dang_giu 172
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 495
+[mo_phong] Máy chủ xử lý µs: p50 290782 p95 544387 p99 570865
 [mo_phong] Sai phạm 0: ghế trùng 0, thanh toán sai 0
 [mo_phong] Đã bán 1/96 ghế, đang giữ 0, sổ 1 vé
 [mo_phong] Bảng so sánh (500 người × 1 lần, 200 kết nối):
   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
-  khong_khoa           15       14        0 19922    15.0
-  khoa                  2        0        0   863   574.2
-  lac_quan              2        0       23 16971    26.7
-  hang_doi              2        0        0   854   579.0
+  khong_khoa           34       32        0 19480    21.9
+  khoa                  2        0        0   862   570.2
+  lac_quan              2        0       27 17887    25.2
+  hang_doi              2        0        0   862   574.7
 
 ===== qtng =====
 $ ../../target/release/mr6_8_dat_ve_phim khach 127.0.0.1 44720 dat_lai ghe_nong=
@@ -115,52 +115,52 @@ $ ../../target/release/mr6_8_dat_ve_phim khach 127.0.0.1 44720 dat_lai ghe_nong=
 $ ../../target/release/mr6_8_dat_ve_phim mo_phong 127.0.0.1 44720 --n 300 --lan 3 --so-sanh
 [mo_phong] === khong_khoa: 300 người × 3 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
-[mo_phong] 872 yc xong trong 0.05 s = 18943 yc/s
-[mo_phong] Khứ hồi ms: p50 2.2 p95 4.2 p99 5.0
-[mo_phong] Thành công 147, từ chối 725
-[mo_phong]   lý do: da_ban 666, dang_giu 50, khong_giu 9
+[mo_phong] 873 yc xong trong 0.05 s = 18933 yc/s
+[mo_phong] Khứ hồi ms: p50 2.7 p95 7.9 p99 11.4
+[mo_phong] Thành công 161, từ chối 712
+[mo_phong]   lý do: da_ban 625, dang_giu 70, khong_giu 17
 [mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
-[mo_phong] Máy chủ xử lý µs: p50 1256 p95 2177 p99 2552
-[mo_phong] Sai phạm 25: ghế trùng 20, thanh toán sai 5
-[mo_phong]   ví dụ: G8 giữ cho u31 khi u149 đang giữ
-[mo_phong]   ví dụ: H6 giữ cho u29 khi u169 đang giữ
-[mo_phong] Đã bán 92/96 ghế, đang giữ 2, sổ 97 vé
+[mo_phong] Máy chủ xử lý µs: p50 1308 p95 2355 p99 3348
+[mo_phong] Sai phạm 34: ghế trùng 28, thanh toán sai 6
+[mo_phong]   ví dụ: F4 giữ cho u84 khi u35 đang giữ
+[mo_phong]   ví dụ: F7 giữ cho u61 khi u96 đang giữ
+[mo_phong] Đã bán 91/96 ghế, đang giữ 5, sổ 94 vé
 [mo_phong] === khoa: 300 người × 3 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
-[mo_phong] 848 yc xong trong 0.05 s = 16572 yc/s
-[mo_phong] Khứ hồi ms: p50 2.9 p95 10.3 p99 16.8
-[mo_phong] Thành công 146, từ chối 702
-[mo_phong]   lý do: da_ban 645, dang_giu 57
+[mo_phong] 840 yc xong trong 0.04 s = 22889 yc/s
+[mo_phong] Khứ hồi ms: p50 5.2 p95 22.2 p99 29.7
+[mo_phong] Thành công 146, từ chối 694
+[mo_phong]   lý do: da_ban 597, dang_giu 97
 [mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
-[mo_phong] Máy chủ xử lý µs: p50 1539 p95 5592 p99 9478
+[mo_phong] Máy chủ xử lý µs: p50 2324 p95 16799 p99 22036
 [mo_phong] Sai phạm 0: ghế trùng 0, thanh toán sai 0
 [mo_phong] Đã bán 95/96 ghế, đang giữ 0, sổ 95 vé
 [mo_phong] === lac_quan: 300 người × 3 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
-[mo_phong] 872 yc xong trong 0.02 s = 37068 yc/s
-[mo_phong] Khứ hồi ms: p50 2.0 p95 4.6 p99 6.3
-[mo_phong] Thành công 152, từ chối 720
-[mo_phong]   lý do: da_ban 655, dang_giu 65
-[mo_phong] Máy chủ: xung đột 19, thử lại 19, hàng đợi max 0
-[mo_phong] Máy chủ xử lý µs: p50 1175 p95 2106 p99 3871
+[mo_phong] 860 yc xong trong 0.06 s = 14744 yc/s
+[mo_phong] Khứ hồi ms: p50 2.1 p95 5.6 p99 7.3
+[mo_phong] Thành công 150, từ chối 710
+[mo_phong]   lý do: da_ban 629, dang_giu 81
+[mo_phong] Máy chủ: xung đột 17, thử lại 17, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1169 p95 2085 p99 3252
 [mo_phong] Sai phạm 0: ghế trùng 0, thanh toán sai 0
 [mo_phong] Đã bán 96/96 ghế, đang giữ 0, sổ 96 vé
 [mo_phong] === hang_doi: 300 người × 3 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
-[mo_phong] 835 yc xong trong 0.99 s = 846 yc/s
-[mo_phong] Khứ hồi ms: p50 295.4 p95 372.4 p99 376.1
-[mo_phong] Thành công 150, từ chối 685
-[mo_phong]   lý do: dang_giu 430, da_ban 255
+[mo_phong] 832 yc xong trong 0.94 s = 890 yc/s
+[mo_phong] Khứ hồi ms: p50 280.8 p95 334.7 p99 337.0
+[mo_phong] Thành công 150, từ chối 682
+[mo_phong]   lý do: dang_giu 443, da_ban 239
 [mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 299
-[mo_phong] Máy chủ xử lý µs: p50 295195 p95 372270 p99 375906
+[mo_phong] Máy chủ xử lý µs: p50 280467 p95 334249 p99 336459
 [mo_phong] Sai phạm 0: ghế trùng 0, thanh toán sai 0
 [mo_phong] Đã bán 96/96 ghế, đang giữ 0, sổ 96 vé
 [mo_phong] Bảng so sánh (300 người × 3 lần, 200 kết nối):
   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
-  khong_khoa          147       25        0 18943     5.0
-  khoa                146        0        0 16572    16.8
-  lac_quan            152        0       19 37068     6.3
-  hang_doi            150        0        0   846   376.1
+  khong_khoa          161       34        0 18933    11.4
+  khoa                146        0        0 22889    29.7
+  lac_quan            150        0       17 14744     7.3
+  hang_doi            150        0        0   890   337.0
 
 ===== qtttl =====
 $ ../../target/release/mr6_8_dat_ve_phim khach 127.0.0.1 44720 dat_lai ttl_s=3 ghe_nong=E7
@@ -172,7 +172,7 @@ $ ../../target/release/mr6_8_dat_ve_phim dat_ve An 127.0.0.1 44720 --thoi-gian 6
 [An] Vào rạp: Hành tinh xanh, suất 19:30 (khoa)
 [An]   trống 96, giữ 0, bán 0; vé 90.000 đ, giữ 3 s
 [An] > giữ E7
-[An]   ĐÃ GIỮ (0.5 ms), thanh toán trong 3 s
+[An]   ĐÃ GIỮ (2.4 ms), thanh toán trong 3 s
 [An] * An giữ E7 (3 s)
 [An] * Chi giữ F5, F6 (3 s)
 [An] * Hết hạn giữ E7 (An), ghế trống lại
@@ -190,7 +190,7 @@ $ ../../target/release/mr6_8_dat_ve_phim dat_ve Chi 127.0.0.1 44720 --thoi-gian 
 [Chi]   trống 96, giữ 0, bán 0; vé 90.000 đ, giữ 3 s
 [Chi] * An giữ E7 (3 s)
 [Chi] > giữ F5, F6
-[Chi]   ĐÃ GIỮ (0.7 ms), thanh toán trong 3 s
+[Chi]   ĐÃ GIỮ (1.4 ms), thanh toán trong 3 s
 [Chi] * Chi giữ F5, F6 (3 s)
 [Chi] * Hết hạn giữ E7 (An), ghế trống lại
 [Chi] * Hết hạn giữ F5 (Chi), ghế trống lại
@@ -213,10 +213,10 @@ $ ../../target/release/mr6_8_dat_ve_phim dat_ve 'Bình' 127.0.0.1 44720
 [Bình] * Hết hạn giữ F5 (Chi), ghế trống lại
 [Bình] * Hết hạn giữ F6 (Chi), ghế trống lại
 [Bình] > giữ E7
-[Bình]   ĐÃ GIỮ (2.0 ms), thanh toán trong 3 s
+[Bình]   ĐÃ GIỮ (1.5 ms), thanh toán trong 3 s
 [Bình] * Bình giữ E7 (3 s)
 [Bình] > thanh toán E7
-[Bình]   ĐẶT VÉ THÀNH CÔNG (2.4 ms): 90.000 đ
+[Bình]   ĐẶT VÉ THÀNH CÔNG (0.7 ms): 90.000 đ
 [Bình]   mã vé S1930-E7
 [Bình] * Bình mua 1 vé E7 (90.000 đ)
 [Bình]       [ MÀN HÌNH ]
@@ -236,11 +236,11 @@ $ xvfb-run -a ../../target/release/mr6_8_dat_ve_phim demo_gui 127.0.0.1 44722
 [demo]    An, Bình, Chi: Kết nối
 [demo] 2. Cả ba chọn ghế E7 rồi CÙNG bấm 'GIỮ CHỖ'
 [demo]    An: Không giữ được: ghế E7 đang có người giữ
-[demo]    Bình: Không giữ được: ghế E7 đang có người giữ
-[demo]    Chi: Đã giữ E7 – thanh toán trong 30 s
+[demo]    Bình: Đã giữ E7 – thanh toán trong 30 s
+[demo]    Chi: Không giữ được: ghế E7 đang có người giữ
 [demo]    máy chủ: 3 yc, tc 1, từ chối 2, sai phạm 0
-[demo] 3. Chi bấm 'THANH TOÁN'
-[demo]    Chi: Đặt vé thành công! 90.000 đ
+[demo] 3. Bình bấm 'THANH TOÁN'
+[demo]    Bình: Đặt vé thành công! 90.000 đ
 [demo]    máy chủ: Đã bán 1/96 ghế, đang giữ 0, sổ 1 vé
 [demo] 4. Máy chủ: khong_khoa, độ trễ xử lý 0–20 ms (CSDL chậm)
 [demo]    Cả ba chọn E8 rồi CÙNG bấm 'GIỮ CHỖ'
@@ -248,20 +248,20 @@ $ xvfb-run -a ../../target/release/mr6_8_dat_ve_phim demo_gui 127.0.0.1 44722
 [demo]    Bình: máy chủ trả lời ĐÃ GIỮ E8
 [demo]    Chi: máy chủ trả lời ĐÃ GIỮ E8
 [demo]    …sau cap_nhat của máy chủ:
-[demo]    An: Ghế E8 đã bị Chi lấy mất!
-[demo]    Bình: Ghế E8 đã bị Chi lấy mất!
-[demo]    Chi: Đã giữ E8 – thanh toán trong 30 s
+[demo]    An: Ghế E8 đã bị Bình lấy mất!
+[demo]    Bình: Đã giữ E8 – thanh toán trong 30 s
+[demo]    Chi: Ghế E8 đã bị Bình lấy mất!
 [demo]    máy chủ: 7 yc, tc 5, từ chối 2, sai phạm 2
+[demo]      ví dụ: E8 giữ cho An khi Chi đang giữ
 [demo]      ví dụ: E8 giữ cho Bình khi An đang giữ
-[demo]      ví dụ: E8 giữ cho Chi khi Bình đang giữ
-[demo]    E8 thuộc: Chi
-[demo]    Đã ghi ket_qua_gui_tranh_chap.png (197 KB)
+[demo]    E8 thuộc: Bình
+[demo]    Đã ghi ket_qua_gui_tranh_chap.png (195 KB)
 [demo] 5. khoa, trễ 0–2 ms; So sánh 4 chế độ (ghế nóng E7)
 [demo]   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
-[demo]   khong_khoa            5        3        0 12180    38.6
-[demo]   khoa                  2        0        0   797   618.9
-[demo]   lac_quan              2        0       25 15981    27.7
-[demo]   hang_doi              2        0        0   815   610.1
+[demo]   khong_khoa            4        2        0 23848    27.9
+[demo]   khoa                  2        0        0   803   607.5
+[demo]   lac_quan              2        0        8 19854    25.5
+[demo]   hang_doi              2        0        0   777   637.7
 [demo]    Sai phạm: khong_khoa
 [demo]    Không sai phạm: khoa, lac_quan, hang_doi
 [demo] 6. Đặt lại: giữ chỗ 6 s; An giữ F5, F6 (không thanh toán)
@@ -276,7 +276,7 @@ $ xvfb-run -a ../../target/release/mr6_8_dat_ve_phim demo_gui 127.0.0.1 44722
 [demo]    máy chủ: Đã bán 4/96 ghế, đang giữ 2, sổ 4 vé
 [demo]    máy chủ: 6 yc, tc 6, từ chối 0, sai phạm 0
 [demo] 7. Chụp 4 cửa sổ
-[demo]    Đã ghi ket_qua_gui.png (325 KB)
+[demo]    Đã ghi ket_qua_gui.png (326 KB)
 [demo] 8. Máy chủ: STOP SERVER
 [demo]    Bình: Mất kết nối máy chủ
 [demo] Kết thúc

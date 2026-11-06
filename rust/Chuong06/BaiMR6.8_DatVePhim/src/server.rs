@@ -1,4 +1,6 @@
-//! Bài mở rộng MR6.8 – Máy chủ tranh chấp tài nguyên (bản dòng lệnh) – GIỐNG NHAU ở 8 bài.
+
+//! thêm ba chỗ nối với may_chu.rs: cờ dòng lệnh không kèm giá trị (CO_DONG_LENH, ví dụ --khoa-ngay-tho),
+//! dòng báo sau khi lắng nghe (sau_khoi_dong) và lệnh bàn phím riêng của bài (lenh_rieng, ví dụ toc_do).
 //!
 //! Lõi ở may_chu.rs (kiểu NV, khung MayChu trong chung.rs, dùng chung với server_gui.rs); tệp này chỉ in
 //! nhật ký, cứ 5 giây in một dòng số liệu (khi có yêu cầu mới) và nhận lệnh bàn phím.
@@ -11,7 +13,7 @@
 //! Chế độ khong_khoa chỉ dùng để minh họa lỗi trong phòng lab (127.0.0.1).
 
 use crate::chung::*;
-use crate::may_chu::{tham_so_dong_lenh, CONG, NV};
+use crate::may_chu::{lenh_rieng, sau_khoi_dong, tham_so_dong_lenh, CONG, CO_DONG_LENH, NV};
 use std::sync::mpsc;
 use std::sync::Arc;
 use std::time::Duration;
@@ -21,7 +23,7 @@ fn log(text: &str) {
 }
 
 pub fn run(args: &[String]) {
-    let a = Args::parse(args, &[]);
+    let a = Args::parse(args, CO_DONG_LENH);
     let (host, cong) = a.host_cong(CONG);
     let che_do = a.str("che-do", "khoa");
     let bao: Bao = Arc::new(log);
@@ -36,6 +38,7 @@ pub fn run(args: &[String]) {
         log(&format!("Không khởi động được: {e}"));
         std::process::exit(1);
     }
+    sau_khoi_dong(&a, &log);
     let (tx, rx) = mpsc::channel::<()>();
     let t = tx.clone();
     let _ = ctrlc::set_handler(move || {
@@ -63,10 +66,10 @@ pub fn run(args: &[String]) {
                         let _ = tx.send(());
                         Ok(())
                     }
-                    _ => {
+                    _ => lenh_rieng(&s, &p).unwrap_or_else(|| {
                         log("lệnh không hợp lệ");
                         Ok(())
-                    }
+                    }),
                 };
                 if let Err(e) = kq {
                     log(&format!("lỗi: {e}"));
