@@ -1,0 +1,187 @@
+===== dichvu =====
+> out\app.exe dich-vu 127.0.0.1 41545
+[dịch vụ] lắng nghe 127.0.0.1:41545 (mỗi kết nối một goroutine)
+[dịch vụ] đợt: 3 yêu cầu VIEC, đồng thời tối đa 3
+[dịch vụ] đợt: 8 yêu cầu VIEC, đồng thời tối đa 3
+[dịch vụ] PHAT 9: nhận 9 kết quả, đúng 9/9
+
+===== server =====
+> out\app.exe server 127.0.0.1 41546
+[server] cổng 41546: máy chủ A – mỗi client một goroutine
+[server] cổng 41547: máy chủ B – nhóm 2 goroutine cố định, hàng đợi tối đa 2 (đầy → 503)
+[  2.150 s] nhận-A          | kết nối mới → tạo goroutine kết-nối-1
+[  2.150 s] kết-nối-1       | xử lý VIEC 1 300
+[  2.168 s] nhận-A          | kết nối mới → tạo goroutine kết-nối-2
+[  2.169 s] kết-nối-2       | xử lý VIEC 2 300
+[  2.189 s] nhận-A          | kết nối mới → tạo goroutine kết-nối-3
+[  2.189 s] kết-nối-3       | xử lý VIEC 3 300
+[  2.210 s] nhận-A          | kết nối mới → tạo goroutine kết-nối-4
+[  2.210 s] kết-nối-4       | xử lý VIEC 4 300
+[  2.229 s] nhận-A          | kết nối mới → tạo goroutine kết-nối-5
+[  2.230 s] kết-nối-5       | xử lý VIEC 5 300
+[  2.249 s] nhận-A          | kết nối mới → tạo goroutine kết-nối-6
+[  2.249 s] kết-nối-6       | xử lý VIEC 6 300
+[  2.551 s] nhận-B          | VIEC 1 vào hàng đợi
+[  2.551 s] nhóm-1          | xử lý VIEC 1 300
+[  2.572 s] nhận-B          | VIEC 2 vào hàng đợi
+[  2.572 s] nhóm-2          | xử lý VIEC 2 300
+[  2.592 s] nhận-B          | VIEC 3 vào hàng đợi
+[  2.612 s] nhận-B          | VIEC 4 vào hàng đợi
+[  2.632 s] nhận-B          | hàng đợi đầy (2/2) → trả 503 cho VIEC 5
+[  2.652 s] nhận-B          | hàng đợi đầy (2/2) → trả 503 cho VIEC 6
+[  2.852 s] nhóm-1          | xử lý VIEC 3 300
+[  2.873 s] nhóm-2          | xử lý VIEC 4 300
+
+===== luong =====
+> out\app.exe luong 127.0.0.1 41545
+(a) Tạo – chạy – chờ goroutine: 3 goroutine, mỗi goroutine nhận tham số (mã, thời gian xử lý) và trả kết quả
+[  0.000 s] chính           | tạo 3 goroutine tải-1..tải-3 rồi cho chạy (go)
+[  0.000 s] tải-3 yc=3      | kết nối dịch vụ, gửi VIEC 3 200
+[  0.000 s] tải-1 yc=1      | kết nối dịch vụ, gửi VIEC 1 300
+[  0.001 s] tải-2 yc=2      | kết nối dịch vụ, gửi VIEC 2 100
+[  0.105 s] tải-2 yc=2      | nhận XONG 2 sau 104 ms
+[  0.204 s] tải-3 yc=3      | nhận XONG 3 sau 204 ms
+[  0.304 s] tải-1 yc=1      | nhận XONG 1 sau 303 ms
+[  0.304 s] chính           | chờ (wg.Wait) xong cả 3 goroutine sau 0.30 s (tuần tự sẽ ≈ 0.60 s)
+
+  Goroutine Tham số         Kết quả    Thời gian
+  tải-1     mã 1, 300 ms    XONG 1        303 ms
+  tải-2     mã 2, 100 ms    XONG 2        104 ms
+  tải-3     mã 3, 200 ms    XONG 3        204 ms
+
+(e) Giới hạn kết nối ra ngoài: 8 goroutine gọi dịch vụ, tối đa 3 kết nối cùng lúc (semaphore)
+[  0.307 s] gọi-8 yc=8      | được suất (đang dùng 1/3), gửi VIEC 18 150
+[  0.307 s] gọi-1 yc=1      | được suất (đang dùng 3/3), gửi VIEC 11 150
+[  0.307 s] gọi-6 yc=6      | hết suất → chờ
+[  0.307 s] gọi-2 yc=2      | hết suất → chờ
+[  0.307 s] gọi-5 yc=5      | hết suất → chờ
+[  0.307 s] gọi-7 yc=7      | hết suất → chờ
+[  0.307 s] gọi-4 yc=4      | được suất (đang dùng 2/3), gửi VIEC 14 150
+[  0.307 s] gọi-3 yc=3      | hết suất → chờ
+[  0.459 s] gọi-1 yc=1      | xong, trả suất
+[  0.459 s] gọi-6 yc=6      | được suất (đang dùng 3/3), gửi VIEC 16 150
+[  0.459 s] gọi-4 yc=4      | xong, trả suất
+[  0.459 s] gọi-5 yc=5      | được suất (đang dùng 3/3), gửi VIEC 15 150
+[  0.459 s] gọi-8 yc=8      | xong, trả suất
+[  0.459 s] gọi-2 yc=2      | được suất (đang dùng 2/3), gửi VIEC 12 150
+[  0.610 s] gọi-6 yc=6      | xong, trả suất
+[  0.610 s] gọi-7 yc=7      | được suất (đang dùng 3/3), gửi VIEC 17 150
+[  0.610 s] gọi-2 yc=2      | xong, trả suất
+[  0.610 s] gọi-3 yc=3      | được suất (đang dùng 3/3), gửi VIEC 13 150
+[  0.610 s] gọi-5 yc=5      | xong, trả suất
+[  0.761 s] gọi-7 yc=7      | xong, trả suất
+[  0.762 s] gọi-3 yc=3      | xong, trả suất
+[  0.763 s] chính           | dịch vụ xác nhận: 8 yêu cầu, đồng thời tối đa 3; tổng 0.46 s (≈ ⌈8/3⌉ × 150 ms = 0.45 s)
+
+(g) Nhật ký theo goroutine: mỗi dòng ghi tên goroutine; ngữ cảnh "yc=" nằm trong giá trị *NhatKy
+    truyền cho goroutine (Go không có biến cục bộ luồng).
+
+Đặc thù Go: goroutine không phải luồng HĐH – runtime lập lịch M:N, GOMAXPROCS = 16, lúc cao điểm
+  có 9 goroutine đang sống; goroutine chờ socket không giữ luồng HĐH (netpoller). runtime.LockOSThread()
+  ghim một goroutine vào luồng HĐH hiện tại – chỉ cần khi thư viện C/GUI đòi đúng một luồng.
+
+===== hangdoi =====
+> out\app.exe hang-doi 127.0.0.1 41545
+(d) Nhà sản xuất – người tiêu dùng: goroutine nhận đọc socket → kênh (tối đa 4) → 3 goroutine xử lý → goroutine gửi
+[  0.002 s] nhận            | kết nối dịch vụ, gửi PHAT 9
+[  0.002 s] nhận            | GOI 1 → hàng đợi
+[  0.002 s] nhận            | GOI 2 → hàng đợi
+[  0.002 s] nhận            | GOI 3 → hàng đợi
+[  0.002 s] nhận            | GOI 4 → hàng đợi
+[  0.002 s] nhận            | GOI 5 → hàng đợi
+[  0.002 s] nhận            | GOI 6 → hàng đợi
+[  0.002 s] nhận            | GOI 7 → hàng đợi
+[  0.003 s] nhận            | hàng đợi đầy (4/4) → chờ chỗ trống (áp lực ngược)
+[  0.083 s] xử-lý-1 yc=2    | xử lý GOI 2: tổng byte = 2190
+[  0.083 s] nhận            | GOI 8 → hàng đợi
+[  0.083 s] nhận            | hàng đợi đầy (4/4) → chờ chỗ trống (áp lực ngược)
+[  0.083 s] xử-lý-3 yc=3    | xử lý GOI 3: tổng byte = 2193
+[  0.083 s] nhận            | GOI 9 → hàng đợi
+[  0.083 s] nhận            | hết dữ liệu → đặt 3 viên thuốc độc (poison pill) vào hàng đợi
+[  0.083 s] xử-lý-2 yc=1    | xử lý GOI 1: tổng byte = 2187
+[  0.084 s] gửi             | gửi KQ 2 2190
+[  0.084 s] gửi             | gửi KQ 3 2193
+[  0.084 s] gửi             | gửi KQ 1 2187
+[  0.164 s] xử-lý-3 yc=5    | xử lý GOI 5: tổng byte = 2199
+[  0.164 s] xử-lý-1 yc=4    | xử lý GOI 4: tổng byte = 2196
+[  0.164 s] xử-lý-2 yc=6    | xử lý GOI 6: tổng byte = 2202
+[  0.164 s] gửi             | gửi KQ 5 2199
+[  0.164 s] gửi             | gửi KQ 4 2196
+[  0.164 s] gửi             | gửi KQ 6 2202
+[  0.245 s] xử-lý-1 yc=8    | xử lý GOI 8: tổng byte = 2208
+[  0.245 s] xử-lý-1         | gặp viên thuốc độc → dừng
+[  0.245 s] xử-lý-3 yc=7    | xử lý GOI 7: tổng byte = 2205
+[  0.245 s] xử-lý-3         | gặp viên thuốc độc → dừng
+[  0.245 s] xử-lý-2 yc=9    | xử lý GOI 9: tổng byte = 2211
+[  0.245 s] xử-lý-2         | gặp viên thuốc độc → dừng
+[  0.245 s] gửi             | gửi KQ 8 2208
+[  0.245 s] gửi             | gửi KQ 7 2205
+[  0.245 s] gửi             | gửi KQ 9 2211
+[  0.245 s] gửi             | cả 3 goroutine xử lý đã dừng → hết việc gửi
+[  0.245 s] chính           | dịch vụ trả lời: NHAN 9/9
+
+  Goroutine    Số gói đã xử lý
+  xử-lý-1                    3
+  xử-lý-2                    3
+  xử-lý-3                    3
+  Goroutine nhận phải chờ vì hàng đợi đầy: 2 lần; tổng 0.24 s (1 goroutine xử lý ≈ 0.72 s)
+
+===== tai =====
+> out\app.exe tai 127.0.0.1 41546
+(b) Máy chủ nhiều goroutine: 6 client đồng thời (cách nhau 20 ms), mỗi yêu cầu xử lý 300 ms
+Máy chủ A – mỗi client một goroutine (cổng 41546):
+[  0.304 s] khách-1         | XONG 1 bởi kết-nối-1 sau 0.30 s
+[  0.322 s] khách-2         | XONG 2 bởi kết-nối-2 sau 0.30 s
+[  0.343 s] khách-3         | XONG 3 bởi kết-nối-3 sau 0.30 s
+[  0.364 s] khách-4         | XONG 4 bởi kết-nối-4 sau 0.30 s
+[  0.384 s] khách-5         | XONG 5 bởi kết-nối-5 sau 0.30 s
+[  0.403 s] khách-6         | XONG 6 bởi kết-nối-6 sau 0.30 s
+Máy chủ B – nhóm 2 goroutine, hàng đợi 2 (cổng 41547):
+[  0.485 s] khách-5         | 503 BAN 5 (bị từ chối) sau 0.00 s
+[  0.505 s] khách-6         | 503 BAN 6 (bị từ chối) sau 0.00 s
+[  0.705 s] khách-1         | XONG 1 bởi nhóm-1 sau 0.30 s
+[  0.726 s] khách-2         | XONG 2 bởi nhóm-2 sau 0.30 s
+[  1.006 s] khách-3         | XONG 3 bởi nhóm-1 sau 0.56 s
+[  1.027 s] khách-4         | XONG 4 bởi nhóm-2 sau 0.56 s
+
+  Máy chủ                       Thành công  Từ chối Thời gian
+  A. mỗi client một goroutine            6        0    0.40 s
+  B. nhóm 2 worker + hàng đợi 2          4        2    0.62 s
+Nhận xét: A tạo goroutine không giới hạn – rẻ hơn luồng nhiều nhưng quá tải vẫn cạn bộ nhớ, socket;
+  B giữ số worker cố định, chỉ nhận 4 việc cùng lúc, phần vượt bị từ chối ngay (503)
+  thay vì xếp hàng vô hạn – client biết để thử lại sau.
+
+===== khoa =====
+> out\app.exe khoa 127.0.0.1 41548
+(c) Trạng thái dùng chung: 4 kết nối × 2000 thông điệp DEM, mỗi kết nối một goroutine xử lý
+[  0.002 s] chính           | server đếm lắng nghe 127.0.0.1:41548; 4 goroutine gửi bắt đầu
+[  0.014 s] xử-lý-1         | kết nối đóng: đã xử lý 2000 thông điệp
+[  0.015 s] xử-lý-2         | kết nối đóng: đã xử lý 2000 thông điệp
+[  0.016 s] xử-lý-4         | kết nối đóng: đã xử lý 2000 thông điệp
+[  0.016 s] xử-lý-3         | kết nối đóng: đã xử lý 2000 thông điệp
+
+  Cách cập nhật biến chung          Giá trị  Đúng Mất cập nhật
+  không khóa (đọc – nhường – ghi)      6407  8000         1593
+  khóa (mutex/lock)                    8000  8000            0
+  nguyên tử (atomic)                   8000  8000            0
+  bảng đồng thời: GET + PUT       4000+4000  8000            0
+Nhận xét: "đọc – làm việc khác – ghi" không khóa làm mất cập nhật; khóa, thao tác nguyên tử
+  hoặc cấu trúc dữ liệu đồng thời đều cho kết quả đúng.
+
+(f) Bế tắc: hai goroutine chuyển tin giữa phiên A và phiên B, mỗi goroutine cần khóa của cả hai phiên
+Lần 1 – lấy khóa theo thứ tự ngược nhau:
+[  0.021 s] chuyển-AB       | giữ khóa phiên A, chờ khóa phiên B
+[  0.032 s] chuyển-BA       | giữ khóa phiên B, chờ khóa phiên A
+[  0.572 s] chuyển-AB       | chờ khóa phiên B quá 500 ms → nghi bế tắc, nhả khóa phiên A, bỏ cuộc
+[  0.572 s] chuyển-BA       | đã chuyển tin từ phiên B sang phiên A
+Lần 2 – mọi goroutine lấy khóa theo cùng thứ tự (A trước B):
+[  0.572 s] chuyển-AB       | giữ khóa phiên A, chờ khóa phiên B
+[  0.623 s] chuyển-AB       | đã chuyển tin từ phiên A sang phiên B
+[  0.623 s] chuyển-BA       | giữ khóa phiên A, chờ khóa phiên B
+[  0.673 s] chuyển-BA       | đã chuyển tin từ phiên B sang phiên A
+
+  Cách lấy khóa         Hoàn tất   Bỏ cuộc (hết hạn chờ)
+  ngược thứ tự                 1                       1
+  cùng thứ tự                  2                       0
+Nhận xét: cùng một thứ tự lấy khóa cho mọi goroutine loại bỏ vòng chờ – điều kiện cần của bế tắc.
+

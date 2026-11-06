@@ -1,0 +1,50 @@
+===== gui =====
+> bin\Release\net10.0-windows\BaiMR6.8_GiaoDien.exe demo 127.0.0.1 42722 ..\ket_qua_gui.png
+[demo] 1. Máy chủ: START SERVER (chế độ khoa, giữ chỗ 30 s)
+[demo]    An, Bình, Chi: Kết nối
+[demo] 2. Cả ba chọn ghế E7 rồi CÙNG bấm 'GIỮ CHỖ'
+[demo]    An: Đã giữ E7 – thanh toán trong 30 s
+[demo]    Bình: Không giữ được: ghế E7 đang có người giữ
+[demo]    Chi: Không giữ được: ghế E7 đang có người giữ
+[demo]    máy chủ: 3 yc, tc 1, từ chối 2, sai phạm 0
+[demo] 3. An bấm 'THANH TOÁN'
+[demo]    An: Đặt vé thành công! 90.000 đ
+[demo]    máy chủ: Đã bán 1/96 ghế, đang giữ 0, sổ 1 vé
+[demo] 4. Máy chủ: khong_khoa, độ trễ xử lý 0–20 ms (CSDL chậm)
+[demo]    Cả ba chọn E8 rồi CÙNG bấm 'GIỮ CHỖ'
+[demo]    An: máy chủ trả lời ĐÃ GIỮ E8
+[demo]    Bình: máy chủ trả lời ĐÃ GIỮ E8
+[demo]    Chi: máy chủ trả lời từ chối
+[demo]    …sau cap_nhat của máy chủ:
+[demo]    An: Ghế E8 đã bị Bình lấy mất!
+[demo]    Bình: Đã giữ E8 – thanh toán trong 30 s
+[demo]    Chi: Không giữ được: ghế E8 đang có người giữ
+[demo]    máy chủ: 7 yc, tc 4, từ chối 3, sai phạm 1
+[demo]      ví dụ: E8 giữ cho Bình khi An đang giữ
+[demo]    E8 thuộc: Bình
+[demo]    Đã ghi ket_qua_gui_tranh_chap.png (96 KB)
+[demo] 5. khoa, trễ 0–2 ms; So sánh 4 chế độ (ghế nóng E7)
+[demo]   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+[demo]   khong_khoa           65       63        0  7671    45.6
+[demo]   khoa                  2        0        0   554   899.0
+[demo]   lac_quan              2        0       21 10830    39.2
+[demo]   hang_doi              2        0        0   584   842.3
+[demo]    Sai phạm: khong_khoa
+[demo]    Không sai phạm: khoa, lac_quan, hang_doi
+[demo] 6. Đặt lại: giữ chỗ 6 s; An giữ F5, F6 (không thanh toán)
+[demo]    Bình bấm F6: Ghế F6 đang có người giữ
+[demo]    hết hạn – An: Hết thời gian giữ chỗ – ghế đã được nhả
+[demo]    Bình giữ F5, F6 rồi thanh toán; Chi mua G7, G8
+[demo]    An giữ E5, E6; Chi chọn H6
+[demo]    An: Đã giữ E5, E6 – thanh toán trong 6 s
+[demo]    Bình: Đặt vé thành công! 180.000 đ
+[demo]    Chi: Đặt vé thành công! 180.000 đ
+[demo]    An: đồng hồ giữ chỗ 00:05
+[demo]    máy chủ: Đã bán 4/96 ghế, đang giữ 2, sổ 4 vé
+[demo]    máy chủ: 6 yc, tc 6, từ chối 0, sai phạm 0
+[demo] 7. Chụp 4 cửa sổ
+[demo]    Đã ghi ket_qua_gui.png (168 KB)
+[demo] 8. Máy chủ: STOP SERVER
+[demo]    Bình: Mất kết nối máy chủ
+[demo] Kết thúc
+

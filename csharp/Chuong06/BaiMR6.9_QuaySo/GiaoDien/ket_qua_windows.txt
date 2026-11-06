@@ -1,0 +1,49 @@
+===== gui =====
+> bin\Release\net10.0-windows\BaiMR6.9_GiaoDien.exe demo 127.0.0.1 42732 ..\ket_qua_gui.png
+[demo] 1. Máy chủ: START SERVER (chế độ khoa)
+[demo]    An, Bình, Bình (máy 2): Kết nối
+[demo] 2. Đặt lại: 1 món quà, p = 1 (lượt đầu chắc trúng)
+[demo]    An, Bình, Bình (máy 2) CÙNG bấm QUAY
+[demo]    An: CHÚC MỪNG! Bạn trúng Xe đạp
+[demo]    Bình: Chúc bạn may mắn lần sau
+[demo]    Bình (máy 2): Bạn đã quay rồi – mỗi người 1 lượt
+[demo]    máy chủ: 3 yc, tc 2, từ chối 1, sai phạm 0
+[demo]    Trao 1/1 quà, 2 lượt, p 1
+[demo] 3. Máy chủ: khong_khoa, độ trễ xử lý 0–20 ms; Đặt lại
+[demo]    An, Bình, Bình (máy 2) CÙNG bấm QUAY
+[demo]    An: CHÚC MỪNG! Bạn trúng Xe đạp
+[demo]    Bình: CHÚC MỪNG! Bạn trúng Xe đạp
+[demo]    Bình (máy 2): CHÚC MỪNG! Bạn trúng Xe đạp
+[demo]    máy chủ: 3 yc, tc 3, từ chối 0, sai phạm 3
+[demo]      ví dụ: Xe đạp: Bình rồi An
+[demo]      ví dụ: Bình quay lần 2
+[demo]    Trao 3/1 quà, 3 lượt, p 1
+[demo]    Đã ghi ket_qua_gui_tranh_chap.png (119 KB)
+[demo] 4. Máy chủ: khoa, trễ 0–2 ms; 10 quà, p = 0.05 (1/20);
+[demo]    So sánh 4 chế độ, 10000 người
+[demo]   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+[demo]   khong_khoa         9927       77        0 19527   430.7
+[demo]   khoa               9900        0        0 21499   444.5
+[demo]   lac_quan           9900        0       37 22101   437.8
+[demo]   hang_doi           9900        0        0   577 17110.8
+[demo]    Sai phạm: khong_khoa
+[demo]    Không sai phạm: khoa, lac_quan, hang_doi
+[demo] 5. Đặt lại: 10 quà, p = 0.8; An quay, rồi Bình quay
+[demo]    Bình (máy 2) bấm QUAY
+[demo]    An: CHÚC MỪNG! Bạn trúng Loa
+[demo]    Bình: CHÚC MỪNG! Bạn trúng Máy ảnh
+[demo]    Bình (máy 2): Bạn đã quay rồi – mỗi người 1 lượt
+[demo] 6. Bắn đồng loạt 500 người (chế độ khoa)
+[demo]    máy chủ: 503 yc, tc 497, từ chối 6, sai phạm 0
+[demo]    Trao 10/10 quà, 497 lượt, p 0.8
+[demo]    Người trúng gần nhất (cửa sổ An):
+[demo]      10:13:42 u43    Điện thoại
+[demo]      10:13:42 u45    Laptop
+[demo]      10:13:42 u181   Phiếu 500k
+[demo]      10:13:42 u438   Tai nghe
+[demo] 7. Chụp 4 cửa sổ
+[demo]    Đã ghi ket_qua_gui.png (301 KB)
+[demo] 8. Máy chủ: STOP SERVER
+[demo]    An: Mất kết nối máy chủ
+[demo] Kết thúc
+

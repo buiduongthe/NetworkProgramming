@@ -1,0 +1,195 @@
+===== server =====
+> java -cp out ServerDangKy 127.0.0.1 43740
+[server] Lắng nghe 127.0.0.1:43740; chế độ khoa, trễ 0–2 ms
+[server] Đặt lại
+[server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
+[server] Lượt trước: khong_khoa, 2790 yc, tc 1803, sai phạm 1639
+[server] Đặt lại
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 5698 yc, tc 166, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: lac_quan – Lạc quan (phiên bản + CAS)
+[server] Lượt trước: lac_quan, 5699 yc, tc 176, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
+[server] hang_doi: 5700 yc, tc 178, từ chối 4269, sai phạm 0
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 5700 yc, tc 178, sai phạm 0
+[server] Đặt lại (si_so=2)
+[server] An vào
+[server] An đăng ký 123013-01 (1/2)
+[server] Bình vào
+[server] Bình đăng ký 123013-01 (2/2)
+[server] Bình rời
+[server] Chi vào
+[server] khoa: 4 yc, tc 2, từ chối 2, sai phạm 0
+[server] An hủy 123013-01 (1/2)
+[server] Chi đăng ký 123013-01 (2/2)
+[server] Chi rời
+[server] An rời
+[server] khoa: 6 yc, tc 4, từ chối 2, sai phạm 0
+[server] Tổng kết (từ lần đặt lại cuối):
+[server]   Chế độ khoa, trễ xử lý 0–2 ms
+[server]   Yêu cầu 6: thành công 4, từ chối 2
+[server]   Xung đột 0, thử lại 0, hết lượt thử 0
+[server]   Hàng đợi max 0, chờ khóa quá hạn 0
+[server]   Xử lý µs: p50 1827 p95 3927 p99 3927
+[server]   Thông lượng 1 yc/s
+[server]   Sai phạm 0: vượt sĩ số 0, ĐK trùng 0
+[server]   Đã ĐK 2/6 chỗ (3 lớp × 2)
+[server] Máy chủ đã dừng
+
+===== mp =====
+> java -cp out MoPhong 127.0.0.1 43740 --n 2000 --so-sanh
+[mo_phong] === khong_khoa: 2000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2790 yc xong trong 0.80 s = 3505 yc/s
+[mo_phong] Khứ hồi ms: p50 418.3 p95 621.2 p99 659.7
+[mo_phong] Thành công 1803, từ chối 987
+[mo_phong]   lý do: lop_day 827, chua_dang_ky 158, da_dang_ky 2
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 13925 p95 310756 p99 373742
+[mo_phong] Sai phạm 1639: vượt sĩ số 1625, ĐK trùng 14
+[mo_phong]   ví dụ: u199 ĐK lại 006124-01
+[mo_phong]   ví dụ: 006124-01: u608 là SV thứ 51
+[mo_phong] Đã ĐK 1761/150 chỗ (3 lớp × 50)
+[mo_phong] === khoa: 2000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 5698 yc xong trong 2.08 s = 2733 yc/s
+[mo_phong] Khứ hồi ms: p50 582.1 p95 906.8 p99 1018.4
+[mo_phong] Thành công 166, từ chối 5532
+[mo_phong]   lý do: lop_day 5528, da_dang_ky 4
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 77963 p95 139046 p99 145317
+[mo_phong] Sai phạm 0: vượt sĩ số 0, ĐK trùng 0
+[mo_phong] Đã ĐK 150/150 chỗ (3 lớp × 50)
+[mo_phong] === lac_quan: 2000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 5699 yc xong trong 0.19 s = 29291 yc/s
+[mo_phong] Khứ hồi ms: p50 37.8 p95 98.2 p99 122.6
+[mo_phong] Thành công 176, từ chối 5523
+[mo_phong]   lý do: lop_day 5144, xung_dot 374, da_dang_ky 5
+[mo_phong] Máy chủ: xung đột 2925, thử lại 2551, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 2870 p95 14147 p99 31030
+[mo_phong] Sai phạm 0: vượt sĩ số 0, ĐK trùng 0
+[mo_phong] Đã ĐK 150/150 chỗ (3 lớp × 50)
+[mo_phong] === hang_doi: 2000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 5700 yc xong trong 5.93 s = 961 yc/s
+[mo_phong] Khứ hồi ms: p50 1885.8 p95 1966.2 p99 2028.8
+[mo_phong] Thành công 178, từ chối 5522
+[mo_phong]   lý do: lop_day 5512, da_dang_ky 10
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 1993
+[mo_phong] Máy chủ xử lý µs: p50 1885442 p95 1965917 p99 2026985
+[mo_phong] Sai phạm 0: vượt sĩ số 0, ĐK trùng 0
+[mo_phong] Đã ĐK 150/150 chỗ (3 lớp × 50)
+[mo_phong] Bảng so sánh (2000 người × 1 lần, 200 kết nối):
+  Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+  khong_khoa         1803     1639        0  3505   659.7
+  khoa                166        0        0  2733  1018.4
+  lac_quan            176        0     2925 29291   122.6
+  hang_doi            178        0        0   961  2028.8
+
+===== qt =====
+> java -cp out Khach 127.0.0.1 43740 dat_lai si_so=2
+[quan_tri] > dat_lai si_so=2
+[quan_tri] OK
+
+===== A =====
+> java -cp out DangKy An 127.0.0.1 43740 --thoi-gian 6.5
+[An] Vào cổng đăng ký (khoa), sĩ số 2
+[An]   123013-01 Lập trình mạng    0/2
+[An]   123005-01 Quản trị mạng     0/2
+[An]   006124-01 Tin học cơ bản    0/2
+[An] > đăng ký 123013-01
+[An]   ĐĂNG KÝ 123013-01 thành công (1/2, 5.0 ms)
+[An] * An đăng ký 123013-01 (1/2)
+[An] * Bình đăng ký 123013-01 (2/2)
+[An] > hủy 123013-01
+[An]   HỦY 123013-01 thành công (1/2, 3.3 ms)
+[An] * An hủy 123013-01 (1/2)
+[An] * Chi đăng ký 123013-01 (2/2)
+
+===== B =====
+> java -cp out DangKy Bình 127.0.0.1 43740
+[Bình] Vào cổng đăng ký (khoa), sĩ số 2
+[Bình]   123013-01 Lập trình mạng    1/2
+[Bình]   123005-01 Quản trị mạng     0/2
+[Bình]   006124-01 Tin học cơ bản    0/2
+[Bình] > đăng ký 123013-01 (bấm đúp: 2 yêu cầu)
+[Bình]   ĐĂNG KÝ 123013-01 thành công (2/2, 3.3 ms)
+[Bình]   123013-01: TỪ CHỐI – đã đăng ký lớp này
+[Bình] * Bình đăng ký 123013-01 (2/2)
+
+===== C =====
+> java -cp out DangKy Chi 127.0.0.1 43740
+[Chi] Vào cổng đăng ký (khoa), sĩ số 2
+[Chi]   123013-01 Lập trình mạng    2/2
+[Chi]   123005-01 Quản trị mạng     0/2
+[Chi]   006124-01 Tin học cơ bản    0/2
+[Chi] > đăng ký 123013-01
+[Chi]   123013-01: TỪ CHỐI – lớp đã đủ
+[Chi] * An hủy 123013-01 (1/2)
+[Chi] > đăng ký 123013-01
+[Chi]   ĐĂNG KÝ 123013-01 thành công (2/2, 3.7 ms)
+[Chi] * Chi đăng ký 123013-01 (2/2)
+[Chi]   123013-01 Lập trình mạng    2/2 *
+[Chi]   123005-01 Quản trị mạng     0/2
+[Chi]   006124-01 Tin học cơ bản    0/2
+
+===== gui =====
+> java -cp out DemoGui 127.0.0.1 43742
+[demo] 1. Máy chủ: START SERVER (chế độ khoa)
+[demo]    An, Bình, Chi: Kết nối
+[demo] 2. Đặt lại: 3 lớp, sĩ số 1 (còn đúng 1 chỗ mỗi lớp)
+[demo]    An, Bình, Chi CÙNG bấm Đăng ký 123013-01
+[demo]    An: Lớp 123013-01 đã đủ sĩ số
+[demo]    Bình: Lớp 123013-01 đã đủ sĩ số
+[demo]    Chi: Đăng ký thành công lớp 123013-01
+[demo]    máy chủ: 3 yc, tc 1, từ chối 2, sai phạm 0
+[demo]    Đã ĐK 1/3 chỗ (3 lớp × 1)
+[demo] 3. Máy chủ: khong_khoa, độ trễ xử lý 0–20 ms; Đặt lại
+[demo]    An, Bình, Chi CÙNG bấm Đăng ký 123013-01
+[demo]    ngay khi có trả lời:
+[demo]    An: Đăng ký thành công lớp 123013-01
+[demo]    Bình: Đăng ký thành công lớp 123013-01
+[demo]    Chi: Đăng ký thành công lớp 123013-01
+[demo]    1 giây sau (đối chiếu danh sách lớp):
+[demo]    An: Đăng ký 123013-01 đã bị MẤT (lỗi máy chủ)!
+[demo]    Bình: Đăng ký thành công lớp 123013-01
+[demo]    Chi: Đăng ký 123013-01 đã bị MẤT (lỗi máy chủ)!
+[demo]    máy chủ: 3 yc, tc 3, từ chối 0, sai phạm 2
+[demo]      ví dụ: 123013-01: Chi là SV thứ 2
+[demo]      ví dụ: 123013-01: Bình là SV thứ 3
+[demo]    Đã ĐK 3/3 chỗ (3 lớp × 1)
+[demo]    123013-01: 1/1 Bình
+[demo]    123005-01: 0/1
+[demo]    006124-01: 0/1
+[demo]    Đã ghi ket_qua_gui_tranh_chap.png (78 KB, cửa sổ An)
+[demo] 4. Máy chủ: khoa, trễ 0–2 ms, 3 lớp × 50; So sánh
+[demo]   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+[demo]   khong_khoa         1648     1481        0  6810   327.0
+[demo]   khoa                170        0        0  2686  1062.6
+[demo]   lac_quan            184        0     2959 25710   129.4
+[demo]   hang_doi            182        0        0   948  2071.2
+[demo]    Sai phạm: khong_khoa
+[demo]    Không sai phạm: khoa, lac_quan, hang_doi
+[demo] 5. Đặt lại; An đăng ký 2 lớp, Bình 1 lớp
+[demo]    Bắn đồng loạt 500 sinh viên ảo (mỗi người 1 lớp)
+[demo]    123013-01: 50/50 An Bình u10
+[demo]    123005-01: 50/50 An u1 u107
+[demo]    006124-01: 50/50 u103 u109 u111
+[demo]    Chi bấm 'Đã đủ' ở 123005-01
+[demo]    Chi: Lớp 123005-01 đã đủ sĩ số
+[demo] 6. An bấm Hủy 123005-01, rồi Chi bấm Đăng ký 123005-01
+[demo]    An: Đã hủy đăng ký lớp 123005-01
+[demo]    Bình: Đăng ký thành công lớp 123013-01
+[demo]    Chi: Đăng ký thành công lớp 123005-01
+[demo]    máy chủ: 1212 yc, tc 174, từ chối 1038, sai phạm 0
+[demo]    Đã ĐK 150/150 chỗ (3 lớp × 50)
+[demo] 7. Chụp 4 cửa sổ
+[demo]    Đã ghi ket_qua_gui.png (136 KB)
+[demo] 8. Máy chủ: STOP SERVER
+[demo]    An: Mất kết nối máy chủ
+[demo] Kết thúc
+

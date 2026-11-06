@@ -1,0 +1,67 @@
+===== server =====
+> ..\..\target\release\mr5_5_phoi_hop_da_luong_bat_dong_bo.exe server 127.0.0.1 44550
+[server] lắng nghe 127.0.0.1:44550; vòng lặp sự kiện trên luồng "vòng-lặp", nhóm tính 2 luồng,
+  nhịp tim 10 ms, luồng cảm biến mỗi 50 ms, chế độ C giới hạn 4 yêu cầu
+Đặc thù Rust: tokio current_thread là vòng lặp một luồng; spawn_blocking cho hàm chặn; việc CPU sang
+  nhóm std::thread riêng (không chiếm luồng chặn); hủy = thả future, luồng đang chạy phải tự xem cờ.
+[  0.883 s] vòng-lặp        | BAM 1 (chan): nhận 65536 byte, 400 vòng, hạn 10000 ms
+[  0.925 s] vòng-lặp        | BAM 1: băm xong trên vòng-lặp, trả lời OK
+[server] đợt "A. CPU ngay trên vòng lặp": 16 yêu cầu
+  giai đoạn      luồng đã chạy
+  nhận/trả lời   vòng-lặp
+  tra cứu cũ     vòng-lặp
+  băm SHA-256    vòng-lặp
+  trễ nhịp tối đa 633.8 ms; nhóm tính tối đa 0 việc
+  cảm biến 10 mẫu, trễ giao tối đa 295.3 ms
+[  1.524 s] vòng-lặp        | BAM 1 (tach): nhận 65536 byte, 400 vòng, hạn 10000 ms
+[  1.569 s] vòng-lặp        | BAM 1: băm xong trên tính-1, trả lời OK
+[server] đợt "B. đẩy sang nhóm luồng": 16 yêu cầu
+  giai đoạn      luồng đã chạy
+  nhận/trả lời   vòng-lặp
+  tra cứu cũ     chặn-1, chặn-2, chặn-3, chặn-4, chặn-5, chặn-6, chặn-7, chặn-8
+  băm SHA-256    tính-1, tính-2
+  trễ nhịp tối đa 9.9 ms; nhóm tính tối đa 16 việc
+  cảm biến 3 mẫu, trễ giao tối đa 0.2 ms
+[  1.723 s] vòng-lặp        | BAM 1 (gioihan): nhận 65536 byte, 400 vòng, hạn 10000 ms
+[  1.771 s] vòng-lặp        | BAM 1: băm xong trên tính-1, trả lời OK
+[server] đợt "C. nhóm luồng + áp lực ngược": 16 yêu cầu
+  giai đoạn      luồng đã chạy
+  nhận/trả lời   vòng-lặp
+  tra cứu cũ     chặn-1, chặn-2, chặn-3, chặn-4, chặn-5, chặn-6, chặn-7, chặn-8
+  băm SHA-256    tính-1, tính-2
+  trễ nhịp tối đa 7.6 ms; nhóm tính tối đa 4 việc
+  cảm biến 4 mẫu, trễ giao tối đa 0.0 ms
+[  1.939 s] vòng-lặp        | BAM 101 (tach): nhận 65536 byte, 400 vòng, hạn 1000 ms
+[  1.983 s] vòng-lặp        | BAM 101: băm xong trên tính-2, trả lời OK
+[  1.984 s] vòng-lặp        | BAM 102 (tach): nhận 65536 byte, 3200 vòng, hạn 30 ms
+[  2.016 s] vòng-lặp        | BAM 102: quá hạn 30 ms → trả HETGIO, bật cờ hủy cho luồng tính
+[server] BAM 102: luồng tính thấy cờ hủy → dừng ở vòng 247
+[  2.017 s] vòng-lặp        | CAMBIEN 201: future được hoàn tất từ luồng cảm-biến, giá trị 21
+[  2.018 s] vòng-lặp        | CAMBIEN 202: future được hoàn tất từ luồng cảm-biến, giá trị 58
+
+===== tai =====
+> ..\..\target\release\mr5_5_phoi_hop_da_luong_bat_dong_bo.exe tai 127.0.0.1 44550
+Máy tạo tải: 16 yêu cầu đồng thời mỗi đợt, mỗi yêu cầu 64 KB, băm SHA-256 400 vòng (≈ 26 MB dữ liệu băm)
+Đợt A. CPU ngay trên vòng lặp: 16/16 OK, 0.64 s, 25.0 yc/s, 1 giá trị băm khác nhau
+Đợt B. đẩy sang nhóm luồng: 16/16 OK, 0.19 s, 85.5 yc/s, 1 giá trị băm khác nhau
+Đợt C. nhóm luồng + áp lực ngược: 16/16 OK, 0.20 s, 82.0 yc/s, 1 giá trị băm khác nhau
+
+  Chế độ             Thời gian   yc/s  Trễ nhịp  Cảm biến  Nhóm
+  A. chặn vòng lặp      0.64 s   25.0  633.8 ms  295.3 ms     0
+  B. nhóm luồng         0.19 s   85.5    9.9 ms    0.2 ms    16
+  C. + áp lực ngược     0.20 s   82.0    7.6 ms    0.0 ms     4
+  (Trễ nhịp, Cảm biến: độ trễ tối đa của nhịp tim 10 ms và của
+   mẫu cảm biến; Nhóm: số việc ở nhóm tính cùng lúc, tối đa)
+Băm kiểm tra (16 hex đầu): 6a1122caf3193141 – giống nhau ở mọi bản ngôn ngữ
+Nhận xét: A chặn vòng lặp → nhịp tim, mẫu cảm biến và mọi kết nối khác đều đứng chờ; B, C giữ
+  vòng lặp thông suốt; C chỉ cho 4 việc vào nhóm 2 luồng, phần còn lại chờ
+  bất đồng bộ ở cổng vào – hàng đợi của nhóm luồng không phình theo tải.
+
+(d) Hạn chót và hủy xuyên ranh giới async → luồng (chế độ tach):
+  yêu cầu 101 (400 vòng, hạn 1000 ms): OK sau 45 ms
+  yêu cầu 102 (3200 vòng, hạn 30 ms): HETGIO sau 34 ms
+
+(c) Luồng nền giao kết quả vào vòng lặp sự kiện:
+  CAMBIEN 201 → giá trị 21, future do luồng cảm-biến hoàn tất
+  CAMBIEN 202 → giá trị 58, future do luồng cảm-biến hoàn tất
+

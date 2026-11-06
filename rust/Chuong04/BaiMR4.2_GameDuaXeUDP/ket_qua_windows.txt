@@ -1,0 +1,83 @@
+===== server =====
+> ..\..\target\release\mr4_2_game_dua_xe_udp.exe server 127.0.0.1 44420 --so-xe 2 --mat 0,20 --dao 0,10 --seed 7 --so-van 2
+[server] Đua xe UDP tại 127.0.0.1:44420, 20 tick/s, cần 2 xe, đường dài 40 ô
+[server] Thêm một xe từ 127.0.0.1 (1/2)
+[server] Thêm một xe từ 127.0.0.1 (2/2)
+[server] Cuộc đua 1: An, Binh; mất gói 0 %, đảo thứ tự 0 %; xuất phát sau 20 tick
+[server] Cuộc đua 1 kết thúc: 1. Binh 60 tick; 2. An 70 tick
+[server] An: nhận 89/89 gói đầu vào (giả lập mất 0), 0 tick phải giữ đầu vào cũ, văng 0 lần
+[server] Binh: nhận 89/89 gói đầu vào (giả lập mất 0), 0 tick phải giữ đầu vào cũ, văng 0 lần
+[server] Thêm một xe từ 127.0.0.1 (1/2)
+[server] Thêm một xe từ 127.0.0.1 (2/2)
+[server] Cuộc đua 2: An, Binh; mất gói 20 %, đảo thứ tự 10 %; xuất phát sau 20 tick
+[server] t=29: Binh văng ở khúc cua (quá 0.50 ô/tick)
+[server] t=45: An văng ở khúc cua (quá 0.50 ô/tick)
+[server] Cuộc đua 2 kết thúc: 1. Binh 64 tick; 2. An 71 tick
+[server] An: nhận 52/65 gói đầu vào (giả lập mất 13), 11 tick phải giữ đầu vào cũ, văng 1 lần
+[server] Binh: nhận 51/63 gói đầu vào (giả lập mất 12), 10 tick phải giữ đầu vào cũ, văng 1 lần
+[server] Đã đua 2 cuộc, dừng server
+
+===== Binh =====
+> ..\..\target\release\mr4_2_game_dua_xe_udp.exe xe Binh 127.0.0.1 44420 --bot lieu --khung 0 --so-van 2
+[Binh] Vào cuộc đua 1 (cần 2 xe; mất gói giả lập 0 %, đảo thứ tự 0 %)
+[Binh] Kết quả: 1. Binh 60 tick, 2. An 70 tick
+[Binh] Ảnh chụp: nhận 90, hụt 0 tick (dài nhất 0), bỏ 0 ảnh cũ
+[Binh] Dự đoán xe mình: lệch 0 lần (lớn nhất 0.00 ô); ngoại suy xe khác: lệch 0 lần (lớn nhất 0.00 ô)
+[Binh] Vào cuộc đua 2 (cần 2 xe; mất gói giả lập 20 %, đảo thứ tự 10 %)
+[Binh] Kết quả: 1. Binh 64 tick, 2. An 71 tick
+[Binh] Ảnh chụp: nhận 64, hụt 26 tick (dài nhất 4), bỏ 6 ảnh cũ
+[Binh] Dự đoán xe mình: lệch 0 lần (lớn nhất 0.00 ô); ngoại suy xe khác: lệch 11 lần (lớn nhất 0.36 ô)
+
+===== An =====
+> ..\..\target\release\mr4_2_game_dua_xe_udp.exe xe An 127.0.0.1 44420 --bot can_than --khung 10 --so-van 2
+[An] Vào cuộc đua 1 (cần 2 xe; mất gói giả lập 0 %, đảo thứ tự 0 %)
+[An] Khung t=0
+  A|A...................~~~~~~..............| x=0.06 v=0.06
+  B|B...................~~~~~~..............| x=0.06 v=0.06
+[An] Khung t=10
+  A|...A................~~~~~~..............| x=3.96 v=0.66
+  B|...B................~~~~~~..............| x=3.96 v=0.66
+[An] Khung t=20
+  A|............A.......~~~~~~..............| x=12.60 v=0.90
+  B|............B.......~~~~~~..............| x=12.60 v=0.90
+[An] Khung t=30
+  A|..................A.~~~~~~..............| x=18.38 v=0.34
+  B|....................B~~~~~..............| x=20.40 v=0.42
+[An] Khung t=40
+  A|....................~~A~~~..............| x=22.12 v=0.38
+  B|....................~~~~~B..............| x=25.10 v=0.46
+[An] Khung t=50
+  A|....................~~~~~A..............| x=25.78 v=0.34
+  B|....................~~~~~~......B.......| x=32.10 v=0.90
+[An] Khung t=60
+  A|....................~~~~~~......A.......| x=32.44 v=0.90
+  B|....................~~~~~~.............B| về đích (60 tick)
+[An] Kết quả: 1. Binh 60 tick, 2. An 70 tick
+[An] Ảnh chụp: nhận 90, hụt 0 tick (dài nhất 0), bỏ 0 ảnh cũ
+[An] Dự đoán xe mình: lệch 0 lần (lớn nhất 0.00 ô); ngoại suy xe khác: lệch 0 lần (lớn nhất 0.00 ô)
+[An] Vào cuộc đua 2 (cần 2 xe; mất gói giả lập 20 %, đảo thứ tự 10 %)
+[An] Khung t=0
+  A|A...................~~~~~~..............| x=0.06 v=0.06
+  B|B...................~~~~~~..............| x=0.06 v=0.06
+[An] Khung t=10 (dự đoán: thiếu ảnh chụp)
+  A|...A................~~~~~~..............| x=3.96 v=0.66
+  B|...B................~~~~~~..............| x=3.90 v=0.60
+[An] Khung t=20
+  A|............A.......~~~~~~..............| x=12.60 v=0.90
+  B|............B.......~~~~~~..............| x=12.60 v=0.90
+[An] Khung t=30
+  A|..................A.~~~~~~..............| x=18.48 v=0.34
+  B|....................B~~~~~..............| x=20.34 v=0.00
+[An] Khung t=40 (dự đoán: thiếu ảnh chụp)
+  A|....................~~A~~~..............| x=22.14 v=0.38
+  B|....................~~~B~~..............| x=23.42 v=0.46
+[An] Khung t=50 (dự đoán: thiếu ảnh chụp)
+  A|....................~~~~~A..............| x=25.62 v=0.40
+  B|....................~~~~~~..B...........| x=28.64 v=0.66
+[An] Khung t=60 (dự đoán: thiếu ảnh chụp)
+  A|....................~~~~~~.....A........| x=31.40 v=0.84
+  B|....................~~~~~~...........B..| x=37.52 v=0.90
+[An] Kết quả: 1. Binh 64 tick, 2. An 71 tick
+[An] Ảnh chụp: nhận 66, hụt 25 tick (dài nhất 3), bỏ 7 ảnh cũ
+[An] Dự đoán xe mình: lệch 0 lần (lớn nhất 0.00 ô); ngoại suy xe khác: lệch 9 lần (lớn nhất 0.36 ô)
+

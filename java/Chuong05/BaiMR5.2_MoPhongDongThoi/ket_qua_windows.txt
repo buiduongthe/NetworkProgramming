@@ -1,0 +1,190 @@
+===== server =====
+> java -cp out DongThoi server 127.0.0.1 43520 200
+[server] lắng nghe 127.0.0.1:43520, mỗi yêu cầu trễ 200 ms
+[server] đợt  1: 20 yêu cầu, đồng thời tối đa  1
+[server] đợt  2: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  3: 20 yêu cầu, đồng thời tối đa  5
+[server] đợt  4: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  5: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  6: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  7: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  8: 20 yêu cầu, đồng thời tối đa 20
+[server] dừng; đã phục vụ 160 yêu cầu
+
+===== mang =====
+> java -cp out DongThoi mang 127.0.0.1 43520
+Khối việc: 20 yêu cầu mạng, mỗi yêu cầu máy chủ trễ 200 ms
+
+1. tuần tự: 4.34 s
+  chính       |AAAABBCCDDEEEFFGGHHHIIJJJKKLLMMMNNOOPPPQQRRSSSTT|
+2. mỗi tác vụ một luồng: 0.31 s
+  luồng-1     |AAA                                             |
+  luồng-2     |BBB                                             |
+  luồng-3     |CCC                                             |
+  luồng-4     |DDD                                             |
+  luồng-5     |EEE                                             |
+  luồng-6     |FFF                                             |
+  luồng-7     |GGG                                             |
+  luồng-8     |HHH                                             |
+  … và 12 luồng khác, mỗi luồng chạy 1 tác vụ
+3. nhóm luồng (5 luồng): 0.89 s
+  luồng-1     |AAAGGNNNSS                                      |
+  luồng-2     |CCCHHMMPPP                                      |
+  luồng-3     |BBBFFOOORR                                      |
+  luồng-4     |EEEIIKKKTT                                      |
+  luồng-5     |DDDJJLLQQQ                                      |
+4. luồng ảo: 0.26 s
+  ảo-1        |AAA                                             |
+  ảo-2        |BBB                                             |
+  ảo-3        |CCC                                             |
+  ảo-4        |DDD                                             |
+  ảo-5        |EEE                                             |
+  ảo-6        |FFF                                             |
+  ảo-7        |GGG                                             |
+  ảo-8        |HHH                                             |
+  … và 12 luồng ảo khác, mỗi luồng ảo chạy 1 tác vụ
+5. CompletableFuture + allOf: 0.23 s
+  ảo-1        |AAA                                             |
+  ảo-2        |BBB                                             |
+  ảo-3        |CCC                                             |
+  ảo-4        |DDD                                             |
+  ảo-5        |EEE                                             |
+  ảo-6        |FFF                                             |
+  ảo-7        |GGG                                             |
+  ảo-8        |HHH                                             |
+  … và 12 luồng ảo khác, mỗi luồng ảo chạy 1 tác vụ
+               0                                           4.3 s
+
+  Mô hình                        Thời gian  Tăng tốc
+  1. tuần tự                        4.34 s      1.0×
+  2. mỗi tác vụ một luồng           0.31 s     13.9×
+  3. nhóm luồng (5 luồng)           0.89 s      4.9×
+  4. luồng ảo                       0.26 s     16.5×
+  5. CompletableFuture + allOf      0.23 s     19.3×
+
+Mô hình 5 nhận đủ 20/20 kết quả trước hạn chót 2 s.
+Nhận xét: việc chờ I/O không tốn CPU; luồng nền tảng, luồng ảo hay
+  CompletableFuture đều chồng được thời gian chờ. Luồng ảo rẻ (vài KB,
+  không chiếm luồng hệ điều hành khi chờ mạng) nên viết kiểu chặn,
+  mỗi yêu cầu một luồng ảo, mà vẫn mở rộng tới hàng nghìn kết nối.
+
+===== cpu =====
+> java -cp out DongThoi cpu
+Khối việc: 8 tác vụ CPU, mỗi tác vụ ≈ 100 ms
+Máy có 16 CPU; Java không có GIL; luồng ảo chạy trên 16 luồng mang
+
+1. tuần tự: 0.94 s
+  chính       |AAAAAAABBBBBCCCCCCDDDDDDEEEEEEEFFFFFFFGGGGGHHHHH|
+2. mỗi tác vụ một luồng: 0.17 s
+  luồng-1     | AAAAAAAA                                       |
+  luồng-3     | CCCCCCCC                                       |
+  luồng-2     | BBBBBBBB                                       |
+  luồng-4     | DDDDDDDD                                       |
+  luồng-5     | EEEEEEEE                                       |
+  luồng-6     | FFFFFFFF                                       |
+  luồng-7     | GGGGGGGG                                       |
+  luồng-8     | HHHHHHHH                                       |
+3. nhóm luồng (16 = số CPU): 0.16 s
+  luồng-1     |CCCCCCCC                                        |
+  luồng-2     |GGGGGGGGG                                       |
+  luồng-3     |DDDDDDDD                                        |
+  luồng-4     |FFFFFFFFF                                       |
+  luồng-5     |AAAAAAAA                                        |
+  luồng-6     |EEEEEEEEE                                       |
+  luồng-7     |BBBBBBBB                                        |
+  luồng-8     |HHHHHHHHH                                       |
+4. luồng ảo: 0.16 s
+  ảo-1        |AAAAAAAA                                        |
+  ảo-2        |BBBBBBBB                                        |
+  ảo-3        |CCCCCCCC                                        |
+  ảo-4        |DDDDDDDD                                        |
+  ảo-5        |EEEEEEEE                                        |
+  ảo-6        |FFFFFFFF                                        |
+  ảo-7        |GGGGGGGGG                                       |
+  ảo-8        |HHHHHHHHH                                       |
+               0                                           0.9 s
+
+  Mô hình                        Thời gian  Tăng tốc
+  1. tuần tự                        0.94 s      1.0×
+  2. mỗi tác vụ một luồng           0.17 s      5.4×
+  3. nhóm luồng (16 = số CPU)       0.16 s      5.8×
+  4. luồng ảo                       0.16 s      5.9×
+
+Nhận xét: không có GIL, các luồng chạy song song thật trên mọi CPU.
+  Mô hình 2: 8 luồng hệ điều hành chia lượt trên 16 CPU nên mỗi tác vụ
+  bị kéo dài; nhóm luồng bằng số CPU cho cùng tổng thời gian mà mỗi tác
+  vụ chạy liền một mạch. Luồng ảo KHÔNG bị chia lượt: mỗi luồng ảo giữ
+  luồng mang tới khi xong việc CPU, nên chạy giống nhóm 16 luồng.
+
+===== tron =====
+> java -cp out DongThoi tron 127.0.0.1 43520
+Khối việc: 20 tác vụ = yêu cầu mạng 200 ms + xử lý CPU ≈ 30 ms
+Đo thêm độ trễ lập lịch: luồng "nhịp tim" ngủ 10 ms và đo xem
+  thực tế bị đánh thức muộn bao nhiêu (trễ lớn = ứng dụng đứng).
+
+A. luồng ảo, CPU ngay trong đó: 0.43 s
+  chờ mạng    |   *****************************************    |
+  ảo-12       |                                      OOOOOOO   |
+  ảo-3        |                                      FFFFFF    |
+  ảo-15       |                                      HHHHHHH   |
+  ảo-11       |                                      BBBBBBB   |
+  ảo-5        |                                      JJJJJJ    |
+  ảo-4        |                                      CCCCCCC   |
+  ảo-9        |                                      AAAAAAA   |
+  … và 13 luồng ảo khác, mỗi luồng ảo chạy 1 tác vụ
+B. luồng ảo + nhóm CPU (16): 0.35 s
+  chờ mạng    |**************************K                     |
+  cpu-7       |                         HHHHHHHHH              |
+  cpu-2       |                          IIIIIIISSSSS          |
+  cpu-5       |                          JJJJJJJJ              |
+  cpu-11      |                          BBBBBBBB              |
+  cpu-4       |                          EEEEEEEQQQQQ          |
+  cpu-9       |                          GGGGGGGG              |
+  cpu-8       |                          FFFFFFFF              |
+  … và 9 luồng khác, mỗi luồng chạy 1 tác vụ
+C. mỗi tác vụ một luồng: 0.32 s
+  chờ mạng    |******************************                  |
+  luồng-1     |                          DDDDDDDD              |
+  luồng-2     |                          MMMMMMMM              |
+  luồng-3     |                          IIIIIIII              |
+  luồng-4     |                          HHHHHHHH              |
+  luồng-5     |                          TTTTTTTT              |
+  luồng-6     |                           KKKKKK               |
+  luồng-7     |                           CCCCCCCC             |
+  … và 13 luồng khác, mỗi luồng chạy 1 tác vụ
+               0                                           0.4 s
+
+  Mô hình                        Thời gian  Trễ lập lịch
+  A. luồng ảo, CPU ngay trong đó    0.43 s         96 ms
+  B. luồng ảo + nhóm CPU (16)       0.35 s          8 ms
+  C. mỗi tác vụ một luồng           0.32 s         28 ms
+
+Nhận xét: "chờ mạng" là hàng chung của mọi tác vụ đang đợi mạng (*).
+  A – luồng ảo không bị chia lượt: việc CPU giữ luồng mang tới khi xong,
+  luồng ảo nhịp tim phải xếp hàng chờ nên bị trễ (giống chặn vòng lặp sự
+  kiện của asyncio). B – đẩy việc CPU sang nhóm luồng nền tảng: luồng mang
+  rảnh, nhịp tim đúng giờ. C – luồng hệ điều hành được chia lượt nên
+  nhịp tim cũng ít trễ, nhưng mỗi luồng tốn bộ nhớ hơn luồng ảo nhiều.
+
+===== khoa =====
+> java -cp out DongThoi khoa
+Tranh chấp dữ liệu: 4 luồng × 5000 lần "đọc – nhường CPU – ghi"
+  lên một biến đếm chung (kết quả đúng phải là 20000).
+  không khóa      :   7275 / 20000 → mất 12725 lần cộng (0.02 s)
+  có khóa (Lock)  :  20000 / 20000 → đúng (0.02 s)
+  AtomicLong      :  20000 / 20000 → đúng (0.00 s)
+
+Bế tắc (deadlock): T1 chuyển X→Y, T2 chuyển Y→X, mỗi luồng cần cả
+  hai khóa; số dư ban đầu X = 100, Y = 100.
+  T1 giữ khóa X, chờ khóa Y
+  T2 giữ khóa Y, chờ khóa X
+  T2: chờ X quá 0,5 s → nghi bế tắc, nhả Y, bỏ cuộc
+  T1: chờ Y quá 0,5 s → nghi bế tắc, nhả X, bỏ cuộc
+  Số dư: X = 100, Y = 100 (tổng 200)
+Cách tránh: mọi luồng lấy khóa theo cùng thứ tự (X trước, Y sau):
+  T1 giữ khóa X, chờ khóa Y
+  T1: đã chuyển 10 từ X sang Y
+  T2 giữ khóa X, chờ khóa Y
+  T2: đã chuyển 5 từ Y sang X
+  Số dư: X = 95, Y = 105 (tổng 200)
+

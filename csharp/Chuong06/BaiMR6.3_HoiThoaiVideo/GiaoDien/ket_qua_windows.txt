@@ -1,0 +1,124 @@
+===== gui =====
+> bin\Release\net10.0-windows\BaiMR6.3_GiaoDien.exe demo 127.0.0.1 42635 42636 ..\ket_qua_gui.png
+[demo] 1. START SERVER; A, B, C Kết nối rồi START (camera giả lập)
+[server] TCP 127.0.0.1:42635 điều khiển; UDP :42636 video
+[server] Khung 160x120 RGB 57600 B, nén zlib, mảnh ≤ 1200 B
+[server] #1 A vào phòng từ 127.0.0.1:64758
+[khach A] Đã kết nối 127.0.0.1:42635, mã 1
+[khach A] Camera: mở, gửi tối đa 10 fps, 1/1
+[khach A] Nhận: 10 fps, độ phân giải 1/1
+[server]   => A vào phòng
+[khach A] Sự kiện: A vào phòng
+[khach A] Camera: tắt (tự tắt), gửi tối đa 10 fps, 1/1
+[server]   => A tự tắt camera
+[khach A] Sự kiện: A tự tắt camera
+[server] #1 A đăng ký UDP 127.0.0.1:52805
+[khach A] START: camera giả lập
+[khach A] Camera: mở, gửi tối đa 10 fps, 1/1
+[server]   => A tự bật camera
+[khach A] Sự kiện: A tự bật camera
+[server] #2 B vào phòng từ 127.0.0.1:64759
+[server]   => B vào phòng
+[khach B] Đã kết nối 127.0.0.1:42635, mã 2
+[khach A] Sự kiện: B vào phòng
+[khach B] Camera: mở, gửi tối đa 10 fps, 1/1
+[khach B] Nhận: 10 fps, độ phân giải 1/1
+[khach B] Sự kiện: B vào phòng
+[server] #2 B đăng ký UDP 127.0.0.1:52806
+[khach B] Camera: tắt (tự tắt), gửi tối đa 10 fps, 1/1
+[server]   => B tự tắt camera
+[khach A] Sự kiện: B tự tắt camera
+[khach B] Sự kiện: B tự tắt camera
+[khach B] START: camera giả lập
+[khach B] Camera: mở, gửi tối đa 10 fps, 1/1
+[server]   => B tự bật camera
+[khach A] Sự kiện: B tự bật camera
+[khach B] Sự kiện: B tự bật camera
+[server] #3 C vào phòng từ 127.0.0.1:64760
+[server]   => C vào phòng
+[khach C] Đã kết nối 127.0.0.1:42635, mã 3
+[khach B] Sự kiện: C vào phòng
+[khach A] Sự kiện: C vào phòng
+[khach C] Camera: mở, gửi tối đa 10 fps, 1/1
+[khach C] Nhận: 10 fps, độ phân giải 1/1
+[khach C] Sự kiện: C vào phòng
+[server] #3 C đăng ký UDP 127.0.0.1:52807
+[khach C] Camera: tắt (tự tắt), gửi tối đa 10 fps, 1/1
+[server]   => C tự tắt camera
+[khach A] Sự kiện: C tự tắt camera
+[khach B] Sự kiện: C tự tắt camera
+[khach C] Sự kiện: C tự tắt camera
+[khach C] START: camera giả lập
+[server]   => C tự bật camera
+[khach C] Camera: mở, gửi tối đa 10 fps, 1/1
+[khach A] Sự kiện: C tự bật camera
+[khach B] Sự kiện: C tự bật camera
+[khach C] Sự kiện: C tự bật camera
+[demo]    Số liệu sau 2 s:
+[demo]   client A: camera mở, gửi 10 fps 716 kbit/s, nhận 10 fps 2247 kbit/s, lưới 320x240, mảnh mất 0
+[demo]   client B: camera mở, gửi 10 fps 712 kbit/s, nhận 10 fps 2247 kbit/s, lưới 320x240, mảnh mất 0
+[demo]   client C: camera mở, gửi 10 fps 731 kbit/s, nhận 10 fps 2244 kbit/s, lưới 320x240, mảnh mất 0
+[demo]   server thấy A: camera mở, giới hạn 10 fps 1/1, vào 10 fps 716 kbit/s, ra (lưới) 10 fps 2245 kbit/s
+[demo]   server thấy B: camera mở, giới hạn 10 fps 1/1, vào 10 fps 712 kbit/s, ra (lưới) 10 fps 2245 kbit/s
+[demo]   server thấy C: camera mở, giới hạn 10 fps 1/1, vào 10 fps 731 kbit/s, ra (lưới) 10 fps 2244 kbit/s
+[demo] 2. Server chọn B -> Tắt camera; chọn C -> fps gửi tối đa 5, độ phân giải gửi 1/2
+[server]   => server tắt camera B
+[khach B] Camera: tắt (server), gửi tối đa 10 fps, 1/1
+[khach A] Sự kiện: server tắt camera B
+[khach B] Sự kiện: server tắt camera B
+[khach C] Sự kiện: server tắt camera B
+[server]   => server giới hạn C gửi tối đa 5 fps
+[khach C] Camera: mở, gửi tối đa 5 fps, 1/1
+[khach C] Sự kiện: server giới hạn C gửi tối đa 5 fps
+[khach A] Sự kiện: server giới hạn C gửi tối đa 5 fps
+[khach B] Sự kiện: server giới hạn C gửi tối đa 5 fps
+[server]   => server đặt độ phân giải C = 1/2
+[khach C] Camera: mở, gửi tối đa 5 fps, 1/2
+[demo] 3. A chọn nhận 1/2; B bấm CANCEL rồi START (xin bật lại khi server đang tắt)
+[khach B] Sự kiện: server đặt độ phân giải C = 1/2
+[khach C] Sự kiện: server đặt độ phân giải C = 1/2
+[khach A] Sự kiện: server đặt độ phân giải C = 1/2
+[server] A chọn nhận 10 fps, độ phân giải 1/2
+[khach A] Nhận: 10 fps, độ phân giải 1/2
+[khach B] CANCEL: tắt camera
+[server]   => B tự tắt camera
+[khach B] Camera: tắt (cả hai), gửi tối đa 10 fps, 1/1
+[khach B] Sự kiện: B tự tắt camera
+[khach A] Sự kiện: B tự tắt camera
+[khach C] Sự kiện: B tự tắt camera
+[khach B] START: camera giả lập
+[server] B xin bật camera -> từ chối (server đang tắt)
+[khach B] Bị từ chối: server đang tắt camera của bạn
+[demo] 4. Số liệu cuối:
+[demo]   client A: camera mở, gửi 10 fps 738 kbit/s, nhận 10 fps 445 kbit/s, lưới 160x120, mảnh mất 0
+[demo]   client B: camera tắt (cả hai), gửi 0 fps 0 kbit/s, nhận 10 fps 1373 kbit/s, lưới 320x240, mảnh mất 0
+[demo]   client C: camera mở, gửi 5 fps 94 kbit/s, nhận 10 fps 1372 kbit/s, lưới 320x240, mảnh mất 0
+[demo]   server thấy A: camera mở, giới hạn 10 fps 1/1, vào 10 fps 738 kbit/s, ra (lưới) 10 fps 446 kbit/s
+[demo]   server thấy B: camera tắt (server), giới hạn 10 fps 1/1, vào 0 fps 0 kbit/s, ra (lưới) 10 fps 1372 kbit/s
+[demo]   server thấy C: camera mở, giới hạn 5 fps 1/2, vào 5 fps 94 kbit/s, ra (lưới) 10 fps 1372 kbit/s
+[server] Trạng thái: 3 client, fps chung 10
+[server]                      giới hạn vào        ra (lưới)
+[server]  #  tên camera       fps 1/n  fps  kbit  fps  kbit
+[server]  1  A   mở            10   1   10   738   10   446
+[server]  2  B   tắt (server)  10   1    0     0   10  1372
+[server]  3  C   mở             5   2    5    94   10  1372
+[demo] Đã chụp 4 cửa sổ vào D:\123013 - Lập trình mạng\Code\csharp\Chuong06\BaiMR6.3_HoiThoaiVideo\ket_qua_gui.png (209 KB)
+[khach A] Đã ngắt kết nối
+[server] #1 A rời phòng
+[server]   => A rời phòng
+[khach B] Sự kiện: A rời phòng
+[khach C] Sự kiện: A rời phòng
+[server] #2 B rời phòng
+[server]   => B rời phòng
+[khach B] Đã ngắt kết nối
+[khach C] Sự kiện: B rời phòng
+[server] #3 C rời phòng
+[server]   => C rời phòng
+[khach C] Đã ngắt kết nối
+[server] Tổng kết luồng vào (từ client tới server):
+[server]  #  tên mảnh khung hỏng mảnh mất  bỏ:tắt vượt fps
+[server]         nhận    đủ        mất hẳn
+[server]  1  A    448    56    0    0    0      0      1
+[server]  2  B    176    22    0    0    0      0      1
+[server]  3  C    241    41    0    0    0      0      2
+

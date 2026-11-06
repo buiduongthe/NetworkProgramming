@@ -1,0 +1,30 @@
+===== server1 =====
+> java -cp out ThreadedServer 127.0.0.1 9643 500 50
+[server] Đang lắng nghe tại 127.0.0.1:9643
+[server] Mỗi kết nối một luồng, MAX_CLIENTS = 500, độ trễ 50 ms
+
+===== load1 =====
+> java -cp out LoadTest 127.0.0.1 9643 20 1,10,100
+[load] Server 127.0.0.1:9643, 20 yêu cầu/client, vòng kín
+[load] client     OK   lỗi  yc/giây     p50     p95     p99
+[load]      1     20     0     15.6    62.4    63.5    63.9
+[load]     10    200     0    158.9    62.8    64.9    65.8
+[load]    100   2000     0   1544.6    62.6    66.1    91.8
+[load] OK: số yêu cầu thành công; lỗi: số client gặp lỗi (bị từ chối, mất kết nối, mã ≠ 200)
+[load] p50, p95, p99: phân vị độ trễ, tính bằng ms
+
+===== server2 =====
+> java -cp out PoolServer 127.0.0.1 9644 8 16 50
+[server] Đang lắng nghe tại 127.0.0.1:9644
+[server] Nhóm 8 luồng thợ, hàng đợi 16 chỗ, độ trễ 50 ms
+
+===== load2 =====
+> java -cp out LoadTest 127.0.0.1 9644 20 1,10,100
+[load] Server 127.0.0.1:9644, 20 yêu cầu/client, vòng kín
+[load] client     OK   lỗi  yc/giây     p50     p95     p99
+[load]      1     20     0     15.5    62.2    64.5    70.7
+[load]     10    200     0     80.4    61.9    64.0    64.7
+[load]    100    480    76    127.7    62.7    64.8  2561.4
+[load] OK: số yêu cầu thành công; lỗi: số client gặp lỗi (bị từ chối, mất kết nối, mã ≠ 200)
+[load] p50, p95, p99: phân vị độ trễ, tính bằng ms
+

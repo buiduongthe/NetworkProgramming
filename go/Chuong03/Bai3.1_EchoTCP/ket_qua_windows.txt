@@ -1,8 +1,8 @@
 ===== server =====
 > out\app.exe server 127.0.0.1 31310
 [server] Đang lắng nghe tại 127.0.0.1:31310
-[server] Client kết nối: 127.0.0.1:60890
-[server] Client 127.0.0.1:60890 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:59468
+[server] Client 127.0.0.1:59468 đã đóng kết nối
 [server] Dừng server
 
 ===== client =====

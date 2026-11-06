@@ -1,0 +1,74 @@
+===== server =====
+> cargo run -q --release -- server 127.0.0.1 21640
+[server] Server chat đang lắng nghe tại 127.0.0.1:21640
+[server] An đăng ký từ 127.0.0.1:62722
+[server] An vào phòng lop
+[server] Bình đăng ký từ 127.0.0.1:62723
+[server] Bình vào phòng lop
+[server] Chi đăng ký từ 127.0.0.1:62724
+[server] Chi vào phòng lop
+[server] Chi rời phòng lop
+[server] Chi rời server
+[server] Từ chối 127.0.0.1:62726: lỗi 409
+[server] Từ chối 127.0.0.1:62727: lỗi 400
+[server] Dừng server
+
+===== an =====
+> cargo run -q --release -- client 127.0.0.1 21640 An
+[client] Đã kết nối 127.0.0.1:21640, gửi hello với tên An
+[client] Chào mừng! Trực tuyến: An; phòng: (chưa có)
+[client] > /join lop
+[client] * An đã vào phòng lop
+[client] * Bình đã vào phòng lop
+[client] 04:21:56 [lop] Bình: Chào cả lớp!
+[client] * Chi đã vào phòng lop
+[client] 04:21:56 [lop] Chi: Xin chào An và Bình
+[client] 04:21:56 [riêng] Chi: Tin riêng gửi An
+[client] * Chi đã rời phòng lop
+[client] Mất kết nối: server đã đóng kết nối
+
+===== binh =====
+> cargo run -q --release -- client 127.0.0.1 21640 Bình
+[client] Đã kết nối 127.0.0.1:21640, gửi hello với tên Bình
+[client] > /join lop
+[client] Chào mừng! Trực tuyến: An, Bình; phòng: lop
+[client] > Chào cả lớp!
+[client] * Bình đã vào phòng lop
+[client] 04:21:56 [lop] Bình: Chào cả lớp!
+[client] * Chi đã vào phòng lop
+[client] 04:21:56 [lop] Chi: Xin chào An và Bình
+[client] * Chi đã rời phòng lop
+[client] Mất kết nối: server đã đóng kết nối
+
+===== chi =====
+> cargo run -q --release -- client 127.0.0.1 21640 Chi
+[client] Đã kết nối 127.0.0.1:21640, gửi hello với tên Chi
+[client] Chào mừng! Trực tuyến: An, Bình, Chi; phòng: lop
+[client] > /join lop
+[client] > Xin chào An và Bình
+[client] > /pm An Tin riêng gửi An
+[client] > /pm Dung Có ai tên Dung không?
+[client] > /leave lop
+[client] > Còn ai trong phòng không?
+[client] > /ping
+[client] * Chi đã vào phòng lop
+[client] 04:21:56 [lop] Chi: Xin chào An và Bình
+[client] Lỗi 404: Không có người nhận
+[client] Lỗi 403: Chưa tham gia phòng
+[client] pong
+[client] Đã ngắt kết nối
+
+===== an2 =====
+> cargo run -q --release -- client 127.0.0.1 21640 An
+[client] Đã kết nối 127.0.0.1:21640, gửi hello với tên An
+[client] Lỗi 409: Tên đã được sử dụng
+[client] Mất kết nối: server đã đóng kết nối
+[client] Đã ngắt kết nối
+
+===== bad =====
+> cargo run -q --release -- client 127.0.0.1 21640 "Tên sai!"
+[client] Đã kết nối 127.0.0.1:21640, gửi hello với tên Tên sai!
+[client] Lỗi 400: Sai cú pháp
+[client] Mất kết nối: server đã đóng kết nối
+[client] Đã ngắt kết nối
+

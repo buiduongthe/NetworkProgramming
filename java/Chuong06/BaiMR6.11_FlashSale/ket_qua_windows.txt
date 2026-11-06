@@ -1,0 +1,189 @@
+===== server =====
+> java -cp out ServerFlashSale 127.0.0.1 43750
+[server] Lắng nghe 127.0.0.1:43750; chế độ khoa, trễ 0–2 ms
+[server] Độ trễ xử lý: ngẫu nhiên 0–1 ms
+[server] Đặt lại (mo_sau_s=0.0)
+[server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
+[server] HẾT HÀNG sau 0.98 s mở bán
+[server] Độ trễ xử lý: ngẫu nhiên 0–1 ms
+[server] Lượt trước: khong_khoa, 10004 yc, tc 1497, sai phạm 3567
+[server] Đặt lại (mo_sau_s=0.0)
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] HẾT HÀNG sau 0.36 s mở bán
+[server] Độ trễ xử lý: ngẫu nhiên 0–1 ms
+[server] Lượt trước: khoa, 10000 yc, tc 67, sai phạm 0
+[server] Đặt lại (mo_sau_s=0.0)
+[server] Chế độ: lac_quan – Lạc quan (phiên bản + CAS)
+[server] HẾT HÀNG sau 0.25 s mở bán
+[server] Độ trễ xử lý: ngẫu nhiên 0–1 ms
+[server] Lượt trước: lac_quan, 10004 yc, tc 69, sai phạm 0
+[server] Đặt lại (mo_sau_s=0.0)
+[server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
+[server] HẾT HÀNG sau 0.29 s mở bán
+[server] hang_doi: 10000 yc, tc 67, từ chối 737, sai phạm 0
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 10000 yc, tc 67, sai phạm 0
+[server] Đặt lại (ton_dau=5, mo_sau_s=3.0)
+[server] An vào
+[server] Bình vào
+[server] MỞ BÁN! 5 sản phẩm
+[server] An mua 2 – đơn FS00001, còn 3
+[server] Bình mua 2 – đơn FS00002, còn 1
+[server] khoa: 3 yc, tc 2, từ chối 1, sai phạm 0
+[server] Bình rời
+[server] Chi vào
+[server] Chi mua 1 – đơn FS00003, còn 0
+[server] HẾT HÀNG sau 2.65 s mở bán
+[server] An rời
+[server] Chi rời
+[server] khoa: 6 yc, tc 3, từ chối 3, sai phạm 0
+[server] Tổng kết (từ lần đặt lại cuối):
+[server]   Chế độ khoa, trễ xử lý 0–1 ms
+[server]   Yêu cầu 6: thành công 3, từ chối 3
+[server]   Xung đột 0, thử lại 0, hết lượt thử 0
+[server]   Hàng đợi max 0, chờ khóa quá hạn 0
+[server]   Xử lý µs: p50 226 p95 4059 p99 4059
+[server]   Thông lượng 1 yc/s
+[server]   Sai phạm 0: tồn âm 0, lệch sổ 0
+[server]   Bán 5/5 sp (3 đơn), tồn 0
+[server] Máy chủ đã dừng
+
+===== mp =====
+> java -cp out MoPhong 127.0.0.1 43750 --n 10000 --so-sanh --tre-ms 1
+[mo_phong] === khong_khoa: 10000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 10004 yc xong trong 1.18 s = 8468 yc/s
+[mo_phong] Khứ hồi ms: p50 780.7 p95 986.3 p99 1043.4
+[mo_phong] Thành công 1497, từ chối 8507
+[mo_phong]   lý do: het_hang 8503, khong_du 4
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 10 p95 101498 p99 326357
+[mo_phong] Sai phạm 3567: tồn âm 1431, lệch sổ 2136
+[mo_phong]   ví dụ: u91 mua 1: bán 101/100
+[mo_phong]   ví dụ: u52 mua 1: bán 102/100
+[mo_phong] Bán 2236/100 sp (1497 đơn), tồn 0
+[mo_phong] === khoa: 10000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 10000 yc xong trong 0.45 s = 22217 yc/s
+[mo_phong] Khứ hồi ms: p50 271.3 p95 461.4 p99 473.3
+[mo_phong] Thành công 67, từ chối 9933
+[mo_phong]   lý do: het_hang 9933
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 6 p95 318 p99 262250
+[mo_phong] Sai phạm 0: tồn âm 0, lệch sổ 0
+[mo_phong] Bán 100/100 sp (67 đơn), tồn 0
+[mo_phong] === lac_quan: 10000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 10004 yc xong trong 0.32 s = 31737 yc/s
+[mo_phong] Khứ hồi ms: p50 213.4 p95 316.8 p99 343.8
+[mo_phong] Thành công 69, từ chối 9935
+[mo_phong]   lý do: het_hang 9903, xung_dot 28, khong_du 4
+[mo_phong] Máy chủ: xung đột 472, thử lại 444, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 5 p95 13507 p99 108610
+[mo_phong] Sai phạm 0: tồn âm 0, lệch sổ 0
+[mo_phong] Bán 100/100 sp (69 đơn), tồn 0
+[mo_phong] === hang_doi: 10000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 10000 yc xong trong 5.31 s = 1883 yc/s
+[mo_phong] Khứ hồi ms: p50 2702.8 p95 5027.3 p99 5224.8
+[mo_phong] Thành công 67, từ chối 9933
+[mo_phong]   lý do: het_hang 9933
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 9989
+[mo_phong] Máy chủ xử lý µs: p50 2686126 p95 5025211 p99 5223859
+[mo_phong] Sai phạm 0: tồn âm 0, lệch sổ 0
+[mo_phong] Bán 100/100 sp (67 đơn), tồn 0
+[mo_phong] Bảng so sánh (10000 người × 1 lần, 200 kết nối):
+  Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+  khong_khoa         1497     3567        0  8468  1043.4
+  khoa                 67        0        0 22217   473.3
+  lac_quan             69        0      472 31737   343.8
+  hang_doi             67        0        0  1883  5224.8
+
+===== qt =====
+> java -cp out Khach 127.0.0.1 43750 dat_lai ton_dau=5 mo_sau_s=3
+[quan_tri] > dat_lai ton_dau=5 mo_sau_s=3
+[quan_tri] OK
+
+===== A =====
+> java -cp out FlashSale An 127.0.0.1 43750 --thoi-gian 6
+[An] Vào trang sale (khoa): Tai nghe không dây TWS Pro
+[An]   1.990.000 đ -> 199.000 đ, kho 5/5
+[An]   mở bán sau 2.7 s
+[An] > MUA NGAY 1 sản phẩm
+[An]   TỪ CHỐI: chưa mở bán, còn 1.7 s
+[An] * MỞ BÁN! 5 sản phẩm
+[An] > MUA NGAY 2 sản phẩm
+[An]   ĐẶT HÀNG OK: đơn FS00001, 398.000 đ (5.5 ms)
+[An] * An mua 2 – đơn FS00001, còn 3
+[An] * Bình mua 2 – đơn FS00002, còn 1
+[An] * Chi mua 1 – đơn FS00003, còn 0
+[An] * HẾT HÀNG sau 2.65 s mở bán
+[An]   kho: HẾT HÀNG
+
+===== B =====
+> java -cp out FlashSale Bình 127.0.0.1 43750
+[Bình] Vào trang sale (khoa): Tai nghe không dây TWS Pro
+[Bình]   1.990.000 đ -> 199.000 đ, kho 5/5
+[Bình]   mở bán sau 2.1 s
+[Bình] * MỞ BÁN! 5 sản phẩm
+[Bình] * An mua 2 – đơn FS00001, còn 3
+[Bình] > MUA NGAY 2 sản phẩm
+[Bình]   ĐẶT HÀNG OK: đơn FS00002, 398.000 đ (1.2 ms)
+[Bình] * Bình mua 2 – đơn FS00002, còn 1
+
+===== C =====
+> java -cp out FlashSale Chi 127.0.0.1 43750
+[Chi] Vào trang sale (khoa): Tai nghe không dây TWS Pro
+[Chi]   1.990.000 đ -> 199.000 đ, kho 1/5
+[Chi] > MUA NGAY 2 sản phẩm
+[Chi]   TỪ CHỐI: chỉ còn 1 sản phẩm
+[Chi] > MUA NGAY 1 sản phẩm
+[Chi]   ĐẶT HÀNG OK: đơn FS00003, 199.000 đ (1.8 ms)
+[Chi] * Chi mua 1 – đơn FS00003, còn 0
+[Chi] * HẾT HÀNG sau 2.65 s mở bán
+[Chi]   kho: HẾT HÀNG
+[Chi] > MUA NGAY 1 sản phẩm
+[Chi]   TỪ CHỐI: hết hàng
+
+===== gui =====
+> java -cp out DemoGui 127.0.0.1 43752
+[demo] 1. Máy chủ: START SERVER (chế độ khoa)
+[demo]    An, Bình, Chi: Kết nối
+[demo] 2. Đặt lại: kho 3 sản phẩm, mở bán sau 3 s
+[demo]    An thấy: 00:00:03, nút 'CHỜ MỞ BÁN' (disabled)
+[demo]    Mở bán: An (2), Bình (1), Chi (2) CÙNG bấm MUA NGAY
+[demo]    An: Đặt hàng thành công! Đơn FS00001 – 2 sp
+[demo]    Bình: Đặt hàng thành công! Đơn FS00002 – 1 sp
+[demo]    Chi: Rất tiếc, sản phẩm đã HẾT HÀNG
+[demo]    máy chủ: 3 yc, tc 2, từ chối 1, sai phạm 0
+[demo]    Bán 3/3 sp (2 đơn), tồn 0
+[demo] 3. Máy chủ: khong_khoa, độ trễ xử lý 0–20 ms; đặt lại
+[demo]    Mở bán: An (2), Bình (1), Chi (2) CÙNG bấm MUA NGAY
+[demo]    An: Đặt hàng thành công! Đơn FS00001 – 2 sp
+[demo]    Bình: Đặt hàng thành công! Đơn FS00001 – 1 sp
+[demo]    Chi: Đặt hàng thành công! Đơn FS00001 – 2 sp
+[demo]    máy chủ: 3 yc, tc 3, từ chối 0, sai phạm 4
+[demo]      ví dụ: Chi mua 2: bán 5/3
+[demo]    Bán 5/3 sp (3 đơn), tồn 1
+[demo]    Đã ghi ket_qua_gui_tranh_chap.png (92 KB)
+[demo] 4. Máy chủ: khoa, trễ 0–1 ms, kho 100; So sánh 4 chế độ
+[demo]   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+[demo]   khong_khoa         1940     4663        0 11856   769.7
+[demo]   khoa                 68        0        0 41729   272.6
+[demo]   lac_quan             72        0     1573 39945   258.1
+[demo]   hang_doi             68        0        0  1886  5236.6
+[demo]    Sai phạm: khong_khoa
+[demo]    Không sai phạm: khoa, lac_quan, hang_doi
+[demo] 5. Đặt lại: kho 100, mở bán sau 4 s
+[demo]    Chi thấy: Bắt đầu sau 00:00:03, nút 'CHỜ MỞ BÁN'
+[demo] 6. Mở bán: An mua 2; 50 người ảo cùng mua; Bình mua 2
+[demo]    An: Đặt hàng thành công! Đơn FS00001 – 2 sp
+[demo]    Bình: Đặt hàng thành công! Đơn FS00052 – 2 sp
+[demo]    máy chủ: 52 yc, tc 52, từ chối 0, sai phạm 0
+[demo]    Bán 73/100 sp (52 đơn), tồn 27
+[demo] 7. Chụp cửa sổ (Chi: lúc đếm ngược)
+[demo]    Đã ghi ket_qua_gui.png (159 KB)
+[demo] 8. Máy chủ: STOP SERVER
+[demo]    An: Mất kết nối máy chủ
+[demo] Kết thúc
+

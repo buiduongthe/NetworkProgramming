@@ -1,0 +1,59 @@
+===== server =====
+> bin\Release\net10.0-windows\BaiMR5.3_GiaoDienDaTacVu.exe server 127.0.0.1 42530
+[server] HTTP 127.0.0.1:42530/tcp, "DNS" 127.0.0.1:42530/udp, cổng mở 42531, 42532
+[server] HTTP GET /tep 384 KB, nghỉ 70 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 60 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 90 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 120 ms mỗi khối
+[server] HTTP GET /tep 320 KB, nghỉ 50 ms mỗi khối
+[server] HTTP: client đóng kết nối giữa chừng (208/256 KB)
+[server] HTTP GET /tep 256 KB, nghỉ 60 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 90 ms mỗi khối
+[server] HTTP GET /tep 384 KB, nghỉ 70 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 80 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 120 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 60 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 90 ms mỗi khối
+[server] HTTP GET /tep 384 KB, nghỉ 70 ms mỗi khối
+[server] HTTP: client đóng kết nối giữa chừng (128/384 KB)
+[server] HTTP: client đóng kết nối giữa chừng (112/256 KB)
+[server] HTTP: client đóng kết nối giữa chừng (176/256 KB)
+[server] dừng
+
+===== gui =====
+> bin\Release\net10.0-windows\BaiMR5.3_GiaoDienDaTacVu.exe demo 127.0.0.1 42530
+[gui]   0.80 s  Bấm Tải tệp: 5 tệp, giới hạn đồng thời 3
+[gui]   0.92 s    (nút Tải tệp giữ luồng giao diện 131 ms)
+[gui]   1.14 s  Bấm Kiểm tra cổng: 42530, 42531, 42532, 42533
+[gui]   1.17 s    (nút Kiểm tra cổng giữ luồng giao diện 78 ms)
+[gui]   1.39 s  Bấm Tra cứu tên: 5 tên qua UDP
+[gui]   1.41 s    (nút Tra cứu tên giữ luồng giao diện 81 ms)
+[gui]   1.86 s  Tải 256 KB (60 ms/khối): xong 256 KB
+[gui]   2.01 s  Kịch bản bấm Hủy ở tác vụ #2
+[gui]   2.02 s  Tải 256 KB (90 ms/khối): đã hủy
+[gui]   2.63 s  Chụp ảnh 1: 5 tác vụ chưa xong, 2 đang chờ lượt
+[gui]   2.73 s  Tải 384 KB (70 ms/khối): xong 384 KB
+[gui]   3.23 s  Tải 320 KB (50 ms/khối): xong 320 KB
+[gui]   3.76 s  Tải 256 KB (120 ms/khối): xong 256 KB
+[gui]   4.29 s  Kiểm tra 4 cổng: 3 mở, 1 đóng
+[gui]   4.51 s  Tra cứu 5 tên: 4/5 tên có địa chỉ
+[gui]   4.70 s  Bấm Tải tệp: 4 tệp, giới hạn đồng thời 3
+[gui]   4.76 s    (nút Tải tệp giữ luồng giao diện 214 ms)
+[gui]   5.08 s  Bấm Làm SAI: tải 256 KB ngay trên luồng giao diện…
+[gui]   6.48 s  Luồng giao diện bị chặn 1397 ms: đồng hồ, nút, thanh tiến trình đứng yên
+[gui]   6.48 s  Tải 256 KB (60 ms/khối): xong 256 KB
+[gui]   6.49 s  Tải 256 KB (90 ms/khối): xong 256 KB
+[gui]   6.56 s  Tải 384 KB (70 ms/khối): xong 384 KB
+[gui]   8.38 s  Tải 256 KB (120 ms/khối): xong 256 KB
+[gui]   8.50 s  Bấm Tải tệp: 4 tệp, giới hạn đồng thời 3
+[gui]   8.56 s    (nút Tải tệp giữ luồng giao diện 140 ms)
+[gui]   9.08 s  Bấm Hủy tất cả: 4 tác vụ
+[gui]   9.09 s  Tải 256 KB (120 ms/khối): đã hủy (khi đang chờ lượt)
+[gui]   9.09 s  Tải 256 KB (60 ms/khối): đã hủy
+[gui]   9.10 s  Tải 256 KB (90 ms/khối): đã hủy
+[gui]   9.10 s  Tải 384 KB (70 ms/khối): đã hủy
+[gui]   9.38 s  Đã chụp cửa sổ: ket_qua_gui.png
+[gui]   9.38 s  Nhịp rỗi              :   30 nhịp, TB   30.9 ms, tối đa     38 ms
+[gui]   9.39 s  Nhịp chạy song song   :  194 nhịp, TB   34.2 ms, tối đa    250 ms
+[gui]   9.39 s  Nhịp luồng GUI bị chặn:    1 nhịp, TB 1455.1 ms, tối đa   1455 ms
+

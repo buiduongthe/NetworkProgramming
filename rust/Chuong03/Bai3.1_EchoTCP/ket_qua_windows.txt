@@ -1,8 +1,8 @@
 ===== server =====
 > ..\..\target\release\bai3_1_echo_tcp.exe server 127.0.0.1 21310
 [server] Đang lắng nghe tại 127.0.0.1:21310
-[server] Client kết nối: 127.0.0.1:60022
-[server] Client 127.0.0.1:60022 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:51343
+[server] Client 127.0.0.1:51343 đã đóng kết nối
 
 ===== client =====
 > ..\..\target\release\bai3_1_echo_tcp.exe client 127.0.0.1 21310

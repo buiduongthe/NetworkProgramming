@@ -1,0 +1,25 @@
+===== mac_dinh =====
+> java -cp out DocCauHinh
+[cấu hình] APP_HOST=(không đặt), APP_PORT=(không đặt), tham số: (không có)
+[cấu hình] Kết quả: host=0.0.0.0, port=9000
+
+===== bien_moi_truong =====
+> set APP_PORT=9100 && java -cp out DocCauHinh
+[cấu hình] APP_HOST=(không đặt), APP_PORT=9100, tham số: (không có)
+[cấu hình] Kết quả: host=0.0.0.0, port=9100
+
+===== tham_so =====
+> set APP_PORT=9100 && java -cp out DocCauHinh 192.168.1.5 9200
+[cấu hình] APP_HOST=(không đặt), APP_PORT=9100, tham số: 192.168.1.5 9200
+[cấu hình] Kết quả: host=192.168.1.5, port=9200
+
+===== cong_abc =====
+> java -cp out DocCauHinh 127.0.0.1 abc
+[cấu hình] APP_HOST=(không đặt), APP_PORT=(không đặt), tham số: 127.0.0.1 abc
+[cấu hình] ConfigError: Cổng phải là số nguyên: abc
+
+===== cong_70000 =====
+> java -cp out DocCauHinh 127.0.0.1 70000
+[cấu hình] APP_HOST=(không đặt), APP_PORT=(không đặt), tham số: 127.0.0.1 70000
+[cấu hình] ConfigError: Cổng không hợp lệ: 70000
+

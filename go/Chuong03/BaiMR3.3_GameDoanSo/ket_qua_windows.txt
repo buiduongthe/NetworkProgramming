@@ -1,0 +1,100 @@
+===== server =====
+> out\app.exe server 127.0.0.1 41335 --so-nguoi 4 --het-gio-ms 1500 --seed 2026 --so-van 1
+[server] Trò chơi đoán số tại 127.0.0.1:41335; cần 4 người; mỗi lượt tối đa 1500 ms
+[server] 127.0.0.1:58949 kết nối
+[server] 127.0.0.1:58950 kết nối
+[server] 127.0.0.1:58951 kết nối
+[server] Dung vào phòng chờ (1/4)
+[server] An vào phòng chờ (2/4)
+[server] Binh vào phòng chờ (3/4)
+[server] 127.0.0.1:58952 kết nối
+[server] Cuong vào phòng chờ (4/4)
+[server] Bắt đầu ván 1: số bí mật = 39 (chỉ server biết), thứ tự: Dung, An, Binh, Cuong
+[server] Từ chối Cuong: NOT_YOUR_TURN
+[server] Từ chối Cuong: BAD_JSON
+[server] Từ chối Cuong: NOT_YOUR_TURN
+[server] 127.0.0.1:58953 kết nối
+[server] Từ chối Em: GAME_IN_PROGRESS
+[server] Dung hết giờ ở lượt 1
+[server] Dung rời trò chơi (còn 3 người)
+[server] Lượt 2: An đoán 40 -> cao quá
+[server] Lượt 3: Binh đoán 20 -> thấp quá
+[server] Từ chối Cuong: BAD_VALUE ('năm mươi')
+[server] Từ chối Cuong: OUT_OF_RANGE (89 ngoài 21–39)
+[server] Lượt 4: Cuong đoán 30 -> thấp quá
+[server] Lượt 5: An đoán 39 -> ĐÚNG
+[server] Kết thúc ván 1: An thắng sau 5 lượt
+[server] Đã chơi 1 ván, dừng server
+
+===== Binh =====
+> out\app.exe choi Binh 127.0.0.1 41335 --bot chia_doi --nghi-ms 200
+[Binh] Đã kết nối 127.0.0.1:41335
+[Binh] Vào phòng chờ: 3/4 người, đoán số trong 1–100
+[Binh] Ván 1 bắt đầu, thứ tự: Dung, An, Binh, Cuong
+[Binh] Dung hết giờ, mất lượt
+[Binh] Dung đã rời trò chơi
+[Binh] An đoán 40: cao quá
+[Binh] Đến lượt bạn (lượt 3), khoảng 1–39
+[Binh] Đoán 20
+[Binh] Binh đoán 20: thấp quá
+[Binh] Cuong đoán 30: thấp quá
+[Binh] An đoán 39: ĐÚNG
+[Binh] Kết thúc: An thắng, số bí mật là 39 (5 lượt)
+
+===== Cuong =====
+> out\app.exe choi Cuong 127.0.0.1 41335 --bot nghich --nghi-ms 200
+[Cuong] Đã kết nối 127.0.0.1:41335
+[Cuong] Vào phòng chờ: 4/4 người, đoán số trong 1–100
+[Cuong] (nghịch) đoán khi ván chưa bắt đầu, rồi gửi khung không phải JSON
+[Cuong] Ván 1 bắt đầu, thứ tự: Dung, An, Binh, Cuong
+[Cuong] (nghịch) đoán khi đang là lượt của Dung
+[Cuong] Server báo lỗi NOT_YOUR_TURN: Chưa đến lượt bạn
+[Cuong] Server báo lỗi BAD_JSON: Khung không phải đối tượng JSON
+[Cuong] Server báo lỗi NOT_YOUR_TURN: Chưa đến lượt bạn
+[Cuong] Dung hết giờ, mất lượt
+[Cuong] Dung đã rời trò chơi
+[Cuong] An đoán 40: cao quá
+[Cuong] Binh đoán 20: thấp quá
+[Cuong] Đến lượt bạn (lượt 4), khoảng 21–39
+[Cuong] (nghịch) gửi giá trị chuỗi và số ngoài khoảng
+[Cuong] Đoán 30
+[Cuong] Server báo lỗi BAD_VALUE: Giá trị đoán phải là số nguyên
+[Cuong] Server báo lỗi OUT_OF_RANGE: Số đoán nằm ngoài khoảng cho phép
+[Cuong] Cuong đoán 30: thấp quá
+[Cuong] An đoán 39: ĐÚNG
+[Cuong] Kết thúc: An thắng, số bí mật là 39 (5 lượt)
+
+===== An =====
+> out\app.exe choi An 127.0.0.1 41335
+[An] Đã kết nối 127.0.0.1:41335
+[An] Vào phòng chờ: 2/4 người, đoán số trong 1–100
+[An] Ván 1 bắt đầu, thứ tự: Dung, An, Binh, Cuong
+[An] Dung hết giờ, mất lượt
+[An] Đến lượt bạn (lượt 2), khoảng 1–100
+[An] Nhập số: abc
+[An] Vui lòng nhập một số nguyên
+[An] Nhập số: 40
+[An] Dung đã rời trò chơi
+[An] An đoán 40: cao quá
+[An] Binh đoán 20: thấp quá
+[An] Cuong đoán 30: thấp quá
+[An] Đến lượt bạn (lượt 5), khoảng 31–39
+[An] Nhập số: 39
+[An] An đoán 39: ĐÚNG
+[An] Kết thúc: An thắng, số bí mật là 39 (5 lượt)
+
+===== Dung =====
+> out\app.exe choi Dung 127.0.0.1 41335 --bot im_lang
+[Dung] Đã kết nối 127.0.0.1:41335
+[Dung] Vào phòng chờ: 1/4 người, đoán số trong 1–100
+[Dung] Ván 1 bắt đầu, thứ tự: Dung, An, Binh, Cuong
+[Dung] Đến lượt bạn (lượt 1), khoảng 1–100
+[Dung] Dung hết giờ, mất lượt
+[Dung] (im lặng) bị hết giờ, ngắt kết nối
+
+===== Em =====
+> out\app.exe choi Em 127.0.0.1 41335 --bot chia_doi
+[Em] Đã kết nối 127.0.0.1:41335
+[Em] Server báo lỗi GAME_IN_PROGRESS: Ván đang diễn ra, hãy vào lại sau
+[Em] Server kết thúc phiên
+

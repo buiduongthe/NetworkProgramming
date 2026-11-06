@@ -1,0 +1,134 @@
+===== server =====
+> dotnet bin/Release/net10.0/BaiMR6.6_DauGia.dll server 127.0.0.1 42700
+[server] Lắng nghe 127.0.0.1:42700; chế độ khoa, trễ 0–2 ms
+[server] Đặt lại (thoi_gian_s=0.0)
+[server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
+[server] Lượt trước: khong_khoa, 2500 yc, tc 535, sai phạm 508
+[server] Đặt lại (thoi_gian_s=0.0)
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] khoa: 2486 yc, tc 184, từ chối 2295, sai phạm 0
+[server] Lượt trước: khoa, 2500 yc, tc 187, sai phạm 0
+[server] Đặt lại (thoi_gian_s=0.0)
+[server] Chế độ: lac_quan – Lạc quan (phiên bản + CAS)
+[server] Lượt trước: lac_quan, 2500 yc, tc 25, sai phạm 0
+[server] Đặt lại (thoi_gian_s=0.0)
+[server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] khoa: 2500 yc, tc 11, từ chối 2489, sai phạm 0
+[server] Lượt trước: khoa, 2500 yc, tc 11, sai phạm 0
+[server] Đặt lại (thoi_gian_s=5.0, gia_han_s=3.0)
+[server] An vào
+[server] Bình vào
+[server] Gia hạn: Bình trả giá phút cuối, còn 3 s
+[server] khoa: 3 yc, tc 3, từ chối 0, sai phạm 0
+[server] Gia hạn: An trả giá phút cuối, còn 3 s
+[server] khoa: 4 yc, tc 4, từ chối 0, sai phạm 0
+[server] Kết thúc phiên: An thắng với 5.500.000 đ
+[server] Bình rời
+[server] An rời
+[server] Tổng kết (từ lần đặt lại cuối):
+[server]   Chế độ khoa, trễ xử lý 0–2 ms
+[server]   Yêu cầu 5: thành công 4, từ chối 1
+[server]   Xung đột 0, thử lại 0, hết lượt thử 0
+[server]   Hàng đợi max 0, chờ khóa quá hạn 0
+[server]   Xử lý µs: p50 2083 p95 2904 p99 2904
+[server]   Thông lượng 1 yc/s
+[server]   Sai phạm 0: giá thấp hơn 0, giá cuối sai 0
+[server]   Giá cuối 5.500.000 đ, thắng An
+[server] Máy chủ đã dừng
+
+===== mp =====
+> dotnet bin/Release/net10.0/BaiMR6.6_DauGia.dll mo_phong 127.0.0.1 42700 --n 500 --so-sanh
+[mo_phong] === khong_khoa: 500 người × 5 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2500 yc xong trong 0.17 s = 14511 yc/s
+[mo_phong] Khứ hồi ms: p50 21.4 p95 59.3 p99 85.2
+[mo_phong] Thành công 535, từ chối 1965
+[mo_phong]   lý do: gia_thap 1965
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 2375 p95 42843 p99 60694
+[mo_phong] Sai phạm 508: giá thấp hơn 508, giá cuối sai 0
+[mo_phong]   ví dụ: u71 5.100.000 đ sau 5.300.000 đ
+[mo_phong]   ví dụ: u145 5.100.000 đ sau 5.300.000 đ
+[mo_phong] Giá cuối 9.000.000 đ, dẫn đầu u456
+[mo_phong] === khoa: 500 người × 5 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2500 yc xong trong 4.38 s = 571 yc/s
+[mo_phong] Khứ hồi ms: p50 649.3 p95 1711.7 p99 2250.4
+[mo_phong] Thành công 187, từ chối 2313
+[mo_phong]   lý do: gia_thap 2313
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 274008 p95 773270 p99 1148190
+[mo_phong] Sai phạm 0: giá thấp hơn 0, giá cuối sai 0
+[mo_phong] Giá cuối 38.100.000 đ, dẫn đầu u457
+[mo_phong] === lac_quan: 500 người × 5 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2500 yc xong trong 0.09 s = 26866 yc/s
+[mo_phong] Khứ hồi ms: p50 13.5 p95 28.6 p99 32.1
+[mo_phong] Thành công 25, từ chối 2475
+[mo_phong]   lý do: gia_thap 2475
+[mo_phong] Máy chủ: xung đột 132, thử lại 132, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 2596 p95 13667 p99 19314
+[mo_phong] Sai phạm 0: giá thấp hơn 0, giá cuối sai 0
+[mo_phong] Giá cuối 8.100.000 đ, dẫn đầu u451
+[mo_phong] === hang_doi: 500 người × 5 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2500 yc xong trong 4.35 s = 574 yc/s
+[mo_phong] Khứ hồi ms: p50 857.3 p95 902.0 p99 911.0
+[mo_phong] Thành công 11, từ chối 2489
+[mo_phong]   lý do: gia_thap 2489
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 500
+[mo_phong] Máy chủ xử lý µs: p50 857031 p95 901671 p99 910744
+[mo_phong] Sai phạm 0: giá thấp hơn 0, giá cuối sai 0
+[mo_phong] Giá cuối 6.600.000 đ, dẫn đầu u167
+[mo_phong] Bảng so sánh (500 người × 5 lần, 200 kết nối):
+  Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+  khong_khoa          535      508        0 14511    85.2
+  khoa                187        0        0   571  2250.4
+  lac_quan             25        0      132 26866    32.1
+  hang_doi             11        0        0   574   911.0
+
+===== qt =====
+> dotnet bin/Release/net10.0/BaiMR6.6_DauGia.dll khach 127.0.0.1 42700 dat_lai thoi_gian_s=5 gia_han_s=3
+[quan_tri] > dat_lai thoi_gian_s=5 gia_han_s=3
+[quan_tri] OK
+
+===== A =====
+> dotnet bin/Release/net10.0/BaiMR6.6_DauGia.dll dau_gia An 127.0.0.1 42700 --thoi-gian 11
+[An] Vào phòng: Bình gốm hoa lam (khoa)
+[An]   giá 5.000.000 đ, bước 100.000 đ, còn 4.7 s
+[An] Giá mới 5.200.000 đ – Bình dẫn đầu
+[An] > trả 5.300.000 đ (+1 bước)
+[An]   CHẤP NHẬN (5.1 ms)
+[An] Giá mới 5.300.000 đ – An dẫn đầu
+[An] * Gia hạn: Bình trả giá phút cuối, còn 3 s
+[An] Giá mới 5.400.000 đ – Bình dẫn đầu
+[An]   Bạn bị trả giá cao hơn!
+[An] > trả 5.500.000 đ (+1 bước)
+[An]   CHẤP NHẬN (3.6 ms), phiên được GIA HẠN
+[An] * Gia hạn: An trả giá phút cuối, còn 3 s
+[An] Giá mới 5.500.000 đ – An dẫn đầu
+[An] * Kết thúc phiên: An thắng với 5.500.000 đ
+[An]   BẠN THẮNG!
+
+===== B =====
+> dotnet bin/Release/net10.0/BaiMR6.6_DauGia.dll dau_gia Bình 127.0.0.1 42700 --thoi-gian 10.4
+[Bình] Vào phòng: Bình gốm hoa lam (khoa)
+[Bình]   giá 5.000.000 đ, bước 100.000 đ, còn 4.3 s
+[Bình] > trả 5.200.000 đ (+2 bước)
+[Bình]   CHẤP NHẬN (6.6 ms)
+[Bình] Giá mới 5.200.000 đ – Bình dẫn đầu
+[Bình] Giá mới 5.300.000 đ – An dẫn đầu
+[Bình]   Bạn bị trả giá cao hơn!
+[Bình] > trả 5.400.000 đ (+1 bước)
+[Bình]   CHẤP NHẬN (2.3 ms), phiên được GIA HẠN
+[Bình] * Gia hạn: Bình trả giá phút cuối, còn 3 s
+[Bình] Giá mới 5.400.000 đ – Bình dẫn đầu
+[Bình] * Gia hạn: An trả giá phút cuối, còn 3 s
+[Bình] Giá mới 5.500.000 đ – An dẫn đầu
+[Bình]   Bạn bị trả giá cao hơn!
+[Bình] * Kết thúc phiên: An thắng với 5.500.000 đ
+[Bình]   Bạn không thắng phiên này
+[Bình] > trả 5.600.000 đ (+1 bước)
+[Bình]   TỪ CHỐI: phiên đã kết thúc
+

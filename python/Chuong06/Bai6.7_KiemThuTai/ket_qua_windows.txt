@@ -1,0 +1,30 @@
+===== server1 =====
+> python thread_server.py 127.0.0.1 9673 500 50
+[server] Đang lắng nghe tại 127.0.0.1:9673
+[server] Mỗi kết nối một luồng, MAX_CLIENTS = 500, độ trễ 50 ms
+
+===== load1 =====
+> python load_test.py 127.0.0.1 9673 20 1,10,100
+[load] Server 127.0.0.1:9673, 20 yêu cầu/client, vòng kín
+[load] client     OK   lỗi  yc/giây     p50     p95     p99
+[load]      1     20     0     19.4    51.3    52.1    53.5
+[load]     10    200     0    192.8    51.5    52.4    53.1
+[load]    100   2000     0   1838.9    51.6    56.1    58.9
+[load] OK: số yêu cầu thành công; lỗi: số client gặp lỗi (bị từ chối, mất kết nối, mã ≠ 200)
+[load] p50, p95, p99: phân vị độ trễ, tính bằng ms
+
+===== server2 =====
+> python pool_server.py 127.0.0.1 9674 8 16 50
+[server] Đang lắng nghe tại 127.0.0.1:9674
+[server] Nhóm 8 luồng thợ, hàng đợi 16 chỗ, độ trễ 50 ms
+
+===== load2 =====
+> python load_test.py 127.0.0.1 9674 20 1,10,100
+[load] Server 127.0.0.1:9674, 20 yêu cầu/client, vòng kín
+[load] client     OK   lỗi  yc/giây     p50     p95     p99
+[load]      1     20     0     19.4    51.2    51.8    54.4
+[load]     10    200     0     97.4    51.2    51.9    52.6
+[load]    100    480    76    154.4    51.2    52.4  2103.5
+[load] OK: số yêu cầu thành công; lỗi: số client gặp lỗi (bị từ chối, mất kết nối, mã ≠ 200)
+[load] p50, p95, p99: phân vị độ trễ, tính bằng ms
+

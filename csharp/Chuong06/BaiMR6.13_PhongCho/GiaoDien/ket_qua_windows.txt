@@ -1,0 +1,50 @@
+===== gui =====
+> bin\Release\net10.0-windows\BaiMR6.13_GiaoDien.exe demo 127.0.0.1 42772 ..\ket_qua_gui.png
+[demo] 1. Máy chủ: START SERVER (khoa, phòng chờ bật)
+[demo]    An, Bình, Chi: Kết nối
+[demo] 2. Đặt lại: 2000 vé, cấp lượt 50 người/s, thùng 50
+[demo]    Chi: VÀO HÀNG CHỜ (người đầu tiên)
+[demo]    Chi: ĐẾN LƯỢT BẠN! Hãy hoàn tất trước khi hết giờ
+[demo]    Mô phỏng: 300 người ùa vào hàng (Bắn đồng loạt)
+[demo]    An, Bình: VÀO HÀNG CHỜ
+[demo]    Chi: chọn 2 vé, THANH TOÁN
+[demo]    Chi: Mua thành công 2 vé – đơn #100, 3.000.000 đ
+[demo]    An: Số thứ tự của bạn: #292
+[demo]    An: Còn khoảng 124 người phía trước – chờ ~2 s
+[demo]    Đã ghi ket_qua_gui_phong_cho.png (132 KB)
+[demo] 3. An tới lượt: đồng hồ 00:19; chọn 3 vé, THANH TOÁN
+[demo]    An: Mua thành công 3 vé – đơn #272, 4.500.000 đ
+[demo]    máy chủ: 897 yc, tc 867, từ chối 30, sai phạm 0
+[demo]    Sổ: bán 693/2000 vé, 272 đơn; kho còn 1307
+[demo] 4. Máy chủ: khong_khoa, trễ 0–20 ms; Đặt lại (500 vé)
+[demo]    Chi: Rời, đăng nhập lại tên 'An' (tab thứ hai của An)
+[demo]    Hai tab của An cùng VÀO HÀNG CHỜ
+[demo]    Hai tab cùng bấm THANH TOÁN 2 vé (một lượt)
+[demo]    tab 1: Mua thành công 2 vé – đơn #274, 3.000.000 đ
+[demo]    tab 2: Mua thành công 2 vé – đơn #273, 3.000.000 đ
+[demo]    máy chủ: 6 yc, tc 6, từ chối 0, sai phạm 1
+[demo]    Sổ: bán 4/500 vé, 2 đơn; kho còn 498
+[demo]      ví dụ: An mua 2 vé khi lượt đã dùng
+[demo]    Đã ghi ket_qua_gui_tranh_chap.png (106 KB)
+[demo] 5. khoa, trễ 0–2 ms; Chi vào lại; So sánh 4 chế độ
+[demo]   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+[demo]   khong_khoa         2979     2824        0   602  4819.1
+[demo]   khoa               1435        0        0  1327  1663.7
+[demo]   lac_quan           1410        0     6426  2554  1155.8
+[demo]   hang_doi           1773        0        0  1200  1805.4
+[demo]    Sai phạm: khong_khoa
+[demo]    Không sai phạm: khoa, lac_quan, hang_doi
+[demo]    So sánh bật/tắt phòng chờ (khoa, 1000 người)
+[demo]   Phòng chờ Mua được Hết vé Quá tải Bỏ cuộc p50 ms p99 ms
+[demo] 6. Đặt lại: 2000 vé, 20 người/s, thùng 2
+[demo]    Bình, Chi vào hàng; Chi mua 1 vé
+[demo]    400 người ùa vào; An vào hàng sau họ
+[demo]    An: Còn khoảng 333 người phía trước – chờ ~17 s
+[demo]    Bình: đồng hồ 00:17
+[demo]    Chi: Mua thành công 1 vé – đơn #1863, 1.500.000 đ
+[demo] 7. Chụp 4 cửa sổ
+[demo]    Đã ghi ket_qua_gui.png (170 KB)
+[demo] 8. Máy chủ: STOP SERVER
+[demo]    Bình: Mất kết nối máy chủ
+[demo] Kết thúc
+

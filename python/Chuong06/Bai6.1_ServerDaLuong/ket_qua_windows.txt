@@ -1,0 +1,51 @@
+===== server1 =====
+> python thread_server.py 127.0.0.1 9660 3
+[server] Đang lắng nghe tại 127.0.0.1:9660
+[server] Mỗi kết nối một luồng, MAX_CLIENTS = 3
+[server] Nhận 127.0.0.1:63736, tạo luồng mới (đang phục vụ: 1)
+[server] Nhận 127.0.0.1:63737, tạo luồng mới (đang phục vụ: 2)
+[server] Nhận 127.0.0.1:63738, tạo luồng mới (đang phục vụ: 3)
+[server] Từ chối 127.0.0.1:63739: đã đủ 3 kết nối
+[server] Từ chối 127.0.0.1:63740: đã đủ 3 kết nối
+[server] Client 127.0.0.1:63736 đã đóng kết nối
+[server] Client 127.0.0.1:63737 đã đóng kết nối
+[server] Client 127.0.0.1:63738 đã đóng kết nối
+
+===== client1 =====
+> python multi_client.py 127.0.0.1 9660 5 1000
+[client] 5 client cách nhau 100 ms, giữ kết nối 1000 ms
+[client 1] t = 8 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 2] t = 127 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 3] t = 222 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 4] Lỗi: [WinError 10053] An established connection was aborted by the software in your host machine
+[client 5] Lỗi: [WinError 10053] An established connection was aborted by the software in your host machine
+[client] Hoàn tất sau 1223 ms
+
+===== server2 =====
+> python pool_server.py 127.0.0.1 9661 2 1
+[server] Đang lắng nghe tại 127.0.0.1:9661
+[server] Nhóm 2 luồng thợ, hàng đợi 1 chỗ
+[server] Nhận 127.0.0.1:63741
+[server] Luồng thợ 1 phục vụ 127.0.0.1:63741
+[server] Nhận 127.0.0.1:63742
+[server] Luồng thợ 2 phục vụ 127.0.0.1:63742
+[server] Nhận 127.0.0.1:63743
+[server] Nhận 127.0.0.1:63744
+[server] Hàng đợi đầy, trả 503 cho 127.0.0.1:63744
+[server] Nhận 127.0.0.1:63745
+[server] Hàng đợi đầy, trả 503 cho 127.0.0.1:63745
+[server] Client 127.0.0.1:63741 đã đóng kết nối
+[server] Luồng thợ 1 phục vụ 127.0.0.1:63743
+[server] Client 127.0.0.1:63742 đã đóng kết nối
+[server] Client 127.0.0.1:63743 đã đóng kết nối
+
+===== client2 =====
+> python multi_client.py 127.0.0.1 9661 5 1000
+[client] 5 client cách nhau 100 ms, giữ kết nối 1000 ms
+[client 1] t = 7 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 2] t = 105 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 4] Lỗi: [WinError 10053] An established connection was aborted by the software in your host machine
+[client 5] Lỗi: [WinError 10053] An established connection was aborted by the software in your host machine
+[client 3] t = 1008 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client] Hoàn tất sau 2010 ms
+

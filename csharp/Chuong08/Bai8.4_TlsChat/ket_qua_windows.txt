@@ -1,0 +1,49 @@
+===== chuanbi =====
+> powershell -NoProfile -ExecutionPolicy Bypass -File tao_chung_chi.ps1 && dotnet run --no-build -c Release -- token an certs/an.jwt && dotnet run --no-build -c Release -- token binh certs/binh_email.jwt email
+.+...+...++++++++++++++++++++++++++++++++++++++++++*...............+.......+.........+...+...+..++++++++++++++++++++++++++++++++++++++++++*.....+...+.............+..+......+.......+........+..........+......+........+...+...+.+........+.......+++++
+....+....++++++++++++++++++++++++++++++++++++++++++*..++++++++++++++++++++++++++++++++++++++++++*.+.......+..................+...........+.+..+............+.+..................+..+.........+......+...+....+...........+....+......+......+.......................+......+......+.+...+.....................+..............+......................+..+.......+......+.........+......+++++
+-----
+...+..+..........+.....+.......+.....+++++++++++++++++++++++++++++++++++++++*.....+........+.+.....+.......+...+..............+.+..+...+....+..+...+..........+..+.........+....+..+.............+........+....+......+++++++++++++++++++++++++++++++++++++++*.......+...+...+..........+...........+..........+........+..........+...+..+...+....+..............+.....................+....+..+....+...+...........+.+......+...+....................+.+..............+.......+.....+.......+..+.+...+...........+....+.....+.........+.............+..+.......+........+.......+......+..............+....+...........+...............+...+.+......+...+...+...+.....+......+..........+.....+...+.+.....+.+...+........+...+....+..+.+............+..+.+..+...+.............+.....+.+...+...+........+....+..+................+..+......+......+...............+......+.............+.........+......++++++
+....+...+...+....+++++++++++++++++++++++++++++++++++++++*.........+.+..+++++++++++++++++++++++++++++++++++++++*...+......+........+...+....+.....+.+...+.................+.......+......+.....................+.....+...+...............+...+..........+..+............+.+...+.....+....+..+....+.........+..+....+......+......+..+.......+......+...+......+.....+..........+...+...............+..+.+...+..+.........+...+..........+.....+.......+........+......+....+...+...............+..+......+...............+............+.........+...+.+......+...+..+......+...+..........+.....+....+..+....+......+......+.....+...+.......+.....+.........+....+..+.......+...............+........+...+.......+..+.............+...+.....+.........+...+.........+..........+...+..+.............+......+.........+........+............+......+.......+...+.....+.+.....+.+.....+.......+...+............+..+....+.....+......+......+............+.+..+..........+.........+........++++++
+-----
+Certificate request self-signature ok
+subject=CN=chat.lab.local
+[cert] ÄÃ£ táº¡o certs\ca.crt, certs\chat.crt, certs\chat.key, certs\chat.p12
+[token] Đã cấp token sub=an, aud=chat, iss=auth.lab.local, hết hạn sau 3600 s -> certs/an.jwt
+[token] Đã cấp token sub=binh, aud=email, iss=auth.lab.local, hết hạn sau 3600 s -> certs/binh_email.jwt
+
+===== server =====
+> dotnet run --no-build -c Release -- server 127.0.0.1 9843
+[server] Đang lắng nghe (TLS ≥ 1.2) tại 127.0.0.1:9843
+[server] Bắt tay TLS thành công 127.0.0.1:59220: TLSv1.3, TLS_AES_256_GCM_SHA384
+[server] an đăng nhập từ 127.0.0.1:59220 (tên lấy từ claim sub)
+[server] an rời phiên
+[server] Bắt tay TLS thành công 127.0.0.1:59222: TLSv1.3, TLS_AES_256_GCM_SHA384
+[server] Kết nối 127.0.0.1:59222 đóng trước khi đăng nhập: The certificate chain was issued by an authority that is not trusted.
+[server] Bắt tay TLS thành công 127.0.0.1:59225: TLSv1.3, TLS_AES_256_GCM_SHA384
+[server] Từ chối 127.0.0.1:59225: 401 Token không hợp lệ: aud không đúng
+
+===== tin_cay =====
+> dotnet run --no-build -c Release -- client localhost 9843 certs/an.jwt certs/ca.crt
+[client] Tin cậy: CA trong certs/ca.crt; token: certs/an.jwt
+[client] Đã kết nối TLS tới localhost:9843: TLSv1.3, TLS_AES_256_GCM_SHA384
+[client] Chứng chỉ server CN=chat.lab.local hợp lệ, tên 'localhost' khớp SAN
+[client] Server chấp nhận: tên = an (từ token), trực tuyến: an
+[client] * an đã vào phòng chung
+[client] [chung] an: Xin chào qua TLS
+[client] [chung] an: Tin nhắn đã được mã hóa
+[client] Đã ngắt kết nối
+
+===== khong_tin_cay =====
+> dotnet run --no-build -c Release -- client localhost 9843 certs/an.jwt
+[client] Tin cậy: kho chứng chỉ của hệ điều hành; token: certs/an.jwt
+[client] Bắt tay TLS thất bại: The remote certificate is invalid because of errors in the certificate chain: PartialChain
+
+===== sai_token =====
+> dotnet run --no-build -c Release -- client localhost 9843 certs/binh_email.jwt certs/ca.crt
+[client] Tin cậy: CA trong certs/ca.crt; token: certs/binh_email.jwt
+[client] Đã kết nối TLS tới localhost:9843: TLSv1.3, TLS_AES_256_GCM_SHA384
+[client] Chứng chỉ server CN=chat.lab.local hợp lệ, tên 'localhost' khớp SAN
+[client] Lỗi từ server: 401 Token không hợp lệ: aud không đúng
+[client] Server đã đóng kết nối
+

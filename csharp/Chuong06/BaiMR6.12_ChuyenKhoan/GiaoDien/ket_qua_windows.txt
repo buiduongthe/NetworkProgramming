@@ -1,0 +1,42 @@
+===== gui =====
+> bin\Release\net10.0-windows\BaiMR6.12_GiaoDien.exe demo 127.0.0.1 42762 ..\ket_qua_gui.png
+[demo] 1. Máy chủ: START SERVER (khoa, khóa theo thứ tự mã)
+[demo]    An, Bình, Chi: Kết nối (TK01, TK02, TK03)
+[demo] 2. An→Bình 500.000 đ và Bình→An 300.000 đ CÙNG LÚC
+[demo]    An: Chuyển thành công 500.000 đ tới TK02 – Bình
+[demo]    Bình: Chuyển thành công 300.000 đ tới TK01 – An
+[demo] 3. Bật 'khóa ngây thơ', Đặt lại; trễ 0–50 ms
+[demo]    An→Bình và Bình→An cùng lúc…
+[demo]    An: Chuyển thành công 500.000 đ tới TK02 – Bình
+[demo]    Bình: Khóa chết: chờ TK01 quá 2 s, đã hủy giao dịch
+[demo]    máy chủ: khóa chết phát hiện 1
+[demo]    Đã ghi ket_qua_gui_khoa_chet.png (133 KB)
+[demo] 4. Tắt 'khóa ngây thơ', Đặt lại; lặp lại chuyển chéo
+[demo]    An: Chuyển thành công 500.000 đ tới TK02 – Bình
+[demo]    Bình: Chuyển thành công 300.000 đ tới TK01 – An
+[demo] 5. Máy chủ: khong_khoa, trễ 0–20 ms; Đặt lại
+[demo]    An→Bình, Bình→Chi, Chi→An 1.000.000 đ cùng lúc
+[demo]    An: Chuyển thành công 1.000.000 đ tới TK02 – Bình
+[demo]    Bình: Chuyển thành công 1.000.000 đ tới TK03 – Chi
+[demo]    Chi: Chuyển thành công 1.000.000 đ tới TK01 – An
+[demo]    máy chủ: 3 yc, tc 3, từ chối 0, sai phạm 4
+[demo]    Tổng tiền 49.000.000 đ, LỆCH -1.000.000 đ
+[demo]    Đã ghi ket_qua_gui_tranh_chap.png (114 KB)
+[demo] 6. Máy chủ: khoa, trễ 0–2 ms; So sánh 4 chế độ
+[demo]   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+[demo]   khong_khoa         2402     1014        0 11387    97.3
+[demo]   khoa               2260        0        0   995  1661.7
+[demo]   lac_quan           1368        0     6137  8201   118.3
+[demo]   hang_doi           2233        0        0   574   926.6
+[demo]    Sai phạm: khong_khoa
+[demo]    Không sai phạm: khoa, lac_quan, hang_doi
+[demo] 7. Đặt lại; An chuyển 200.000 đ cho Chi
+[demo]    An: Chuyển thành công 200.000 đ tới TK03 – Chi
+[demo]    Chi: + Nhận 200.000 đ từ TK01 – An lúc 10:16:25
+[demo]    máy chủ: Tổng tiền 50.000.000 đ (khớp), 10 tài khoản
+[demo] 8. Chụp 4 cửa sổ
+[demo]    Đã ghi ket_qua_gui.png (181 KB)
+[demo] 9. Máy chủ: STOP SERVER
+[demo]    Bình: Mất kết nối máy chủ
+[demo] Kết thúc
+

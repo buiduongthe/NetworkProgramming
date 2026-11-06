@@ -1,8 +1,8 @@
 ===== server =====
 > java -cp out EchoServer 127.0.0.1 9393
 [server] Đang lắng nghe tại 127.0.0.1:9393
-[server] Client kết nối: 127.0.0.1:51220
-[server] Client 127.0.0.1:51220 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:62247
+[server] Client 127.0.0.1:62247 đã đóng kết nối
 
 ===== client =====
 > java -cp out EchoClient 127.0.0.1 9393

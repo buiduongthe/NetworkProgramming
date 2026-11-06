@@ -1,0 +1,36 @@
+===== server =====
+> ..\..\target\release\bai5_3_giao_dien_bat_dong_bo.exe server 127.0.0.1 21530 1500
+[server] Đang lắng nghe tại 127.0.0.1:21530, độ trễ giả lập 1500 ms
+[server] Client kết nối: 127.0.0.1:62421
+[server] Nhận từ 127.0.0.1:62421: {"op":"lookup","term":"TCP"}
+[server] Client 127.0.0.1:62421 đã đóng kết nối
+[server] Dừng server
+
+===== gui =====
+> ..\..\target\release\bai5_3_giao_dien_bat_dong_bo.exe demo 127.0.0.1 21530 21531
+[gui] Kết nối cổng 21531: Lỗi: REFUSED
+[gui] Kết nối cổng 21530: Đã kết nối
+[gui] Đang chờ phản hồi: trạng thái 'Đang tra cứu...', nút Tra cứu disabled
+[gui] Ảnh cửa sổ khi đang chờ:
+┌─ Tra cứu thuật ngữ – Bài 5.3 ──────────────────────────────────┐
+│ Máy chủ: 127.0.0.1        Cổng: 21530   [░Kết nối░]            │
+│ Thuật ngữ: TCP                              [░Tra cứu░]        │
+│ ┌────────────────────────────────────────────────────────────┐ │
+│ │                                                            │ │
+│ │                                                            │ │
+│ └────────────────────────────────────────────────────────────┘ │
+│ Đang tra cứu...                       Đồng hồ giao diện: 3.3 s │
+└────────────────────────────────────────────────────────────────┘
+[gui] Kết quả: Giao thức truyền tin cậy, hướng kết nối – trạng thái 'Xong'
+[gui] Trong lúc chờ, đồng hồ giao diện được vẽ lại 16 lần (không đứng hình)
+[gui] Ảnh cửa sổ khi có kết quả:
+┌─ Tra cứu thuật ngữ – Bài 5.3 ──────────────────────────────────┐
+│ Máy chủ: 127.0.0.1        Cổng: 21530   [░Kết nối░]            │
+│ Thuật ngữ: TCP                              [ Tra cứu ]        │
+│ ┌────────────────────────────────────────────────────────────┐ │
+│ │Giao thức truyền tin cậy, hướng kết nối                     │ │
+│ │                                                            │ │
+│ └────────────────────────────────────────────────────────────┘ │
+│ Xong                                  Đồng hồ giao diện: 4.3 s │
+└────────────────────────────────────────────────────────────────┘
+

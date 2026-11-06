@@ -1,0 +1,44 @@
+===== mock =====
+> python mock_llm_cong_cu.py 127.0.0.1 41815
+[mock] LLM giả lập (gọi công cụ) tại http://127.0.0.1:41815/v1
+[mock] #1 2 tin nhắn, 2 công cụ -> gọi phan_giai_ten
+[mock] #2 4 tin nhắn, 2 công cụ -> gọi kiem_tra_cong, kiem_tra_cong
+[mock] #3 7 tin nhắn -> trả lời (240 ký tự)
+[mock] #4 2 tin nhắn, 2 công cụ -> gọi kiem_tra_cong, khoi_dong_lai_dich_vu
+[mock] #5 5 tin nhắn -> trả lời (248 ký tự)
+[mock] Dừng server
+
+===== dich_vu =====
+> python -m http.server 41816 --bind 127.0.0.1
+Serving HTTP on 127.0.0.1 port 41816 (http://127.0.0.1:41816/) ...
+
+Keyboard interrupt received, exiting.
+
+===== hoi1 =====
+> out\app.exe "Vì sao không mở được dịch vụ web trên localhost cổng 41816 và 41817?"
+[tac-tu] Hỏi: Vì sao không mở được dịch vụ web trên localhost cổng 41816 và 41817?
+[tac-tu] Vòng 1: LLM yêu cầu 1 công cụ
+  CHẠY  phan_giai_ten{"ten":"localhost"} -> {"dia_chi":["127.0.0.1","::1"]}
+[tac-tu] Vòng 2: LLM yêu cầu 2 công cụ
+  CHẶN  kiem_tra_cong{"host":"localhost","cong":41816}: ::1 nằm ngoài mạng phòng thí nghiệm
+  CHẶN  kiem_tra_cong{"host":"localhost","cong":41817}: ::1 nằm ngoài mạng phòng thí nghiệm
+[tac-tu] Vòng 3: LLM trả lời
+  Tôi không thực hiện được: kiem_tra_cong bị từ chối (::1
+  nằm ngoài mạng phòng thí nghiệm); kiem_tra_cong bị từ chối
+  (::1 nằm ngoài mạng phòng thí nghiệm). Việc kiểm tra máy
+  ngoài mạng phòng thí nghiệm hoặc thay đổi dịch vụ cần quản
+  trị viên.
+
+===== hoi2 =====
+> out\app.exe "Kiểm tra cổng 53 của 8.8.8.8 rồi khởi động lại dịch vụ DNS giúp tôi"
+[tac-tu] Hỏi: Kiểm tra cổng 53 của 8.8.8.8 rồi khởi động lại dịch vụ DNS giúp tôi
+[tac-tu] Vòng 1: LLM yêu cầu 2 công cụ
+  CHẶN  kiem_tra_cong{"host":"8.8.8.8","cong":53}: 8.8.8.8 nằm ngoài mạng phòng thí nghiệm
+  CHẶN  khoi_dong_lai_dich_vu{"host":"8.8.8.8","dich_vu":"dns"}: công cụ không có trong danh mục
+[tac-tu] Vòng 2: LLM trả lời
+  Tôi không thực hiện được: kiem_tra_cong bị từ chối
+  (8.8.8.8 nằm ngoài mạng phòng thí nghiệm);
+  khoi_dong_lai_dich_vu bị từ chối (công cụ không có trong
+  danh mục). Việc kiểm tra máy ngoài mạng phòng thí nghiệm
+  hoặc thay đổi dịch vụ cần quản trị viên.
+

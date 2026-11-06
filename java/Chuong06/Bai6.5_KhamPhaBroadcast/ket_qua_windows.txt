@@ -1,0 +1,18 @@
+===== r1 =====
+> java -cp out Responder 9200 Phòng-Lab-A 9639
+[responder] Phòng-Lab-A, cổng dịch vụ 9200, chờ discover tại cổng 9639
+[responder] discover id=282612 từ 172.29.128.1:50267, trả lời sau 20 ms
+
+===== r2 =====
+> java -cp out Responder 9201 Phòng-Lab-B 9639
+[responder] Phòng-Lab-B, cổng dịch vụ 9201, chờ discover tại cổng 9639
+[responder] discover id=282612 từ 172.29.128.1:50267, trả lời sau 112 ms
+
+===== client =====
+> java -cp out Discover 1000 9639 255.255.255.255
+[client] Phát discover id=282612 tới 255.255.255.255:9639
+[client] Thu thập phản hồi trong 1000 ms
+[client] Tìm thấy 2 server:
+[client]   Phòng-Lab-A tại 172.29.128.1:9200
+[client]   Phòng-Lab-B tại 172.29.128.1:9201
+

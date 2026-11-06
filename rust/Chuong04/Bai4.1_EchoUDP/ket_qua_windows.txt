@@ -1,0 +1,27 @@
+===== server =====
+> ..\..\target\release\bai4_1_echo_udp.exe server 127.0.0.1 21410
+[server] Đang lắng nghe UDP tại 127.0.0.1:21410
+[server] Nhận 9 byte từ 127.0.0.1:64509
+[server] Nhận 23 byte từ 127.0.0.1:64509
+[server] Nhận 16 byte từ 127.0.0.1:64510
+
+===== client1 =====
+> ..\..\target\release\bai4_1_echo_udp.exe client 127.0.0.1 21410
+[client] Gửi tới 127.0.0.1:21410 qua UDP. Nhập dòng cần gửi (Ctrl+Z/Ctrl+D để kết thúc).
+[client] Gửi: 'Xin chào' -> Nhận: 'Xin chào'
+[client] Gửi: 'Lập trình mạng UDP' -> Nhận: 'Lập trình mạng UDP'
+[client] Đã đóng socket
+
+===== client2 =====
+> ..\..\target\release\bai4_1_echo_udp.exe client 127.0.0.1 21410
+[client] Gửi tới 127.0.0.1:21410 qua UDP. Nhập dòng cần gửi (Ctrl+Z/Ctrl+D để kết thúc).
+[client] Gửi: 'Client thứ hai' -> Nhận: 'Client thứ hai'
+[client] Đã đóng socket
+
+===== client3 =====
+> ..\..\target\release\bai4_1_echo_udp.exe client 127.0.0.1 21419
+[client] Gửi tới 127.0.0.1:21419 qua UDP. Nhập dòng cần gửi (Ctrl+Z/Ctrl+D để kết thúc).
+[client] Gửi: 'Có ai không?' -> Không có phản hồi: datagram có thể đã mất
+[client] Gửi: 'Gửi lần nữa' -> Không có phản hồi: datagram có thể đã mất
+[client] Đã đóng socket
+

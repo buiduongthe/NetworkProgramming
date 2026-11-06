@@ -1,0 +1,34 @@
+===== sv_vuln =====
+> ..\..\target\release\mr8_3_chong_slowloris.exe server vulnerable 127.0.0.1 44830
+[server:vulnerable] Nghe tại 127.0.0.1:44830, nhóm 40 worker. Ctrl+C để dừng.
+[server:vulnerable] KHÔNG có hạn đọc tiêu đề: mỗi kết nối chậm giữ một worker.
+[server:vulnerable] Dừng. Tổng kết: chấp nhận 40, phục vụ xong 0, đóng vì chậm 0, từ chối 503 0.
+
+===== sv_prot =====
+> ..\..\target\release\mr8_3_chong_slowloris.exe server protected 127.0.0.1 44831
+[server:protected] Nghe tại 127.0.0.1:44831, nhóm 40 worker. Ctrl+C để dừng.
+[server:protected] Phòng thủ: hạn đọc tiêu đề 3.0s, hạn rỗi 2.0s, tiêu đề <= 8192B, <= 10 kết nối/IP, trần 64 kết nối.
+[server:protected] Dừng. Tổng kết: chấp nhận 151, phục vụ xong 1, đóng vì chậm 10, từ chối 503 140.
+
+===== slow_vuln =====
+> ..\..\target\release\mr8_3_chong_slowloris.exe slow 127.0.0.1 44830 150
+[slow] (CHỈ THÍ NGHIỆM) mở 150 kết nối nhỏ giọt tới 127.0.0.1:44830 từ nguồn 127.0.0.2 trong ~9s
+[slow] đã mở được 150 kết nối; bắt đầu nhỏ giọt mỗi ~7s một byte
+[slow] còn 0 kết nối đang giữ
+[slow] đóng toàn bộ kết nối thí nghiệm
+
+===== slow_prot =====
+> ..\..\target\release\mr8_3_chong_slowloris.exe slow 127.0.0.1 44831 150
+[slow] (CHỈ THÍ NGHIỆM) mở 150 kết nối nhỏ giọt tới 127.0.0.1:44831 từ nguồn 127.0.0.2 trong ~9s
+[slow] đã mở được 150 kết nối; bắt đầu nhỏ giọt mỗi ~7s một byte
+[slow] còn 10 kết nối đang giữ
+[slow] đóng toàn bộ kết nối thí nghiệm
+
+===== probe_vuln =====
+> ..\..\target\release\mr8_3_chong_slowloris.exe probe 127.0.0.1 44830
+[probe] THẤT BẠI: hết thời gian chờ sau 4009 ms – server không phục vụ kịp (bị tấn công làm nghẽn).
+
+===== probe_prot =====
+> ..\..\target\release\mr8_3_chong_slowloris.exe probe 127.0.0.1 44831
+[probe] THÀNH CÔNG sau 4 ms: HTTP/1.1 200 OK
+

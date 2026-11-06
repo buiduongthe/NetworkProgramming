@@ -1,0 +1,27 @@
+===== khong_tham_so =====
+> dotnet run --no-build -c Release
+Cách dùng: dotnet run -- <tên miền | địa chỉ IP> ...
+
+===== tra_cuu =====
+> dotnet run --no-build -c Release -- localhost 127.0.0.1 ::1 example.com 8.8.8.8 khong-ton-tai.invalid
+[dns] Tra cứu xuôi: localhost
+  INET6  ::1
+  INET  127.0.0.1
+  Thời gian: 23.02 ms
+[dns] Tra cứu ngược: 127.0.0.1
+  127.0.0.1 → BuiDuongThe
+  Thời gian: 16.62 ms
+[dns] Tra cứu ngược: ::1
+  ::1 → BuiDuongThe
+  Thời gian: 3.00 ms
+[dns] Tra cứu xuôi: example.com
+  INET  172.66.147.243
+  INET  104.20.23.154
+  Thời gian: 2.54 ms
+[dns] Tra cứu ngược: 8.8.8.8
+  8.8.8.8 → dns.google
+  Thời gian: 4587.09 ms
+[dns] Tra cứu xuôi: khong-ton-tai.invalid
+  Không phân giải được khong-ton-tai.invalid (mã HostNotFound: No such host is known.)
+  Thời gian: 7.08 ms
+

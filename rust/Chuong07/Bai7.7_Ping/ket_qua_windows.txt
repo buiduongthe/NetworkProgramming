@@ -1,0 +1,10 @@
+===== ping =====
+> cargo run -q --release -- 127.0.0.1 4
+[ping] PING 127.0.0.1: 4 gói Echo Request, dữ liệu 32 byte, chờ tối đa 1000 ms
+[ping] Tiêu đề ICMP gửi đi: 08 00 D7 D4 7C 9C 00 01 (kiểu, mã, checksum, id, seq)
+[ping] Trả lời từ 127.0.0.1: seq=1 ttl=128 thời gian=0.266 ms
+[ping] Trả lời từ 127.0.0.1: seq=2 ttl=128 thời gian=0.500 ms
+[ping] Trả lời từ 127.0.0.1: seq=3 ttl=128 thời gian=0.589 ms
+[ping] Trả lời từ 127.0.0.1: seq=4 ttl=128 thời gian=0.342 ms
+[ping] Đã gửi 4, nhận 4, mất 0%; RTT trung bình 0.424 ms
+

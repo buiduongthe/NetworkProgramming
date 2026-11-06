@@ -1,0 +1,14 @@
+===== gui =====
+> bin\Release\net10.0-windows\BaiMR5.6_GiaoDien.exe demo ..\ket_qua_gui.png
+[gui] Bấm 'Đa luồng – đồng bộ', dừng ở 3.8 s: U đã chen ngang Luồng T1, hai nửa T1 chạy trên Luồng T1 và T1b
+[gui] Bấm 'Đa luồng – bất đồng bộ', chạy hết: T2 chạy tiếp trên thợ khác sau I/O
+[gui] Hoạt hình chạy xong sau 1.4 s thật, vẽ lại 47 lần (giao diện không đứng)
+[gui] Bấm 'So sánh 4 chế độ', tua tới cuối
+[gui]   đơn, đồng bộ   hoàn tất 9.5 s, luồng 1, U chờ 8.7 s, chen ngang 0
+[gui]   đa, đồng bộ    hoàn tất 5.8 s, luồng 5, U chờ 0.0 s, chen ngang 1
+[gui]   đơn, bất đ.bộ  hoàn tất 6.8 s, luồng 1, U chờ 1.4 s, chen ngang 0
+[gui]   đa, bất đ.bộ   hoàn tất 5.5 s, luồng 2, U chờ 0.4 s, chen ngang 0
+[gui] Bỏ việc khẩn, bấm 'Đa luồng – đồng bộ', dừng ở 3.3 s rồi bấm 'Chen ngang U ngay'
+[gui]   U đến 3.3 s, chờ 0.0 s, chen ngang 1 lần, hoàn tất 5.7 s
+[gui] Đã chụp cửa sổ: ket_qua_gui.png
+

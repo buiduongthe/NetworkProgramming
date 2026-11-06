@@ -1,0 +1,27 @@
+===== server =====
+> python udp_echo_server.py 127.0.0.1 9411
+[server] Đang lắng nghe UDP tại 127.0.0.1:9411
+[server] Nhận 9 byte từ 127.0.0.1:49765
+[server] Nhận 23 byte từ 127.0.0.1:49765
+[server] Nhận 16 byte từ 127.0.0.1:49766
+
+===== client1 =====
+> python udp_echo_client.py 127.0.0.1 9411
+[client] Gửi tới 127.0.0.1:9411 qua UDP. Nhập dòng cần gửi (Ctrl+Z/Ctrl+D để kết thúc).
+[client] Gửi: 'Xin chào' -> Nhận: 'Xin chào'
+[client] Gửi: 'Lập trình mạng UDP' -> Nhận: 'Lập trình mạng UDP'
+[client] Đã đóng socket
+
+===== client2 =====
+> python udp_echo_client.py 127.0.0.1 9411
+[client] Gửi tới 127.0.0.1:9411 qua UDP. Nhập dòng cần gửi (Ctrl+Z/Ctrl+D để kết thúc).
+[client] Gửi: 'Client thứ hai' -> Nhận: 'Client thứ hai'
+[client] Đã đóng socket
+
+===== client3 =====
+> python udp_echo_client.py 127.0.0.1 9419
+[client] Gửi tới 127.0.0.1:9419 qua UDP. Nhập dòng cần gửi (Ctrl+Z/Ctrl+D để kết thúc).
+[client] Gửi: 'Có ai không?' -> Không có phản hồi: datagram có thể đã mất
+[client] Gửi: 'Gửi lần nữa' -> Không có phản hồi: datagram có thể đã mất
+[client] Đã đóng socket
+

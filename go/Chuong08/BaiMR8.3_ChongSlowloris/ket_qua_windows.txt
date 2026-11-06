@@ -1,0 +1,30 @@
+===== sv_vuln =====
+> out\app.exe server vulnerable 127.0.0.1 41835
+[server:vulnerable] Nghe tại 127.0.0.1:41835, nhóm 40 worker. Ctrl+C để dừng.
+[server:vulnerable] KHÔNG có hạn đọc tiêu đề: mỗi kết nối chậm giữ một worker.
+[server:vulnerable] Dừng. Tổng kết: chấp nhận 40, phục vụ xong 0, đóng vì chậm 0, từ chối 503 0.
+
+===== sv_prot =====
+> out\app.exe server protected 127.0.0.1 41836
+[server:protected] Nghe tại 127.0.0.1:41836, nhóm 40 worker. Ctrl+C để dừng.
+[server:protected] Phòng thủ: hạn đọc tiêu đề 3.0s, hạn rỗi 2.0s, tiêu đề <= 8192B, <= 10 kết nối/IP, trần 64 kết nối.
+[server:protected] Dừng. Tổng kết: chấp nhận 151, phục vụ xong 1, đóng vì chậm 10, từ chối 503 140.
+
+===== slow_vuln =====
+> out\app.exe slow 127.0.0.1 41835 150
+[slow] (CHỈ THÍ NGHIỆM) mở 150 kết nối nhỏ giọt tới 127.0.0.1:41835 từ nguồn 127.0.0.2 trong ~9s
+[slow] đã mở được 150 kết nối; bắt đầu nhỏ giọt mỗi ~7s một byte
+
+===== slow_prot =====
+> out\app.exe slow 127.0.0.1 41836 150
+[slow] (CHỈ THÍ NGHIỆM) mở 150 kết nối nhỏ giọt tới 127.0.0.1:41836 từ nguồn 127.0.0.2 trong ~9s
+[slow] đã mở được 150 kết nối; bắt đầu nhỏ giọt mỗi ~7s một byte
+
+===== probe_vuln =====
+> out\app.exe probe 127.0.0.1 41835
+[probe] THẤT BẠI: hết thời gian chờ sau 4002 ms – server không phục vụ kịp (bị tấn công làm nghẽn).
+
+===== probe_prot =====
+> out\app.exe probe 127.0.0.1 41836
+[probe] THÀNH CÔNG sau 2 ms: HTTP/1.1 200 OK
+

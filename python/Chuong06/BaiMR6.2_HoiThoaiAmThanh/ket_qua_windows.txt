@@ -1,0 +1,242 @@
+===== server =====
+> python server_am_thanh.py 127.0.0.1 41620 41621
+[server] Điều khiển: TCP 127.0.0.1:41620; âm thanh RTP: UDP 127.0.0.1:41621
+[server] PCM 16 bit mono 16 kHz; khung 20 ms = 320 mẫu = 640 B
+[server] #1 B vào phòng từ 127.0.0.1:63945
+[server]   => B vào phòng
+[server] #1 B đăng ký UDP 127.0.0.1:63515
+[server] #2 C vào phòng từ 127.0.0.1:63946
+[server]   => C vào phòng
+[server] #2 C đăng ký UDP 127.0.0.1:63516
+[server] #3 A vào phòng từ 127.0.0.1:63948
+[server]   => A vào phòng
+[server] #3 A đăng ký UDP 127.0.0.1:63517
+[server] t=2.5s > tat_mic tat_ca
+[server]   => server tắt mic tất cả
+[server] t=3.5s > bat_mic tat_ca
+[server]   => server bật mic tất cả
+[server] t=4.5s > tat_mic B
+[server]   => server tắt mic B
+[server] t=4.5s > do_loi C 2
+[server]   => server đặt độ lợi C = 2.00
+[server] B xin bật mic -> từ chối (server đang khóa)
+[server] t=5.5s > bat_mic B
+[server]   => server bật mic B
+[server] t=5.5s > am_luong_chung 0.5
+[server]   => server đặt âm lượng chung 0.50
+[server] A tự đặt âm lượng nghe 0.50
+[server]   => C tự tắt mic
+[server] t=8.0s > bat_mic tat_ca
+[server]   => server bật mic tất cả (C vẫn tự tắt)
+[server] t=8.6s > trang_thai
+[server] Trạng thái: 3 client, âm lượng chung 0.50
+[server]  #  tên mic          lợi   mức vào            mất  jit.
+[server]  1  B   mở           1.00 -15.1 |#######---|   0  0.7ms
+[server]  2  C   tắt (tự tắt) 2.00   --- |----------|   0  0.6ms
+[server]  3  A   mở           1.00 -15.1 |#######---|  16  0.9ms
+[server] #3 A rời phòng
+[server]   => A rời phòng
+[server] #1 B rời phòng
+[server]   => B rời phòng
+[server] #2 C rời phòng
+[server]   => C rời phòng
+
+===== B =====
+> python khach_am_thanh.py B 127.0.0.1 41620 --tan-so 620 --thoi-gian 9.5
+[khach B] Vào phòng, mã 1; nguồn: sin 620 Hz, biên độ 0.25
+[khach B] Gửi 320 mẫu/20 ms -> 50 gói/s, 256 kbit/s PCM
+[khach B] Mic: mở
+[khach B] Sự kiện: B vào phòng
+[khach B] Sự kiện: C vào phòng
+[khach B] Sự kiện: A vào phòng
+[khach B]  1.0s nghe |###########-----| -17.9 dBFS mic mở
+[khach B] Mic: tắt (server)
+[khach B] Sự kiện: server tắt mic tất cả
+[khach B]  2.0s nghe |############----| -15.0 dBFS mic tắt
+[khach B] Mic: mở
+[khach B] Sự kiện: server bật mic tất cả
+[khach B]  3.0s nghe |############----| -15.8 dBFS mic mở
+[khach B] Mic: tắt (server)
+[khach B] Sự kiện: server tắt mic B
+[khach B] Sự kiện: server đặt độ lợi C = 2.00
+[khach B]  4.0s nghe |#############---|  -9.9 dBFS mic tắt
+[khach B] > bat_mic (xin server)
+[khach B] Bị từ chối: server đang khóa mic của bạn
+[khach B] Mic: mở
+[khach B] Sự kiện: server bật mic B
+[khach B] Sự kiện: server đặt âm lượng chung 0.50
+[khach B]  5.0s nghe |#############---| -10.1 dBFS mic mở
+[khach B]  6.0s nghe |############----| -14.1 dBFS mic mở
+[khach B] Sự kiện: C tự tắt mic
+[khach B] Mic: mở
+[khach B] Sự kiện: server bật mic tất cả (C vẫn tự tắt)
+[khach B]  7.0s nghe |############----| -14.2 dBFS mic mở
+[khach B]  8.0s nghe |##########------| -21.1 dBFS mic mở
+[khach B]  9.0s nghe |##########------| -21.4 dBFS mic mở
+[khach B] Sự kiện: A rời phòng
+[khach B] Kết thúc sau 9.5 s
+[khach B] Gửi 375 gói (215 kbit/s gồm header), giả lập mất 0
+[khach B] Nhận 475 gói, mất 0, trễ 0, jitter 1.14 ms
+[khach B] Phát: thiếu 0 khung, cạn 0 lần, đệm 3 khung = 60 ms
+
+===== C =====
+> python khach_am_thanh.py C 127.0.0.1 41620 --tan-so 880 --thoi-gian 9.5
+[khach C] Vào phòng, mã 2; nguồn: sin 880 Hz, biên độ 0.25
+[khach C] Gửi 320 mẫu/20 ms -> 50 gói/s, 256 kbit/s PCM
+[khach C] Mic: mở
+[khach C] Sự kiện: C vào phòng
+[khach C] Sự kiện: A vào phòng
+[khach C]  1.0s nghe |############----| -13.7 dBFS mic mở
+[khach C] Mic: tắt (server)
+[khach C] Sự kiện: server tắt mic tất cả
+[khach C]  2.0s nghe |##########------| -22.4 dBFS mic tắt
+[khach C] Mic: mở
+[khach C] Sự kiện: server bật mic tất cả
+[khach C]  3.0s nghe |#############---| -12.8 dBFS mic mở
+[khach C] Sự kiện: server tắt mic B
+[khach C] Sự kiện: server đặt độ lợi C = 2.00
+[khach C]  4.0s nghe |############----| -15.1 dBFS mic mở
+[khach C] Sự kiện: server bật mic B
+[khach C] Sự kiện: server đặt âm lượng chung 0.50
+[khach C]  5.0s nghe |###########-----| -18.0 dBFS mic mở
+[khach C]  6.0s nghe |###########-----| -18.2 dBFS mic mở
+[khach C] > tat_mic
+[khach C] Mic: tắt (tự tắt)
+[khach C] Sự kiện: C tự tắt mic
+[khach C] Mic: tắt (tự tắt)
+[khach C] Sự kiện: server bật mic tất cả (C vẫn tự tắt)
+[khach C]  7.0s nghe |###########-----| -18.2 dBFS mic tắt
+[khach C]  8.0s nghe |###########-----| -18.2 dBFS mic tắt
+[khach C] Sự kiện: A rời phòng
+[khach C]  9.0s nghe |###########-----| -18.5 dBFS mic tắt
+[khach C] Sự kiện: B rời phòng
+[khach C] Kết thúc sau 9.5 s
+[khach C] Gửi 275 gói (157 kbit/s gồm header), giả lập mất 0
+[khach C] Nhận 475 gói, mất 0, trễ 0, jitter 0.88 ms
+[khach C] Phát: thiếu 0 khung, cạn 0 lần, đệm 3 khung = 60 ms
+
+===== A =====
+> python khach_am_thanh.py A 127.0.0.1 41620 --tan-so 440 --thoi-gian 8.3 --mat-goi 0.05 --ghi out/ghi_A.wav
+[khach A] Vào phòng, mã 3; nguồn: sin 440 Hz, biên độ 0.25
+[khach A] Gửi 320 mẫu/20 ms -> 50 gói/s, 256 kbit/s PCM
+[khach A] Mic: mở
+[khach A] Sự kiện: A vào phòng
+[khach A] Mic: tắt (server)
+[khach A] Sự kiện: server tắt mic tất cả
+[khach A]  1.0s nghe |############----| -14.3 dBFS mic tắt
+[khach A] Mic: mở
+[khach A] Sự kiện: server bật mic tất cả
+[khach A]  2.0s nghe |###########-----| -17.6 dBFS mic mở
+[khach A] Sự kiện: server tắt mic B
+[khach A] Sự kiện: server đặt độ lợi C = 2.00
+[khach A]  3.0s nghe |#############---| -10.9 dBFS mic mở
+[khach A] Sự kiện: server bật mic B
+[khach A] Sự kiện: server đặt âm lượng chung 0.50
+[khach A]  4.0s nghe |#############---| -10.2 dBFS mic mở
+[khach A]  5.0s nghe |############----| -14.1 dBFS mic mở
+[khach A] > am_luong 0.50 (chỉ áp dụng tại client)
+[khach A]  6.0s nghe |###########-----| -17.3 dBFS mic mở
+[khach A] Sự kiện: C tự tắt mic
+[khach A] Mic: mở
+[khach A] Sự kiện: server bật mic tất cả (C vẫn tự tắt)
+[khach A]  7.0s nghe |#########-------| -25.4 dBFS mic mở
+[khach A]  8.0s nghe |#########-------| -27.1 dBFS mic mở
+[khach A] Kết thúc sau 8.3 s
+[khach A] Gửi 345 gói (226 kbit/s gồm header), giả lập mất 20
+[khach A] Nhận 415 gói, mất 0, trễ 0, jitter 0.98 ms
+[khach A] Phát: thiếu 0 khung, cạn 0 lần, đệm 3 khung = 60 ms
+[khach A] Đã ghi out/ghi_A.wav (8.30 s), 10 mốc sự kiện
+
+===== phan_tich =====
+> python phan_tich_wav.py out/ghi_A.wav 440:A 620:B 880:C
+[phan_tich] out/ghi_A.wav: 8.30 s, 16000 Hz, 16 bit, mono
+[phan_tich] Goertzel, cửa sổ Hann; RMS dBFS; --- = vắng (<-50)
+Đoạn  Từ-đến (s)  A 440  B 620  C 880  Thay đổi
+  1   0.15-0.62     ---  -15.1  -15.1  
+  2   0.77-1.62     ---    ---    ---  B tắt, C tắt
+  3   1.77-2.62     ---  -15.1  -15.1  B bật, C bật
+  4   2.77-3.62     ---    ---   -9.0  B tắt, C +6.0dB
+  5   3.77-5.30     ---  -21.1  -15.1  B bật, C -6.0dB
+  6   5.45-6.06     ---  -27.1  -21.1  B -6.0dB, C -6.0dB
+  7   6.21-8.30     ---  -27.1    ---  C tắt
+Sự kiện mở đầu mỗi đoạn:
+  1  0.00s bắt đầu ghi; A vào phòng
+  2  0.62s server tắt mic tất cả
+  3  1.62s server bật mic tất cả
+  4  2.62s server tắt mic B; server đặt độ lợi C = 2.00
+  5  3.62s server bật mic B; server đặt âm lượng chung 0.50
+  6  5.30s A tự đặt âm lượng nghe 0.50
+  7  6.06s C tự tắt mic; server bật mic tất cả (C vẫn tự tắt)
+Mix-minus: A không nghe tiếng mình (440 Hz): vắng mọi đoạn -> ĐÚNG
+
+===== gui =====
+> python demo_gui.py 127.0.0.1 41625 41626
+[demo] 1. Server: chọn micro 'Giả lập', Mic Volume 50 %, bật 'Phát ra loa server', bấm Start Server
+[server-gui] Server nghe: phát ra loa
+[server-gui] Micro server bật: GIẢ LẬP – sin 330 Hz
+[demo]    -> 'Server đang chạy tại 127.0.0.1:41625 (UDP 41626)'; Mic server: GIẢ LẬP – sin 330 Hz; Loa server: THẬT (thiết bị mặc định)
+[demo] 2. Client A, B, C: bấm Connect
+[server-gui] Server chạy: TCP 127.0.0.1:41625 điều khiển, UDP 127.0.0.1:41626 âm thanh RTP
+[server-gui] #1 C vào phòng từ 127.0.0.1:63951
+[server-gui] => C vào phòng
+[server-gui] #1 C đăng ký UDP 127.0.0.1:63518
+[server-gui] => C tự tắt mic
+[server-gui] #3 B vào phòng từ 127.0.0.1:63950
+[server-gui] => B vào phòng
+[server-gui] #2 A vào phòng từ 127.0.0.1:63949
+[server-gui] => A vào phòng
+[server-gui] => A tự tắt mic
+[server-gui] #2 A đăng ký UDP 127.0.0.1:63519
+[server-gui] => B tự tắt mic
+[server-gui] #3 B đăng ký UDP 127.0.0.1:63520
+[demo]    A: 'Đã kết nối – mã 2; mic tắt (tự tắt)', Server Vol: 100%
+[demo]    B: 'Đã kết nối – mã 3; mic tắt (tự tắt)', Server Vol: 100%
+[demo]    C: 'Đã kết nối – mã 1; mic tắt (tự tắt)', Server Vol: 100%
+[demo] 3. Mỗi client: chọn micro 'Giả lập', bấm Start Audio, Start Mic
+[server-gui] => A tự bật mic
+[server-gui] => B tự bật mic
+[server-gui] => C tự bật mic
+[demo]    Số client: 3; Micro: GIẢ LẬP – sin 440 Hz; Loa: THẬT (thiết bị mặc định)
+[demo] 4. Đo lần 1 (mọi mic mở) – mức từng âm, dBFS:
+[demo]     người nghe   server(330)      A(440)      B(620)      C(880)   tổng
+[demo]     client A           -21.1        vắng       -15.1       -15.1  -11.7
+[demo]     client B           -21.1       -15.1        vắng       -15.1  -11.5
+[demo]     client C           -21.1       -15.1       -15.1        vắng  -11.8
+[demo]     server              vắng       -15.1       -15.1       -15.1  -10.4
+[demo]     server thấy #1 C: mic mở           mức vào  -15.1 dBFS, độ lợi 1.00, nghe 1.00, mất 0
+[demo]     server thấy #2 A: mic mở           mức vào  -15.1 dBFS, độ lợi 1.00, nghe 1.00, mất 0
+[demo]     server thấy #3 B: mic mở           mức vào  -15.1 dBFS, độ lợi 1.00, nghe 1.00, mất 0
+[demo] 5. Server bấm 'Khóa' ở hàng B, kéo độ lợi C lên 200 %; A kéo âm lượng nghe xuống 50 %
+[server-gui] => server tắt mic B
+[server-gui] => server đặt độ lợi C = 2.00
+[server-gui] A tự đặt âm lượng nghe 0.50
+[demo] 6. B bấm Stop Mic rồi Start Mic (xin bật lại khi đang bị khóa)
+[server-gui] => B tự tắt mic
+[server-gui] B xin bật mic -> từ chối (server đang khóa)
+[demo]    A: 'Đã kết nối – mã 2; mic mở', Server Vol: 100%, Mic (server): mở
+[demo]    B: 'Bị từ chối: server đang khóa mic của bạn', Server Vol: 100%, Mic (server): tắt (cả hai)
+[demo]    C: 'Đã kết nối – mã 1; mic mở', Server Vol: 200%, Mic (server): mở
+[demo] 7. Đo lần 2 (B bị khóa, độ lợi C = 2, A nghe 50 %) – mức từng âm, dBFS:
+[demo]     người nghe   server(330)      A(440)      B(620)      C(880)   tổng
+[demo]     client A           -27.1        vắng        vắng       -15.1  -14.8
+[demo]     client B           -21.1       -15.1        vắng        -9.0   -7.8
+[demo]     client C           -21.1       -15.1        vắng        vắng  -13.8
+[demo]     server              vắng       -15.1        vắng        -9.0   -8.1
+[demo]     server thấy #1 C: mic mở           mức vào  -15.1 dBFS, độ lợi 2.00, nghe 1.00, mất 0
+[demo]     server thấy #2 A: mic mở           mức vào  -15.0 dBFS, độ lợi 1.00, nghe 0.50, mất 0
+[demo]     server thấy #3 B: mic tắt (server) mức vào   -inf dBFS, độ lợi 1.00, nghe 1.00, mất 0
+[demo] 8. Chụp các cửa sổ
+[demo]    Đã ghi ket_qua_gui.png (95 KB)
+[demo] 9. Server bấm Stop Server
+[server-gui] #3 B rời phòng
+[server-gui] => B rời phòng
+[server-gui] #1 C rời phòng
+[server-gui] => C rời phòng
+[server-gui] #2 A rời phòng
+[server-gui] => A rời phòng
+[server-gui] Server đã dừng
+[demo]    A: 'Mất kết nối: server đã đóng kết nối'
+[demo]    B: 'Mất kết nối: server đã đóng kết nối'
+[demo]    C: 'Mất kết nối: server đã đóng kết nối'
+[demo] Kết thúc
+

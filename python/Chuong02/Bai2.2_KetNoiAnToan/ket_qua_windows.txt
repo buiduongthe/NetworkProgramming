@@ -1,0 +1,29 @@
+===== server =====
+> python test_server.py 127.0.0.1 9210
+[server] Đang lắng nghe tại 127.0.0.1:9210
+[server] Client kết nối: 127.0.0.1:55114
+
+===== refused =====
+> python safe_connect.py 127.0.0.1 9211
+[client] Kết nối tới 127.0.0.1:9211, thời gian chờ 3000 ms
+[client] NetError REFUSED, thử lại: không, sau 2042 ms
+[client] Nguyên nhân: ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+===== not_found =====
+> python safe_connect.py khong-ton-tai.invalid 9210
+[client] Kết nối tới khong-ton-tai.invalid:9210, thời gian chờ 3000 ms
+[client] NetError NOT_FOUND, thử lại: không, sau 34 ms
+[client] Nguyên nhân: gaierror: [Errno 11001] getaddrinfo failed
+
+===== timeout =====
+> python safe_connect.py 10.255.255.1 9210 3000
+[client] Kết nối tới 10.255.255.1:9210, thời gian chờ 3000 ms
+[client] NetError UNREACHABLE, thử lại: có, sau 3011 ms
+[client] Nguyên nhân: TimeoutError: timed out
+
+===== ok =====
+> python safe_connect.py localhost 9210
+[client] Kết nối tới localhost:9210, thời gian chờ 3000 ms
+[client] Thành công: 127.0.0.1:55114 -> 127.0.0.1:9210, sau 2075 ms
+[client] Đã đóng kết nối
+

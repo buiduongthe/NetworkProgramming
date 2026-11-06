@@ -1,0 +1,38 @@
+===== l1 =====
+> python listener.py 0 9671
+[listener] Tham gia nhóm 239.255.42.99, nghe cổng 9671
+[listener] Thêm Phòng-Lab-A tại 172.29.128.1:9200
+[listener] Thêm Phòng-Lab-B tại 172.29.128.1:9201
+[listener] Hết hạn, xóa: Phòng-Lab-B
+[listener] Bộ nhớ đệm: Phòng-Lab-A tại 172.29.128.1:9200
+
+===== a1 =====
+> python announcer.py 9200 Phòng-Lab-A 1000 0 9671
+[announcer] Phát tới nhóm 239.255.42.99:9671, chu kỳ 1000 ms
+[announcer] Lần 1: announce Phòng-Lab-A, cổng 9200, ttl_ms=3000
+[announcer] Lần 2: announce Phòng-Lab-A, cổng 9200, ttl_ms=3000
+[announcer] Lần 3: announce Phòng-Lab-A, cổng 9200, ttl_ms=3000
+[announcer] Lần 4: announce Phòng-Lab-A, cổng 9200, ttl_ms=3000
+[announcer] Lần 5: announce Phòng-Lab-A, cổng 9200, ttl_ms=3000
+[announcer] Lần 6: announce Phòng-Lab-A, cổng 9200, ttl_ms=3000
+[announcer] Lần 7: announce Phòng-Lab-A, cổng 9200, ttl_ms=3000
+[announcer] Lần 8: announce Phòng-Lab-A, cổng 9200, ttl_ms=3000
+[announcer] Lần 9: announce Phòng-Lab-A, cổng 9200, ttl_ms=3000
+[announcer] Dừng
+
+===== a2 =====
+> python announcer.py 9201 Phòng-Lab-B 1000 3 9671
+[announcer] Phát tới nhóm 239.255.42.99:9671, chu kỳ 1000 ms
+[announcer] Lần 1: announce Phòng-Lab-B, cổng 9201, ttl_ms=3000
+[announcer] Lần 2: announce Phòng-Lab-B, cổng 9201, ttl_ms=3000
+[announcer] Lần 3: announce Phòng-Lab-B, cổng 9201, ttl_ms=3000
+[announcer] Dừng phát sau 3 lần
+
+===== l2 =====
+> python listener.py 7000 9671
+[listener] Tham gia nhóm 239.255.42.99, nghe cổng 9671
+[listener] Thêm Phòng-Lab-A tại 172.29.128.1:9200
+[listener] Thêm Phòng-Lab-B tại 172.29.128.1:9201
+[listener] Hết hạn, xóa: Phòng-Lab-B
+[listener] Bộ nhớ đệm: Phòng-Lab-A tại 172.29.128.1:9200
+

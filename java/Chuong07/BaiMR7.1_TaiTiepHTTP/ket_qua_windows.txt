@@ -1,0 +1,30 @@
+===== server =====
+> java -cp out ServerTep 127.0.0.1 43710 --kich-thuoc 300000 --cat-sau 100000 --so-lan-cat 2
+[server] http://127.0.0.1:43710/tep.bin, 300000 byte, ETag "5a97e2f2a4bc600a"
+[server] #1 HEAD -> 200, 300000 byte
+[server] #2 GET Range=- -> 200, NGẮT sau 100000 byte
+[server] #3 GET Range=bytes=100000- -> 206, NGẮT sau 100000 byte
+[server] #4 GET Range=bytes=200000- -> 206, gửi 100000 byte
+[server] #5 HEAD -> 200, 300000 byte
+[server] Dừng server
+
+===== tai =====
+> java -cp out TaiTiep http://127.0.0.1:43710/tep.bin tep_tai_ve.bin
+[tai] HEAD: 300000 byte, ETag "5a97e2f2a4bc600a"
+[tai] Lần 1: đã có 0 byte, xin toàn bộ
+[tai] -> 200 OK
+[tai] Kết nối đứt: nhận 100000/300000 byte của lần này
+[tai] Chờ 0.2 s rồi tải tiếp
+[tai] Lần 2: đã có 100000 byte, xin Range: bytes=100000-
+[tai] -> 206 Partial Content, bytes 100000-299999/300000
+[tai] Kết nối đứt: nhận 100000/200000 byte của lần này
+[tai] Chờ 0.4 s rồi tải tiếp
+[tai] Lần 3: đã có 200000 byte, xin Range: bytes=200000-
+[tai] -> 206 Partial Content, bytes 200000-299999/300000
+[tai] Đủ 300000/300000 byte; SHA-256 KHỚP (5a97e2f2a4bc600a...)
+
+===== tai_lai =====
+> java -cp out TaiTiep http://127.0.0.1:43710/tep.bin tep_tai_ve.bin
+[tai] HEAD: 300000 byte, ETag "5a97e2f2a4bc600a"
+[tai] Đủ 300000/300000 byte; SHA-256 KHỚP (5a97e2f2a4bc600a...)
+

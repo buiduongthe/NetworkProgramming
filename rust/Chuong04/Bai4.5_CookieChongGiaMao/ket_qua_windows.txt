@@ -1,0 +1,47 @@
+===== server =====
+> ..\..\target\release\bai4_5_cookie_chong_gia_mao.exe server 127.0.0.1 21450
+[server] Đang lắng nghe UDP tại 127.0.0.1:21450, từ điển 5 thuật ngữ, MAX_RATIO = 3
+[server] Nhận 40 byte từ 127.0.0.1:53340 (id=1, cookie: không có)
+[server]   -> phản hồi 176 byte > 3 × 40 byte: gửi thách thức 401 (97 byte)
+[server] Nhận 111 byte từ 127.0.0.1:53340 (id=2, cookie: hợp lệ)
+[server]   -> gửi phản hồi status=200 (176 byte)
+[server] Nhận 112 byte từ 127.0.0.1:53340 (id=3, cookie: hợp lệ)
+[server]   -> gửi phản hồi status=200 (136 byte)
+[server] Nhận 40 byte từ 127.0.0.1:53341 (id=1, cookie: không có)
+[server]   -> gửi phản hồi status=404 (56 byte)
+[server] Nhận 55 byte từ 127.0.0.1:53342 (id=1, cookie: không hợp lệ)
+[server]   -> phản hồi 176 byte > 3 × 55 byte: gửi thách thức 401 (97 byte)
+[server] Nhận 111 byte từ 127.0.0.1:53342 (id=2, cookie: hợp lệ)
+[server]   -> gửi phản hồi status=200 (176 byte)
+
+===== client =====
+> ..\..\target\release\bai4_5_cookie_chong_gia_mao.exe client 127.0.0.1 21450
+[client] Gửi yêu cầu tới 127.0.0.1:21450 qua UDP. Nhập thuật ngữ (Ctrl+Z/Ctrl+D để kết thúc).
+[client] Tra cứu 'UDP' (không kèm cookie)
+[client]   Lần 1: gửi id=1 (40 byte), chờ tối đa 500 ms
+[client] Nhận thách thức 401, lưu cookie e59cbdf7056254c1…; gửi lại kèm cookie
+[client]   Lần 1: gửi id=2 (111 byte), chờ tối đa 500 ms
+[client] UDP: User Datagram Protocol – giao thức vận chuyển không kết nối, tiêu đề 8 byte, bảo toàn ranh giới thông điệp
+[client] Tra cứu 'QUIC' (kèm cookie)
+[client]   Lần 1: gửi id=3 (112 byte), chờ tối đa 500 ms
+[client] QUIC: Giao thức vận chuyển chạy trên UDP, tích hợp TLS 1.3, nền tảng của HTTP/3
+[client] Đã đóng socket
+
+===== client2 =====
+> ..\..\target\release\bai4_5_cookie_chong_gia_mao.exe client 127.0.0.1 21450
+[client] Gửi yêu cầu tới 127.0.0.1:21450 qua UDP. Nhập thuật ngữ (Ctrl+Z/Ctrl+D để kết thúc).
+[client] Tra cứu 'XYZ' (không kèm cookie)
+[client]   Lần 1: gửi id=1 (40 byte), chờ tối đa 500 ms
+[client] Lỗi 404: Không có thuật ngữ
+[client] Đã đóng socket
+
+===== client3 =====
+> ..\..\target\release\bai4_5_cookie_chong_gia_mao.exe client 127.0.0.1 21450 deadbeef
+[client] Gửi yêu cầu tới 127.0.0.1:21450 qua UDP. Nhập thuật ngữ (Ctrl+Z/Ctrl+D để kết thúc).
+[client] Tra cứu 'UDP' (kèm cookie)
+[client]   Lần 1: gửi id=1 (55 byte), chờ tối đa 500 ms
+[client] Nhận thách thức 401, lưu cookie 9c2bc356bff510ef…; gửi lại kèm cookie
+[client]   Lần 1: gửi id=2 (111 byte), chờ tối đa 500 ms
+[client] UDP: User Datagram Protocol – giao thức vận chuyển không kết nối, tiêu đề 8 byte, bảo toàn ranh giới thông điệp
+[client] Đã đóng socket
+

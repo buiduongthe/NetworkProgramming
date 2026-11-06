@@ -1,0 +1,53 @@
+===== server1 =====
+> out\app.exe threaded 127.0.0.1 31610 3
+[server] Đang lắng nghe tại 127.0.0.1:31610
+[server] Mỗi kết nối một luồng, MAX_CLIENTS = 3
+[server] Nhận 127.0.0.1:63887, tạo luồng mới (đang phục vụ: 1)
+[server] Nhận 127.0.0.1:63888, tạo luồng mới (đang phục vụ: 2)
+[server] Nhận 127.0.0.1:63889, tạo luồng mới (đang phục vụ: 3)
+[server] Từ chối 127.0.0.1:63890: đã đủ 3 kết nối
+[server] Từ chối 127.0.0.1:63891: đã đủ 3 kết nối
+[server] Client 127.0.0.1:63887 đã đóng kết nối
+[server] Client 127.0.0.1:63888 đã đóng kết nối
+[server] Client 127.0.0.1:63889 đã đóng kết nối
+[server] Dừng server
+
+===== client1 =====
+> out\app.exe client 127.0.0.1 31610 5 1000
+[client] 5 client cách nhau 100 ms, giữ kết nối 1000 ms
+[client 1] t = 15 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 2] t = 106 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 3] t = 203 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 4] Lỗi: read tcp 127.0.0.1:63890->127.0.0.1:31610: wsarecv: An existing connection was forcibly closed by the remote host.
+[client 5] Lỗi: read tcp 127.0.0.1:63891->127.0.0.1:31610: wsarecv: An established connection was aborted by the software in your host machine.
+[client] Hoàn tất sau 1205 ms
+
+===== server2 =====
+> out\app.exe pool 127.0.0.1 31611 2 1
+[server] Đang lắng nghe tại 127.0.0.1:31611
+[server] Nhóm 2 luồng thợ, hàng đợi 1 chỗ
+[server] Nhận 127.0.0.1:63892
+[server] Luồng thợ 1 phục vụ 127.0.0.1:63892
+[server] Nhận 127.0.0.1:63893
+[server] Luồng thợ 2 phục vụ 127.0.0.1:63893
+[server] Nhận 127.0.0.1:63894
+[server] Nhận 127.0.0.1:63895
+[server] Hàng đợi đầy, trả 503 cho 127.0.0.1:63895
+[server] Nhận 127.0.0.1:63896
+[server] Hàng đợi đầy, trả 503 cho 127.0.0.1:63896
+[server] Client 127.0.0.1:63892 đã đóng kết nối
+[server] Luồng thợ 1 phục vụ 127.0.0.1:63894
+[server] Client 127.0.0.1:63893 đã đóng kết nối
+[server] Client 127.0.0.1:63894 đã đóng kết nối
+[server] Dừng server
+
+===== client2 =====
+> out\app.exe client 127.0.0.1 31611 5 1000
+[client] 5 client cách nhau 100 ms, giữ kết nối 1000 ms
+[client 1] t = 5 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 2] t = 101 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 4] t = 302 ms: bị từ chối 503 – Server bận
+[client 5] Lỗi: read tcp 127.0.0.1:63896->127.0.0.1:31611: wsarecv: An existing connection was forcibly closed by the remote host.
+[client 3] t = 1005 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client] Hoàn tất sau 2006 ms
+

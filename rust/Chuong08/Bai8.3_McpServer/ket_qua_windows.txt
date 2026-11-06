@@ -1,0 +1,80 @@
+===== host =====
+> python mcp_test_client.py 21830 21831 cargo run -q --release
+[client] Mở cổng thử 127.0.0.1:21830; khởi chạy MCP server: cargo run -q --release
+[client] (công bố phiên bản, khả năng) -> {"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientCapabilities":{}}}}
+[client]    <- {"jsonrpc":"2.0","id":1,"result":{"resultType":"complete","supportedVersions":["2026-07-28"],"capabilities":{"tools":{}},"serverInfo":{"name":"nettools-mcp","version":"1.0.0"}}}
+[client] (liệt kê công cụ) -> id=2 tools/list {}
+[client]    <- {"jsonrpc":"2.0","id":2,"result":{"resultType":"complete","tools":[{"name":"resolve_host","description":"Phân giải tên miền","inputSchema":{"type":"object","properties":{"host":{"type":"string"}},"required":["host"]}},{"name":"check_port","description":"Kiểm tra cổng TCP","inputSchema":{"type":"object","properties":{"host":{"type":"string"},"port":{"type":"integer"}},"required":["host","port"]}},{"name":"ping","description":"Đo thời gian khứ hồi ICMP","inputSchema":{"type":"object","properties":{"host":{"type":"string"}},"required":["host"]}}],"ttlMs":3600000,"cacheScope":"public"}}
+[client] (cổng đang mở) -> id=3 tools/call {"name":"check_port","arguments":{"host":"127.0.0.1","port":21830}}
+[client]    <- {"jsonrpc":"2.0","id":3,"result":{"resultType":"complete","isError":false,"content":[{"type":"text","text":"127.0.0.1:21830 OPEN"}]}}
+[client] (cổng đóng) -> id=4 tools/call {"name":"check_port","arguments":{"host":"127.0.0.1","port":21831}}
+[client]    <- {"jsonrpc":"2.0","id":4,"result":{"resultType":"complete","isError":false,"content":[{"type":"text","text":"127.0.0.1:21831 FILTERED"}]}}
+[client] (đích ngoài ALLOWED_NETS) -> id=5 tools/call {"name":"check_port","arguments":{"host":"10.10.1.5","port":22}}
+[client]    <- {"jsonrpc":"2.0","id":5,"result":{"resultType":"complete","isError":true,"content":[{"type":"text","text":"Ngoài phạm vi cho phép: 10.10.1.5"}]}}
+[client] (phân giải tên) -> id=6 tools/call {"name":"resolve_host","arguments":{"host":"localhost"}}
+[client]    <- {"jsonrpc":"2.0","id":6,"result":{"resultType":"complete","isError":false,"content":[{"type":"text","text":"INET6 ::1; INET 127.0.0.1"}]}}
+[client] (ping (socket RAW)) -> id=7 tools/call {"name":"ping","arguments":{"host":"127.0.0.1"}}
+[client]    <- {"jsonrpc":"2.0","id":7,"result":{"resultType":"complete","isError":false,"content":[{"type":"text","text":"127.0.0.1: thời gian khứ hồi 0.249 ms, TTL 128"}]}}
+[client] (chèn lệnh shell) -> id=8 tools/call {"name":"ping","arguments":{"host":"8.8.8.8; rm -rf ~"}}
+[client]    <- {"jsonrpc":"2.0","id":8,"result":{"resultType":"complete","isError":true,"content":[{"type":"text","text":"Tên máy không hợp lệ"}]}}
+[client] (cổng sai) -> id=9 tools/call {"name":"check_port","arguments":{"host":"127.0.0.1","port":70000}}
+[client]    <- {"jsonrpc":"2.0","id":9,"result":{"resultType":"complete","isError":true,"content":[{"type":"text","text":"Cổng không hợp lệ"}]}}
+[client] (công cụ không tồn tại) -> id=10 tools/call {"name":"scan_network","arguments":{"cidr":"10.10.0.0/16"}}
+[client]    <- {"jsonrpc":"2.0","id":10,"error":{"code":-32602,"message":"Unknown tool: scan_network"}}
+[client] (thiếu _meta) -> id=11 tools/list {} (không có _meta)
+[client]    <- {"jsonrpc":"2.0","id":11,"error":{"code":-32602,"message":"Invalid params: thiếu _meta"}}
+[client] (phiên bản cũ) -> id=12 tools/list {} (_meta: protocolVersion 2025-11-25)
+[client]    <- {"jsonrpc":"2.0","id":12,"error":{"code":-32022,"message":"UnsupportedProtocolVersion"}}
+[client] (phương thức không có) -> id=13 resources/list {}
+[client]    <- {"jsonrpc":"2.0","id":13,"error":{"code":-32601,"message":"Method not found"}}
+[client] (thông báo (không có id)) -> notifications/cancelled {"requestId":3} (không có _meta)
+[client]    (thông báo: không chờ phản hồi)
+[client] (dòng không phải JSON) -> {"jsonrpc":"2.0","id":15,"method":
+[client]    <- {"jsonrpc":"2.0","id":null,"error":{"code":-32700,"message":"Parse error"}}
+[client] Đã đóng stdin; server kết thúc với mã 0
+----- Nhật ký stderr của server -----
+[mcp] MCP server công cụ mạng (stdio), phiên bản 2026-07-28 | ALLOWED_NETS = 127.0.0.0/8
+[mcp] <- id=1 server/discover
+[mcp] -> id=1 result
+[mcp] <- id=2 tools/list
+[mcp] -> id=2 result
+[mcp] <- id=3 tools/call
+[mcp]   gọi công cụ check_port {"host":"127.0.0.1","port":21830}
+[mcp]   resolve: INET 127.0.0.1
+[mcp] -> id=3 result
+[mcp] <- id=4 tools/call
+[mcp]   gọi công cụ check_port {"host":"127.0.0.1","port":21831}
+[mcp]   resolve: INET 127.0.0.1
+[mcp] -> id=4 result
+[mcp] <- id=5 tools/call
+[mcp]   gọi công cụ check_port {"host":"10.10.1.5","port":22}
+[mcp]   -> PolicyError: Ngoài phạm vi cho phép: 10.10.1.5
+[mcp] -> id=5 result
+[mcp] <- id=6 tools/call
+[mcp]   gọi công cụ resolve_host {"host":"localhost"}
+[mcp]   resolve: INET6 ::1
+[mcp]   resolve: INET 127.0.0.1
+[mcp] -> id=6 result
+[mcp] <- id=7 tools/call
+[mcp]   gọi công cụ ping {"host":"127.0.0.1"}
+[mcp] -> id=7 result
+[mcp] <- id=8 tools/call
+[mcp]   gọi công cụ ping {"host":"8.8.8.8; rm -rf ~"}
+[mcp]   -> PolicyError: Tên máy không hợp lệ
+[mcp] -> id=8 result
+[mcp] <- id=9 tools/call
+[mcp]   gọi công cụ check_port {"host":"127.0.0.1","port":70000}
+[mcp]   -> PolicyError: Cổng không hợp lệ
+[mcp] -> id=9 result
+[mcp] <- id=10 tools/call
+[mcp] -> id=10 error -32602
+[mcp] <- id=11 tools/list
+[mcp] -> id=11 error -32602
+[mcp] <- id=12 tools/list
+[mcp] -> id=12 error -32022
+[mcp] <- id=13 resources/list
+[mcp] -> id=13 error -32601
+[mcp] <- thông báo notifications/cancelled: không trả lời
+[mcp] <- dòng không phải JSON -> -32700
+[mcp] Host đã đóng stdin, kết thúc
+

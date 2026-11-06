@@ -1,0 +1,29 @@
+===== server =====
+> python -m http.server 9111 --bind 127.0.0.1
+Serving HTTP on 127.0.0.1 port 9111 (http://127.0.0.1:9111/) ...
+
+Keyboard interrupt received, exiting.
+
+===== open =====
+> java -cp out PortCheck localhost 9111
+[port-check] Kiểm tra localhost:9111 (thời gian chờ 2000 ms)
+  INET   127.0.0.1
+  INET6  0:0:0:0:0:0:0:1
+[port-check] 127.0.0.1 cổng 9111: kết nối thành công
+[port-check] Kết quả: localhost:9111 -> OPEN
+
+===== closed =====
+> java -cp out PortCheck localhost 9112
+[port-check] Kiểm tra localhost:9112 (thời gian chờ 2000 ms)
+  INET   127.0.0.1
+  INET6  0:0:0:0:0:0:0:1
+[port-check] 127.0.0.1 cổng 9112: bị từ chối (RST)
+[port-check] 0:0:0:0:0:0:0:1 cổng 9112: bị từ chối (RST)
+[port-check] Kết quả: localhost:9112 -> CLOSED
+
+===== unresolved =====
+> java -cp out PortCheck khong-ton-tai.invalid 80
+[port-check] Kiểm tra khong-ton-tai.invalid:80 (thời gian chờ 2000 ms)
+[port-check] Không phân giải được khong-ton-tai.invalid (UnknownHostException: No such host is known (khong-ton-tai.invalid))
+[port-check] Kết quả: khong-ton-tai.invalid:80 -> UNRESOLVED
+

@@ -1,11 +1,11 @@
 ===== server =====
 > dotnet bin/Release/net10.0/BaiMR6.1_TatServerAnToan.dll server 127.0.0.1 42610 --han-cho-ms 2000
 [server] Lắng nghe tại 127.0.0.1:42610, PID ghi vào server.pid
-[server] #1 kết nối từ cổng 49672
+[server] #1 kết nối từ cổng 65367
 [server] #1 bắt đầu LAM 1500
-[server] #2 kết nối từ cổng 49673
+[server] #2 kết nối từ cổng 65368
 [server] #2 bắt đầu LAM 4000
-[server] #3 kết nối từ cổng 49674
+[server] #3 kết nối từ cổng 65369
 [server] #3 bắt đầu LAM 100
 [server] #3 XONG 100
 [server] Nhận SIGINT: ngừng nhận kết nối mới
@@ -39,7 +39,7 @@
 ===== quan_tri =====
 > rem Windows không có kill -TERM: bấm Ctrl+C trong cửa sổ máy chủ
 Windows không có SIGTERM: gửi Ctrl+C (SIGINT) tới máy chủ
-(gửi Ctrl+C tới tiến trình "server", PID 10012)
+(gửi Ctrl+C tới tiến trình "server", PID 15268)
 
 ===== D =====
 > dotnet bin/Release/net10.0/BaiMR6.1_TatServerAnToan.dll khach D 127.0.0.1 42610 100

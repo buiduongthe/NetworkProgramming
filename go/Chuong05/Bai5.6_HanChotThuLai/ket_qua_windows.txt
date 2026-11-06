@@ -1,0 +1,25 @@
+===== server =====
+> out\app.exe server 127.0.0.1 31560
+[server] Đang lắng nghe tại 127.0.0.1:31560
+[server] Yêu cầu #1: cố ý trả lời chậm 2000 ms
+[server] Yêu cầu #2: trả lời 503, đề nghị chờ 300 ms
+[server] Yêu cầu #3: xử lý 0 ms rồi trả lời
+[server] Yêu cầu #4: xử lý 3000 ms rồi trả lời
+[server] Dừng server
+
+===== client =====
+> out\app.exe client 127.0.0.1 31560 31561
+[client] === Kịch bản 1: hạn chót 1000 ms, thử lại tối đa 5 lần (base 200, cap 5000) ===
+[client] [t=    0 ms] Lần thử 1: gửi {"op":"lookup","term":"TCP"}
+[client] [t= 1005 ms]   lỗi TIMEOUT (có thể thử lại); chờ 6 ms, giới hạn trên 200 ms
+[client] [t= 1011 ms] Lần thử 2: gửi {"op":"lookup","term":"TCP"}
+[client] [t= 1012 ms]   lỗi UNAVAILABLE (có thể thử lại); chờ 300 ms, giới hạn trên 400 ms
+[client] [t= 1312 ms] Lần thử 3: gửi {"op":"lookup","term":"TCP"}
+[client] [t= 1314 ms] Thành công: {"status":200,"term":"TCP","text":"Giao thức truyền tin cậy, hướng kết nối"}
+[client] === Kịch bản 2: server xử lý 3000 ms, hạn chót 5000 ms, người dùng bấm Hủy sau 500 ms ===
+[client] [t=    4 ms] Lần thử 1: gửi {"delay_ms":3000,"op":"lookup","term":"UDP"}
+[client] [t=  505 ms] Người dùng đã hủy (Cancelled) – không thử lại
+[client] === Kịch bản 3: cổng 31561 không có server (REFUSED) ===
+[client] [t=    0 ms] Lần thử 1: gửi {"op":"lookup","term":"TCP"}
+[client] [t=    0 ms] Thất bại, không thử lại: REFUSED (retry=false)
+

@@ -1,0 +1,32 @@
+===== sv_vuln =====
+> dotnet bin/Release/net10.0/BaiMR8.3_ChongSlowloris.dll server vulnerable 127.0.0.1 42830
+[server:vulnerable] Nghe tại 127.0.0.1:42830, nhóm 40 worker. Ctrl+C để dừng.
+[server:vulnerable] KHÔNG có hạn đọc tiêu đề: mỗi kết nối chậm giữ một worker.
+[server:vulnerable] Dừng. Tổng kết: chấp nhận 40, phục vụ xong 0, đóng vì chậm 0, từ chối 503 0.
+
+===== sv_prot =====
+> dotnet bin/Release/net10.0/BaiMR8.3_ChongSlowloris.dll server protected 127.0.0.1 42831
+[server:protected] Nghe tại 127.0.0.1:42831, nhóm 40 worker. Ctrl+C để dừng.
+[server:protected] Phòng thủ: hạn đọc tiêu đề 3s, hạn rỗi 2s, tiêu đề <= 8192B, <= 10 kết nối/IP, trần 64 kết nối.
+[server:protected] Dừng. Tổng kết: chấp nhận 151, phục vụ xong 1, đóng vì chậm 10, từ chối 503 140.
+
+===== slow_vuln =====
+> dotnet bin/Release/net10.0/BaiMR8.3_ChongSlowloris.dll slow 127.0.0.1 42830 150
+[slow] (CHỈ THÍ NGHIỆM) mở 150 kết nối gửi chậm tới 127.0.0.1:42830 từ nguồn 127.0.0.2 trong ~9s
+[slow] đã mở được 150 kết nối; bắt đầu gửi mỗi ~7s một byte
+[slow] còn 150 kết nối đang giữ
+
+===== slow_prot =====
+> dotnet bin/Release/net10.0/BaiMR8.3_ChongSlowloris.dll slow 127.0.0.1 42831 150
+[slow] (CHỈ THÍ NGHIỆM) mở 150 kết nối gửi chậm tới 127.0.0.1:42831 từ nguồn 127.0.0.2 trong ~9s
+[slow] đã mở được 150 kết nối; bắt đầu gửi mỗi ~7s một byte
+[slow] còn 10 kết nối đang giữ
+
+===== probe_vuln =====
+> dotnet bin/Release/net10.0/BaiMR8.3_ChongSlowloris.dll probe 127.0.0.1 42830
+[probe] THẤT BẠI: hết thời gian chờ sau 4028 ms – server không phục vụ kịp (bị làm nghẽn).
+
+===== probe_prot =====
+> dotnet bin/Release/net10.0/BaiMR8.3_ChongSlowloris.dll probe 127.0.0.1 42831
+[probe] THÀNH CÔNG sau 26 ms: HTTP/1.1 200 OK
+

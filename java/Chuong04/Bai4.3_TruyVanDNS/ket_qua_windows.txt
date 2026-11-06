@@ -1,0 +1,40 @@
+===== dns =====
+> python fake_dns_server.py 127.0.0.1 9433
+[dns-giả] Đang lắng nghe UDP tại 127.0.0.1:9433; demo.ltm.local -> 192.0.2.10, 2001:db8::10
+[dns-giả] Truy vấn id=0x9371 demo.ltm.local A từ 127.0.0.1:65321 -> RCODE=0, 1 bản ghi
+[dns-giả] Truy vấn id=0x5AE2 demo.ltm.local AAAA từ 127.0.0.1:50976 -> RCODE=0, 1 bản ghi
+[dns-giả] Truy vấn id=0x505B khong-co.ltm.local A từ 127.0.0.1:50977 -> RCODE=3, 0 bản ghi
+
+===== a =====
+> java -cp out DnsQuery 127.0.0.1 demo.ltm.local A 9433
+[client] Truy vấn A cho demo.ltm.local tới 127.0.0.1:9433 (id=0x9371, 32 byte)
+[client] Truy vấn (hex): 93 71 01 00 00 01 00 00 00 00 00 00 04 64 65 6D 6F 03 6C 74 6D 05 6C 6F 63 61 6C 00 00 01 00 01
+[client] Phản hồi 48 byte từ 127.0.0.1:9433, RCODE=0 (NOERROR), ANCOUNT=1
+[client] Phản hồi (hex): 93 71 85 80 00 01 00 01 00 00 00 00 04 64 65 6D 6F 03 6C 74 6D 05 6C 6F 63 61 6C 00 00 01 00 01 C0 0C 00 01 00 01 00 00 01 2C 00 04 C0 00 02 0A
+[client] Địa chỉ: 192.0.2.10
+
+===== aaaa =====
+> java -cp out DnsQuery 127.0.0.1 demo.ltm.local AAAA 9433
+[client] Truy vấn AAAA cho demo.ltm.local tới 127.0.0.1:9433 (id=0x5AE2, 32 byte)
+[client] Truy vấn (hex): 5A E2 01 00 00 01 00 00 00 00 00 00 04 64 65 6D 6F 03 6C 74 6D 05 6C 6F 63 61 6C 00 00 1C 00 01
+[client] Phản hồi 60 byte từ 127.0.0.1:9433, RCODE=0 (NOERROR), ANCOUNT=1
+[client] Phản hồi (hex): 5A E2 85 80 00 01 00 01 00 00 00 00 04 64 65 6D 6F 03 6C 74 6D 05 6C 6F 63 61 6C 00 00 1C 00 01 C0 0C 00 1C 00 01 00 00 01 2C 00 10 20 01 0D B8 00 00 00 00 00 00 00 00 00 00 00 10
+[client] Địa chỉ: 2001:db8::10
+
+===== nx =====
+> java -cp out DnsQuery 127.0.0.1 khong-co.ltm.local A 9433
+[client] Truy vấn A cho khong-co.ltm.local tới 127.0.0.1:9433 (id=0x505B, 36 byte)
+[client] Truy vấn (hex): 50 5B 01 00 00 01 00 00 00 00 00 00 08 6B 68 6F 6E 67 2D 63 6F 03 6C 74 6D 05 6C 6F 63 61 6C 00 00 01 00 01
+[client] Phản hồi 36 byte từ 127.0.0.1:9433, RCODE=3 (NXDOMAIN), ANCOUNT=0
+[client] Phản hồi (hex): 50 5B 85 83 00 01 00 00 00 00 00 00 08 6B 68 6F 6E 67 2D 63 6F 03 6C 74 6D 05 6C 6F 63 61 6C 00 00 01 00 01
+[client] Không có bản ghi A
+
+===== sys =====
+> java -cp out DnsQuery 8.8.8.8 example.com A
+[client] Truy vấn A cho example.com tới 8.8.8.8:53 (id=0x5F41, 29 byte)
+[client] Truy vấn (hex): 5F 41 01 00 00 01 00 00 00 00 00 00 07 65 78 61 6D 70 6C 65 03 63 6F 6D 00 00 01 00 01
+[client] Phản hồi 61 byte từ 8.8.8.8:53, RCODE=0 (NOERROR), ANCOUNT=2
+[client] Phản hồi (hex): 5F 41 81 80 00 01 00 02 00 00 00 00 07 65 78 61 6D 70 6C 65 03 63 6F 6D 00 00 01 00 01 C0 0C 00 01 00 01 00 00 01 2C 00 04 68 14 17 9A C0 0C 00 01 00 01 00 00 01 2C 00 04 AC 42 93 F3
+[client] Địa chỉ: 104.20.23.154
+[client] Địa chỉ: 172.66.147.243
+

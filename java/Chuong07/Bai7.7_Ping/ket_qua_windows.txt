@@ -1,0 +1,12 @@
+===== ping =====
+> java -cp out Ping 127.0.0.1 4
+[ping] Tiêu đề ICMP tự tạo: 08 00 3B 7E 20 04 00 01 (kiểu, mã, checksum, id, seq)
+[ping] Kiểm tra: INET_CHECKSUM(gói đã điền checksum) = 0x0000 (đúng khi bằng 0)
+[ping] Java không có socket RAW: đo bằng InetAddress.isReachable(), không có TTL
+[ping] PING 127.0.0.1 (127.0.0.1): 4 lần, chờ tối đa 1000 ms
+[ping] Trả lời từ 127.0.0.1: seq=1 thời gian=3.518 ms
+[ping] Trả lời từ 127.0.0.1: seq=2 thời gian=0.962 ms
+[ping] Trả lời từ 127.0.0.1: seq=3 thời gian=1.326 ms
+[ping] Trả lời từ 127.0.0.1: seq=4 thời gian=1.076 ms
+[ping] Đã gửi 4, nhận 4, mất 0%; RTT trung bình 1.721 ms
+

@@ -1,0 +1,71 @@
+===== broker =====
+> mosquitto -c out\mosquitto_windows.conf   (cấu hình: cổng 31780, ghi nhật ký ra màn hình)
+1793982117: mosquitto version 2.1.2 starting
+1793982117: Config loaded from out/mosquitto_windows.conf.
+1793982117: Bridge support available.
+1793982117: Persistence support available.
+1793982117: TLS support available.
+1793982117: TLS-PSK support available.
+1793982117: Websockets support available.
+1793982117: Opening ipv4 listen socket on port 31780.
+1793982117: Opening ipv6 listen socket on port 31780.
+1793982117: mosquitto version 2.1.2 running
+1793982138: New connection from ::1:58232 on port 31780.
+1793982138: New client connected from ::1:58232 as dashboard-01 (p5, c1, k4).
+1793982140: New connection from ::1:58233 on port 31780.
+1793982140: New client connected from ::1:58233 as day1 (p5, c1, k30).
+1793982143: Client day1 [::1:58233] disconnected.
+1793982143: New connection from ::1:58234 on port 31780.
+1793982143: New client connected from ::1:58234 as day2 (p5, c1, k30).
+1793982145: Client day2 [::1:58234] disconnected: connection closed by client.
+1793982148: New connection from ::1:58235 on port 31780.
+1793982148: New client connected from ::1:58235 as dashboard-02 (p5, c1, k60).
+1793982150: Client dashboard-02 [::1:58235] disconnected.
+1793982151: mosquitto version 2.1.2 terminating
+
+===== dashboard =====
+> out\app.exe dashboard localhost 31780 4
+[dashboard] Đã kết nối broker localhost:31780 là 'dashboard-01' (MQTT 5.0, keep alive 4 s)
+[dashboard] SUBSCRIBE nhamay/+/nhietdo (QoS 0) -> SUBACK, QoS được cấp 0
+[dashboard] SUBSCRIBE nhamay/+/trangthai (QoS 1) -> SUBACK, QoS được cấp 1
+[dashboard] Trạng thái nhamay/day1/trangthai: online (QoS 1)
+[dashboard] Nhiệt độ  nhamay/day1/nhietdo: {"v":25.7,"ts":1793982140}
+[dashboard] Nhiệt độ  nhamay/day1/nhietdo: {"v":24.1,"ts":1793982141}
+[dashboard] PINGREQ -> PINGRESP
+[dashboard] Nhiệt độ  nhamay/day1/nhietdo: {"v":24.2,"ts":1793982142}
+[dashboard] Trạng thái nhamay/day1/trangthai: offline (QoS 1)
+[dashboard] Trạng thái nhamay/day2/trangthai: online (QoS 1)
+[dashboard] Nhiệt độ  nhamay/day2/nhietdo: {"v":24.0,"ts":1793982143}
+[dashboard] Nhiệt độ  nhamay/day2/nhietdo: {"v":25.0,"ts":1793982144}
+[dashboard] PINGREQ -> PINGRESP
+[dashboard] Trạng thái nhamay/day2/trangthai: offline (QoS 1)
+[dashboard] PINGREQ -> PINGRESP
+[dashboard] PINGREQ -> PINGRESP
+[dashboard] Broker đóng kết nối
+
+===== day1 =====
+> out\app.exe sensor day1 localhost 31780 3 1000
+[day1] Đã kết nối broker localhost:31780 (MQTT 5.0, keep alive 30 s, di chúc 'nhamay/day1/trangthai' = offline)
+[day1] PUBLISH nhamay/day1/trangthai = online (QoS 1, giữ lại) -> đã nhận PUBACK
+[day1] PUBLISH nhamay/day1/nhietdo = {"v":25.7,"ts":1793982140} (QoS 0)
+[day1] PUBLISH nhamay/day1/nhietdo = {"v":24.1,"ts":1793982141} (QoS 0)
+[day1] PUBLISH nhamay/day1/nhietdo = {"v":24.2,"ts":1793982142} (QoS 0)
+[day1] Tắt đúng thủ tục: phát offline rồi gửi DISCONNECT
+
+===== day2 =====
+> out\app.exe sensor day2 localhost 31780 2 1000 --mat-ket-noi
+[day2] Đã kết nối broker localhost:31780 (MQTT 5.0, keep alive 30 s, di chúc 'nhamay/day2/trangthai' = offline)
+[day2] PUBLISH nhamay/day2/trangthai = online (QoS 1, giữ lại) -> đã nhận PUBACK
+[day2] PUBLISH nhamay/day2/nhietdo = {"v":24.0,"ts":1793982143} (QoS 0)
+[day2] PUBLISH nhamay/day2/nhietdo = {"v":25.0,"ts":1793982144} (QoS 0)
+[day2] Mô phỏng mất kết nối: đóng socket, không gửi DISCONNECT
+
+===== dashboard2 =====
+> out\app.exe dashboard localhost 31780 60 dashboard-02
+[dashboard] Đã kết nối broker localhost:31780 là 'dashboard-02' (MQTT 5.0, keep alive 60 s)
+[dashboard] SUBSCRIBE nhamay/+/nhietdo (QoS 0) -> SUBACK, QoS được cấp 0
+[dashboard] SUBSCRIBE nhamay/+/trangthai (QoS 1) -> SUBACK, QoS được cấp 1
+[dashboard] Trạng thái nhamay/day1/trangthai: offline (QoS 1, tin giữ lại)
+[dashboard] Trạng thái nhamay/day2/trangthai: offline (QoS 1, tin giữ lại)
+[dashboard] Đã gửi DISCONNECT
+

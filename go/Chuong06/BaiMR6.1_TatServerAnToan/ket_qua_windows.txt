@@ -1,0 +1,52 @@
+===== server =====
+> out\app.exe server 127.0.0.1 41615 2000
+[server] Lắng nghe tại 127.0.0.1:41615, PID ghi vào server.pid
+[server] #1 kết nối từ cổng 57876
+[server] #2 kết nối từ cổng 57877
+[server] #2 bắt đầu LAM 100
+[server] #3 kết nối từ cổng 57878
+[server] #3 bắt đầu LAM 4000
+[server] #1 bắt đầu LAM 1500
+[server] #2 XONG 100
+[server] #4 kết nối từ cổng 57879
+[server] #4 bắt đầu LAM 100
+[server] #4 XONG 100
+[server] #1 XONG 1500
+[server] #3 XONG 4000
+[server] #2 client đóng kết nối
+[server] #3 client đóng kết nối
+[server] #1 client đóng kết nối
+[server] #4 client đóng kết nối
+[server] Nhận SIGINT: ngừng nhận kết nối mới
+[server] Chờ tối đa 2000 ms cho 0 kết nối
+[server] Đã tắt sau 0.0 s: xong 4 yêu cầu, hủy 0
+
+===== A =====
+> out\app.exe khach A 127.0.0.1 41615 1500
+[khach A] Gửi LAM 1500
+[khach A] t=1.5s nhận: XONG 1500
+[khach A] t=10.0s server đóng kết nối
+
+===== B =====
+> out\app.exe khach B 127.0.0.1 41615 4000
+[khach B] Gửi LAM 4000
+[khach B] t=4.0s nhận: XONG 4000
+[khach B] t=10.0s server đóng kết nối
+
+===== C =====
+> out\app.exe khach C 127.0.0.1 41615 100
+[khach C] Gửi LAM 100
+[khach C] t=0.1s nhận: XONG 100
+[khach C] t=10.0s server đóng kết nối
+
+===== quan_tri =====
+> rem Windows không có kill -TERM: bấm Ctrl+C trong cửa sổ máy chủ
+Windows không có SIGTERM: gửi Ctrl+C (SIGINT) tới máy chủ
+(gửi Ctrl+C tới tiến trình "server", PID 6228)
+
+===== D =====
+> out\app.exe khach D 127.0.0.1 41615 100
+[khach D] Gửi LAM 100
+[khach D] t=0.1s nhận: XONG 100
+[khach D] t=10.0s server đóng kết nối
+

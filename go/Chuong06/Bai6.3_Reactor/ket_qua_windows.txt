@@ -1,0 +1,12 @@
+===== server =====
+> out\app.exe server 127.0.0.1 31630
+[server] Bản Go của server reactor dùng syscall.Select của Linux; hãy chạy trên Linux hoặc WSL
+
+===== client =====
+> out\app.exe client 127.0.0.1 31630 3 1048576
+[client] Mở 3 kết nối đồng thời, mỗi kết nối gửi thêm 1048576 byte
+[client 3] Lỗi: Không kết nối được 127.0.0.1:31630: dial tcp 127.0.0.1:31630: connectex: No connection could be made because the target machine actively refused it.
+[client 2] Lỗi: Không kết nối được 127.0.0.1:31630: dial tcp 127.0.0.1:31630: connectex: No connection could be made because the target machine actively refused it.
+[client 1] Lỗi: Không kết nối được 127.0.0.1:31630: dial tcp 127.0.0.1:31630: connectex: No connection could be made because the target machine actively refused it.
+[client] Hoàn tất sau 14 ms
+

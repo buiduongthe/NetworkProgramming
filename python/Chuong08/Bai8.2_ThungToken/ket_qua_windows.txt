@@ -1,0 +1,21 @@
+===== bucket =====
+> python thung_token.py 10 2 14 2
+[bucket] Thùng: dung lượng C = 10, tốc độ nạp R = 2 đơn vị/giây, mỗi yêu cầu n = 1
+[bucket] Gửi 14 yêu cầu từ 2 tác vụ đồng thời (thùng đầy lúc bắt đầu)
+[bucket] Yêu cầu 01 (tác vụ 1) được phép tại t =  0.000 s   lý thuyết  0.000 s
+[bucket] Yêu cầu 02 (tác vụ 2) được phép tại t =  0.000 s   lý thuyết  0.000 s
+[bucket] Yêu cầu 03 (tác vụ 1) được phép tại t =  0.000 s   lý thuyết  0.000 s
+[bucket] Yêu cầu 04 (tác vụ 2) được phép tại t =  0.000 s   lý thuyết  0.000 s
+[bucket] Yêu cầu 05 (tác vụ 1) được phép tại t =  0.000 s   lý thuyết  0.000 s
+[bucket] Yêu cầu 06 (tác vụ 2) được phép tại t =  0.000 s   lý thuyết  0.000 s
+[bucket] Yêu cầu 07 (tác vụ 1) được phép tại t =  0.000 s   lý thuyết  0.000 s
+[bucket] Yêu cầu 08 (tác vụ 2) được phép tại t =  0.000 s   lý thuyết  0.000 s
+[bucket] Yêu cầu 09 (tác vụ 1) được phép tại t =  0.000 s   lý thuyết  0.000 s
+[bucket] Yêu cầu 10 (tác vụ 2) được phép tại t =  0.000 s   lý thuyết  0.000 s
+[bucket] Yêu cầu 11 (tác vụ 2) được phép tại t =  0.510 s   lý thuyết  0.500 s
+[bucket] Yêu cầu 12 (tác vụ 2) được phép tại t =  1.015 s   lý thuyết  1.000 s
+[bucket] Yêu cầu 13 (tác vụ 1) được phép tại t =  1.504 s   lý thuyết  1.500 s
+[bucket] Yêu cầu 14 (tác vụ 1) được phép tại t =  2.009 s   lý thuyết  2.000 s
+[bucket] Thử lấy n = 11 > C = 10 đơn vị
+[bucket] Lỗi ArgumentError: n vượt dung lượng
+

@@ -1,0 +1,222 @@
+===== server =====
+> out\app.exe server 127.0.0.1 41775
+[server] Lắng nghe 127.0.0.1:41775; chế độ khoa, trễ 0–2 ms
+[server] Phòng chờ BẬT: 500 vé, cấp lượt 50 người/s
+[server] Đặt lại (phong_cho=1, toc_do=200.0, dung_luong=20)
+[server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
+[server] Lượt trước: khong_khoa, 3000 yc, tc 2992, sai phạm 2950
+[server] Đặt lại (phong_cho=1, toc_do=200.0, dung_luong=20)
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] khoa: 276 yc, tc 77, từ chối 0, sai phạm 0
+[server] Đã bán hết 500 vé
+[server] Lượt trước: khoa, 2507 yc, tc 1539, sai phạm 0
+[server] Đặt lại (phong_cho=1, toc_do=200.0, dung_luong=20)
+[server] Chế độ: lac_quan – Lạc quan (phiên bản + CAS)
+[server] Đã bán hết 500 vé
+[server] Lượt trước: lac_quan, 4193 yc, tc 801, sai phạm 0
+[server] Đặt lại (phong_cho=1, toc_do=200.0, dung_luong=20)
+[server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
+[server] hang_doi: 3372 yc, tc 1554, từ chối 1256, sai phạm 0
+[server] Đã bán hết 500 vé
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 3458 yc, tc 1722, sai phạm 0
+[server] Đặt lại (phong_cho=0, toc_do=200.0, dung_luong=20)
+[server] Đã bán hết 500 vé
+[server] Lượt trước: khoa, 3143 yc, tc 198, sai phạm 0
+[server] Đặt lại (phong_cho=1, toc_do=200.0, dung_luong=20)
+[server] Đã bán hết 500 vé
+[server] Lượt trước: khoa, 2505 yc, tc 1513, sai phạm 0
+[server] Đặt lại (toc_do=0.5, dung_luong=1)
+[server] An vào
+[server] Bình vào
+[server] Chi vào
+[server] khoa: 8 yc, tc 5, từ chối 1, sai phạm 0
+[server] khoa: 9 yc, tc 8, từ chối 1, sai phạm 0
+[server] Bình rời
+[server] An rời
+[server] Chi rời
+[server] khoa: 11 yc, tc 9, từ chối 2, sai phạm 0
+[server] Tổng kết (từ lần đặt lại cuối):
+[server]   Chế độ khoa, trễ xử lý 0–2 ms
+[server]   Yêu cầu 11: thành công 9, từ chối 2
+[server]   Xung đột 0, thử lại 0, hết lượt thử 0
+[server]   Hàng đợi max 0, chờ khóa quá hạn 0
+[server]   Xử lý µs: p50 1502 p95 3319895 p99 3319895
+[server]   Thông lượng 2 yc/s
+[server]   Sai phạm 0: vượt vé 0, sai lượt 0, đảo số 0
+[server]   Sổ: bán 7/500 vé, 3 đơn; kho còn 493
+[server] Máy chủ đã dừng
+
+===== mp =====
+> out\app.exe mo_phong 127.0.0.1 41775 --n 1000 --so-sanh
+[mo_phong] === khong_khoa: 1000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 3000 yc xong trong 4.72 s = 635 yc/s
+[mo_phong] Khứ hồi ms: p50 13.5 p95 3972.4 p99 4593.8
+[mo_phong] Thành công 2992, từ chối 8
+[mo_phong]   lý do: da_mua 8
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 2719 p95 3970120 p99 4593264
+[mo_phong] Sai phạm 2950: vượt vé 1973, sai lượt 92, đảo số 885
+[mo_phong]   ví dụ: u117 vào sau nhưng nhận số 1 ≤ 2
+[mo_phong]   ví dụ: u137 vào sau nhưng nhận số 2 ≤ 2
+[mo_phong] Sổ: bán 2473/500 vé, 992 đơn; kho còn 270
+[mo_phong] === khoa: 1000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2507 yc xong trong 1.76 s = 1428 yc/s
+[mo_phong] Khứ hồi ms: p50 674.2 p95 1404.7 p99 1554.8
+[mo_phong] Thành công 1539, từ chối 968
+[mo_phong]   lý do: het_ve 721, qua_tai 218, da_mua 29
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 242699 p95 379262 p99 435385
+[mo_phong] Sai phạm 0: vượt vé 0, sai lượt 0, đảo số 0
+[mo_phong] Sổ: bán 500/500 vé, 204 đơn; kho còn 0
+[mo_phong] === lac_quan: 1000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 4193 yc xong trong 1.20 s = 3500 yc/s
+[mo_phong] Khứ hồi ms: p50 43.9 p95 583.8 p99 1030.5
+[mo_phong] Thành công 801, từ chối 3392
+[mo_phong]   lý do: xung_dot 3227, het_ve 140, da_mua 25
+[mo_phong] Máy chủ: xung đột 17047, thử lại 13820, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 10348 p95 557914 p99 1011822
+[mo_phong] Sai phạm 0: vượt vé 0, sai lượt 0, đảo số 0
+[mo_phong] Sổ: bán 500/500 vé, 195 đơn; kho còn 0
+[mo_phong] === hang_doi: 1000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 3458 yc xong trong 2.52 s = 1374 yc/s
+[mo_phong] Khứ hồi ms: p50 351.1 p95 1593.0 p99 1687.9
+[mo_phong] Thành công 1722, từ chối 1736
+[mo_phong]   lý do: qua_tai 1239, het_ve 474, da_mua 23
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 999
+[mo_phong] Máy chủ xử lý µs: p50 351120 p95 1590480 p99 1685449
+[mo_phong] Sai phạm 0: vượt vé 0, sai lượt 0, đảo số 0
+[mo_phong] Sổ: bán 500/500 vé, 194 đơn; kho còn 0
+[mo_phong] Bảng so sánh (1000 người × 1 lần, 200 kết nối):
+  Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+  khong_khoa         2992     2950        0   635  4593.8
+  khoa               1539        0        0  1428  1554.8
+  lac_quan            801        0    17047  3500  1030.5
+  hang_doi           1722        0        0  1374  1687.9
+
+===== pc =====
+> out\app.exe so_sanh_phong_cho 127.0.0.1 41775 --n 1000
+[mo_phong] === khoa: 1000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 3143 yc xong trong 0.54 s = 5790 yc/s
+[mo_phong] Khứ hồi ms: p50 4.6 p95 283.3 p99 487.5
+[mo_phong] Thành công 198, từ chối 2945
+[mo_phong]   lý do: qua_tai 2815, het_ve 130
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 0 p95 101037 p99 106941
+[mo_phong] Sai phạm 0: vượt vé 0, sai lượt 0, đảo số 0
+[mo_phong] Sổ: bán 500/500 vé, 198 đơn; kho còn 0
+[mo_phong] === khoa: 1000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2505 yc xong trong 1.69 s = 1483 yc/s
+[mo_phong] Khứ hồi ms: p50 638.5 p95 1384.6 p99 1529.9
+[mo_phong] Thành công 1513, từ chối 992
+[mo_phong]   lý do: het_ve 719, qua_tai 241, da_mua 32
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 211563 p95 345699 p99 394342
+[mo_phong] Sai phạm 0: vượt vé 0, sai lượt 0, đảo số 0
+[mo_phong] Sổ: bán 500/500 vé, 197 đơn; kho còn 0
+[mo_phong] Bật/tắt phòng chờ (1000 người, khoa, 200 kết nối):
+  Phòng chờ Mua được Hết vé Quá tải Bỏ cuộc p50 ms p99 ms
+  tắt            198    130    2815     672   29.3  523.8
+  bật            197    719     241      52   66.9  164.7
+  Thời gian cả lượt: tắt 0.63 s, bật 1.77 s
+
+===== qt =====
+> out\app.exe khach 127.0.0.1 41775 dat_lai toc_do=0.5 dung_luong=1
+[quan_tri] > dat_lai toc_do=0.5 dung_luong=1
+[quan_tri] OK
+
+===== A =====
+> out\app.exe mua_ve An 127.0.0.1 41775 --tu-dong --so-ve 2 --thoi-gian 7
+[An] Trang bán vé: Đêm nhạc Mùa Đông 2026 (khoa)
+[An]   còn 500/500 vé, 1.500.000 đ/vé
+[An]   phòng chờ BẬT, cấp lượt 0.5 người/s
+[An] > vào phòng chờ
+[An]   số thứ tự #1, còn 0 người phía trước, ~2.0 s
+[An]   ĐẾN LƯỢT! (chờ 0.1 s) còn 20.0 s để mua
+[An] > mua 2 vé
+[An]   THÀNH CÔNG (1.3 ms): đơn #1981, 2 vé, 3.000.000 đ
+
+===== B =====
+> out\app.exe mua_ve Bình 127.0.0.1 41775 --tu-dong --so-ve 1 --thoi-gian 6.5
+[Bình] Trang bán vé: Đêm nhạc Mùa Đông 2026 (khoa)
+[Bình]   còn 498/500 vé, 1.500.000 đ/vé
+[Bình]   phòng chờ BẬT, cấp lượt 0.5 người/s
+[Bình] > vào phòng chờ
+[Bình]   số thứ tự #2, còn 0 người phía trước, ~2.0 s
+[Bình] > mua 1 vé
+[Bình]   TỪ CHỐI (0.7 ms): chưa tới lượt – hãy vào hàng chờ
+[Bình]   ĐẾN LƯỢT! (chờ 1.7 s) còn 20.0 s để mua
+[Bình] > mua 1 vé
+[Bình]   THÀNH CÔNG (1.6 ms): đơn #1982, 1 vé, 1.500.000 đ
+
+===== C =====
+> out\app.exe mua_ve Chi 127.0.0.1 41775 --thoi-gian 6.5
+[Chi] Trang bán vé: Đêm nhạc Mùa Đông 2026 (khoa)
+[Chi]   còn 498/500 vé, 1.500.000 đ/vé
+[Chi]   phòng chờ BẬT, cấp lượt 0.5 người/s
+[Chi] > vào phòng chờ
+[Chi]   số thứ tự #3, còn 1 người phía trước, ~4.0 s
+[Chi]   ĐẾN LƯỢT! (chờ 3.3 s) còn 20.0 s để mua
+[Chi] > mua 4 vé (bấm đúp)
+[Chi]   THÀNH CÔNG (2.3 ms): đơn #1983, 4 vé, 6.000.000 đ
+[Chi]   TỪ CHỐI (6.8 ms): lượt này đã dùng để mua
+
+===== gui =====
+> out\app_gui.exe demo_gui 127.0.0.1 41777
+[demo] 1. Máy chủ: START SERVER (khoa, phòng chờ bật)
+[demo]    An, Bình, Chi: Kết nối
+[demo] 2. Đặt lại: 2000 vé, cấp lượt 50 người/s, thùng 50
+[demo]    Chi: VÀO HÀNG CHỜ (người đầu tiên)
+[demo]    Chi: ĐẾN LƯỢT BẠN! Hãy hoàn tất trước khi hết giờ
+[demo]    Mô phỏng: 300 người ùa vào hàng (Bắn đồng loạt)
+[demo]    An, Bình: VÀO HÀNG CHỜ
+[demo]    Chi: chọn 2 vé, THANH TOÁN
+[demo]    Chi: Mua thành công 2 vé – đơn #92, 3.000.000 đ
+[demo]    An: Số thứ tự của bạn: #302
+[demo]    An: Còn khoảng 142 người phía trước – chờ ~3 s
+[demo]    Đã ghi ket_qua_gui_phong_cho.png (280 KB)
+[demo] 3. An tới lượt: đồng hồ 00:19; chọn 3 vé, THANH TOÁN
+[demo]    An: Mua thành công 3 vé – đơn #272, 4.500.000 đ
+[demo]    máy chủ: 900 yc, tc 870, từ chối 30, sai phạm 0
+[demo]    Sổ: bán 655/2000 vé, 272 đơn; kho còn 1345
+[demo] 4. Máy chủ: khong_khoa, trễ 0–20 ms; Đặt lại (500 vé)
+[demo]    Chi: Rời, đăng nhập lại tên 'An' (tab thứ hai của An)
+[demo]    Hai tab của An cùng VÀO HÀNG CHỜ
+[demo]    Hai tab cùng bấm THANH TOÁN 2 vé (một lượt)
+[demo]    tab 1: Mua thành công 2 vé – đơn #273, 3.000.000 đ
+[demo]    tab 2: Mua thành công 2 vé – đơn #274, 3.000.000 đ
+[demo]    máy chủ: 6 yc, tc 6, từ chối 0, sai phạm 1
+[demo]    Sổ: bán 4/500 vé, 2 đơn; kho còn 498
+[demo]      ví dụ: An mua 2 vé khi lượt đã dùng
+[demo]    Đã ghi ket_qua_gui_tranh_chap.png (240 KB)
+[demo] 5. khoa, trễ 0–2 ms; Chi vào lại; So sánh 4 chế độ
+[demo]   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+[demo]   khong_khoa         2995     2983        0   619  4705.2
+[demo]   khoa               1492        0        0  1501  1456.9
+[demo]   lac_quan            862        0    16723  3208  1139.5
+[demo]   hang_doi           1710        0        0  1334  1730.3
+[demo]    Sai phạm: khong_khoa
+[demo]    Không sai phạm: khoa, lac_quan, hang_doi
+[demo]    So sánh bật/tắt phòng chờ (khoa, 1000 người)
+[demo]   Phòng chờ Mua được Hết vé Quá tải Bỏ cuộc p50 ms p99 ms
+[demo]   tắt            199    134    2865     667   36.6  481.6
+[demo]   bật            192    763      64      15   73.3  127.2
+[demo]   Thời gian cả lượt: tắt 0.59 s, bật 1.62 s
+[demo] 6. Đặt lại: 2000 vé, 20 người/s, thùng 2
+[demo]    Bình, Chi vào hàng; Chi mua 1 vé
+[demo]    400 người ùa vào; An vào hàng sau họ
+[demo]    An: Còn khoảng 346 người phía trước – chờ ~17 s
+[demo]    Bình: đồng hồ 00:17
+[demo]    Chi: Mua thành công 1 vé – đơn #2263, 1.500.000 đ
+[demo] 7. Chụp 4 cửa sổ
+[demo]    Đã ghi ket_qua_gui.png (368 KB)
+[demo] 8. Máy chủ: STOP SERVER
+[demo]    Bình: Mất kết nối máy chủ
+[demo] Kết thúc
+

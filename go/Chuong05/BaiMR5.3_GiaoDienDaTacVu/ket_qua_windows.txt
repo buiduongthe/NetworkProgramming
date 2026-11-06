@@ -1,0 +1,61 @@
+===== server =====
+> out\app.exe server 127.0.0.1 41535
+[server] HTTP 127.0.0.1:41535/tcp, "DNS" 127.0.0.1:41535/udp, cổng mở 41536, 41537
+[server] HTTP GET /tep 256 KB, nghỉ 90 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 60 ms mỗi khối
+[server] HTTP GET /tep 384 KB, nghỉ 70 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 120 ms mỗi khối
+[server] HTTP: client đóng kết nối giữa chừng (192/256 KB)
+[server] HTTP GET /tep 320 KB, nghỉ 50 ms mỗi khối
+[server] HTTP GET /tep 384 KB, nghỉ 70 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 60 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 90 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 80 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 120 ms mỗi khối
+[server] HTTP GET /tep 384 KB, nghỉ 70 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 60 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 90 ms mỗi khối
+[server] HTTP: client đóng kết nối giữa chừng (160/256 KB)
+[server] HTTP: client đóng kết nối giữa chừng (128/384 KB)
+[server] HTTP: client đóng kết nối giữa chừng (112/256 KB)
+[server] dừng
+
+===== ui =====
+> out\app.exe ui 127.0.0.1 41539 127.0.0.1 41535
+[ui]   0.00 s  Giao diện: http://127.0.0.1:41539/ (máy chủ thử 127.0.0.1:41535)
+[ui]   2.68 s  Bấm Tải tệp: 5 tệp, giới hạn đồng thời 3
+[ui]   2.72 s  Bấm Kiểm tra cổng: 41535, 41536, 41537, 41538
+[ui]   2.76 s  Bấm Tra cứu tên: 5 tên qua UDP
+[ui]   3.59 s  Tải 256 KB (60 ms/khối): xong 256 KB
+[ui]   3.72 s  Bấm Hủy ở tác vụ #2
+[ui]   3.72 s  Tải 256 KB (90 ms/khối): đã hủy
+[ui]   4.30 s  Tải 384 KB (70 ms/khối): xong 384 KB
+[ui]   4.69 s  Tải 320 KB (50 ms/khối): xong 320 KB
+[ui]   5.40 s  Tải 256 KB (120 ms/khối): xong 256 KB
+[ui]   5.51 s  Kiểm tra 4 cổng: 3 mở, 1 đóng
+[ui]   5.89 s  Tra cứu 5 tên: 4/5 tên có địa chỉ
+[ui]   5.96 s  Bấm Tải tệp: 4 tệp, giới hạn đồng thời 3
+[ui]   6.31 s  Bấm Làm SAI: trang gọi /api/bad ĐỒNG BỘ, handler tải 256 KB rồi mới trả lời
+[ui]   6.87 s  Tải 256 KB (60 ms/khối): xong 256 KB
+[ui]   7.32 s  Tải 256 KB (90 ms/khối): xong 256 KB
+[ui]   7.52 s  /api/bad trả lời sau 1216 ms (các goroutine khác vẫn chạy bình thường)
+[ui]   7.53 s  Trang bị chặn 1221 ms: đồng hồ, nút, thanh tiến trình đứng yên
+[ui]   7.58 s  Tải 384 KB (70 ms/khối): xong 384 KB
+[ui]   8.68 s  Tải 256 KB (120 ms/khối): xong 256 KB
+[ui]   8.74 s  Bấm Tải tệp: 4 tệp, giới hạn đồng thời 3
+[ui]   9.29 s  Bấm Hủy tất cả: 4 tác vụ
+[ui]   9.29 s  Tải 256 KB (120 ms/khối): đã hủy (khi đang chờ lượt)
+[ui]   9.29 s  Tải 384 KB (70 ms/khối): đã hủy
+[ui]   9.29 s  Tải 256 KB (90 ms/khối): đã hủy
+[ui]   9.29 s  Tải 256 KB (60 ms/khối): đã hủy
+[ui]  10.48 s  dừng
+
+===== browser =====
+> python chup_giao_dien.py 41539
+[trình duyệt] Chụp ảnh 1: 4 tác vụ chưa xong, 1 đang chờ lượt
+[trình duyệt] Bấm Làm SAI (XMLHttpRequest đồng bộ)
+[trình duyệt] Nhịp rỗi                :   57 nhịp, TB   19.7 ms, tối đa     24 ms
+[trình duyệt] Nhịp chạy song song     :  248 nhịp, TB   20.0 ms, tối đa     29 ms
+[trình duyệt] Nhịp luồng chính bị chặn:    1 nhịp, TB 1246.4 ms, tối đa   1246 ms
+[trình duyệt] Đã chụp giao diện: ket_qua_gui.png
+

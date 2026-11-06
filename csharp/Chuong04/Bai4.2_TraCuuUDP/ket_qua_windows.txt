@@ -1,0 +1,44 @@
+===== server =====
+> dotnet run --no-build -c Release -- server 127.0.0.1 9422 2
+[server] Đang lắng nghe UDP tại 127.0.0.1:9422, từ điển 5 thuật ngữ
+[server] Mô phỏng mất gói: bỏ qua 2 datagram đầu tiên
+[server] Bỏ qua datagram thứ 1 từ 127.0.0.1:60371 (mô phỏng mất gói)
+[server] Bỏ qua datagram thứ 2 từ 127.0.0.1:60371 (mô phỏng mất gói)
+[server] Yêu cầu id=1 op=lookup từ 127.0.0.1:60371 -> status=200, 176 byte
+[server] Yêu cầu id=2 op=lookup từ 127.0.0.1:60371 -> status=200, 136 byte
+[server] Yêu cầu id=3 op=lookup từ 127.0.0.1:60371 -> status=404, 56 byte
+[server] Dừng server
+
+===== client =====
+> dotnet run --no-build -c Release -- client 127.0.0.1 9422
+[client] Gửi yêu cầu tới 127.0.0.1:9422 qua UDP (chờ 500 ms, tối đa 4 lần). Nhập thuật ngữ (Ctrl+Z/Ctrl+D để kết thúc).
+[client] Tra cứu 'UDP'
+[client]   Lần 1: gửi id=1 (35 byte), chờ tối đa 500 ms
+[client]   Hết 500 ms không có phản hồi
+[client]   Lần 2: gửi id=1 (35 byte), chờ tối đa 1000 ms
+[client]   Hết 1000 ms không có phản hồi
+[client]   Lần 3: gửi id=1 (35 byte), chờ tối đa 2000 ms
+[client] UDP: User Datagram Protocol – giao thức vận chuyển không kết nối, tiêu đề 8 byte, bảo toàn ranh giới thông điệp (1542 ms)
+[client] Tra cứu 'QUIC'
+[client]   Lần 1: gửi id=2 (36 byte), chờ tối đa 500 ms
+[client] QUIC: Giao thức vận chuyển chạy trên UDP, tích hợp TLS 1.3, nền tảng của HTTP/3 (5 ms)
+[client] Tra cứu 'XYZ'
+[client]   Lần 1: gửi id=3 (35 byte), chờ tối đa 500 ms
+[client] Lỗi 404: Không có thuật ngữ (1 ms)
+[client] Đã đóng socket
+
+===== client2 =====
+> dotnet run --no-build -c Release -- client 127.0.0.1 9429
+[client] Gửi yêu cầu tới 127.0.0.1:9429 qua UDP (chờ 500 ms, tối đa 4 lần). Nhập thuật ngữ (Ctrl+Z/Ctrl+D để kết thúc).
+[client] Tra cứu 'TCP'
+[client]   Lần 1: gửi id=1 (35 byte), chờ tối đa 500 ms
+[client]   Hết 500 ms không có phản hồi
+[client]   Lần 2: gửi id=1 (35 byte), chờ tối đa 1000 ms
+[client]   Hết 1000 ms không có phản hồi
+[client]   Lần 3: gửi id=1 (35 byte), chờ tối đa 2000 ms
+[client]   Hết 2000 ms không có phản hồi
+[client]   Lần 4: gửi id=1 (35 byte), chờ tối đa 4000 ms
+[client]   Hết 4000 ms không có phản hồi
+[client] Lỗi: Không có phản hồi sau 4 lần (9 ms)
+[client] Đã đóng socket
+

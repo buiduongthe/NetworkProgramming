@@ -1,0 +1,39 @@
+===== server =====
+> out\app.exe server 127.0.0.1 31550 4096
+[server] Đang lắng nghe tại 127.0.0.1:31550, giới hạn đọc 4096 KiB/s
+[server] Client kết nối: 127.0.0.1:50236
+[server] Nhận yêu cầu put: du_lieu_thu.bin, 4194304 byte
+[server] Đã lưu uploads/du_lieu_thu.bin, mã băm khớp (200)
+[server] Client 127.0.0.1:50236 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:50237
+[server] Nhận yêu cầu put: du_lieu_thu.bin, 4194304 byte
+[server] Kết nối đóng khi mới nhận 1900544/4194304 byte: xóa uploads\du_lieu_thu.bin.part
+[server] Lỗi với 127.0.0.1:50237: Kết nối đã đóng (đã nhận 1900544 byte)
+[server] Client 127.0.0.1:50237 đã đóng kết nối
+[server] Dừng server
+
+===== client =====
+> out\app.exe client 127.0.0.1 31550 du_lieu_thu.bin
+[client] Tạo tệp thử du_lieu_thu.bin (4 MiB)
+[client] Đã kết nối 127.0.0.1:31550, tải lên du_lieu_thu.bin
+[client] Tiến trình: 0.06/4.00 MiB (1%)
+[client] Tiến trình: 0.69/4.00 MiB (17%)
+[client] Tiến trình: 1.12/4.00 MiB (28%)
+[client] Tiến trình: 1.56/4.00 MiB (39%)
+[client] Tiến trình: 2.00/4.00 MiB (50%)
+[client] Tiến trình: 2.44/4.00 MiB (60%)
+[client] Tiến trình: 2.88/4.00 MiB (71%)
+[client] Tiến trình: 3.31/4.00 MiB (82%)
+[client] Tiến trình: 3.75/4.00 MiB (93%)
+[client] Tiến trình: 4.00/4.00 MiB (100%)
+[client] Kết quả: {"saved":"du_lieu_thu.bin","status":200} sau 1.08 s
+
+===== client_huy =====
+> out\app.exe client 127.0.0.1 31550 du_lieu_thu.bin 400
+[client] Đã kết nối 127.0.0.1:31550, tải lên du_lieu_thu.bin, sẽ bấm Hủy sau 400 ms
+[client] Tiến trình: 0.06/4.00 MiB (1%)
+[client] Tiến trình: 0.69/4.00 MiB (17%)
+[client] Tiến trình: 1.12/4.00 MiB (28%)
+[client] Tiến trình: 1.56/4.00 MiB (39%)
+[client] Đã hủy sau 0.40 s; đóng kết nối (trạng thái giao thức không còn tin cậy)
+

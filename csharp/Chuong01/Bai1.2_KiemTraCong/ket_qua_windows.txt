@@ -1,0 +1,30 @@
+===== server =====
+> python -m http.server 9121 --bind 127.0.0.1
+Serving HTTP on 127.0.0.1 port 9121 (http://127.0.0.1:9121/) ...
+
+Keyboard interrupt received, exiting.
+
+===== open =====
+> dotnet run --no-build -c Release -- localhost 9121
+[port-check] Kiểm tra localhost:9121 (thời gian chờ 2000 ms)
+  INET6  ::1
+  INET   127.0.0.1
+[port-check] ::1 cổng 9121: hết thời gian chờ
+[port-check] 127.0.0.1 cổng 9121: kết nối thành công
+[port-check] Kết quả: localhost:9121 -> OPEN
+
+===== closed =====
+> dotnet run --no-build -c Release -- localhost 9122
+[port-check] Kiểm tra localhost:9122 (thời gian chờ 2000 ms)
+  INET6  ::1
+  INET   127.0.0.1
+[port-check] ::1 cổng 9122: bị từ chối (RST)
+[port-check] 127.0.0.1 cổng 9122: hết thời gian chờ
+[port-check] Kết quả: localhost:9122 -> CLOSED
+
+===== unresolved =====
+> dotnet run --no-build -c Release -- khong-ton-tai.invalid 80
+[port-check] Kiểm tra khong-ton-tai.invalid:80 (thời gian chờ 2000 ms)
+[port-check] Không phân giải được khong-ton-tai.invalid (mã lỗi 11001: HostNotFound)
+[port-check] Kết quả: khong-ton-tai.invalid:80 -> UNRESOLVED
+

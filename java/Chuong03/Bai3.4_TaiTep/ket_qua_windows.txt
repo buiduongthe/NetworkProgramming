@@ -1,0 +1,49 @@
+===== server =====
+> java -cp out PutServer 127.0.0.1 9343
+[server] Đang lắng nghe tại 127.0.0.1:9343, thư mục tải lên: uploads/
+[server] Client kết nối: 127.0.0.1:52211
+[server] 127.0.0.1:52211: put 'mau.txt' -> 200, lưu uploads/mau.txt (201000 byte)
+[server] 127.0.0.1:52211: lookup 'TCP' -> 200
+[server] Client 127.0.0.1:52211 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:52212
+[server] 127.0.0.1:52212: put '../thu.txt' -> 200, lưu uploads/thu.txt (170 byte)
+[server] 127.0.0.1:52212: put '..\..\thu2.txt' -> 200, lưu uploads/thu2.txt (170 byte)
+[server] 127.0.0.1:52212: put '../' -> 400 (Sai tham số)
+[server] 127.0.0.1:52212: put 'sai_bam.txt' -> 422 (Mã băm không khớp)
+[server] 127.0.0.1:52212: put 'lon.bin' -> 400 (Sai tham số)
+[server] Client 127.0.0.1:52212 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:52213
+[server] Lỗi với 127.0.0.1:52213: Tệp chưa nhận đủ (100/1000 byte)
+[server] Client 127.0.0.1:52213 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:52214
+[server] 127.0.0.1:52214: list -> 200
+[server] Client 127.0.0.1:52214 đã đóng kết nối
+
+===== client =====
+> java -cp out PutClient 127.0.0.1 9343
+[client] Đã kết nối 127.0.0.1:9343. Nhập 'put <tệp>' hoặc thuật ngữ (Ctrl+Z/Ctrl+D để kết thúc).
+[client] Tải lên mau.txt: 201000 byte, SHA-256 8cb2f9bf834b2b6a…
+[client] Kết quả: 200 {"status":200,"saved":"mau.txt"}
+[client] Lỗi: không tìm thấy tệp 'khong_co.txt'
+[client] TCP: Giao thức vận chuyển hướng kết nối, tin cậy, đúng thứ tự, truyền dòng byte (RFC 9293).
+[client] Đã đóng kết nối
+
+===== kiem_thu =====
+> java -cp out KiemThu 127.0.0.1 9343
+[kiểm thử] Server 127.0.0.1:9343
+[kiểm thử] Ca 8a – tên '../thu.txt': ĐẠT (status 200, lưu 'thu.txt')
+[kiểm thử] Ca 8b – tên '..\..\thu2.txt': ĐẠT (status 200, lưu 'thu2.txt')
+[kiểm thử] Ca 8c – tên '../' (không còn tên tệp): ĐẠT (bị từ chối: status 400, Sai tham số)
+[kiểm thử] Ca 9 – mã băm khai báo sai: ĐẠT (status 422, Mã băm không khớp)
+[kiểm thử] Ca bổ sung 1 – size 200 MiB > MAX_FILE: ĐẠT (status 400, Sai tham số)
+[kiểm thử] Ca bổ sung 2 – ngắt sau 100/1000 byte: ĐẠT (server vẫn phục vụ client mới, list -> 200)
+[kiểm thử] Kết quả: 6/6 ca đạt
+
+===== thu_muc =====
+> dir /b uploads & rem SHA-256 (16 ký tự đầu) của mau.txt và uploads\mau.txt
+mau.txt
+thu.txt
+thu2.txt
+8cb2f9bf834b2b6a  mau.txt
+8cb2f9bf834b2b6a  uploads/mau.txt
+

@@ -1,0 +1,165 @@
+===== server =====
+> out\app.exe server 127.0.0.1 41525 200
+[server] lắng nghe 127.0.0.1:41525, mỗi yêu cầu trễ 200 ms
+[server] đợt  1: 20 yêu cầu, đồng thời tối đa  1
+[server] đợt  2: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  3: 20 yêu cầu, đồng thời tối đa  5
+[server] đợt  4: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  5: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  6: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  7: 20 yêu cầu, đồng thời tối đa 20
+[server] dừng; đã phục vụ 140 yêu cầu
+
+===== mang =====
+> out\app.exe mang 127.0.0.1 41525
+Khối việc: 20 yêu cầu mạng, mỗi yêu cầu máy chủ trễ 200 ms
+
+1. tuần tự: 4.04 s
+  chính       |AABBBCCDDDEEFFGGGHHIIIJJKKLLLMMNNNOOPPQQQRRSSSTT|
+2. mỗi tác vụ một goroutine: 0.20 s
+  goroutine-1 |BBB                                             |
+  goroutine-2 |TTT                                             |
+  goroutine-3 |AAA                                             |
+  goroutine-4 |KKK                                             |
+  goroutine-5 |OOO                                             |
+  goroutine-6 |CCC                                             |
+  goroutine-8 |DDD                                             |
+  goroutine-9 |MMM                                             |
+  … và 12 goroutine khác, mỗi goroutine chạy 1 tác vụ
+3. nhóm worker (5 goroutine): 0.81 s
+  worker-2    |BBFFFOOQQQ                                      |
+  worker-1    |CCGGGKKPPP                                      |
+  worker-4    |EEHHHMMTTT                                      |
+  worker-3    |DDIIILLSSS                                      |
+  worker-5    |AAJJJNNRRR                                      |
+4. goroutine + kênh + context: 0.21 s
+  goroutine-2 |TTT                                             |
+  goroutine-3 |DDD                                             |
+  goroutine-1 |HHH                                             |
+  goroutine-5 |EEE                                             |
+  goroutine-4 |BBB                                             |
+  goroutine-6 |NNN                                             |
+  goroutine-7 |AAA                                             |
+  goroutine-9 |FFF                                             |
+  … và 12 goroutine khác, mỗi goroutine chạy 1 tác vụ
+               0                                           4.0 s
+
+  Mô hình                        Thời gian  Tăng tốc
+  1. tuần tự                        4.04 s      1.0×
+  2. mỗi tác vụ một goroutine       0.20 s     19.8×
+  3. nhóm worker (5 goroutine)      0.81 s      5.0×
+  4. goroutine + kênh + context     0.21 s     19.7×
+
+Mô hình 4 nhận đủ 20/20 kết quả qua kênh trước hạn chót.
+Nhận xét: việc chờ I/O không tốn CPU; goroutine rất nhẹ (vài KB ngăn
+  xếp) nên mỗi yêu cầu một goroutine là cách viết tự nhiên trong Go –
+  bộ lập lịch tự ghép hàng nghìn goroutine lên vài luồng hệ điều hành.
+
+===== cpu =====
+> out\app.exe cpu
+Khối việc: 8 tác vụ CPU, mỗi tác vụ ≈ 100 ms
+Máy có 16 CPU; GOMAXPROCS = 16; Go không có GIL
+
+1. tuần tự: 0.82 s
+  chính       |AAAAAABBBBBBCCCCCCDDDDDDEEEEEEFFFFFFGGGGGGHHHHHH|
+2. mỗi tác vụ một goroutine: 0.23 s
+  goroutine-1 |HHHHHHHHHHHHH                                   |
+  goroutine-2 |DDDDDDDDDDDDD                                   |
+  goroutine-3 |BBBBBBBBBBBB                                    |
+  goroutine-4 |AAAAAAAAAAAAA                                   |
+  goroutine-5 |CCCCCCCCCCCCC                                   |
+  goroutine-6 |FFFFFFFFFFFFFF                                  |
+  goroutine-7 |GGGGGGGGGGGGG                                   |
+  goroutine-8 |EEEEEEEEEEEEEE                                  |
+3. nhóm worker (16 = số CPU): 0.23 s
+  worker-3    |AAAAAAAAAAAAA                                   |
+  worker-2    |CCCCCCCCCCCCCC                                  |
+  worker-1    |BBBBBBBBBBBBBB                                  |
+  worker-4    |EEEEEEEEEEEEE                                   |
+  worker-7    |HHHHHHHHHHHHHH                                  |
+  worker-8    |DDDDDDDDDDDDDD                                  |
+  worker-6    |GGGGGGGGGGGGGG                                  |
+  worker-5    |FFFFFFFFFFFFFF                                  |
+               0                                           0.8 s
+
+  Mô hình                        Thời gian  Tăng tốc
+  1. tuần tự                        0.82 s      1.0×
+  2. mỗi tác vụ một goroutine       0.23 s      3.5×
+  3. nhóm worker (16 = số CPU)      0.23 s      3.6×
+
+Nhận xét: không có GIL, các goroutine chạy song song thật trên mọi CPU;
+  mô hình 2 tạo 8 goroutine nhưng chỉ GOMAXPROCS goroutine chạy cùng
+  lúc (mỗi tác vụ bị kéo dài vì chia lượt); nhóm worker bằng số CPU
+  cho cùng tổng thời gian mà mỗi tác vụ chạy liền một mạch.
+
+===== tron =====
+> out\app.exe tron 127.0.0.1 41525
+Khối việc: 20 tác vụ = yêu cầu mạng 200 ms + xử lý CPU ≈ 30 ms
+Đo thêm độ trễ lập lịch: goroutine "nhịp tim" ngủ 10 ms và đo xem
+  thực tế bị đánh thức muộn bao nhiêu (trễ lớn = ứng dụng đứng).
+
+A. CPU ngay trong goroutine: 0.37 s
+  chờ mạng    |***************D                                |
+  goroutine-1 |          SSSSSS                                |
+  goroutine-2 |          MMMMM                                 |
+  goroutine-6 |          NNNNNN                                |
+  goroutine-3 |          RRRRRR                                |
+  goroutine-5 |          TTTTTT                                |
+  goroutine-4 |          LLLLLLL                               |
+  goroutine-7 |          JJJJJJJ                               |
+  … và 13 goroutine khác, mỗi goroutine chạy 1 tác vụ
+B. + nhóm worker CPU (16): 0.35 s
+  chờ mạng    |**************B                                 |
+  worker-3    |          TTTTKKKK                              |
+  worker-9    |          QQQQSSSS                              |
+  worker-1    |          AAAAAA                                |
+  worker-2    |          EEEEEEE                               |
+  worker-5    |          OOOOBBBBB                             |
+  worker-7    |          IIIIJJJJ                              |
+  worker-12   |          LLLLL                                 |
+  … và 9 worker khác, mỗi worker chạy 1 tác vụ
+C. như A, GOMAXPROCS = 1: 0.94 s
+  chờ mạng    |****************************TT                  |
+  goroutine-1 |          NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN |
+  goroutine-2 |           HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH |
+  goroutine-3 |           EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE|
+  goroutine-4 |            AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA|
+  goroutine-5 |            BBBBBBBBBBBBBBBBBBBBBBBB            |
+  goroutine-6 |             JJJJJJJJJJJJJJJJJJJJJJJ            |
+  goroutine-7 |               LLLLLLLLLLLLLLLLLLLLLL           |
+  … và 13 goroutine khác, mỗi goroutine chạy 1 tác vụ
+               0                                           0.9 s
+
+  Mô hình                        Thời gian  Trễ lập lịch
+  A. CPU ngay trong goroutine       0.37 s         91 ms
+  B. + nhóm worker CPU (16)         0.35 s         31 ms
+  C. như A, GOMAXPROCS = 1          0.94 s         11 ms
+
+Nhận xét: "chờ mạng" là hàng chung của mọi goroutine đang đợi trong
+  netpoller (*). A, B – CPU chạy song song trên mọi CPU, nhịp tim gần
+  như không trễ; B giới hạn số việc CPU đồng thời. C – chỉ một luồng
+  nên CPU tuần tự như Python, nhưng bộ lập lịch Go tự ngắt (preempt)
+  goroutine chạy lâu nên nhịp tim chỉ trễ vài chục ms, không đứng hẳn.
+
+===== khoa =====
+> out\app.exe khoa
+Tranh chấp dữ liệu: 4 goroutine × 5000 lần "đọc – nhường CPU – ghi"
+  lên một biến đếm chung (kết quả đúng phải là 20000).
+  không khóa      :   5000 / 20000 → mất 15000 lần cộng (0.01 s)
+  có khóa (Mutex) :  20000 / 20000 → đúng (0.01 s)
+  atomic.Int64    :  20000 / 20000 → đúng (0.01 s)
+
+Bế tắc (deadlock): T1 chuyển X→Y, T2 chuyển Y→X, mỗi luồng cần cả
+  hai khóa; số dư ban đầu X = 100, Y = 100.
+  T1 giữ khóa X, chờ khóa Y
+  T2 giữ khóa Y, chờ khóa X
+  T1: chờ Y quá 0,5 s → nghi bế tắc, nhả X, bỏ cuộc
+  T2: đã chuyển 5 từ Y sang X
+  Số dư: X = 105, Y = 95 (tổng 200)
+Cách tránh: mọi luồng lấy khóa theo cùng thứ tự (X trước, Y sau):
+  T1 giữ khóa X, chờ khóa Y
+  T1: đã chuyển 10 từ X sang Y
+  T2 giữ khóa X, chờ khóa Y
+  T2: đã chuyển 5 từ Y sang X
+  Số dư: X = 100, Y = 100 (tổng 200)
+

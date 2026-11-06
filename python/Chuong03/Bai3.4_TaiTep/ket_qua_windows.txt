@@ -1,23 +1,23 @@
 ===== server =====
 > python put_server.py 127.0.0.1 9341
 [server] Đang lắng nghe tại 127.0.0.1:9341, thư mục tải lên: uploads/
-[server] Client kết nối: 127.0.0.1:51227
-[server] 127.0.0.1:51227: put 'mau.txt' -> 200, lưu uploads/mau.txt (201000 byte)
-[server] 127.0.0.1:51227: lookup 'TCP' -> 200
-[server] Client 127.0.0.1:51227 đã đóng kết nối
-[server] Client kết nối: 127.0.0.1:51228
-[server] 127.0.0.1:51228: put '../thu.txt' -> 200, lưu uploads/thu.txt (170 byte)
-[server] 127.0.0.1:51228: put '..\..\thu2.txt' -> 200, lưu uploads/thu2.txt (170 byte)
-[server] 127.0.0.1:51228: put '../' -> 400 (Sai tham số)
-[server] 127.0.0.1:51228: put 'sai_bam.txt' -> 422 (Mã băm không khớp)
-[server] 127.0.0.1:51228: put 'lon.bin' -> 400 (Sai tham số)
-[server] Client 127.0.0.1:51228 đã đóng kết nối
-[server] Client kết nối: 127.0.0.1:51229
-[server] Lỗi với 127.0.0.1:51229: Tệp chưa nhận đủ (100/1000 byte)
-[server] Client 127.0.0.1:51229 đã đóng kết nối
-[server] Client kết nối: 127.0.0.1:51230
-[server] 127.0.0.1:51230: list -> 200
-[server] Client 127.0.0.1:51230 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:55129
+[server] 127.0.0.1:55129: put 'mau.txt' -> 200, lưu uploads/mau.txt (201000 byte)
+[server] 127.0.0.1:55129: lookup 'TCP' -> 200
+[server] Client 127.0.0.1:55129 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:55130
+[server] 127.0.0.1:55130: put '../thu.txt' -> 200, lưu uploads/thu.txt (170 byte)
+[server] 127.0.0.1:55130: put '..\..\thu2.txt' -> 200, lưu uploads/thu2.txt (170 byte)
+[server] 127.0.0.1:55130: put '../' -> 400 (Sai tham số)
+[server] 127.0.0.1:55130: put 'sai_bam.txt' -> 422 (Mã băm không khớp)
+[server] 127.0.0.1:55130: put 'lon.bin' -> 400 (Sai tham số)
+[server] Client 127.0.0.1:55130 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:55131
+[server] Lỗi với 127.0.0.1:55131: Tệp chưa nhận đủ (100/1000 byte)
+[server] Client 127.0.0.1:55131 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:55132
+[server] 127.0.0.1:55132: list -> 200
+[server] Client 127.0.0.1:55132 đã đóng kết nối
 
 ===== client =====
 > python put_client.py 127.0.0.1 9341

@@ -1,0 +1,58 @@
+===== server =====
+> java -cp out UdpCookieServer 127.0.0.1 9453
+[server] Đang lắng nghe UDP tại 127.0.0.1:9453, từ điển 5 thuật ngữ, MAX_RATIO = 3
+[server] Nhận 48 byte từ 127.0.0.1:57541 (id=1, cookie: không có)
+[server]   -> phản hồi 176 byte > 3 × 48 byte: gửi thách thức 401 (97 byte)
+[server] Nhận 111 byte từ 127.0.0.1:57541 (id=2, cookie: hợp lệ)
+[server]   -> gửi phản hồi status=200 (176 byte)
+[server] Nhận 112 byte từ 127.0.0.1:57541 (id=3, cookie: hợp lệ)
+[server]   -> gửi phản hồi status=200 (136 byte)
+[server] Nhận 48 byte từ 127.0.0.1:49768 (id=1, cookie: không có)
+[server]   -> gửi phản hồi status=404 (56 byte)
+[server] Nhận 55 byte từ 127.0.0.1:53119 (id=1, cookie: không hợp lệ)
+[server]   -> phản hồi 176 byte > 3 × 55 byte: gửi thách thức 401 (97 byte)
+[server] Nhận 111 byte từ 127.0.0.1:53119 (id=2, cookie: hợp lệ)
+[server]   -> gửi phản hồi status=200 (176 byte)
+[server] Nhận 13 byte từ 127.0.0.1:53120 (id=null, cookie: không có)
+[server]   -> phản hồi 65 byte, thách thức 100 byte đều > 3 × 13 byte: không gửi gì
+[server] Bỏ datagram không phải đối tượng JSON từ 127.0.0.1:53120
+[server] Bỏ datagram 1300 byte > MAX_DGRAM từ 127.0.0.1:53120
+[server] Dừng server
+
+===== client =====
+> java -cp out UdpCookieClient 127.0.0.1 9453
+[client] Gửi yêu cầu tới 127.0.0.1:9453 qua UDP. Nhập thuật ngữ (Ctrl+Z/Ctrl+D để kết thúc).
+[client] Tra cứu 'UDP' (không kèm cookie)
+[client]   Lần 1: gửi id=1 (48 byte), chờ tối đa 500 ms
+[client] Nhận thách thức 401, lưu cookie eaf9910aa781e8f5…; gửi lại kèm cookie
+[client]   Lần 1: gửi id=2 (111 byte), chờ tối đa 500 ms
+[client] UDP: User Datagram Protocol – giao thức vận chuyển không kết nối, tiêu đề 8 byte, bảo toàn ranh giới thông điệp
+[client] Tra cứu 'QUIC' (kèm cookie)
+[client]   Lần 1: gửi id=3 (112 byte), chờ tối đa 500 ms
+[client] QUIC: Giao thức vận chuyển chạy trên UDP, tích hợp TLS 1.3, nền tảng của HTTP/3
+[client] Đã đóng socket
+
+===== client2 =====
+> java -cp out UdpCookieClient 127.0.0.1 9453
+[client] Gửi yêu cầu tới 127.0.0.1:9453 qua UDP. Nhập thuật ngữ (Ctrl+Z/Ctrl+D để kết thúc).
+[client] Tra cứu 'XYZ' (không kèm cookie)
+[client]   Lần 1: gửi id=1 (48 byte), chờ tối đa 500 ms
+[client] Lỗi 404: Không có thuật ngữ
+[client] Đã đóng socket
+
+===== client3 =====
+> java -cp out UdpCookieClient 127.0.0.1 9453 deadbeef
+[client] Gửi yêu cầu tới 127.0.0.1:9453 qua UDP. Nhập thuật ngữ (Ctrl+Z/Ctrl+D để kết thúc).
+[client] Tra cứu 'UDP' (kèm cookie)
+[client]   Lần 1: gửi id=1 (55 byte), chờ tối đa 500 ms
+[client] Nhận thách thức 401, lưu cookie 8f38b7a02ab432b5…; gửi lại kèm cookie
+[client]   Lần 1: gửi id=2 (111 byte), chờ tối đa 500 ms
+[client] UDP: User Datagram Protocol – giao thức vận chuyển không kết nối, tiêu đề 8 byte, bảo toàn ranh giới thông điệp
+[client] Đã đóng socket
+
+===== raw =====
+> python -c "<gửi 3 datagram thô: {\"op\":\"list\"} 13 byte, [1,2], 1300 byte>"
+[thử] Gửi 13 byte -> không có phản hồi sau 1 s
+[thử] Gửi 5 byte -> không có phản hồi sau 1 s
+[thử] Gửi 1300 byte -> không có phản hồi sau 1 s
+

@@ -1,0 +1,37 @@
+===== server =====
+> python -m http.server 21120 --bind 127.0.0.1
+Serving HTTP on 127.0.0.1 port 21120 (http://127.0.0.1:21120/) ...
+
+Keyboard interrupt received, exiting.
+
+===== open =====
+> ..\..\target\release\bai1_2_kiem_tra_cong.exe localhost 21120
+[port-check] Kiểm tra localhost:21120 (thời gian chờ 2000 ms)
+  INET6  ::1
+  INET   127.0.0.1
+[port-check] ::1 cổng 21120: hết thời gian chờ
+[port-check] 127.0.0.1 cổng 21120: kết nối thành công
+[port-check] Kết quả: localhost:21120 -> OPEN
+
+===== closed =====
+> ..\..\target\release\bai1_2_kiem_tra_cong.exe localhost 21121
+[port-check] Kiểm tra localhost:21121 (thời gian chờ 2000 ms)
+  INET6  ::1
+  INET   127.0.0.1
+[port-check] ::1 cổng 21121: hết thời gian chờ
+[port-check] 127.0.0.1 cổng 21121: hết thời gian chờ
+[port-check] Kết quả: localhost:21121 -> FILTERED
+
+===== unresolved =====
+> ..\..\target\release\bai1_2_kiem_tra_cong.exe khong-ton-tai.invalid 80
+[port-check] Kiểm tra khong-ton-tai.invalid:80 (thời gian chờ 2000 ms)
+[port-check] Không phân giải được khong-ton-tai.invalid (No such host is known. (os error 11001))
+[port-check] Kết quả: khong-ton-tai.invalid:80 -> UNRESOLVED
+
+===== filtered =====
+> ..\..\target\release\bai1_2_kiem_tra_cong.exe 10.255.255.1 21122
+[port-check] Kiểm tra 10.255.255.1:21122 (thời gian chờ 2000 ms)
+  INET   10.255.255.1
+[port-check] 10.255.255.1 cổng 21122: hết thời gian chờ
+[port-check] Kết quả: 10.255.255.1:21122 -> FILTERED
+

@@ -1,0 +1,41 @@
+===== gui =====
+> bin\Release\net10.0-windows\BaiMR6.11_GiaoDien.exe demo 127.0.0.1 42752 ..\ket_qua_gui.png
+[demo] 1. Máy chủ: START SERVER (chế độ khoa)
+[demo]    An, Bình, Chi: Kết nối
+[demo] 2. Đặt lại: kho 3 sản phẩm, mở bán sau 3 s
+[demo]    An thấy: 00:00:03, nút 'CHỜ MỞ BÁN' (disabled)
+[demo]    Mở bán: An (2), Bình (1), Chi (2) CÙNG bấm MUA NGAY
+[demo]    An: Đặt hàng thành công! Đơn FS00002 – 2 sp
+[demo]    Bình: Đặt hàng thành công! Đơn FS00001 – 1 sp
+[demo]    Chi: Rất tiếc, sản phẩm đã HẾT HÀNG
+[demo]    máy chủ: 3 yc, tc 2, từ chối 1, sai phạm 0
+[demo]    Bán 3/3 sp (2 đơn), tồn 0
+[demo] 3. Máy chủ: khong_khoa, độ trễ xử lý 0–20 ms; đặt lại
+[demo]    Mở bán: An (2), Bình (1), Chi (2) CÙNG bấm MUA NGAY
+[demo]    An: Đặt hàng thành công! Đơn FS00001 – 2 sp
+[demo]    Bình: Đặt hàng thành công! Đơn FS00002 – 1 sp
+[demo]    Chi: Chỉ còn 1 sản phẩm – giảm số lượng
+[demo]    máy chủ: 3 yc, tc 2, từ chối 1, sai phạm 0
+[demo]    Bán 3/3 sp (2 đơn), tồn 0
+[demo]    Đã ghi ket_qua_gui_tranh_chap.png (98 KB)
+[demo] 4. Máy chủ: khoa, trễ 0–1 ms, kho 100; So sánh 4 chế độ
+[demo]   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+[demo]   khong_khoa         4592    11211        0 22679   399.7
+[demo]   khoa                 63        0        0 28936   367.1
+[demo]   lac_quan             66        0      267 35570   285.6
+[demo]   hang_doi             61        0        0   983 10006.2
+[demo]    Sai phạm: khong_khoa
+[demo]    Không sai phạm: khoa, lac_quan, hang_doi
+[demo] 5. Đặt lại: kho 100, mở bán sau 4 s
+[demo]    Chi thấy: Bắt đầu sau 00:00:03, nút 'CHỜ MỞ BÁN'
+[demo] 6. Mở bán: An mua 2; 50 người ảo cùng mua; Bình mua 2
+[demo]    An: Đặt hàng thành công! Đơn FS00001 – 2 sp
+[demo]    Bình: Đặt hàng thành công! Đơn FS00052 – 2 sp
+[demo]    máy chủ: 52 yc, tc 52, từ chối 0, sai phạm 0
+[demo]    Bán 81/100 sp (52 đơn), tồn 19
+[demo] 7. Chụp cửa sổ (Chi: lúc đếm ngược)
+[demo]    Đã ghi ket_qua_gui.png (179 KB)
+[demo] 8. Máy chủ: STOP SERVER
+[demo]    An: Mất kết nối máy chủ
+[demo] Kết thúc
+

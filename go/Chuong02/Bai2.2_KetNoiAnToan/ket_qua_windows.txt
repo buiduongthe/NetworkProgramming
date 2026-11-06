@@ -1,0 +1,30 @@
+===== server =====
+> out\app.exe server 127.0.0.1 31220
+[server] Đang lắng nghe tại 127.0.0.1:31220
+[server] Client kết nối: 127.0.0.1:61264
+[server] Dừng server
+
+===== refused =====
+> out\app.exe client 127.0.0.1 31221
+[client] Kết nối tới 127.0.0.1:31221, thời gian chờ 3000 ms
+[client] NetError REFUSED, thử lại: không, sau 4 ms
+[client] Nguyên nhân: dial tcp4 127.0.0.1:31221: connectex: No connection could be made because the target machine actively refused it.
+
+===== not_found =====
+> out\app.exe client khong-ton-tai.invalid 31220
+[client] Kết nối tới khong-ton-tai.invalid:31220, thời gian chờ 3000 ms
+[client] NetError NOT_FOUND, thử lại: không, sau 32 ms
+[client] Nguyên nhân: lookup khong-ton-tai.invalid: no such host
+
+===== timeout =====
+> out\app.exe client 10.255.255.1 31220 3000
+[client] Kết nối tới 10.255.255.1:31220, thời gian chờ 3000 ms
+[client] NetError UNREACHABLE, thử lại: có, sau 3000 ms
+[client] Nguyên nhân: dial tcp4 10.255.255.1:31220: i/o timeout
+
+===== ok =====
+> out\app.exe client localhost 31220
+[client] Kết nối tới localhost:31220, thời gian chờ 3000 ms
+[client] Thành công: 127.0.0.1:61264 -> 127.0.0.1:31220, sau 35 ms
+[client] Đã đóng kết nối
+

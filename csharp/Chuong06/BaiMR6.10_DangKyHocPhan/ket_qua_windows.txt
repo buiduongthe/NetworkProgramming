@@ -1,0 +1,141 @@
+===== server =====
+> dotnet bin/Release/net10.0/BaiMR6.10_DangKyHocPhan.dll server 127.0.0.1 42740
+[server] Lắng nghe 127.0.0.1:42740; chế độ khoa, trễ 0–2 ms
+[server] Đặt lại
+[server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
+[server] Lượt trước: khong_khoa, 2206 yc, tc 2014, sai phạm 1850
+[server] Đặt lại
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 5693 yc, tc 194, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: lac_quan – Lạc quan (phiên bản + CAS)
+[server] Lượt trước: lac_quan, 5697 yc, tc 188, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
+[server] hang_doi: 2078 yc, tc 150, từ chối 66, sai phạm 0
+[server] hang_doi: 4859 yc, tc 174, từ chối 2847, sai phạm 0
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] khoa: 5701 yc, tc 177, từ chối 5524, sai phạm 0
+[server] Lượt trước: khoa, 5701 yc, tc 177, sai phạm 0
+[server] Đặt lại (si_so=2)
+[server] An vào
+[server] Bình vào
+[server] An đăng ký 123013-01 (1/2)
+[server] Bình đăng ký 123013-01 (2/2)
+[server] Bình rời
+[server] Chi vào
+[server] An hủy 123013-01 (1/2)
+[server] Chi đăng ký 123013-01 (2/2)
+[server] khoa: 6 yc, tc 4, từ chối 2, sai phạm 0
+[server] Chi rời
+[server] An rời
+[server] Tổng kết (từ lần đặt lại cuối):
+[server]   Chế độ khoa, trễ xử lý 0–2 ms
+[server]   Yêu cầu 6: thành công 4, từ chối 2
+[server]   Xung đột 0, thử lại 0, hết lượt thử 0
+[server]   Hàng đợi max 0, chờ khóa quá hạn 0
+[server]   Xử lý µs: p50 1594 p95 2740 p99 2740
+[server]   Thông lượng 2 yc/s
+[server]   Sai phạm 0: vượt sĩ số 0, ĐK trùng 0
+[server]   Đã ĐK 2/6 chỗ (3 lớp × 2)
+[server] Máy chủ đã dừng
+
+===== mp =====
+> dotnet bin/Release/net10.0/BaiMR6.10_DangKyHocPhan.dll mo_phong 127.0.0.1 42740 --n 2000 --so-sanh
+[mo_phong] === khong_khoa: 2000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2206 yc xong trong 0.14 s = 15692 yc/s
+[mo_phong] Khứ hồi ms: p50 43.5 p95 76.9 p99 91.7
+[mo_phong] Thành công 2014, từ chối 192
+[mo_phong]   lý do: chua_dang_ky 190, da_dang_ky 2
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 2426 p95 21537 p99 29702
+[mo_phong] Sai phạm 1850: vượt sĩ số 1832, ĐK trùng 18
+[mo_phong]   ví dụ: 006124-01: u574 là SV thứ 51
+[mo_phong]   ví dụ: 006124-01: u582 là SV thứ 52
+[mo_phong] Đã ĐK 1968/150 chỗ (3 lớp × 50)
+[mo_phong] === khoa: 2000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 5693 yc xong trong 3.46 s = 1643 yc/s
+[mo_phong] Khứ hồi ms: p50 968.1 p95 1442.6 p99 1677.9
+[mo_phong] Thành công 194, từ chối 5499
+[mo_phong]   lý do: lop_day 5496, da_dang_ky 3
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 114160 p95 253063 p99 383520
+[mo_phong] Sai phạm 0: vượt sĩ số 0, ĐK trùng 0
+[mo_phong] Đã ĐK 150/150 chỗ (3 lớp × 50)
+[mo_phong] === lac_quan: 2000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 5697 yc xong trong 0.16 s = 35059 yc/s
+[mo_phong] Khứ hồi ms: p50 39.4 p95 72.8 p99 87.9
+[mo_phong] Thành công 188, từ chối 5509
+[mo_phong]   lý do: lop_day 5472, xung_dot 32, da_dang_ky 5
+[mo_phong] Máy chủ: xung đột 1028, thử lại 996, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 2254 p95 19306 p99 25586
+[mo_phong] Sai phạm 0: vượt sĩ số 0, ĐK trùng 0
+[mo_phong] Đã ĐK 150/150 chỗ (3 lớp × 50)
+[mo_phong] === hang_doi: 2000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 5701 yc xong trong 10.08 s = 566 yc/s
+[mo_phong] Khứ hồi ms: p50 3197.7 p95 3376.9 p99 3500.5
+[mo_phong] Thành công 177, từ chối 5524
+[mo_phong]   lý do: lop_day 5514, da_dang_ky 10
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 1994
+[mo_phong] Máy chủ xử lý µs: p50 3197488 p95 3376616 p99 3500184
+[mo_phong] Sai phạm 0: vượt sĩ số 0, ĐK trùng 0
+[mo_phong] Đã ĐK 149/150 chỗ (3 lớp × 50)
+[mo_phong] Bảng so sánh (2000 người × 1 lần, 200 kết nối):
+  Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+  khong_khoa         2014     1850        0 15692    91.7
+  khoa                194        0        0  1643  1677.9
+  lac_quan            188        0     1028 35059    87.9
+  hang_doi            177        0        0   566  3500.5
+
+===== qt =====
+> dotnet bin/Release/net10.0/BaiMR6.10_DangKyHocPhan.dll khach 127.0.0.1 42740 dat_lai si_so=2
+[quan_tri] > dat_lai si_so=2
+[quan_tri] OK
+
+===== A =====
+> dotnet bin/Release/net10.0/BaiMR6.10_DangKyHocPhan.dll dang_ky An 127.0.0.1 42740 --thoi-gian 6.5
+[An] Vào cổng đăng ký (khoa), sĩ số 2
+[An]   123013-01 Lập trình mạng    0/2
+[An]   123005-01 Quản trị mạng     0/2
+[An]   006124-01 Tin học cơ bản    0/2
+[An] > đăng ký 123013-01
+[An]   ĐĂNG KÝ 123013-01 thành công (1/2, 6.8 ms)
+[An] * An đăng ký 123013-01 (1/2)
+[An] * Bình đăng ký 123013-01 (2/2)
+[An] > hủy 123013-01
+[An]   HỦY 123013-01 thành công (1/2, 2.4 ms)
+[An] * An hủy 123013-01 (1/2)
+[An] * Chi đăng ký 123013-01 (2/2)
+
+===== B =====
+> dotnet bin/Release/net10.0/BaiMR6.10_DangKyHocPhan.dll dang_ky Bình 127.0.0.1 42740
+[Bình] Vào cổng đăng ký (khoa), sĩ số 2
+[Bình]   123013-01 Lập trình mạng    0/2
+[Bình]   123005-01 Quản trị mạng     0/2
+[Bình]   006124-01 Tin học cơ bản    0/2
+[Bình] * An đăng ký 123013-01 (1/2)
+[Bình] > đăng ký 123013-01 (bấm đúp: 2 yêu cầu)
+[Bình]   ĐĂNG KÝ 123013-01 thành công (2/2, 2.7 ms)
+[Bình]   123013-01: TỪ CHỐI – đã đăng ký lớp này
+[Bình] * Bình đăng ký 123013-01 (2/2)
+
+===== C =====
+> dotnet bin/Release/net10.0/BaiMR6.10_DangKyHocPhan.dll dang_ky Chi 127.0.0.1 42740
+[Chi] Vào cổng đăng ký (khoa), sĩ số 2
+[Chi]   123013-01 Lập trình mạng    2/2
+[Chi]   123005-01 Quản trị mạng     0/2
+[Chi]   006124-01 Tin học cơ bản    0/2
+[Chi] > đăng ký 123013-01
+[Chi]   123013-01: TỪ CHỐI – lớp đã đủ
+[Chi] * An hủy 123013-01 (1/2)
+[Chi] > đăng ký 123013-01
+[Chi]   ĐĂNG KÝ 123013-01 thành công (2/2, 3.4 ms)
+[Chi] * Chi đăng ký 123013-01 (2/2)
+[Chi]   123013-01 Lập trình mạng    2/2 *
+[Chi]   123005-01 Quản trị mạng     0/2
+[Chi]   006124-01 Tin học cơ bản    0/2
+

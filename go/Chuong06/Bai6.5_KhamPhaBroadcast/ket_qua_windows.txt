@@ -1,0 +1,20 @@
+===== r1 =====
+> out\app.exe responder 9200 Phòng-Lab-A 31650
+[responder] Phòng-Lab-A, cổng dịch vụ 9200, chờ discover tại cổng 31650
+[responder] discover id=300666 từ 172.29.128.1:58131, trả lời sau 62 ms
+[responder] Dừng
+
+===== r2 =====
+> out\app.exe responder 9201 Phòng-Lab-B 31650
+[responder] Phòng-Lab-B, cổng dịch vụ 9201, chờ discover tại cổng 31650
+[responder] discover id=300666 từ 172.29.128.1:58131, trả lời sau 166 ms
+[responder] Dừng
+
+===== client =====
+> out\app.exe discover 1000 31650 255.255.255.255
+[client] Phát discover id=300666 tới 255.255.255.255:31650
+[client] Thu thập phản hồi trong 1000 ms
+[client] Tìm thấy 2 server:
+[client]   Phòng-Lab-A tại 172.29.128.1:9200
+[client]   Phòng-Lab-B tại 172.29.128.1:9201
+

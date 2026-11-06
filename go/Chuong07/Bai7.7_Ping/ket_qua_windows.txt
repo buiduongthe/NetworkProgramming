@@ -1,0 +1,10 @@
+===== ping =====
+> out\app.exe 127.0.0.1 4
+[ping] PING 127.0.0.1: 4 gói Echo Request, dữ liệu 32 byte, chờ tối đa 1000 ms
+[ping] Tiêu đề ICMP gửi đi: 08 00 7F 00 4E F4 00 01 (kiểu, mã, checksum, id, seq)
+[ping] Trả lời từ 127.0.0.1: seq=1 ttl=128 thời gian=0.000 ms
+[ping] Trả lời từ 127.0.0.1: seq=2 ttl=128 thời gian=0.548 ms
+[ping] Trả lời từ 127.0.0.1: seq=3 ttl=128 thời gian=0.000 ms
+[ping] Trả lời từ 127.0.0.1: seq=4 ttl=128 thời gian=0.000 ms
+[ping] Đã gửi 4, nhận 4, mất 0%; RTT trung bình 0.137 ms
+

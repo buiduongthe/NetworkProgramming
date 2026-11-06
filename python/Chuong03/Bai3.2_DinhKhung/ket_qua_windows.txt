@@ -1,0 +1,32 @@
+===== server =====
+> python frame_server.py 127.0.0.1 9301
+[server] Đang lắng nghe tại 127.0.0.1:9301
+[server] Client kết nối: 127.0.0.1:55117
+[server] Nhận khung 20 byte từ 127.0.0.1:55117
+[server] Nhận khung 30 byte từ 127.0.0.1:55117
+[server] Nhận khung 257154 byte từ 127.0.0.1:55117
+[server] Client 127.0.0.1:55117 đã đóng kết nối
+
+===== client =====
+> python frame_client.py 127.0.0.1 9301 200000
+[client] Đã kết nối 127.0.0.1:9301. Nhập dòng cần gửi (Ctrl+D để kết thúc).
+[client] Gửi: 'Xin chào' -> Nhận: 'Xin chào'
+[client] Gửi: 'Lập trình mạng' -> Nhận: 'Lập trình mạng'
+[client] Gửi thông điệp lớn: 200000 ký tự, 257143 byte UTF-8
+[client] Nhận lại: 200000 ký tự, 257143 byte; trùng khớp: có
+[client] SHA-256 gửi:  6086711c23b484a2ccc0b19faa52b870…
+[client] SHA-256 nhận: 6086711c23b484a2ccc0b19faa52b870…
+[client] Đã đóng kết nối
+
+===== line =====
+> python line_demo.py 127.0.0.1 9302
+[đọc] Đang lắng nghe tại 127.0.0.1:9302, max_len = 64
+[gửi] 9 byte: HELLO\nWOR
+[đọc] READ_LINE -> 'HELLO' (pending còn 3 byte)
+[gửi] 11 byte: LD\r\nXin ch\xc3
+[đọc] READ_LINE -> 'WORLD' (pending còn 7 byte)
+[gửi] 3 byte: \xa0o\n
+[đọc] READ_LINE -> 'Xin chào' (pending còn 0 byte)
+[gửi] 100 byte: AAAAAAAAAAAAAAAAAAAAA...
+[đọc] ProtocolError: Dòng quá dài (pending 100 byte > 64)
+

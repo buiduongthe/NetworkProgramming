@@ -1,0 +1,154 @@
+===== server =====
+> ..\..\target\release\mr5_2_mo_phong_dong_thoi.exe server 127.0.0.1 44520 200
+[server] lắng nghe 127.0.0.1:44520, mỗi yêu cầu trễ 200 ms
+[server] đợt  1: 20 yêu cầu, đồng thời tối đa  1
+[server] đợt  2: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  3: 20 yêu cầu, đồng thời tối đa  5
+[server] đợt  4: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  5: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  6: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  7: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  8: 20 yêu cầu, đồng thời tối đa 20
+[server] dừng; đã phục vụ 160 yêu cầu
+
+===== mang =====
+> ..\..\target\release\mr5_2_mo_phong_dong_thoi.exe mang 127.0.0.1 44520
+Khối việc: 20 yêu cầu mạng, mỗi yêu cầu máy chủ trễ 200 ms
+
+1. tuần tự: 4.24 s
+  chính       |AABBBCCDDEEEFFGGGHHIIIJJKKLLLMMNNNOOPPQQQRRSSSTT|
+2. mỗi tác vụ một luồng: 0.22 s
+  luồng-1     |AAA                                             |
+  luồng-2     |III                                             |
+  luồng-3     |LLL                                             |
+  luồng-4     |PPP                                             |
+  luồng-5     |TTT                                             |
+  luồng-6     |FFF                                             |
+  luồng-7     |GGG                                             |
+  luồng-8     |HHH                                             |
+  … và 12 luồng khác, mỗi luồng chạy 1 tác vụ
+3. nhóm luồng (5 luồng): 0.85 s
+  luồng-1     |AAHHHNNSSS                                      |
+  luồng-2     |BBFFFKKPPP                                      |
+  luồng-3     |CCGGGMMRRR                                      |
+  luồng-4     |DDIIILLQQQ                                      |
+  luồng-5     |EEJJJOOTTT                                      |
+4. tokio (1 luồng): 0.22 s
+  vòng lặp    |**A                                             |
+               0                                           4.2 s
+
+  Mô hình                        Thời gian  Tăng tốc
+  1. tuần tự                        4.24 s      1.0×
+  2. mỗi tác vụ một luồng           0.22 s     19.4×
+  3. nhóm luồng (5 luồng)           0.85 s      5.0×
+  4. tokio (1 luồng)                0.22 s     19.3×
+
+Nhận xét: việc chờ I/O không tốn CPU, nên luồng hay tác vụ async đều
+  chồng được thời gian chờ; tokio làm được trên một luồng duy nhất (*).
+
+===== cpu =====
+> ..\..\target\release\mr5_2_mo_phong_dong_thoi.exe cpu
+Khối việc: 8 tác vụ CPU, mỗi tác vụ ≈ 100 ms
+Máy có 16 CPU; Rust không có GIL: luồng chạy song song thật
+
+1. tuần tự: 0.90 s
+  chính       |AAAAAABBBBBCCCCCCCDDDDDDEEEEEEFFFFFFGGGGGGHHHHHH|
+2. mỗi tác vụ một luồng (8): 0.21 s
+  luồng-1     |AAAAAAAAAAA                                     |
+  luồng-2     |BBBBBBBBBBB                                     |
+  luồng-3     |DDDDDDDDDDD                                     |
+  luồng-4     |CCCCCCCCCCC                                     |
+  luồng-5     |FFFFFFFFFFF                                     |
+  luồng-6     |GGGGGGGGGGG                                     |
+  luồng-7     |HHHHHHHHHHH                                     |
+  luồng-8     |EEEEEEEEEEEE                                    |
+3. nhóm luồng (16 = số CPU): 0.23 s
+  luồng-1     |AAAAAAAAAAAA                                    |
+  luồng-2     |BBBBBBBBBBBB                                    |
+  luồng-3     |CCCCCCCCCCCCC                                   |
+  luồng-4     |DDDDDDDDDDDD                                    |
+  luồng-5     |EEEEEEEEEEEEE                                   |
+  luồng-6     |FFFFFFFFFFFF                                    |
+  luồng-7     |GGGGGGGGGGGG                                    |
+  luồng-8     |HHHHHHHHHHHH                                    |
+               0                                           0.9 s
+
+  Mô hình                        Thời gian  Tăng tốc
+  1. tuần tự                        0.90 s      1.0×
+  2. mỗi tác vụ một luồng (8)       0.21 s      4.3×
+  3. nhóm luồng (16 = số CPU)       0.23 s      3.9×
+
+Nhận xét: không có GIL, các luồng chạy song song thật trên mọi CPU
+  (khác nhóm luồng Python); mô hình 2 tạo 8 luồng nhưng chỉ 16 luồng
+  chạy cùng lúc (mỗi tác vụ bị kéo dài vì chia lượt); nhóm luồng bằng
+  số CPU cho cùng tổng thời gian mà mỗi tác vụ chạy liền một mạch.
+
+===== tron =====
+> ..\..\target\release\mr5_2_mo_phong_dong_thoi.exe tron 127.0.0.1 44520
+Khối việc: 20 tác vụ = yêu cầu mạng 200 ms + xử lý CPU ≈ 30 ms
+Đo thêm độ trễ vòng lặp sự kiện: tác vụ "nhịp tim" ngủ 10 ms và
+  đo xem thực tế bị đánh thức muộn bao nhiêu (trễ lớn = ứng dụng đứng).
+
+A. CPU ngay trong vòng lặp: 0.96 s
+  vòng lặp    |*********************************************TTT|
+B. spawn_blocking: 0.35 s
+  vòng lặp    |***********D                                    |
+  luồng-1     |          AAAAAA                                |
+  luồng-2     |           BBBB                                 |
+  luồng-3     |           CCCCC                                |
+  luồng-4     |           DDDDD                                |
+  luồng-5     |           EEEEEE                               |
+  luồng-6     |           FFFFF                                |
+  luồng-7     |           GGGGGG                               |
+  … và 13 luồng khác, mỗi luồng chạy 1 tác vụ
+C. nhóm luồng tự viết, 2 luồng: 0.78 s
+  vòng lặp    |***********                                     |
+  luồng-1     |          AAAACCCEEEGGGIIIKKKMMOOOQQSSS         |
+  luồng-2     |          BBBBDDDFFFHHHJJJLLLNNPPPRRTTT         |
+D. runtime đa luồng (16 worker): 0.40 s
+  chờ mạng    |*****************                               |
+  worker-1    |          AAABBBBBB                             |
+  worker-2    |            NNNNNEEE                            |
+  worker-3    |            JJJJJJ                              |
+  worker-4    |            KKKKKK                              |
+  worker-5    |            SSSSFFFF                            |
+  worker-6    |            CCCCCC                              |
+  worker-7    |            MMMMMM                              |
+  … và 9 worker khác, mỗi worker chạy 1 tác vụ
+               0                                           1.0 s
+
+  Mô hình                        Thời gian  Trễ vòng lặp
+  A. CPU ngay trong vòng lặp        0.96 s        743 ms
+  B. spawn_blocking                 0.35 s         28 ms
+  C. nhóm luồng tự viết, 2 luồng    0.78 s          8 ms
+  D. runtime đa luồng (16 worker)    0.40 s         76 ms
+
+Nhận xét: A – xử lý CPU chặn vòng lặp sự kiện, nhịp tim trễ hàng trăm
+  ms (giống asyncio của Python). B, C – đẩy CPU sang luồng khác: vòng
+  lặp thông suốt và, vì Rust không có GIL, CPU chạy song song; C giới
+  hạn số việc CPU đồng thời bằng nhóm 2 luồng. D – runtime đa luồng:
+  CPU chạy ngay trong tác vụ vẫn chặn worker đang chạy nó, nhịp tim chỉ
+  chạy được khi có worker rảnh – nên vẫn dùng spawn_blocking cho việc nặng.
+
+===== khoa =====
+> ..\..\target\release\mr5_2_mo_phong_dong_thoi.exe khoa
+Tranh chấp dữ liệu: 4 luồng × 5000 lần "đọc – nhường CPU – ghi"
+  lên một biến đếm chung (kết quả đúng phải là 20000).
+  không khóa      :   8202 / 20000 → mất 11798 lần cộng (0.00 s)
+  có khóa (Mutex) :  20000 / 20000 → đúng (0.01 s)
+  AtomicI64 add   :  20000 / 20000 → đúng (0.00 s)
+
+Bế tắc (deadlock): T1 chuyển X→Y, T2 chuyển Y→X, mỗi luồng cần cả
+  hai khóa; số dư ban đầu X = 100, Y = 100.
+  T1 giữ khóa X, chờ khóa Y
+  T2 giữ khóa Y, chờ khóa X
+  T1: chờ Y quá 0,5 s → nghi bế tắc, nhả X, bỏ cuộc
+  T2: đã chuyển 5 từ Y sang X
+  Số dư: X = 105, Y = 95 (tổng 200)
+Cách tránh: mọi luồng lấy khóa theo cùng thứ tự (X trước, Y sau):
+  T1 giữ khóa X, chờ khóa Y
+  T1: đã chuyển 10 từ X sang Y
+  T2 giữ khóa X, chờ khóa Y
+  T2: đã chuyển 5 từ Y sang X
+  Số dư: X = 100, Y = 100 (tổng 200)
+

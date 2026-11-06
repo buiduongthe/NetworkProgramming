@@ -1,0 +1,40 @@
+===== server =====
+> dotnet run --no-build -c Release -- server 127.0.0.1 9511 4096
+[server] Đang lắng nghe tại 127.0.0.1:9511, giới hạn đọc 4096 KiB/s
+[server] Client kết nối: 127.0.0.1:63088
+[server] Nhận yêu cầu put: du_lieu_thu.bin, 4194304 byte
+[server] Đã lưu uploads/du_lieu_thu.bin, mã băm khớp (200)
+[server] Client 127.0.0.1:63088 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:63089
+[server] Nhận yêu cầu put: du_lieu_thu.bin, 4194304 byte
+[server] Lỗi khi mới nhận 1769472/4194304 byte: xóa uploads/du_lieu_thu.bin.part
+[server] Lỗi với 127.0.0.1:63089: Kết nối đã đóng (đã nhận 1769472 byte)
+[server] Client 127.0.0.1:63089 đã đóng kết nối
+[server] Dừng server
+
+===== client =====
+> dotnet run --no-build -c Release -- client 127.0.0.1 9511 du_lieu_thu.bin
+[client] Tạo tệp thử du_lieu_thu.bin (4 MiB)
+[client] Đã kết nối 127.0.0.1:9511, tải lên du_lieu_thu.bin
+[client] Tiến trình: 0.06/4.00 MiB (1%)
+[client] Tiến trình: 0.56/4.00 MiB (14%)
+[client] Tiến trình: 1.00/4.00 MiB (25%)
+[client] Tiến trình: 1.44/4.00 MiB (35%)
+[client] Tiến trình: 1.81/4.00 MiB (45%)
+[client] Tiến trình: 2.25/4.00 MiB (56%)
+[client] Tiến trình: 2.62/4.00 MiB (65%)
+[client] Tiến trình: 3.06/4.00 MiB (76%)
+[client] Tiến trình: 3.50/4.00 MiB (87%)
+[client] Tiến trình: 3.94/4.00 MiB (98%)
+[client] Tiến trình: 4.00/4.00 MiB (100%)
+[client] Kết quả: {"status":200,"saved":"du_lieu_thu.bin"} sau 1.20 s
+
+===== client_huy =====
+> dotnet run --no-build -c Release -- client 127.0.0.1 9511 du_lieu_thu.bin 400
+[client] Đã kết nối 127.0.0.1:9511, tải lên du_lieu_thu.bin, sẽ bấm Hủy sau 400 ms
+[client] Tiến trình: 0.06/4.00 MiB (1%)
+[client] Tiến trình: 0.62/4.00 MiB (15%)
+[client] Tiến trình: 1.06/4.00 MiB (26%)
+[client] Tiến trình: 1.50/4.00 MiB (37%)
+[client] Đã hủy sau 0.41 s; đóng kết nối (trạng thái giao thức không còn tin cậy)
+

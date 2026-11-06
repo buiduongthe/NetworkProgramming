@@ -17,22 +17,22 @@
 [demo]      ví dụ: Bình 5.300.000 đ sau 5.300.000 đ
 [demo]      ví dụ: Chi 5.300.000 đ sau 5.300.000 đ
 [demo]    Lịch sử trả giá (mới nhất trước):
-[demo]      09:41:47 Chi   5.300.000 đ
-[demo]      09:41:47 Bình  5.300.000 đ
-[demo]      09:41:47 An    5.300.000 đ
-[demo]      09:41:46 Bình  5.200.000 đ
-[demo]    Đã ghi ket_qua_gui_tranh_chap.png (112 KB)
+[demo]      10:10:32 Chi   5.300.000 đ
+[demo]      10:10:32 Bình  5.300.000 đ
+[demo]      10:10:32 An    5.300.000 đ
+[demo]      10:10:30 Bình  5.200.000 đ
+[demo]    Đã ghi ket_qua_gui_tranh_chap.png (111 KB)
 [demo] 5. Máy chủ: khoa, trễ 0–2 ms; So sánh 4 chế độ
 [demo]   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
-[demo]   khong_khoa          388      360        0 13444    72.2
-[demo]   khoa                174        0        0   569  2322.0
-[demo]   lac_quan             34        0      144 18379    72.7
-[demo]   hang_doi             16        0        0   574   903.1
+[demo]   khong_khoa          490      456        0 14035    73.1
+[demo]   khoa                237        0        0   572  2326.9
+[demo]   lac_quan             30        0      108 20953    56.2
+[demo]   hang_doi             13        0        0   573   910.6
 [demo]    Sai phạm: khong_khoa
 [demo]    Không sai phạm: khoa, lac_quan, hang_doi
 [demo] 6. Đặt lại: phiên 8 s, gia hạn 4 s; An '+1 bước'
-[demo]    Bình '+2 bước' khi còn 00:03.0
-[demo]    -> đồng hồ An: 00:03.6 GIA HẠN!
+[demo]    Bình '+2 bước' khi còn 00:02.9
+[demo]    -> đồng hồ An: 00:03.7 GIA HẠN!
 [demo] 7. An '+1 bước' khi còn 00:00.9
 [demo]    -> đồng hồ Bình: 00:03.7 GIA HẠN!
 [demo]    An: BẠN THẮNG! 5.400.000 đ
@@ -40,7 +40,7 @@
 [demo]    Chi: Kết thúc – An thắng
 [demo]    máy chủ: Giá cuối 5.400.000 đ, thắng An
 [demo] 8. Chụp 4 cửa sổ
-[demo]    Đã ghi ket_qua_gui.png (183 KB)
+[demo]    Đã ghi ket_qua_gui.png (181 KB)
 [demo] 9. Máy chủ: STOP SERVER
 [demo]    Bình: Mất kết nối máy chủ
 [demo] Kết thúc

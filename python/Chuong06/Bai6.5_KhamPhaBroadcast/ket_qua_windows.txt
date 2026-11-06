@@ -1,0 +1,20 @@
+===== r1 =====
+> python responder.py 9200 Phòng-Lab-A 9669
+[responder] Phòng-Lab-A, cổng dịch vụ 9200, chờ discover tại cổng 9669
+[responder] discover id=660739 từ 172.29.128.1:54878, trả lời sau 180 ms
+[responder] Dừng
+
+===== r2 =====
+> python responder.py 9201 Phòng-Lab-B 9669
+[responder] Phòng-Lab-B, cổng dịch vụ 9201, chờ discover tại cổng 9669
+[responder] discover id=660739 từ 172.29.128.1:54878, trả lời sau 112 ms
+[responder] Dừng
+
+===== client =====
+> python discover.py 1000 9669 255.255.255.255
+[client] Phát discover id=660739 tới 255.255.255.255:9669
+[client] Thu thập phản hồi trong 1000 ms
+[client] Tìm thấy 2 server:
+[client]   Phòng-Lab-B tại 172.29.128.1:9201
+[client]   Phòng-Lab-A tại 172.29.128.1:9200
+

@@ -1,0 +1,139 @@
+===== server =====
+> dotnet bin/Release/net10.0/BaiMR6.12_ChuyenKhoan.dll server 127.0.0.1 42760
+[server] Lắng nghe 127.0.0.1:42760; chế độ khoa, trễ 0–2 ms
+[server] Đặt lại (khoa_ngay_tho=0)
+[server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
+[server] Lượt trước: khong_khoa, 2500 yc, tc 2389, sai phạm 930
+[server] Đặt lại (khoa_ngay_tho=0)
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 2500 yc, tc 2346, sai phạm 0
+[server] Đặt lại (khoa_ngay_tho=0)
+[server] Chế độ: lac_quan – Lạc quan (phiên bản + CAS)
+[server] Lượt trước: lac_quan, 2500 yc, tc 1336, sai phạm 0
+[server] Đặt lại (khoa_ngay_tho=0)
+[server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
+[server] hang_doi: 1246 yc, tc 673, từ chối 73, sai phạm 0
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 2500 yc, tc 2256, sai phạm 0
+[server] Đặt lại (khoa_ngay_tho=1, so_tk=5)
+[server] khoa: 21 yc, tc 1, từ chối 0, sai phạm 0
+[server] khóa chết: u8 TK05→TK04, chờ TK04 quá 2 s
+[server] khóa chết: u19 TK05→TK02, chờ TK05 quá 2 s (+18 vụ)
+[server] Lượt trước: khoa, 40 yc, tc 7, sai phạm 0
+[server] Đặt lại (khoa_ngay_tho=0)
+[server] An vào
+[server] Bình vào
+[server] khoa: 40 yc, tc 40, từ chối 0, sai phạm 0
+[server] Bình rời
+[server] An rời
+[server] Tổng kết (từ lần đặt lại cuối):
+[server]   Chế độ khoa, trễ xử lý 0–2 ms
+[server]   Yêu cầu 43: thành công 42, từ chối 1
+[server]   Xung đột 0, thử lại 0, hết lượt thử 0
+[server]   Hàng đợi max 0, chờ khóa quá hạn 0
+[server]   Xử lý µs: p50 14635 p95 45585 p99 56268
+[server]   Thông lượng 14 yc/s
+[server]   Sai phạm 0: tổng lệch 0, lệch TK 0, thấu chi 0
+[server]   Tổng tiền 25.000.000 đ (khớp), 5 tài khoản
+[server] Máy chủ đã dừng
+
+===== mp =====
+> dotnet bin/Release/net10.0/BaiMR6.12_ChuyenKhoan.dll mo_phong 127.0.0.1 42760 --n 500 --so-sanh
+[mo_phong] === khong_khoa: 500 người × 5 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2500 yc xong trong 0.22 s = 11505 yc/s
+[mo_phong] Khứ hồi ms: p50 24.7 p95 68.7 p99 100.6
+[mo_phong] Thành công 2389, từ chối 111
+[mo_phong]   lý do: khong_du 111
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 3027 p95 42174 p99 51388
+[mo_phong] Sai phạm 930: tổng lệch 1, lệch TK 10, thấu chi 919
+[mo_phong]   ví dụ: u127 TK01→TK10: TK01 còn -100.000 đ
+[mo_phong]   ví dụ: u139 TK01→TK10: TK01 còn -200.000 đ
+[mo_phong] Tổng tiền 52.500.000 đ, LỆCH +2.500.000 đ
+[mo_phong] === khoa: 500 người × 5 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2500 yc xong trong 2.50 s = 999 yc/s
+[mo_phong] Khứ hồi ms: p50 184.7 p95 1397.8 p99 1625.6
+[mo_phong] Thành công 2346, từ chối 154
+[mo_phong]   lý do: khong_du 154
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 8940 p95 677706 p99 1417177
+[mo_phong] Sai phạm 0: tổng lệch 0, lệch TK 0, thấu chi 0
+[mo_phong] Tổng tiền 50.000.000 đ (khớp), 10 tài khoản
+[mo_phong] === lac_quan: 500 người × 5 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2500 yc xong trong 0.22 s = 11194 yc/s
+[mo_phong] Khứ hồi ms: p50 30.8 p95 67.7 p99 81.3
+[mo_phong] Thành công 1336, từ chối 1164
+[mo_phong]   lý do: xung_dot 764, khong_du 400
+[mo_phong] Máy chủ: xung đột 6202, thử lại 5438, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 10123 p95 37028 p99 49569
+[mo_phong] Sai phạm 0: tổng lệch 0, lệch TK 0, thấu chi 0
+[mo_phong] Tổng tiền 50.000.000 đ (khớp), 10 tài khoản
+[mo_phong] === hang_doi: 500 người × 5 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 2500 yc xong trong 4.41 s = 567 yc/s
+[mo_phong] Khứ hồi ms: p50 874.5 p95 925.7 p99 930.2
+[mo_phong] Thành công 2256, từ chối 244
+[mo_phong]   lý do: khong_du 244
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 500
+[mo_phong] Máy chủ xử lý µs: p50 874283 p95 925240 p99 929989
+[mo_phong] Sai phạm 0: tổng lệch 0, lệch TK 0, thấu chi 0
+[mo_phong] Tổng tiền 50.000.000 đ (khớp), 10 tài khoản
+[mo_phong] Bảng so sánh (500 người × 5 lần, 200 kết nối):
+  Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+  khong_khoa         2389      930        0 11505   100.6
+  khoa               2346        0        0   999  1625.6
+  lac_quan           1336        0     6202 11194    81.3
+  hang_doi           2256        0        0   567   930.2
+
+===== qt =====
+> dotnet bin/Release/net10.0/BaiMR6.12_ChuyenKhoan.dll khach 127.0.0.1 42760 dat_lai khoa_ngay_tho=1 so_tk=5
+[quan_tri] > dat_lai khoa_ngay_tho=1 so_tk=5
+[quan_tri] OK
+
+===== kc =====
+> dotnet bin/Release/net10.0/BaiMR6.12_ChuyenKhoan.dll mo_phong 127.0.0.1 42760 --n 20 --lan 2
+[mo_phong] === khoa: 20 người × 2 lần, 20 kết nối ===
+[mo_phong] Rào xuất phát: 20/20 kết nối sẵn sàng -> bắn
+[mo_phong] 40 yc xong trong 4.03 s = 10 yc/s
+[mo_phong] Khứ hồi ms: p50 2002.5 p95 2004.1 p99 2008.5
+[mo_phong] Thành công 7, từ chối 33
+[mo_phong]   lý do: khoa_cho_lau 33
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 2002076 p95 2003724 p99 2008146
+[mo_phong] Sai phạm 0: tổng lệch 0, lệch TK 0, thấu chi 0
+[mo_phong] Tổng tiền 25.000.000 đ (khớp), 5 tài khoản
+
+===== tt =====
+> dotnet bin/Release/net10.0/BaiMR6.12_ChuyenKhoan.dll mo_phong 127.0.0.1 42760 --n 20 --lan 2 --dat-lai
+[mo_phong] === khoa: 20 người × 2 lần, 20 kết nối ===
+[mo_phong] Rào xuất phát: 20/20 kết nối sẵn sàng -> bắn
+[mo_phong] 40 yc xong trong 0.08 s = 521 yc/s
+[mo_phong] Khứ hồi ms: p50 14.9 p95 45.9 p99 56.5
+[mo_phong] Thành công 40, từ chối 0
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 14650 p95 45585 p99 56268
+[mo_phong] Sai phạm 0: tổng lệch 0, lệch TK 0, thấu chi 0
+[mo_phong] Tổng tiền 25.000.000 đ (khớp), 5 tài khoản
+
+===== A =====
+> dotnet bin/Release/net10.0/BaiMR6.12_ChuyenKhoan.dll ngan_hang An 127.0.0.1 42760 --thoi-gian 4
+[An] Đăng nhập TK01 – An (khoa)
+[An]   số dư 6.400.000 đ
+[An] > chuyển 500.000 đ TK01→TK02
+[An]   THÀNH CÔNG (4.8 ms), số dư 5.900.000 đ
+[An] + Nhận 300.000 đ từ TK02 (Bình), số dư 6.200.000 đ
+[An] > chuyển 9.000.000 đ TK01→TK03
+[An]   TỪ CHỐI (3 ms): không đủ số dư (TK01 còn 6.200.000 đ)
+
+===== B =====
+> dotnet bin/Release/net10.0/BaiMR6.12_ChuyenKhoan.dll ngan_hang Bình 127.0.0.1 42760 --thoi-gian 3.5
+[Bình] Đăng nhập TK02 – Bình (khoa)
+[Bình]   số dư 7.000.000 đ
+[Bình] > chuyển 300.000 đ TK02→TK01
+[Bình]   THÀNH CÔNG (6.4 ms), số dư 7.200.000 đ
+[Bình] + Nhận 500.000 đ từ TK01 (An), số dư 7.200.000 đ
+[Bình] Số dư TK02: 7.200.000 đ
+

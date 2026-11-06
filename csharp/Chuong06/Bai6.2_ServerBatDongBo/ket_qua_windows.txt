@@ -1,0 +1,24 @@
+===== server =====
+> dotnet run --no-build -c Release -- server 127.0.0.1 9603
+[server] Server bất đồng bộ đang lắng nghe tại 127.0.0.1:9603
+[server] Nhận 127.0.0.1:65125 (tác vụ: 1, luồng: 16)
+[server] Nhận 127.0.0.1:65126 (tác vụ: 2, luồng: 16)
+[server] Nhận 127.0.0.1:65127 (tác vụ: 3, luồng: 16)
+[server] Nhận 127.0.0.1:65128 (tác vụ: 4, luồng: 16)
+[server] Nhận 127.0.0.1:65129 (tác vụ: 5, luồng: 16)
+[server] Kết thúc 127.0.0.1:65125: client đóng kết nối
+[server] Kết thúc 127.0.0.1:65126: client đóng kết nối
+[server] Kết thúc 127.0.0.1:65127: client đóng kết nối
+[server] Kết thúc 127.0.0.1:65128: client đóng kết nối
+[server] Kết thúc 127.0.0.1:65129: client đóng kết nối
+
+===== client =====
+> dotnet run --no-build -c Release -- client 127.0.0.1 9603 5 1000
+[client] 5 client cách nhau 100 ms, giữ kết nối 1000 ms
+[client 1] t = 70 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 2] t = 115 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 3] t = 223 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 4] t = 334 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client 5] t = 444 ms: 200 TCP – Truyền tin cậy, hướng kết nối
+[client] Hoàn tất sau 1451 ms
+

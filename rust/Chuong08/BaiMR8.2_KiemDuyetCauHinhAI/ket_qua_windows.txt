@@ -1,0 +1,55 @@
+===== mock =====
+> python mock_llm_cau_hinh.py 127.0.0.1 44820
+[mock] LLM giả lập (sinh cấu hình) tại http://127.0.0.1:44820/v1
+[mock] #1 lần sinh 1: JSON trong khối markdown, nhiều lỗi
+[mock] #2 lần sinh 2: sửa lỗi cũ, sinh lỗi mới
+[mock] #3 lần sinh 3: hợp lệ
+[mock] #4 lần sinh 1: JSON trong khối markdown, nhiều lỗi
+[mock] #5 lần sinh 2: sửa lỗi cũ, sinh lỗi mới
+[mock] Dừng server
+
+===== duyet =====
+> ..\..\target\release\mr8_2_kiem_duyet_cau_hinh_ai.exe ha_tang.json "Tạo 3 VLAN Phong_Lab, WiFi_Khach, May_Chu trong 10.20.0.0/22" --so-lan 3
+[kiem-duyet] Yêu cầu: Tạo 3 VLAN Phong_Lab, WiFi_Khach, May_Chu trong 10.20.0.0/22
+[kiem-duyet] Lần 1: 5 lỗi
+  - WiFi_Khach: VLAN 5000 ngoài miền 1-4094
+  - WiFi_Khach: cổng mặc định 10.20.1.300 không phải IPv4 hợp lệ
+  - May_Chu: mạng 10.20.1.64/26 chồng lấn WiFi_Khach (10.20.1.0/25)
+  - ACL KHACH_RA_NGOAI: cấm quy tắc "permit ip any any"
+  - dich_vu.telnet phải tắt (mật khẩu đi dạng rõ), dùng SSH
+[kiem-duyet] Lần 2: 2 lỗi
+  - May_Chu: VLAN 99 đã dùng cho Quan_Tri
+  - May_Chu: cổng mặc định 10.20.1.128 không phải địa chỉ máy của 10.20.1.128/27
+[kiem-duyet] Lần 3: ĐẠT
+[kiem-duyet] Lệnh CLI sinh từ cấu hình đã duyệt (chờ người duyệt):
+  vlan 30
+   name Phong_Lab
+  interface Vlan30
+   ip address 10.20.0.1 255.255.255.0
+  vlan 40
+   name WiFi_Khach
+  interface Vlan40
+   ip address 10.20.1.1 255.255.255.128
+  vlan 50
+   name May_Chu
+  interface Vlan50
+   ip address 10.20.1.129 255.255.255.224
+  ip access-list extended KHACH_RA_NGOAI
+   deny ip 10.20.1.0 0.0.0.127 10.20.0.0 0.0.3.255
+   permit ip 10.20.1.0 0.0.0.127 any
+  no service telnet
+
+===== tu_choi =====
+> ..\..\target\release\mr8_2_kiem_duyet_cau_hinh_ai.exe ha_tang.json "Tạo 3 VLAN Phong_Lab, WiFi_Khach, May_Chu trong 10.20.0.0/22" --so-lan 2
+[kiem-duyet] Yêu cầu: Tạo 3 VLAN Phong_Lab, WiFi_Khach, May_Chu trong 10.20.0.0/22
+[kiem-duyet] Lần 1: 5 lỗi
+  - WiFi_Khach: VLAN 5000 ngoài miền 1-4094
+  - WiFi_Khach: cổng mặc định 10.20.1.300 không phải IPv4 hợp lệ
+  - May_Chu: mạng 10.20.1.64/26 chồng lấn WiFi_Khach (10.20.1.0/25)
+  - ACL KHACH_RA_NGOAI: cấm quy tắc "permit ip any any"
+  - dich_vu.telnet phải tắt (mật khẩu đi dạng rõ), dùng SSH
+[kiem-duyet] Lần 2: 2 lỗi
+  - May_Chu: VLAN 99 đã dùng cho Quan_Tri
+  - May_Chu: cổng mặc định 10.20.1.128 không phải địa chỉ máy của 10.20.1.128/27
+[kiem-duyet] TỪ CHỐI: sau 2 lần vẫn chưa đạt, không sinh lệnh
+

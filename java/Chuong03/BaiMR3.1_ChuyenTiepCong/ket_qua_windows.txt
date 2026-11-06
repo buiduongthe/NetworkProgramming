@@ -1,0 +1,39 @@
+===== dich =====
+> java -cp out ServerDich 127.0.0.1 43311
+[dich] Server chữ hoa lắng nghe tại 127.0.0.1:43311
+[dich] 127.0.0.1:61857 gửi 29 byte, trả 29 byte chữ hoa
+[dich] 127.0.0.1:61860 gửi 360000 byte, trả 360000 byte chữ hoa
+[dich] Dừng server
+
+===== chuyen_tiep =====
+> java -cp out ChuyenTiep 127.0.0.1 43310 127.0.0.1 43311
+[chuyen-tiep] 127.0.0.1:43310 -> 127.0.0.1:43311
+[chuyen-tiep] #1 127.0.0.1:61856 <-> đích 127.0.0.1:43311
+[chuyen-tiep] #1 xong: lên 29 byte, xuống 29 byte
+[chuyen-tiep] #2 127.0.0.1:61859 <-> đích 127.0.0.1:43311
+[chuyen-tiep] #2 xong: lên 360000 byte, xuống 360000 byte
+[chuyen-tiep] Dừng
+
+===== chuyen_tiep_hong =====
+> java -cp out ChuyenTiep 127.0.0.1 43312 127.0.0.1 43313
+[chuyen-tiep] 127.0.0.1:43312 -> 127.0.0.1:43313
+[chuyen-tiep] #1 127.0.0.1:61861: không nối được đích 127.0.0.1:43313 (Connection refused: getsockopt)
+[chuyen-tiep] Dừng
+
+===== client_nho =====
+> java -cp out ClientThu 127.0.0.1 43310 "Xin chào lập trình mạng"
+[client] Gửi 29 byte, nhận 29 byte
+[client] Phản hồi: 'XIN CHÀO LẬP TRÌNH MẠNG'
+[client] So khớp với bản chữ hoa: KHỚP
+
+===== client_lon =====
+> java -cp out ClientThu 127.0.0.1 43310 "dữ liệu lớn " 20000
+[client] Gửi 360000 byte, nhận 360000 byte
+[client] Phản hồi: 'DỮ LIỆU LỚN DỮ LIỆU LỚN DỮ LIỆU LỚN DỮ L'...
+[client] So khớp với bản chữ hoa: KHỚP
+
+===== client_hong =====
+> java -cp out ClientThu 127.0.0.1 43312 "Có ai không?"
+[client] Gửi 14 byte, nhận 0 byte
+[client] Kết nối bị đóng mà không có dữ liệu trả về
+

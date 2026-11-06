@@ -1,0 +1,42 @@
+===== server =====
+> cargo run -q --release -- server 127.0.0.1 21730
+[server] Đang lắng nghe tại 127.0.0.1:21730
+[server] Bắt tay WebSocket thành công với 127.0.0.1:58861
+[server] Nhận văn bản (9 byte): 'Xin chào'
+[server] Nhận văn bản (21 byte): 'WebSocket hai chiều'
+[server] 127.0.0.1:58861 gửi khung đóng, mã 1000
+[server] Đóng kết nối 127.0.0.1:58861
+[server] 127.0.0.1:58862 GET / HTTP/1.1 -> 400 (không phải yêu cầu WebSocket)
+[server] Đóng kết nối 127.0.0.1:58862
+[server] Bắt tay WebSocket thành công với 127.0.0.1:58863
+[server] Nhận ping: 'nhip-tim' -> gửi pong
+[server] 127.0.0.1:58863 gửi khung đóng, mã 1000
+[server] Đóng kết nối 127.0.0.1:58863
+[server] Bắt tay WebSocket thành công với 127.0.0.1:58864
+[server] Nhận văn bản (300 byte): 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+[server] 127.0.0.1:58864 gửi khung đóng, mã 1000
+[server] Đóng kết nối 127.0.0.1:58864
+[server] Bắt tay WebSocket thành công với 127.0.0.1:58865
+[server] Lỗi giao thức với 127.0.0.1:58865: Khung client phải được che
+[server] Đóng kết nối 127.0.0.1:58865
+[server] Bắt tay WebSocket thành công với 127.0.0.1:58866
+[server] Lỗi giao thức với 127.0.0.1:58866: Khung quá lớn
+[server] Đóng kết nối 127.0.0.1:58866
+[server] Dừng server
+
+===== client =====
+> cargo run -q --release -- client 127.0.0.1 21730
+[client] Bắt tay thành công: HTTP/1.1 101 Switching Protocols
+[client] Nhận: 'echo: Xin chào'
+[client] Nhận: 'echo: WebSocket hai chiều'
+[client] Server xác nhận đóng, mã 1000
+[client] Đã đóng kết nối
+
+===== kiemthu =====
+> cargo run -q --release -- kiemthu 127.0.0.1 21730
+[kiểm thử] 1. Yêu cầu HTTP thường (không Upgrade) -> HTTP/1.1 400 Bad Request
+[kiểm thử] 2. Ping 'nhip-tim' -> opcode 0xA, dữ liệu 'nhip-tim'
+[kiểm thử] 3. Văn bản 300 byte -> nhận lại 306 byte (opcode 0x1)
+[kiểm thử] 4. Khung không che -> khung đóng, mã 1002
+[kiểm thử] 5. Khung khai báo 2^40 byte -> khung đóng, mã 1009
+

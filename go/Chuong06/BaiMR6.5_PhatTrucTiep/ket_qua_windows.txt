@@ -1,0 +1,281 @@
+===== server =====
+> out\app.exe server 127.0.0.1 41655 41656
+[server] TCP 127.0.0.1:41655, UDP 41656; bộ đệm GOP: bật
+[server] #1 P (phát) vào từ 127.0.0.1:62413
+[server] => P kết nối (máy phát)
+[server] #1 P đăng ký UDP 127.0.0.1:51654
+[server] P phát 160x120 10 fps GOP 20, 16000 Hz
+[server] => P bắt đầu phát
+[server] #2 D (xem) vào từ 127.0.0.1:62414
+[server] => D vào xem
+[server] #2 D đăng ký UDP 127.0.0.1:51655
+[server] D: gửi bộ đệm GOP 11 gói (I #0 + 3 P)
+[server] D: khung I đầu sau 17 ms (bộ đệm)
+[server] #3 A (xem) vào từ 127.0.0.1:62415
+[server] => A vào xem
+[server] #3 A đăng ký UDP 127.0.0.1:51656
+[server] A: gửi bộ đệm GOP 13 gói (I #0 + 5 P)
+[server] A: khung I đầu sau 19 ms (bộ đệm)
+[server] #4 B (xem) vào từ 127.0.0.1:62416
+[server] => B vào xem
+[server] #4 B đăng ký UDP 127.0.0.1:51657
+[server] B: gửi bộ đệm GOP 17 gói (I #20 + 9 P)
+[server] B: khung I đầu sau 2 ms (bộ đệm)
+[server] PLI từ D -> P
+[server] > bo_dem tat
+[server] Bộ đệm GOP: tắt
+[server] PLI từ D -> P
+[server] #5 C (xem) vào từ 127.0.0.1:62417
+[server] => C vào xem
+[server] #5 C đăng ký UDP 127.0.0.1:51658
+[server] A đăng ký nhận: A
+[server] C: khung I đầu sau 1808 ms (trực tiếp)
+[server] A đăng ký nhận: A+V
+[server] PLI từ A -> P
+[server] > trang_thai
+[server] Trạng thái: P đang phát, 4 người xem
+[server] bộ đệm GOP tắt: 0 gói, 0 KB
+[server] vào 423 kbit/s (tiếng 261, hình 162)
+[server] ra 1574 kbit/s, hệ số nhân bản 3.72
+[server] PLI chuyển 3, bỏ 0
+[server] tên    nhận gói ra  KB ra kbit/s khung I đầu
+[server] D      A+V     646    453    423   17 ms bộ đệm
+[server] A      A+V     613    426    305   19 ms bộ đệm
+[server] B      A+V     478    340    423    2 ms bộ đệm
+[server] C      A+V     205    145    423 1808 ms trực tiếp
+[server] => B rời
+[server] => C rời
+[server] => D rời
+[server] => A rời
+[server] => P dừng phát
+[server] => P (máy phát) thoát
+[server] ===== TỔNG KẾT: 4 người xem =====
+[server] vào 761 gói 529 KB, ra 2060 gói 1442 KB
+[server] hệ số nhân bản (byte ra/vào) 2.73
+[server] PLI chuyển 3, bỏ 0
+[server] tên    nhận gói ra  KB ra kbit/s khung I đầu
+[server] B      A+V     490    347    425    2 ms bộ đệm
+[server] C      A+V     218    153    406 1808 ms trực tiếp
+[server] D      A+V     667    466    402   17 ms bộ đệm
+[server] A      A+V     685    476    389   19 ms bộ đệm
+[server] (kbit/s = trung bình suốt thời gian xem)
+[server] Server đã dừng
+
+===== P =====
+> out\app.exe phat P 127.0.0.1 41655 -thoi-gian 11
+[phat P] Sự kiện: P kết nối (máy phát)
+[phat P] Mã 1; camera GIẢ LẬP – bảng clapper
+[phat P] Micro GIẢ LẬP – 440 Hz + bíp 1000 Hz mỗi giây
+[phat P] Sự kiện: P bắt đầu phát
+[phat P] Bắt đầu phát 160x120 10 fps GOP 20
+[phat P] Mỗi giây: khung I/P, kbit/s hình, tiếng (cả header)
+[phat P] Sự kiện: D vào xem
+[phat P] Sự kiện: A vào xem
+[phat P]  1s khung I 1 P 10 | hình  156 tiếng 266 kbit/s
+[phat P]  2s khung I 1 P  9 | hình  112 tiếng 261 kbit/s
+[phat P] Sự kiện: B vào xem
+[phat P]  3s khung I 0 P 10 | hình  121 tiếng 261 kbit/s
+[phat P]  4s khung I 1 P  9 | hình  112 tiếng 261 kbit/s
+[phat P]  5s khung I 0 P 10 | hình  121 tiếng 261 kbit/s
+[phat P] PLI từ D -> gửi khung I #54
+[phat P]  6s khung I 1 P  9 | hình  160 tiếng 261 kbit/s
+[phat P] PLI từ D -> gửi khung I #64
+[phat P] Sự kiện: C vào xem
+[phat P]  7s khung I 1 P  9 | hình  161 tiếng 261 kbit/s
+[phat P]  8s khung I 0 P  9 | hình   78 tiếng 256 kbit/s
+[phat P]  9s khung I 1 P 10 | hình  206 tiếng 266 kbit/s
+[phat P] PLI từ A -> gửi khung I #94
+[phat P] Sự kiện: B rời
+[phat P] Sự kiện: C rời
+[phat P] Sự kiện: D rời
+[phat P] 10s khung I 1 P  9 | hình  162 tiếng 261 kbit/s
+[phat P] Sự kiện: A rời
+[phat P] Dừng phát
+[phat P] ===== TỔNG KẾT sau 11.0 s =====
+[phat P] khung I 7, P 103; TB I 4908 B, P 1404 B
+[phat P] P nhỏ nhất 412 B, lớn nhất 5637 B (khung chớp)
+[phat P] I/thô 8.5 %, P TB/I TB 28.6 %
+[phat P] tiếng 550 gói; PLI nhận 3
+
+===== B =====
+> out\app.exe xem B 127.0.0.1 41655 -tre 3 -thoi-gian 9.7
+[xem B] Chờ 3.0 s rồi mới vào xem (vào muộn)
+[xem B] Vào xem: mã 4, máy phát đang phát
+[xem B] Nhận tiếng+hình, đồng bộ BẬT, jitter 100 ms
+[xem B] Mỗi giây: gói tiếng, mất, trễ ms | khung hiện, lệch ms
+[xem B] Luồng 160x120, 10 fps, GOP 20, 16000 Hz
+[xem B] Sự kiện: B vào xem
+[xem B] Khung đầu sau 98 ms: bộ đệm GOP (I cũ 1.0 s)
+[xem B]  1s tiếng 51 mất 0 trễ  94 | hình 10 lệch   +4
+[xem B]  2s tiếng 50 mất 0 trễ  94 | hình 10 lệch   +3
+[xem B]  3s tiếng 50 mất 0 trễ  94 | hình 11 lệch   +2
+[xem B] Sự kiện: C vào xem
+[xem B]  4s tiếng 50 mất 0 trễ  94 | hình  9 lệch   +2
+[xem B]  5s tiếng 50 mất 0 trễ  95 | hình 10 lệch   +2
+[xem B]  6s tiếng 50 mất 0 trễ  94 | hình 10 lệch   +3
+[xem B] ===== TỔNG KẾT =====
+[xem B] vào muộn 3.0 s; khung đầu sau 98 ms
+[xem B]   nguồn khung đầu: bộ đệm GOP
+[xem B] tiếng: nhận 335 gói, mất 0, trễ TB 94 ms
+[xem B]   (trễ đầu-cuối: giả định cùng đồng hồ)
+[xem B] hình: nhận 77 khung (I 6, P 71), hỏng 0
+[xem B]   P bỏ chờ I 0; hiện 67, bỏ cũ 9
+[xem B] đứng hình 0, xin khung khóa 0
+[xem B] lệch tiếng-hình TB (+ = hình chậm hơn tiếng):
+[xem B]   1. đồng bộ BẬT: +2 ms (n=66)
+[xem B] nhận TB 425 kbit/s
+
+===== C =====
+> out\app.exe xem C 127.0.0.1 41655 -tre 6.5 -thoi-gian 9.6
+[xem C] Chờ 6.5 s rồi mới vào xem (vào muộn)
+[xem C] Vào xem: mã 5, máy phát đang phát
+[xem C] Nhận tiếng+hình, đồng bộ BẬT, jitter 100 ms
+[xem C] Mỗi giây: gói tiếng, mất, trễ ms | khung hiện, lệch ms
+[xem C] Luồng 160x120, 10 fps, GOP 20, 16000 Hz
+[xem C] Sự kiện: C vào xem
+[xem C]  1s tiếng 50 mất 0 trễ  91 | hình  0 lệch    –
+[xem C] Khung đầu sau 1899 ms: chờ khung I
+[xem C]  2s tiếng 51 mất 0 trễ  91 | hình  2 lệch   +3
+[xem C]  3s tiếng 50 mất 0 trễ  90 | hình 10 lệch   +3
+[xem C] Sự kiện: B rời
+[xem C] ===== TỔNG KẾT =====
+[xem C] vào muộn 6.5 s; khung đầu sau 1899 ms
+[xem C]   nguồn khung đầu: chờ khung I
+[xem C] tiếng: nhận 155 gói, mất 0, trễ TB 91 ms
+[xem C]   (trễ đầu-cuối: giả định cùng đồng hồ)
+[xem C] hình: nhận 13 khung (I 2, P 11), hỏng 0
+[xem C]   P bỏ chờ I 18; hiện 13, bỏ cũ 0
+[xem C] đứng hình 0, xin khung khóa 0
+[xem C] lệch tiếng-hình TB (+ = hình chậm hơn tiếng):
+[xem C]   1. đồng bộ BẬT: +2 ms (n=13)
+[xem C] nhận TB 406 kbit/s
+
+===== D =====
+> out\app.exe xem D 127.0.0.1 41655 -mat-goi 0.03 -thoi-gian 9.5
+[xem D] Vào xem: mã 2, máy phát đang phát
+[xem D] Nhận tiếng+hình, đồng bộ BẬT, jitter 100 ms, mất 3%
+[xem D] Mỗi giây: gói tiếng, mất, trễ ms | khung hiện, lệch ms
+[xem D] Luồng 160x120, 10 fps, GOP 20, 16000 Hz
+[xem D] Sự kiện: D vào xem
+[xem D] Khung đầu sau 98 ms: bộ đệm GOP (I cũ 0.3 s)
+[xem D] Sự kiện: A vào xem
+[xem D]  1s tiếng 48 mất 2 trễ  82 | hình 10 lệch   +2
+[xem D]  2s tiếng 49 mất 3 trễ  82 | hình  8 lệch   +2
+[xem D] Sự kiện: B vào xem
+[xem D]  3s tiếng 46 mất 7 trễ  82 | hình 10 lệch   +2
+[xem D]  4s tiếng 49 mất 8 trễ  82 | hình 10 lệch   +2
+[xem D]  5s tiếng 48 mất 10 trễ  82 | hình  6 lệch   +1
+[xem D] Thiếu khung #49 -> đứng hình, xin khung khóa
+[xem D] Chưa có khung I: xin khung khóa
+[xem D]  6s tiếng 50 mất 10 trễ  82 | hình  0 lệch    –
+[xem D] Hồi phục bằng khung I #64 sau 1097 ms
+[xem D] Sự kiện: C vào xem
+[xem D]  7s tiếng 49 mất 11 trễ  82 | hình  9 lệch   +3
+[xem D]  8s tiếng 49 mất 12 trễ  82 | hình 10 lệch   +2
+[xem D]  9s tiếng 50 mất 12 trễ  82 | hình 10 lệch   +3
+[xem D] Sự kiện: B rời
+[xem D] Sự kiện: C rời
+[xem D] ===== TỔNG KẾT =====
+[xem D] vào ngay; khung đầu sau 98 ms
+[xem D]   nguồn khung đầu: bộ đệm GOP
+[xem D] tiếng: nhận 462 gói, mất 13, trễ TB 82 ms
+[xem D]   (trễ đầu-cuối: giả định cùng đồng hồ)
+[xem D] hình: nhận 82 khung (I 6, P 76), hỏng 2
+[xem D]   P bỏ chờ I 11; hiện 78, bỏ cũ 3
+[xem D] đứng hình 1, xin khung khóa 2
+[xem D] lệch tiếng-hình TB (+ = hình chậm hơn tiếng):
+[xem D]   1. đồng bộ BẬT: +2 ms (n=77)
+[xem D] nhận TB 391 kbit/s
+[xem D] giả lập mất 18 gói nhận
+
+===== A =====
+> out\app.exe xem A 127.0.0.1 41655 -thoi-gian 10 -ghep ket_qua_video.png
+[xem A] Vào xem: mã 3, máy phát đang phát
+[xem A] Nhận tiếng+hình, đồng bộ BẬT, jitter 100 ms
+[xem A] Mỗi giây: gói tiếng, mất, trễ ms | khung hiện, lệch ms
+[xem A] Luồng 160x120, 10 fps, GOP 20, 16000 Hz
+[xem A] Sự kiện: A vào xem
+[xem A] Khung đầu sau 121 ms: bộ đệm GOP (I cũ 0.5 s)
+[xem A]  1s tiếng 50 mất 0 trễ 100 | hình 10 lệch   +2
+[xem A] > chup 1. DONG BO BAT
+[xem A] Đã chụp out/A_chup_1.png: hình 2.400 s, tiếng 2.400 s
+[xem A]  2s tiếng 50 mất 0 trễ 100 | hình 10 lệch   +3
+[xem A] Sự kiện: B vào xem
+[xem A]  3s tiếng 51 mất 0 trễ  99 | hình 10 lệch   +2
+[xem A] > dong_bo tat
+[xem A] Đồng bộ tiếng-hình: TẮT
+[xem A]  4s tiếng 49 mất 0 trễ  99 | hình 11 lệch  -49
+[xem A] > chup 2. DONG BO TAT
+[xem A]  5s tiếng 50 mất 0 trễ  99 | hình 10 lệch  -93
+[xem A] Đã chụp out/A_chup_2.png: hình 5.500 s, tiếng 5.408 s
+[xem A]  6s tiếng 50 mất 0 trễ  99 | hình 10 lệch  -94
+[xem A] Sự kiện: C vào xem
+[xem A] > dong_bo bat
+[xem A] Đồng bộ tiếng-hình: BẬT
+[xem A]  7s tiếng 50 mất 0 trễ 100 | hình  9 lệch  -52
+[xem A] > dang_ky am_thanh
+[xem A] Đăng ký nhận: âm thanh
+[xem A]  8s tiếng 50 mất 0 trễ 100 | hình  5 lệch   +2
+[xem A] > dang_ky ca_hai
+[xem A] Đăng ký nhận: âm thanh+video
+[xem A] Thiếu khung #81 -> đứng hình, xin khung khóa
+[xem A] Hồi phục bằng khung I #94 sau 99 ms
+[xem A] Hình trở lại sau 484 ms
+[xem A]  9s tiếng 50 mất 0 trễ 100 | hình  1 lệch   +4
+[xem A] Sự kiện: B rời
+[xem A] Sự kiện: C rời
+[xem A] Sự kiện: D rời
+[xem A] > chup 3. NHAN LAI VIDEO
+[xem A] Đã chụp out/A_chup_3.png: hình 9.900 s, tiếng 9.906 s
+[xem A] ===== TỔNG KẾT =====
+[xem A] vào ngay; khung đầu sau 121 ms
+[xem A]   nguồn khung đầu: bộ đệm GOP
+[xem A] tiếng: nhận 500 gói, mất 0, trễ TB 100 ms
+[xem A]   (trễ đầu-cuối: giả định cùng đồng hồ)
+[xem A] hình: nhận 93 khung (I 6, P 87), hỏng 0
+[xem A]   P bỏ chờ I 3; hiện 86, bỏ cũ 5
+[xem A] đứng hình 1, xin khung khóa 1
+[xem A] lệch tiếng-hình TB (+ = hình chậm hơn tiếng):
+[xem A]   1. đồng bộ BẬT: +2 ms (n=34)
+[xem A]   2. đồng bộ TẮT: -94 ms (n=31)
+[xem A]   3. đồng bộ BẬT: +2 ms (n=20)
+[xem A] nhận TB 389 kbit/s
+[xem A] Đã ghép 3 ảnh vào ket_qua_video.png (688x672)
+
+===== gui =====
+> out\app_gui.exe demo_gui 127.0.0.1 41657 41658 ket_qua_gui.png
+[demo] 1. Server: bấm START SERVER
+[demo] 2. P: Kết nối; camera giả lập (clapper), micro giả lập
+[demo]    P bấm PHÁT (10 fps, GOP 20)
+[demo] 3. A: Kết nối ngay (đồng bộ tiếng-hình BẬT)
+[demo] 4. B: bỏ chọn 'Đồng bộ', Kết nối (vào muộn 3,5 s)
+[demo] 5. Số liệu (bộ đệm GOP bật):
+[demo]    server: vào 372, ra 744 kbit/s, hệ số 2.00
+[demo]      -> A: A+V, 372 kbit/s, I đầu 20 ms (bộ đệm)
+[demo]      -> B: A+V, 372 kbit/s, I đầu 18 ms (bộ đệm)
+[demo]    P: I 4 P 72, TB I 4254 B, P 1316 B, PLI 0
+[demo]    A: đồng bộ BẬT, khung đầu 122 ms (bộ đệm GOP)
+[demo]       lệch TB +2 ms, trễ 100 ms, mất tiếng 0, đứng 0
+[demo]    B: đồng bộ TẮT, khung đầu 20 ms (bộ đệm GOP)
+[demo]       lệch TB -77 ms, trễ 81 ms, mất tiếng 0, đứng 0
+[demo] 6. P bấm 'Khung khóa ngay'; A bấm 'Chụp'
+[demo]    A đã chụp out/A_gui_chup_1.png
+[demo] 7. Chụp 4 cửa sổ
+[demo]    Đã ghi ket_qua_gui.png (373 KB)
+[demo] 8. Server: chọn B, bấm 'Ngắt người chọn'
+[demo]    B: Trạng thái: mất kết nối server
+[demo] 9. P: DỪNG PHÁT, chọn 'Mẫu thử ffmpeg (testsrc)', PHÁT
+[demo]    P testsrc: I 2 P 36, TB I 2298 B, P 299 B
+[demo]    P: MẪU THỬ ffmpeg testsrc (không phải camera)
+[demo]    A: khung I 8, P 129, lệch +1 ms
+[demo] 10. P: DỪNG PHÁT, tạo tệp mẫu mp4, nguồn Tệp video, PHÁT
+[demo]    Tệp video (chọn tệp bên dưới) | Tiếng của tệp video
+[demo]    P tệp: I 3 P 38, TB I 6174 B, P 9916 B
+[demo]    P: TỆP VIDEO – tep_mau.mp4
+[demo]    A: khung I 11, P 167, lệch +1 ms, mức tiếng -24.9 dBFS
+[demo]    Đã ghi ket_qua_gui_tep.png (218 KB)
+[demo] 11. Server bấm STOP SERVER
+[demo]    P: Trạng thái: mất kết nối server
+[demo]    A: Trạng thái: mất kết nối server
+[demo] Kết thúc
+

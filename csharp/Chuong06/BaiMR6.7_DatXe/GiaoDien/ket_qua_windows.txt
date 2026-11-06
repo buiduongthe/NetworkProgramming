@@ -1,0 +1,52 @@
+===== gui =====
+> bin\Release\net10.0-windows\BaiMR6.7_GiaoDien.exe demo 127.0.0.1 42712 ..\ket_qua_gui.png
+[demo] 1. Máy chủ: START SERVER (chế độ khoa, 1 xe)
+[demo]    An, Bình, Chi: Kết nối
+[demo] 2. An, Bình, Chi CÙNG bấm 'ĐẶT XE'
+[demo]    An: Đặt thành công – tài xế Hùng
+[demo]    Bình: Hết chỗ – không còn xe trống
+[demo]    Chi: Hết chỗ – không còn xe trống
+[demo]    máy chủ: 3 yc, tc 1, từ chối 2, sai phạm 0
+[demo] 3. An bấm 'Hủy chuyến'
+[demo]    An: Đã hủy chuyến
+[demo]    máy chủ: Đã đặt 0/1 xe, 1 lượt báo đặt được
+[demo] 4. Máy chủ: khong_khoa, độ trễ xử lý 0–20 ms (CSDL chậm)
+[demo]    An, Bình, Chi CÙNG bấm 'ĐẶT XE'
+[demo]    An nhận: Tài xế Hùng đã nhận khách khác (Chi)!
+[demo]    Bình nhận: Tài xế Hùng đã nhận khách khác (Chi)!
+[demo]    Chi nhận: Đặt thành công – tài xế Hùng
+[demo]    …sau cap_nhat của máy chủ:
+[demo]    An: Tài xế Hùng đã nhận khách khác (Chi)!
+[demo]    Bình: Tài xế Hùng đã nhận khách khác (Chi)!
+[demo]    Chi: Đặt thành công – tài xế Hùng
+[demo]    máy chủ: 7 yc, tc 5, từ chối 2, sai phạm 2
+[demo]      ví dụ: xe 1: Bình khi An đang đặt
+[demo]      ví dụ: xe 1: Chi khi Bình đang đặt
+[demo]    xe 1 chở: Chi
+[demo]    Đã ghi ket_qua_gui_tranh_chap.png (98 KB)
+[demo] 5. Máy chủ: khoa, trễ 0–2 ms, đặt lại 3 xe
+[demo]    So sánh 4 chế độ (1000 người)
+[demo]   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+[demo]   khong_khoa           73       70        0 12213    57.0
+[demo]   khoa                  3        0        0   561  1763.0
+[demo]   lac_quan              3        0       68 18432    51.1
+[demo]   hang_doi              3        0        0   565  1731.6
+[demo]    Sai phạm: khong_khoa
+[demo]    Không sai phạm: khoa, lac_quan, hang_doi
+[demo] 6. Đặt lại (3 xe); An, Bình, Chi CÙNG bấm 'ĐẶT XE'
+[demo]    An: Đặt thành công – tài xế Minh
+[demo]    Bình: Đặt thành công – tài xế Hùng
+[demo]    Chi: Đặt thành công – tài xế Lan
+[demo]    An: Minh 51F-246.80, đến sau 6 phút
+[demo]    Bình: Hùng 51A-123.45, đến sau 8 phút
+[demo]    Chi: Lan 51G-678.90, đến sau 10 phút
+[demo]    máy chủ: Đã đặt 3/3 xe, 3 lượt báo đặt được
+[demo] 7. Chụp 4 cửa sổ
+[demo]    Đã ghi ket_qua_gui.png (178 KB)
+[demo]    An: Đã tới nơi – bấm Hoàn tất chuyến
+[demo]    Bình: Đã tới nơi – bấm Hoàn tất chuyến
+[demo]    Chi: Đã tới nơi – bấm Hoàn tất chuyến
+[demo] 8. Máy chủ: STOP SERVER
+[demo]    Bình: Mất kết nối máy chủ
+[demo] Kết thúc
+

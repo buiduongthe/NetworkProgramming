@@ -1,0 +1,34 @@
+===== ports =====
+> python demo_ports.py 9523,9531,9537 9525,9528,9533,9539
+[demo] Cổng mở: 9523, 9531, 9537
+[demo] Cổng bị lọc (mô phỏng): 9525, 9528, 9533, 9539
+[demo] Nhấn Ctrl+C để dừng
+
+===== scan =====
+> python scan_async.py 127.0.0.1 9520 9539 10
+[scan] Quét 20 cổng 9520–9539 trên 127.0.0.1, thời gian chờ 1000 ms
+[scan]   cổng 9520: FILTERED
+[scan]   cổng 9521: FILTERED
+[scan]   cổng 9522: FILTERED
+[scan]   cổng 9523: OPEN
+[scan]   cổng 9524: FILTERED
+[scan]   cổng 9525: FILTERED
+[scan]   cổng 9526: FILTERED
+[scan]   cổng 9527: FILTERED
+[scan]   cổng 9528: FILTERED
+[scan]   cổng 9529: FILTERED
+[scan]   cổng 9530: FILTERED
+[scan]   cổng 9531: OPEN
+[scan]   cổng 9532: FILTERED
+[scan]   cổng 9533: FILTERED
+[scan]   cổng 9534: FILTERED
+[scan]   cổng 9535: FILTERED
+[scan]   cổng 9536: FILTERED
+[scan]   cổng 9537: OPEN
+[scan]   cổng 9538: FILTERED
+[scan]   cổng 9539: FILTERED
+[scan] Tổng hợp: OPEN=3, CLOSED=0, FILTERED=17
+[scan] Hai lần quét cho cùng kết quả: có
+[scan] Tuần tự   (max_parallel=1):  17.15 s
+[scan] Đồng thời (max_parallel=10): 2.04 s
+

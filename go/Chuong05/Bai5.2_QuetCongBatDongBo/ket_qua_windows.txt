@@ -1,0 +1,22 @@
+===== ports =====
+> out\app.exe ports 31523,31531,31537 31525,31528,31533,31539
+[demo] Cổng mở: 31523, 31531, 31537
+[demo] Cổng bị lọc (mô phỏng): 31525, 31528, 31533, 31539
+[demo] Nhấn Ctrl+C để dừng
+[demo] Dừng
+
+===== scan =====
+> out\app.exe scan 127.0.0.1 31520 31539 10
+[scan] Quét 20 cổng 31520–31539 trên 127.0.0.1, thời gian chờ 1000 ms
+[scan]   cổng 31523: OPEN
+[scan]   cổng 31525: OPEN
+[scan]   cổng 31528: OPEN
+[scan]   cổng 31531: OPEN
+[scan]   cổng 31533: OPEN
+[scan]   cổng 31537: OPEN
+[scan]   cổng 31539: OPEN
+[scan] Tổng hợp: OPEN=7, CLOSED=13, FILTERED=0
+[scan] Hai lần quét cho cùng kết quả: có
+[scan] Tuần tự   (max_parallel=1):  0.01 s
+[scan] Đồng thời (max_parallel=10): 0.00 s
+

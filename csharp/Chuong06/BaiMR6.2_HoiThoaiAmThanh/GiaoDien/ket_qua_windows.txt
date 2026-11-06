@@ -1,0 +1,115 @@
+===== gui =====
+> bin\Release\net10.0-windows\BaiMR6.2_GiaoDien.exe demo 127.0.0.1 42625 42626 ..\ket_qua_gui.png
+[demo] 1. Bấm Start Server, server Start Mic (giả lập sin 330 Hz)
+[server] Điều khiển: TCP 127.0.0.1:42625; âm thanh RTP: UDP 127.0.0.1:42626
+[server] PCM 16 bit mono 16 kHz; khung 20 ms = 320 mẫu = 640 B
+[server] Server bật micro: giả lập (sin 330 Hz)
+[demo] 2. A, B, C bấm Connect rồi Start Mic (giả lập 440 / 620 / 880 Hz)
+[server] #1 A vào phòng từ 127.0.0.1:64750
+[khach A] Đã kết nối 127.0.0.1:42625, mã 1
+[server]   => A vào phòng
+[khach A] Mic: mở
+[khach A] Sự kiện: A vào phòng
+[khach A] Mic: tắt (tự tắt)
+[server]   => A tự tắt mic
+[khach A] Sự kiện: A tự tắt mic
+[server] #1 A đăng ký UDP 127.0.0.1:57185
+[khach A] Start Mic: giả lập (sin 440 Hz)
+[server]   => A tự bật mic
+[khach A] Mic: mở
+[khach A] Sự kiện: A tự bật mic
+[server] #2 B vào phòng từ 127.0.0.1:64751
+[server]   => B vào phòng
+[khach A] Sự kiện: B vào phòng
+[khach B] Đã kết nối 127.0.0.1:42625, mã 2
+[khach B] Mic: mở
+[khach B] Sự kiện: B vào phòng
+[server] #2 B đăng ký UDP 127.0.0.1:57186
+[server]   => B tự tắt mic
+[khach B] Mic: tắt (tự tắt)
+[khach B] Sự kiện: B tự tắt mic
+[khach A] Sự kiện: B tự tắt mic
+[khach B] Start Mic: giả lập (sin 620 Hz)
+[server]   => B tự bật mic
+[khach B] Mic: mở
+[khach A] Sự kiện: B tự bật mic
+[khach B] Sự kiện: B tự bật mic
+[server] #3 C vào phòng từ 127.0.0.1:64752
+[server]   => C vào phòng
+[khach A] Sự kiện: C vào phòng
+[khach C] Đã kết nối 127.0.0.1:42625, mã 3
+[khach B] Sự kiện: C vào phòng
+[khach C] Mic: mở
+[khach C] Sự kiện: C vào phòng
+[server] #3 C đăng ký UDP 127.0.0.1:57187
+[server]   => C tự tắt mic
+[khach C] Mic: tắt (tự tắt)
+[khach A] Sự kiện: C tự tắt mic
+[khach B] Sự kiện: C tự tắt mic
+[khach C] Sự kiện: C tự tắt mic
+[khach C] Start Mic: giả lập (sin 880 Hz)
+[server]   => C tự bật mic
+[khach C] Mic: mở
+[khach B] Sự kiện: C tự bật mic
+[khach A] Sự kiện: C tự bật mic
+[khach C] Sự kiện: C tự bật mic
+[demo]    Số liệu sau 2 s:
+[demo]   client A: mức nhận -10.3 dBFS, mức mic -15.1 dBFS, gửi 107 gói, nhận 108, mất 0, mic mở, Server Vol 100%
+[demo]   client B: mức nhận -10.3 dBFS, mức mic -15.1 dBFS, gửi 105 gói, nhận 107, mất 0, mic mở, Server Vol 100%
+[demo]   client C: mức nhận -10.3 dBFS, mức mic -15.0 dBFS, gửi 105 gói, nhận 106, mất 0, mic mở, Server Vol 100%
+[demo]   server thấy A: mức vào -15.1 dBFS
+[demo]   server thấy B: mức vào -15.0 dBFS
+[demo]   server thấy C: mức vào -15.1 dBFS
+[demo] 3. Server khóa mic B, kéo độ lợi C lên 150 %; A kéo âm lượng nghe xuống 50 %
+[server]   => server tắt mic B
+[khach B] Mic: tắt (server)
+[khach B] Sự kiện: server tắt mic B
+[khach A] Sự kiện: server tắt mic B
+[khach C] Sự kiện: server tắt mic B
+[server] A tự đặt âm lượng nghe 0.50
+[server]   => server đặt độ lợi C = 1.50
+[khach C] Sự kiện: server đặt độ lợi C = 1.50
+[khach B] Sự kiện: server đặt độ lợi C = 1.50
+[khach A] Sự kiện: server đặt độ lợi C = 1.50
+[demo] 4. B bấm Stop Mic rồi Start Mic (xin bật lại khi đang bị khóa)
+[khach B] Stop Mic
+[server]   => B tự tắt mic
+[khach B] Mic: tắt (cả hai)
+[khach B] Sự kiện: B tự tắt mic
+[khach A] Sự kiện: B tự tắt mic
+[khach C] Sự kiện: B tự tắt mic
+[khach B] Start Mic: giả lập (sin 620 Hz)
+[server] B xin bật mic -> từ chối (server đang khóa)
+[khach B] Bị từ chối: server đang khóa mic của bạn
+[demo] 5. Số liệu cuối:
+[demo]   client A: mức nhận -16.0 dBFS, mức mic -15.1 dBFS, gửi 282 gói, nhận 283, mất 0, mic mở, Server Vol 100%
+[demo]   client B: mức nhận -8.8 dBFS, mức mic -15.1 dBFS, gửi 106 gói, nhận 282, mất 0, mic tắt (cả hai), Server Vol 100%
+[demo]   client C: mức nhận -12.0 dBFS, mức mic -15.1 dBFS, gửi 281 gói, nhận 281, mất 0, mic mở, Server Vol 150%
+[demo]   server thấy A: mức vào -15.1 dBFS
+[demo]   server thấy B: mức vào --- dBFS
+[demo]   server thấy C: mức vào -15.1 dBFS
+[server] Trạng thái: 3 client, âm lượng chung 1.00
+[server]  #  tên mic          lợi   mức vào            mất  jit.
+[server]  1  A   mở           1.00 -15.1 |#######---|   0  0.5ms
+[server]  2  B   tắt (server) 1.00   --- |----------|   0  0.4ms
+[server]  3  C   mở           1.50 -15.0 |#######---|   0  0.5ms
+[demo] Đã chụp 4 cửa sổ vào D:\123013 - Lập trình mạng\Code\csharp\Chuong06\BaiMR6.2_HoiThoaiAmThanh\ket_qua_gui.png (97 KB)
+[khach A] Đã ngắt kết nối
+[server] #1 A rời phòng
+[server]   => A rời phòng
+[khach B] Sự kiện: A rời phòng
+[khach C] Sự kiện: A rời phòng
+[server] #2 B rời phòng
+[server]   => B rời phòng
+[khach B] Đã ngắt kết nối
+[khach C] Sự kiện: B rời phòng
+[server] #3 C rời phòng
+[server]   => C rời phòng
+[khach C] Đã ngắt kết nối
+[server] Tổng kết (gói vào: từ client tới server):
+[server]  #  tên gói vào mất trễ thiếu cạn bị chặn cắt ngọn
+[server]  1  A       289   0    0     0   0       0        0
+[server]  2  B       106   0    0     0   0       0        0
+[server]  3  C       290   0    0     0   0       0        0
+[server] Server tắt micro
+

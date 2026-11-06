@@ -1,8 +1,8 @@
 ===== server =====
 > python echo_server.py 127.0.0.1 9391
 [server] Đang lắng nghe tại 127.0.0.1:9391
-[server] Client kết nối: 127.0.0.1:51225
-[server] Client 127.0.0.1:51225 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:55115
+[server] Client 127.0.0.1:55115 đã đóng kết nối
 
 ===== client =====
 > python echo_client.py 127.0.0.1 9391

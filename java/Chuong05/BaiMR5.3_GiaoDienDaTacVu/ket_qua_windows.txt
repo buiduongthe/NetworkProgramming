@@ -1,0 +1,50 @@
+===== server =====
+> java -cp out MayChuThu 127.0.0.1 43530
+[server] HTTP 127.0.0.1:43530/tcp, "DNS" 127.0.0.1:43530/udp, cổng mở 43531, 43532
+[server] HTTP GET /tep 256 KB, nghỉ 60 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 90 ms mỗi khối
+[server] HTTP GET /tep 384 KB, nghỉ 70 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 120 ms mỗi khối
+[server] HTTP GET /tep 320 KB, nghỉ 50 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 60 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 90 ms mỗi khối
+[server] HTTP GET /tep 384 KB, nghỉ 70 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 80 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 120 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 60 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 90 ms mỗi khối
+[server] HTTP GET /tep 384 KB, nghỉ 70 ms mỗi khối
+[server] dừng
+
+===== gui =====
+> java -cp out UngDung 127.0.0.1 43530 --demo
+[gui]   1.17 s  Bấm Tải tệp: 5 tệp, giới hạn đồng thời 3
+[gui]   1.24 s  Bấm Kiểm tra cổng: 43530, 43531, 43532, 43533
+[gui]   1.25 s  Bấm Tra cứu tên: 5 tên qua UDP
+[gui]   2.18 s  Kịch bản bấm Hủy ở tác vụ #2
+[gui]   2.27 s  Tải 256 KB (90 ms/khối): đã hủy
+[gui]   2.75 s  Tải 256 KB (60 ms/khối): xong 256 KB
+[gui]   2.84 s  Chụp ảnh 1: 5 tác vụ chưa xong, 2 đang chờ lượt
+[gui]   3.55 s  Tra cứu 5 tên: 4/5 tên có địa chỉ
+[gui]   3.57 s  Tải 384 KB (70 ms/khối): xong 384 KB
+[gui]   4.84 s  Tải 256 KB (120 ms/khối): xong 256 KB
+[gui]   4.84 s  Tải 320 KB (50 ms/khối): xong 320 KB
+[gui]   4.87 s  Kiểm tra 4 cổng: 3 mở, 1 đóng
+[gui]   4.90 s  Bấm Tải tệp: 4 tệp, giới hạn đồng thời 3
+[gui]   5.23 s  Bấm Làm SAI: tải 256 KB ngay trên luồng giao diện…
+[gui]   6.66 s  Luồng giao diện bị chặn 1412 ms: đồng hồ, nút, thanh tiến trình đứng yên
+[gui]   6.68 s  Tải 256 KB (60 ms/khối): xong 256 KB
+[gui]   6.68 s  Tải 256 KB (90 ms/khối): xong 256 KB
+[gui]   6.74 s  Tải 384 KB (70 ms/khối): xong 384 KB
+[gui]   7.83 s  Tải 256 KB (120 ms/khối): xong 256 KB
+[gui]   7.89 s  Bấm Tải tệp: 4 tệp, giới hạn đồng thời 3
+[gui]   8.42 s  Bấm Hủy tất cả: 4 tác vụ
+[gui]   8.45 s  Tải 256 KB (120 ms/khối): đã hủy (khi đang chờ lượt)
+[gui]   8.46 s  Tải 256 KB (60 ms/khối): đã hủy
+[gui]   8.46 s  Tải 384 KB (70 ms/khối): đã hủy
+[gui]   8.49 s  Tải 256 KB (90 ms/khối): đã hủy
+[gui]   9.00 s  Đã chụp cửa sổ: ket_qua_gui.png
+[gui]   9.00 s  Nhịp rỗi              :   35 nhịp, TB   31.9 ms, tối đa     89 ms
+[gui]   9.01 s  Nhịp chạy song song   :  166 nhịp, TB   34.9 ms, tối đa    192 ms
+[gui]   9.01 s  Nhịp luồng GUI bị chặn:    1 nhịp, TB 1450.2 ms, tối đa   1450 ms
+

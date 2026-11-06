@@ -1,0 +1,146 @@
+===== server =====
+> python may_chu_tre.py 127.0.0.1 41520 200
+[server] lắng nghe 127.0.0.1:41520, mỗi yêu cầu trễ 200 ms
+[server] đợt  1: 20 yêu cầu, đồng thời tối đa  1
+[server] đợt  2: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  3: 20 yêu cầu, đồng thời tối đa  5
+[server] đợt  4: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  5: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  6: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  7: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  8: 20 yêu cầu, đồng thời tối đa 20
+[server] dừng; đã phục vụ 160 yêu cầu
+
+===== mang =====
+> python dong_thoi.py mang 127.0.0.1 41520
+Khối việc: 20 yêu cầu mạng, mỗi yêu cầu máy chủ trễ 200 ms
+
+1. tuần tự: 4.37 s
+  chính       |AABBBCCDDEEEFFGGGHHIIJJJKKLLLMMNNNOOPPQQQRRSSSTT|
+2. mỗi tác vụ một luồng: 0.22 s
+  luồng-1     |AAA                                             |
+  luồng-2     |BBB                                             |
+  luồng-3     |CCC                                             |
+  luồng-4     |DDD                                             |
+  luồng-5     |EEE                                             |
+  luồng-6     |FFF                                             |
+  luồng-7     |GGG                                             |
+  luồng-8     |HHH                                             |
+  … và 12 luồng khác, mỗi luồng chạy 1 tác vụ
+3. nhóm luồng (5 luồng): 0.89 s
+  luồng-1     |AAAJJOOSSS                                      |
+  luồng-2     |BBBIINNTTT                                      |
+  luồng-3     |CCFFFKKPPP                                      |
+  luồng-4     |DDGGGLLQQQ                                      |
+  luồng-5     |EEEHHMMRRR                                      |
+4. asyncio (1 luồng): 0.23 s
+  vòng lặp    |***                                             |
+               0                                           4.4 s
+
+  Mô hình                        Thời gian  Tăng tốc
+  1. tuần tự                        4.37 s      1.0×
+  2. mỗi tác vụ một luồng           0.22 s     19.5×
+  3. nhóm luồng (5 luồng)           0.89 s      4.9×
+  4. asyncio (1 luồng)              0.23 s     19.1×
+
+Nhận xét: việc chờ I/O không tốn CPU, nên luồng hay coroutine đều chồng
+  được thời gian chờ; asyncio làm được trên một luồng duy nhất (*).
+
+===== cpu =====
+> python dong_thoi.py cpu
+Khối việc: 8 tác vụ CPU thuần Python, mỗi tác vụ ≈ 100 ms
+Máy có 16 CPU; GIL đang bật
+
+1. tuần tự: 0.84 s
+  chính       |AAAAABBBBBBCCCCCDDDDDDEEEEEFFFFFFGGGGGGHHHHHHH  |
+2. nhóm luồng (4 luồng): 0.90 s
+  luồng-1     |AAAAAAAAAAAAAAAAEEEEEEEEEEEEEEEEGGGGGGGGGGGGGGGG|
+  luồng-2     |  BBBBBBBBBBBBBBBBBFFFFFFFFFFFFFFFFFFFFFFFFF    |
+  luồng-3     |    CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCHHHHHHHHHHHHH |
+  luồng-4     |        DDDDDDDDDDDDDDDDDDDDDDDDDDDD            |
+3. nhóm tiến trình (16 t.trình): 0.49 s
+  tiến trình-1|AAAAAAAAAAAAAAAAAAAAAAAA                        |
+  tiến trình-2|   BBBBBBBBBBBBBBBBBBBBBBB                      |
+  tiến trình-3|    CCCCCCCCCCCCCCCCCCCCC                       |
+  tiến trình-4|    DDDDDDDDDDDDDDDDDDDDD                       |
+  tiến trình-5|    EEEEEEEEEEEEEEEEEEEEE                       |
+  tiến trình-6|    FFFFFFFFFFFFFFFFFFFFF                       |
+  tiến trình-7|         GGGGGGGGGGGGGGGGGG                     |
+  tiến trình-8|         HHHHHHHHHHHHHHHHHH                     |
+               0                                           0.9 s
+
+  Mô hình                        Thời gian  Tăng tốc
+  1. tuần tự                        0.84 s      1.0×
+  2. nhóm luồng (4 luồng)           0.90 s      0.9×
+  3. nhóm tiến trình (16 t.trình)    0.49 s      1.7×
+
+Nhận xét: với GIL, mỗi lúc chỉ một luồng chạy mã Python, nên nhóm luồng
+  không nhanh hơn tuần tự (mỗi tác vụ bị kéo dài vì phải chia lượt);
+  nhóm tiến trình có GIL riêng cho từng tiến trình nên chạy song song
+  thật trên nhiều CPU.
+
+===== tron =====
+> python dong_thoi.py tron 127.0.0.1 41520
+Khối việc: 20 tác vụ = yêu cầu mạng 200 ms + xử lý CPU ≈ 30 ms
+Đo thêm độ trễ vòng lặp sự kiện: coroutine "nhịp tim" ngủ 10 ms và
+  đo xem thực tế bị đánh thức muộn bao nhiêu (trễ lớn = ứng dụng đứng).
+
+A. CPU ngay trong vòng lặp: 0.89 s
+  vòng lặp    |**********************************************TT|
+B. asyncio.to_thread: 0.90 s
+  vòng lặp    |*****************************************       |
+  luồng-1     |            AABBCCCCEEEEEEHHHH      LLLLLL      |
+  luồng-2     |                DDDDDFFFFF   IIIIIPPPPPPP    TTT|
+  luồng-3     |                     GGGGG JJJJJNNNNNNNNN       |
+  luồng-4     |                          KKKKKK  MM        QQQQ|
+  luồng-5     |                               OOOOOOOO  RRRR   |
+  luồng-6     |                                         SSSSSS |
+C. run_in_executor, 2 luồng: 0.89 s
+  vòng lặp    |**************************I                     |
+  luồng-1     |           AAABBDDDEEEEHHHJJKKKLLLLNNNPPPRRRRTT |
+  luồng-2     |               CCCCFFFGGG   IIIIMMMMOOOOQQQSSSSS|
+D. run_in_executor, 16 t.trình: 0.47 s
+  vòng lặp    |************I                                   |
+  tiến trình-7|           AAAAAAAAAA                           |
+  tiến trình-6|           BBBBBBBBBB                           |
+  tiến trình-10|           CCCCCCCCCCC                          |
+  tiến trình-8|           DDDDDDDDDD                           |
+  tiến trình-3|           EEEEEEEESSSSSS                       |
+  tiến trình-1|           FFFFFFFFQQQQQQ                       |
+  tiến trình-5|            GGGGGGGGG                           |
+  … và 9 tiến trình khác, mỗi tiến trình chạy 1 tác vụ
+               0                                           0.9 s
+
+  Mô hình                        Thời gian  Trễ vòng lặp
+  A. CPU ngay trong vòng lặp        0.89 s        637 ms
+  B. asyncio.to_thread              0.90 s        428 ms
+  C. run_in_executor, 2 luồng       0.89 s        126 ms
+  D. run_in_executor, 16 t.trình    0.47 s         10 ms
+
+Nhận xét: A – xử lý CPU chặn vòng lặp sự kiện, nhịp tim trễ hàng trăm
+  ms. B, C – đẩy CPU sang luồng khác thì vòng lặp được chạy xen, nhưng
+  vì GIL nên CPU vẫn tuần tự, và càng nhiều luồng tranh GIL (B dùng
+  nhóm mặc định 20 luồng) thì vòng lặp càng chờ lâu. D – tiến trình
+  riêng: vòng lặp thông suốt và CPU chạy song song.
+
+===== khoa =====
+> python dong_thoi.py khoa
+Tranh chấp dữ liệu: 4 luồng × 5000 lần "đọc – nhường CPU – ghi"
+  lên một biến đếm chung (kết quả đúng phải là 20000).
+  không khóa      :   5214 / 20000 → mất 14786 lần cộng (0.02 s)
+  có khóa (Lock)  :  20000 / 20000 → đúng (0.15 s)
+
+Bế tắc (deadlock): T1 chuyển X→Y, T2 chuyển Y→X, mỗi luồng cần cả
+  hai khóa; số dư ban đầu X = 100, Y = 100.
+  T1 giữ khóa X, chờ khóa Y
+  T2 giữ khóa Y, chờ khóa X
+  T1: chờ Y quá 0,5 s → nghi bế tắc, nhả X, bỏ cuộc
+  T2: chờ X quá 0,5 s → nghi bế tắc, nhả Y, bỏ cuộc
+  Số dư: X = 100, Y = 100 (tổng 200)
+Cách tránh: mọi luồng lấy khóa theo cùng thứ tự (X trước, Y sau):
+  T1 giữ khóa X, chờ khóa Y
+  T1: đã chuyển 10 từ X sang Y
+  T2 giữ khóa X, chờ khóa Y
+  T2: đã chuyển 5 từ Y sang X
+  Số dư: X = 95, Y = 105 (tổng 200)
+

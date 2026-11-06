@@ -1,8 +1,8 @@
 ===== server =====
 > dotnet run --no-build -c Release -- server 127.0.0.1 9392
 [server] Đang lắng nghe tại 127.0.0.1:9392
-[server] Client kết nối: 127.0.0.1:49670
-[server] Client 127.0.0.1:49670 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:64612
+[server] Client 127.0.0.1:64612 đã đóng kết nối
 
 ===== client =====
 > dotnet run --no-build -c Release -- client 127.0.0.1 9392

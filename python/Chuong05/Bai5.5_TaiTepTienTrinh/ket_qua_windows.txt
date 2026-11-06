@@ -1,0 +1,43 @@
+===== server =====
+> python put_server.py 127.0.0.1 9510 4096
+[server] Đang lắng nghe tại 127.0.0.1:9510, giới hạn đọc 4096 KiB/s
+[server] Client kết nối: 127.0.0.1:63432
+[server] Nhận yêu cầu put: du_lieu_thu.bin, 4194304 byte
+[server] Đã lưu uploads/du_lieu_thu.bin, mã băm khớp (200)
+[server] Client 127.0.0.1:63432 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:63435
+[server] Nhận yêu cầu put: du_lieu_thu.bin, 4194304 byte
+[server] Lỗi khi mới nhận 1376256/4194304 byte: xóa uploads\du_lieu_thu.bin.part
+[server] Lỗi với 127.0.0.1:63435: Kết nối đã đóng (đã nhận 1376256 byte)
+[server] Client 127.0.0.1:63435 đã đóng kết nối
+[server] Dừng server
+
+===== client =====
+> python put_client.py 127.0.0.1 9510 du_lieu_thu.bin
+[client] Tạo tệp thử du_lieu_thu.bin (4 MiB)
+[client] Đã kết nối 127.0.0.1:9510, tải lên du_lieu_thu.bin
+[client] Tiến trình: 0.06/4.00 MiB (1%)
+[client] Tiến trình: 0.69/4.00 MiB (17%)
+[client] Tiến trình: 1.06/4.00 MiB (26%)
+[client] Tiến trình: 1.31/4.00 MiB (32%)
+[client] Tiến trình: 1.56/4.00 MiB (39%)
+[client] Tiến trình: 1.81/4.00 MiB (45%)
+[client] Tiến trình: 2.06/4.00 MiB (51%)
+[client] Tiến trình: 2.31/4.00 MiB (57%)
+[client] Tiến trình: 2.56/4.00 MiB (64%)
+[client] Tiến trình: 2.69/4.00 MiB (67%)
+[client] Tiến trình: 3.06/4.00 MiB (76%)
+[client] Tiến trình: 3.44/4.00 MiB (85%)
+[client] Tiến trình: 3.69/4.00 MiB (92%)
+[client] Tiến trình: 3.94/4.00 MiB (98%)
+[client] Tiến trình: 4.00/4.00 MiB (100%)
+[client] Kết quả: {"status":200,"saved":"du_lieu_thu.bin"} sau 1.82 s
+
+===== client_huy =====
+> python put_client.py 127.0.0.1 9510 du_lieu_thu.bin 400
+[client] Đã kết nối 127.0.0.1:9510, tải lên du_lieu_thu.bin, sẽ bấm Hủy sau 400 ms
+[client] Tiến trình: 0.06/4.00 MiB (1%)
+[client] Tiến trình: 0.81/4.00 MiB (20%)
+[client] Tiến trình: 1.06/4.00 MiB (26%)
+[client] Đã hủy sau 0.41 s; đóng kết nối (trạng thái giao thức không còn tin cậy)
+

@@ -1,0 +1,29 @@
+===== server =====
+> dotnet run --no-build -c Release -- server 127.0.0.1 9220
+[server] Đang lắng nghe tại 127.0.0.1:9220
+[server] Client kết nối: 127.0.0.1:51208
+
+===== refused =====
+> dotnet run --no-build -c Release -- client 127.0.0.1 9221
+[client] Kết nối tới 127.0.0.1:9221, thời gian chờ 3000 ms
+[client] NetError REFUSED, thử lại: không, sau 2068 ms
+[client] Nguyên nhân: SocketException ConnectionRefused: No connection could be made because the target machine actively refused it.
+
+===== not_found =====
+> dotnet run --no-build -c Release -- client khong-ton-tai.invalid 9220
+[client] Kết nối tới khong-ton-tai.invalid:9220, thời gian chờ 3000 ms
+[client] NetError NOT_FOUND, thử lại: không, sau 41 ms
+[client] Nguyên nhân: SocketException HostNotFound: No such host is known.
+
+===== timeout =====
+> dotnet run --no-build -c Release -- client 10.255.255.1 9220 3000
+[client] Kết nối tới 10.255.255.1:9220, thời gian chờ 3000 ms
+[client] NetError UNREACHABLE, thử lại: có, sau 3020 ms
+[client] Nguyên nhân: TimeoutException: Hết thời gian chờ 3000 ms
+
+===== ok =====
+> dotnet run --no-build -c Release -- client localhost 9220
+[client] Kết nối tới localhost:9220, thời gian chờ 3000 ms
+[client] Thành công: 127.0.0.1:51208 -> 127.0.0.1:9220, sau 2075 ms
+[client] Đã đóng kết nối
+

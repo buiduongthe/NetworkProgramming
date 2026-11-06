@@ -1,0 +1,36 @@
+===== ipam =====
+> out\app.exe ke_hoach.json ke_hoach_qua_tai.json
+===== Kế hoạch: ke_hoach.json =====
+[ipam] Khối địa chỉ 10.20.0.0/22: 1024 địa chỉ, riêng (RFC 1918)
+
+[ipam] 1) Chia mạng con (VLSM, yêu cầu lớn cấp trước)
+  Tên             Cần Khả dụng Mạng con         Mặt nạ          Dải khả dụng
+  Phong_Lab       200      254 10.20.0.0/24     255.255.255.0   10.20.0.1 - 10.20.0.254
+  WiFi_Khach      100      126 10.20.1.0/25     255.255.255.128 10.20.1.1 - 10.20.1.126
+  Giang_Vien       60       62 10.20.1.128/26   255.255.255.192 10.20.1.129 - 10.20.1.190
+  May_Chu          20       30 10.20.1.192/27   255.255.255.224 10.20.1.193 - 10.20.1.222
+  Lien_Ket_R1_R2    2        2 10.20.1.224/30   255.255.255.252 10.20.1.225 - 10.20.1.226
+  Đã dùng 484/1024 địa chỉ (47.3%)
+
+[ipam] 2) Khối còn trống
+  10.20.1.228/30    (4 địa chỉ)
+  10.20.1.232/29    (8 địa chỉ)
+  10.20.1.240/28    (16 địa chỉ)
+  10.20.2.0/23      (512 địa chỉ)
+
+[ipam] 3) Kiểm tra tiền tố đề xuất
+  10.20.1.0/25      -> CHỒNG LẤN với WiFi_Khach (10.20.1.0/25)
+  10.20.3.0/24      -> HỢP LỆ, còn trống
+  192.168.1.0/24    -> NGOÀI KHỐI 10.20.0.0/22
+  10.20.2.300/24    -> KHÔNG HỢP LỆ (sai cú pháp địa chỉ hoặc tiền tố)
+  10.20.0.5/24      -> có bit máy, chuẩn hóa 10.20.0.0/24; CHỒNG LẤN với Phong_Lab (10.20.0.0/24)
+
+[ipam] 4) Cấp phát địa chỉ trong May_Chu (10.20.1.192/27)
+  gateway  10.20.1.193/27
+  web01    10.20.1.194/27
+  db01     10.20.1.195/27
+  dns01    10.20.1.196/27
+===== Kế hoạch: ke_hoach_qua_tai.json =====
+[ipam] Khối địa chỉ 192.168.50.0/24: 256 địa chỉ, riêng (RFC 1918)
+[ipam] LỖI: Không đủ chỗ cho WiFi_Khach (100 máy cần /25) trong 192.168.50.0/24
+

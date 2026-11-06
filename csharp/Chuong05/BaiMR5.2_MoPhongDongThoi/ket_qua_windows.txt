@@ -1,0 +1,178 @@
+===== server =====
+> dotnet bin/Release/net10.0/BaiMR5.2_MoPhongDongThoi.dll server 127.0.0.1 42520 200
+[server] lắng nghe 127.0.0.1:42520, mỗi yêu cầu trễ 200 ms
+[server] đợt  1: 20 yêu cầu, đồng thời tối đa  1
+[server] đợt  2: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  3: 20 yêu cầu, đồng thời tối đa  5
+[server] đợt  4: 20 yêu cầu, đồng thời tối đa 16
+[server] đợt  5: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  6: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  7: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  8: 20 yêu cầu, đồng thời tối đa 20
+[server] đợt  9: 20 yêu cầu, đồng thời tối đa 20
+[server] dừng; đã phục vụ 180 yêu cầu
+
+===== mang =====
+> dotnet bin/Release/net10.0/BaiMR5.2_MoPhongDongThoi.dll mang 127.0.0.1 42520
+Khối việc: 20 yêu cầu mạng, mỗi yêu cầu máy chủ trễ 200 ms
+
+1. tuần tự: 4.15 s
+  chính       |AAABBCCDDDEEFFFGGHHIIIJJKKKLLMMNNNOOPPQQQRRSSSTT|
+2. mỗi tác vụ một luồng: 0.22 s
+  luồng-1     |AAA                                             |
+  luồng-2     |EEE                                             |
+  luồng-3     |BBB                                             |
+  luồng-4     |CCC                                             |
+  luồng-5     |DDD                                             |
+  luồng-6     |FFF                                             |
+  luồng-7     |GGG                                             |
+  luồng-8     |HHH                                             |
+  … và 12 luồng khác, mỗi luồng chạy 1 tác vụ
+3. nhóm 5 luồng tự tạo: 0.83 s
+  luồng-1     |AAAFFOOTTT                                      |
+  luồng-2     |BBBIILLPPP                                      |
+  luồng-3     |CCCGGMMRRR                                      |
+  luồng-4     |DDDHHKKQQQ                                      |
+  luồng-5     |EEEJJNNSSS                                      |
+4. Task.Run + gọi chặn: 0.43 s
+  luồng-1     |AAA                                             |
+  luồng-2     |BBB                                             |
+  luồng-3     |CCCRR                                           |
+  luồng-4     |DDD                                             |
+  luồng-5     |EEE                                             |
+  luồng-6     |FFF                                             |
+  luồng-7     |GGGTT                                           |
+  luồng-8     |HHH                                             |
+  … và 8 luồng khác, mỗi luồng chạy 1 tác vụ
+5. async/await (Task): 0.24 s
+  chờ mạng    |***                                             |
+               0                                           4.1 s
+
+  Mô hình                        Thời gian  Tăng tốc
+  1. tuần tự                        4.15 s      1.0×
+  2. mỗi tác vụ một luồng           0.22 s     18.6×
+  3. nhóm 5 luồng tự tạo            0.83 s      5.0×
+  4. Task.Run + gọi chặn            0.43 s      9.7×
+  5. async/await (Task)             0.24 s     17.6×
+
+Nhận xét: việc chờ I/O không tốn CPU, nên luồng hay async đều chồng được
+  thời gian chờ. Mô hình 4 chậm vì gọi hàm CHẶN trên ThreadPool (tối thiểu
+  16 luồng, thêm dần khi thiếu); async/await (5) không giữ luồng khi chờ (*).
+
+===== cpu =====
+> dotnet bin/Release/net10.0/BaiMR5.2_MoPhongDongThoi.dll cpu
+Khối việc: 8 tác vụ CPU, mỗi tác vụ ≈ 100 ms
+Máy có 16 CPU; .NET không có GIL; ThreadPool tối thiểu 16 luồng
+
+1. tuần tự: 0.90 s
+  chính       |AAAAAABBBBBBCCCCCDDDDDDDEEEEEEFFFFFFGGGGGGHHHHHH|
+2. mỗi tác vụ một luồng: 0.25 s
+  luồng-1     |CCCCCCCCCCCCC                                   |
+  luồng-2     |EEEEEEEEEEEEE                                   |
+  luồng-3     |BBBBBBBBBBBB                                    |
+  luồng-4     |AAAAAAAAAAAAA                                   |
+  luồng-5     |DDDDDDDDDDDDD                                   |
+  luồng-6     |FFFFFFFFFFFF                                    |
+  luồng-7     |GGGGGGGGGGGGGG                                  |
+  luồng-8     |HHHHHHHHHHHH                                    |
+3. Task.Run (ThreadPool): 0.28 s
+  luồng-1     |AAAAAAAAAAAAAA                                  |
+  luồng-2     |BBBBBBBBBBBBBB                                  |
+  luồng-3     |CCCCCCCCCCCCCCC                                 |
+  luồng-4     |DDDDDDDDDDDDD                                   |
+  luồng-5     |EEEEEEEEEEEEEEE                                 |
+  luồng-6     |FFFFFFFFFFFFFF                                  |
+  luồng-7     |GGGGGGGGGGGGGGG                                 |
+  luồng-8     |HHHHHHHHHHHHHH                                  |
+4. Parallel.For (16 = số CPU): 0.29 s
+  luồng-1     |BBBBBBBBBBBBBB                                  |
+  luồng-2     |DDDDDDDDDDDDDD                                  |
+  luồng-3     |AAAAAAAAAAAAAA                                  |
+  luồng-4     |EEEEEEEEEEEEEEE                                 |
+  luồng-5     |HHHHHHHHHHHHHH                                  |
+  luồng-6     |CCCCCCCCCCCCCCC                                 |
+  luồng-7     |FFFFFFFFFFFFFFFF                                |
+  luồng-8     |GGGGGGGGGGGGGG                                  |
+               0                                           0.9 s
+
+  Mô hình                        Thời gian  Tăng tốc
+  1. tuần tự                        0.90 s      1.0×
+  2. mỗi tác vụ một luồng           0.25 s      3.6×
+  3. Task.Run (ThreadPool)          0.28 s      3.2×
+  4. Parallel.For (16 = số CPU)     0.29 s      3.2×
+
+Nhận xét: .NET không có GIL nên mọi cách dùng luồng đều chạy song song
+  thật, nhanh gần gấp số CPU. Mô hình 2 tạo 8 luồng nhưng chỉ có số CPU
+  luồng chạy cùng lúc (mỗi tác vụ bị kéo dài vì chia lượt); ThreadPool và
+  Parallel.For giữ số luồng gần số CPU nên mỗi tác vụ chạy liền một mạch.
+
+===== tron =====
+> dotnet bin/Release/net10.0/BaiMR5.2_MoPhongDongThoi.dll tron 127.0.0.1 42520
+Khối việc: 20 tác vụ = yêu cầu mạng 200 ms + xử lý CPU ≈ 30 ms
+Đo thêm độ trễ: tác vụ "nhịp tim" chờ 10 ms (await Task.Delay) và đo xem
+  thực tế được chạy tiếp muộn bao nhiêu (trễ lớn = ứng dụng đứng).
+
+A. CPU sau await (ThreadPool): 0.40 s
+  chờ mạng    |AA***************                               |
+  luồng-1     |             LLLLGGGG                           |
+  luồng-2     |             DDDDCCCC                           |
+  luồng-3     |             MMMMEEEEE                          |
+  luồng-4     |             HHHHHHHH                           |
+  luồng-5     |             SSSSSSSS                           |
+  luồng-6     |             RRRRAAAA                           |
+  luồng-7     |             IIIIIIII                           |
+  … và 9 luồng khác, mỗi luồng chạy 1 tác vụ
+B. 1 luồng, CPU trong vòng lặp: 0.88 s
+  vòng lặp    |**********************************************TT|
+C. 1 luồng + Task.Run: 0.36 s
+  vòng lặp    |************P                                   |
+  luồng-1     |            PPPP                                |
+  luồng-2     |            SSSSBBBB                            |
+  luồng-3     |            TTTTTT                              |
+  luồng-4     |            RRRREEEE                            |
+  luồng-5     |            LLLL                                |
+  luồng-6     |            IIII                                |
+  luồng-7     |            QQQQQQ                              |
+  … và 10 luồng khác, mỗi luồng chạy 1 tác vụ
+D. như C, SemaphoreSlim(2): 0.64 s
+  vòng lặp    |************K                                   |
+  luồng-1     |            LLLJJEEDDBBBOOGGFFFNNMMM            |
+  luồng-2     |            KKKCCHHSSPPPQQTTIIIRRAAA            |
+               0                                           0.9 s
+
+  Mô hình                        Thời gian  Trễ nhịp tim
+  A. CPU sau await (ThreadPool)     0.40 s         38 ms
+  B. 1 luồng, CPU trong vòng lặp    0.88 s        648 ms
+  C. 1 luồng + Task.Run             0.36 s         34 ms
+  D. như C, SemaphoreSlim(2)        0.64 s          6 ms
+
+Nhận xét: A – ứng dụng console không có SynchronizationContext, phần sau
+  await chạy trên ThreadPool nên CPU tự song song. B – vòng lặp một luồng
+  (như luồng giao diện WinForms/WPF): CPU chạy ngay trên vòng lặp chặn mọi
+  thứ, nhịp tim trễ hàng trăm ms. C, D – đẩy CPU sang ThreadPool bằng
+  Task.Run: vòng lặp thông suốt, CPU song song; D giới hạn số việc CPU.
+  Trễ vài chục ms còn lại ở A, C, D: bộ hẹn giờ của Task.Delay cần một
+  luồng ThreadPool rảnh để báo, mà các luồng đang bận tính toán.
+
+===== khoa =====
+> dotnet bin/Release/net10.0/BaiMR5.2_MoPhongDongThoi.dll khoa
+Tranh chấp dữ liệu: 4 luồng × 5000 lần "đọc – nhường CPU – ghi"
+  lên một biến đếm chung (kết quả đúng phải là 20000).
+  không khóa      :  10992 / 20000 → mất 9008 lần cộng (0.00 s)
+  có khóa (lock)  :  20000 / 20000 → đúng (0.01 s)
+  Interlocked     :  20000 / 20000 → đúng (0.00 s)
+
+Bế tắc (deadlock): T1 chuyển X→Y, T2 chuyển Y→X, mỗi luồng cần cả
+  hai khóa; số dư ban đầu X = 100, Y = 100.
+  T1 giữ khóa X, chờ khóa Y
+  T2 giữ khóa Y, chờ khóa X
+  T1: chờ Y quá 0,5 s → nghi bế tắc, nhả X, bỏ cuộc
+  T2: đã chuyển 5 từ Y sang X
+  Số dư: X = 105, Y = 95 (tổng 200)
+Cách tránh: mọi luồng lấy khóa theo cùng thứ tự (X trước, Y sau):
+  T1 giữ khóa X, chờ khóa Y
+  T1: đã chuyển 10 từ X sang Y
+  T2 giữ khóa X, chờ khóa Y
+  T2: đã chuyển 5 từ Y sang X
+  Số dư: X = 100, Y = 100 (tổng 200)
+

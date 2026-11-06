@@ -1,0 +1,115 @@
+===== server =====
+> java -cp out ServerDoanSo 127.0.0.1 43330 --so-nguoi 4 --het-gio-ms 1500 --seed 2026 --so-van 1
+[server] Trò chơi đoán số tại 127.0.0.1:43330; cần 4 người; mỗi lượt tối đa 1500 ms
+[server] 127.0.0.1:60913 kết nối
+[server] Binh vào phòng chờ (1/4)
+[server] 127.0.0.1:60915 kết nối
+[server] Cuong vào phòng chờ (2/4)
+[server] Từ chối Cuong: GAME_NOT_STARTED
+[server] Từ chối Cuong: BAD_JSON
+[server] 127.0.0.1:60916 kết nối
+[server] An vào phòng chờ (3/4)
+[server] 127.0.0.1:60917 kết nối
+[server] Dung vào phòng chờ (4/4)
+[server] Bắt đầu ván 1: số bí mật = 39 (chỉ server biết), thứ tự: Binh, Cuong, An, Dung
+[server] Từ chối Cuong: NOT_YOUR_TURN
+[server] Lượt 1: Binh đoán 50 -> cao quá
+[server] Từ chối Cuong: BAD_VALUE ('năm mươi')
+[server] Từ chối Cuong: OUT_OF_RANGE (99 ngoài 1–49)
+[server] Lượt 2: Cuong đoán 25 -> thấp quá
+[server] Lượt 3: An đoán 40 -> cao quá
+[server] 127.0.0.1:60918 kết nối
+[server] Từ chối Em: GAME_IN_PROGRESS
+[server] Dung hết giờ ở lượt 4
+[server] Dung rời trò chơi (còn 3 người)
+[server] Lượt 5: Binh đoán 32 -> thấp quá
+[server] Lượt 6: Cuong đoán 36 -> thấp quá
+[server] Lượt 7: An đoán 39 -> ĐÚNG
+[server] Kết thúc ván 1: An thắng sau 7 lượt
+[server] Đã chơi 1 ván, dừng server
+
+===== Binh =====
+> java -cp out NguoiChoi Binh 127.0.0.1 43330 --bot chia_doi --nghi-ms 200
+[Binh] Đã kết nối 127.0.0.1:43330
+[Binh] Vào phòng chờ: 1/4 người, đoán số trong 1–100
+[Binh] Ván 1 bắt đầu, thứ tự: Binh, Cuong, An, Dung
+[Binh] Đến lượt bạn (lượt 1), khoảng 1–100
+[Binh] Đoán 50
+[Binh] Binh đoán 50: cao quá
+[Binh] Cuong đoán 25: thấp quá
+[Binh] An đoán 40: cao quá
+[Binh] Dung hết giờ, mất lượt
+[Binh] Đến lượt bạn (lượt 5), khoảng 26–39
+[Binh] Đoán 32
+[Binh] Dung đã rời trò chơi
+[Binh] Binh đoán 32: thấp quá
+[Binh] Cuong đoán 36: thấp quá
+[Binh] An đoán 39: ĐÚNG
+[Binh] Kết thúc: An thắng, số bí mật là 39 (7 lượt)
+
+===== Cuong =====
+> java -cp out NguoiChoi Cuong 127.0.0.1 43330 --bot nghich --nghi-ms 200
+[Cuong] Đã kết nối 127.0.0.1:43330
+[Cuong] Vào phòng chờ: 2/4 người, đoán số trong 1–100
+[Cuong] (nghịch) đoán khi ván chưa bắt đầu, rồi gửi khung không phải JSON
+[Cuong] Server báo lỗi GAME_NOT_STARTED: Ván chưa bắt đầu
+[Cuong] Server báo lỗi BAD_JSON: Khung không phải đối tượng JSON
+[Cuong] Ván 1 bắt đầu, thứ tự: Binh, Cuong, An, Dung
+[Cuong] (nghịch) đoán khi đang là lượt của Binh
+[Cuong] Server báo lỗi NOT_YOUR_TURN: Chưa đến lượt bạn
+[Cuong] Binh đoán 50: cao quá
+[Cuong] Đến lượt bạn (lượt 2), khoảng 1–49
+[Cuong] (nghịch) gửi giá trị chuỗi và số ngoài khoảng
+[Cuong] Đoán 25
+[Cuong] Server báo lỗi BAD_VALUE: Giá trị đoán phải là số nguyên
+[Cuong] Server báo lỗi OUT_OF_RANGE: Số đoán nằm ngoài khoảng cho phép
+[Cuong] Cuong đoán 25: thấp quá
+[Cuong] An đoán 40: cao quá
+[Cuong] Dung hết giờ, mất lượt
+[Cuong] Dung đã rời trò chơi
+[Cuong] Binh đoán 32: thấp quá
+[Cuong] Đến lượt bạn (lượt 6), khoảng 33–39
+[Cuong] Đoán 36
+[Cuong] Cuong đoán 36: thấp quá
+[Cuong] An đoán 39: ĐÚNG
+[Cuong] Kết thúc: An thắng, số bí mật là 39 (7 lượt)
+
+===== An =====
+> java -cp out NguoiChoi An 127.0.0.1 43330
+[An] Đã kết nối 127.0.0.1:43330
+[An] Vào phòng chờ: 3/4 người, đoán số trong 1–100
+[An] Ván 1 bắt đầu, thứ tự: Binh, Cuong, An, Dung
+[An] Binh đoán 50: cao quá
+[An] Cuong đoán 25: thấp quá
+[An] Đến lượt bạn (lượt 3), khoảng 26–49
+[An] Nhập số: abc
+[An] Vui lòng nhập một số nguyên
+[An] Nhập số: 40
+[An] An đoán 40: cao quá
+[An] Dung hết giờ, mất lượt
+[An] Dung đã rời trò chơi
+[An] Binh đoán 32: thấp quá
+[An] Cuong đoán 36: thấp quá
+[An] Đến lượt bạn (lượt 7), khoảng 37–39
+[An] Nhập số: 39
+[An] An đoán 39: ĐÚNG
+[An] Kết thúc: An thắng, số bí mật là 39 (7 lượt)
+
+===== Dung =====
+> java -cp out NguoiChoi Dung 127.0.0.1 43330 --bot im_lang
+[Dung] Đã kết nối 127.0.0.1:43330
+[Dung] Vào phòng chờ: 4/4 người, đoán số trong 1–100
+[Dung] Ván 1 bắt đầu, thứ tự: Binh, Cuong, An, Dung
+[Dung] Binh đoán 50: cao quá
+[Dung] Cuong đoán 25: thấp quá
+[Dung] An đoán 40: cao quá
+[Dung] Đến lượt bạn (lượt 4), khoảng 26–39
+[Dung] Dung hết giờ, mất lượt
+[Dung] (im lặng) bị hết giờ, ngắt kết nối
+
+===== Em =====
+> java -cp out NguoiChoi Em 127.0.0.1 43330 --bot chia_doi
+[Em] Đã kết nối 127.0.0.1:43330
+[Em] Server báo lỗi GAME_IN_PROGRESS: Ván đang diễn ra, hãy vào lại sau
+[Em] Server kết thúc phiên
+

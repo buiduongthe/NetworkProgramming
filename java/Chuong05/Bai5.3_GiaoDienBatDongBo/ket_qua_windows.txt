@@ -1,11 +1,11 @@
 ===== server =====
 > java -cp out LookupServer 127.0.0.1 9506 1500
 [server] Đang lắng nghe tại 127.0.0.1:9506, độ trễ giả lập 1500 ms
-[server] Client kết nối: 127.0.0.1:54864
-[server] Nhận từ 127.0.0.1:54864: {"op":"lookup","term":"TCP"}
-[server] Nhận từ 127.0.0.1:54864: {"op":"lookup","term":"XYZ"}
-[server] Lỗi với 127.0.0.1:54864: Connection reset
-[server] Client 127.0.0.1:54864 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:62122
+[server] Nhận từ 127.0.0.1:62122: {"op":"lookup","term":"TCP"}
+[server] Nhận từ 127.0.0.1:62122: {"op":"lookup","term":"XYZ"}
+[server] Lỗi với 127.0.0.1:62122: Connection reset
+[server] Client 127.0.0.1:62122 đã đóng kết nối
 [server] Dừng server
 
 ===== gui =====

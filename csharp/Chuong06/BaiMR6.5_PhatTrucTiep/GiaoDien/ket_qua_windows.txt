@@ -1,0 +1,37 @@
+===== gui =====
+> bin\Release\net10.0-windows\BaiMR6.5_GiaoDien.exe demo 127.0.0.1 42652 42653 ..\ket_qua_gui.png
+[demo] 1. Server: bấm START SERVER
+[demo] 2. P: Kết nối; camera giả lập (clapper), micro giả lập
+[demo]    P bấm PHÁT (10 fps, GOP 20)
+[demo] 3. A: Kết nối ngay (đồng bộ tiếng-hình BẬT)
+[demo] 4. B: bỏ chọn 'Đồng bộ', Kết nối (vào muộn 3,5 s)
+[demo] 5. Số liệu (bộ đệm GOP bật):
+[demo]    server: vào 355, ra 709 kbit/s, hệ số 2.00
+[demo]      -> A: A+V, 355 kbit/s, I đầu 19 ms (bộ đệm)
+[demo]      -> B: A+V, 355 kbit/s, I đầu 12 ms (bộ đệm)
+[demo]    P: I 4 P 72, TB I 3371 B, P 1133 B, PLI 0
+[demo]    A: đồng bộ BẬT, khung đầu 105 ms (bộ đệm GOP)
+[demo]       lệch TB +3 ms, trễ 82 ms, mất tiếng 0, đứng 0
+[demo]    B: đồng bộ TẮT, khung đầu 12 ms (bộ đệm GOP)
+[demo]       lệch TB -82 ms, trễ 87 ms, mất tiếng 0, đứng 0
+[demo] 6. P bấm 'Khung khóa ngay'; A bấm 'Chụp'
+[demo]    A đã chụp out/A_gui_chup_1.png
+[demo] 7. Chụp 4 cửa sổ
+[demo]    Đã ghi ..\ket_qua_gui.png (179 KB)
+[demo] 8. Server: chọn B, bấm 'Ngắt người chọn'
+[demo]    B: Trạng thái: mất kết nối server
+[demo] 9. P: DỪNG PHÁT, chọn 'Mẫu thử ffmpeg (testsrc)', PHÁT
+[demo]    P testsrc: I 2 P 38, TB I 1136 B, P 322 B
+[demo]    P: MẪU THỬ ffmpeg testsrc (không phải camera)
+[demo]    A: khung I 8, P 129, lệch +1 ms
+[demo] 10. P: DỪNG PHÁT, tạo tệp mẫu mp4, nguồn Tệp video, PHÁT
+[demo]    Tệp video (chọn tệp bên dưới) | Tiếng của tệp video
+[demo]    P tệp: I 3 P 38, TB I 3574 B, P 12353 B
+[demo]    P: TỆP VIDEO – tep_mau.mp4
+[demo]    A: khung I 11, P 167, lệch +5 ms, mức tiếng -24.9 dBFS
+[demo]    Đã ghi ..\ket_qua_gui_tep.png (106 KB)
+[demo] 11. Server bấm STOP SERVER
+[demo]    P: Trạng thái: mất kết nối server
+[demo]    A: Trạng thái: mất kết nối server
+[demo] Kết thúc
+

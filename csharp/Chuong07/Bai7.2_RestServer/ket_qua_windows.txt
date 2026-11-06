@@ -1,0 +1,66 @@
+===== server =====
+> dotnet run --no-build -c Release -- server 127.0.0.1 9722
+[server] Đang lắng nghe tại 127.0.0.1:9722
+[server] 127.0.0.1:50642 GET /api/v1/terms -> 200
+[server] 127.0.0.1:50642 GET /api/v1/terms/TCP -> 200
+[server] 127.0.0.1:50642 GET /api/v1/terms/Keep%20alive -> 200
+[server] 127.0.0.1:50642 GET /api/v1/terms/XYZ -> 404
+[server] 127.0.0.1:50642 POST /api/v1/terms -> 201
+[server] 127.0.0.1:50642 GET /api/v1/terms/QUIC -> 200
+[server] 127.0.0.1:50642 DELETE /api/v1/terms/QUIC -> 204
+[server] 127.0.0.1:50642 PUT /api/v1/terms/TCP -> 405
+[server] 127.0.0.1:50642 GET /api/v2/khac -> 404
+[server] Đóng kết nối 127.0.0.1:50642
+[server] 127.0.0.1:50643 GET /api/v1/terms/UDP -> 200
+[server] Đóng kết nối 127.0.0.1:50643
+[server] 127.0.0.1:50644 POST /api/v1/terms -> 501
+[server] Đóng kết nối 127.0.0.1:50644
+[server] 127.0.0.1:50645 POST /api/v1/terms -> 413
+[server] Đóng kết nối 127.0.0.1:50645
+
+===== client =====
+> dotnet run --no-build -c Release -- client 127.0.0.1 9722
+[client] Đã kết nối 127.0.0.1:9722 (một kết nối cho mọi yêu cầu)
+[client] GET /api/v1/terms -> HTTP/1.1 200 OK
+[client]   {"terms":["TCP","UDP","HTTP","Keep alive"]}
+[client] GET /api/v1/terms/TCP -> HTTP/1.1 200 OK
+[client]   {"term":"TCP","text":"Giao thức vận chuyển hướng kết nối"}
+[client] GET /api/v1/terms/Keep%20alive -> HTTP/1.1 200 OK
+[client]   {"term":"Keep alive","text":"Giữ kết nối TCP cho nhiều yêu cầu liên tiếp"}
+[client] GET /api/v1/terms/XYZ -> HTTP/1.1 404 Not Found
+[client]   {"type":"about:blank","title":"Không có thuật ngữ","status":404}
+[client] POST /api/v1/terms -> HTTP/1.1 201 Created
+[client]   Location: /api/v1/terms/QUIC
+[client]   {"term":"QUIC","text":"Giao thức vận chuyển trên UDP"}
+[client] GET /api/v1/terms/QUIC -> HTTP/1.1 200 OK
+[client]   {"term":"QUIC","text":"Giao thức vận chuyển trên UDP"}
+[client] DELETE /api/v1/terms/QUIC -> HTTP/1.1 204 No Content
+[client] PUT /api/v1/terms/TCP -> HTTP/1.1 405 Method Not Allowed
+[client]   {"type":"about:blank","title":"Phương thức không hỗ trợ","status":405}
+[client] GET /api/v2/khac -> HTTP/1.1 404 Not Found
+[client]   {"type":"about:blank","title":"Không có tài nguyên","status":404}
+[client] Đã đóng kết nối
+
+===== curl =====
+> rem ba yêu cầu curl.exe (in từng lệnh bên dưới)
+> curl -i http://127.0.0.1:9722/api/v1/terms/UDP
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Length: 69
+
+{"term":"UDP","text":"Giao thức vận chuyển không kết nối"}
+
+> curl -i -H "Transfer-Encoding: chunked" -d "{\"term\":\"A\",\"text\":\"B\"}" http://127.0.0.1:9722/api/v1/terms
+HTTP/1.1 501 Not Implemented
+Content-Type: application/problem+json; charset=utf-8
+Content-Length: 62
+
+{"type":"about:blank","title":"Chưa hỗ trợ","status":501}
+
+> curl -i -X POST -H "Content-Length: 4000000000" http://127.0.0.1:9722/api/v1/terms
+HTTP/1.1 413 Content Too Large
+Content-Type: application/problem+json; charset=utf-8
+Content-Length: 62
+
+{"type":"about:blank","title":"Thân quá lớn","status":413}
+
