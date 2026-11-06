@@ -3,7 +3,7 @@ $ dotnet bin/Release/net10.0/BaiMR6.7_DatXe.dll server 127.0.0.1 42710
 [server] Lắng nghe 127.0.0.1:42710; chế độ khoa, trễ 0–2 ms
 [server] Đặt lại
 [server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
-[server] Lượt trước: khong_khoa, 1000 yc, tc 197, sai phạm 196
+[server] Lượt trước: khong_khoa, 1000 yc, tc 166, sai phạm 165
 [server] Đặt lại
 [server] Chế độ: khoa – Khóa loại trừ (mutex)
 [server] Lượt trước: khoa, 1000 yc, tc 1, sai phạm 0
@@ -13,12 +13,12 @@ $ dotnet bin/Release/net10.0/BaiMR6.7_DatXe.dll server 127.0.0.1 42710
 [server] Đặt lại
 [server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
 [server] Chế độ: khoa – Khóa loại trừ (mutex)
-[server] khoa: 1000 yc, tc 1, từ chối 999, sai phạm 0
 [server] Lượt trước: khoa, 1000 yc, tc 1, sai phạm 0
 [server] Đặt lại (so_xe=10)
 [server] Đặt lại
 [server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
-[server] Lượt trước: khong_khoa, 2000 yc, tc 84, sai phạm 74
+[server] khong_khoa: 1993 yc, tc 161, từ chối 1829, sai phạm 151
+[server] Lượt trước: khong_khoa, 2000 yc, tc 161, sai phạm 151
 [server] Đặt lại
 [server] Chế độ: khoa – Khóa loại trừ (mutex)
 [server] Lượt trước: khoa, 2000 yc, tc 10, sai phạm 0
@@ -27,7 +27,7 @@ $ dotnet bin/Release/net10.0/BaiMR6.7_DatXe.dll server 127.0.0.1 42710
 [server] Lượt trước: lac_quan, 2000 yc, tc 10, sai phạm 0
 [server] Đặt lại
 [server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
-[server] hang_doi: 2000 yc, tc 10, từ chối 962, sai phạm 0
+[server] hang_doi: 2000 yc, tc 10, từ chối 1943, sai phạm 0
 [server] Chế độ: khoa – Khóa loại trừ (mutex)
 [server] Lượt trước: khoa, 2000 yc, tc 10, sai phạm 0
 [server] Đặt lại (so_xe=1)
@@ -35,8 +35,8 @@ $ dotnet bin/Release/net10.0/BaiMR6.7_DatXe.dll server 127.0.0.1 42710
 [server] Bình vào
 [server] Xe 1 (Hùng) nhận khách An
 [server] An hủy chuyến, xe 1 trống
-[server] khoa: 3 yc, tc 2, từ chối 1, sai phạm 0
 [server] Xe 1 (Hùng) nhận khách Bình
+[server] khoa: 5 yc, tc 3, từ chối 2, sai phạm 0
 [server] Bình hủy chuyến, xe 1 trống
 [server] Bình rời
 [server] An rời
@@ -45,7 +45,7 @@ $ dotnet bin/Release/net10.0/BaiMR6.7_DatXe.dll server 127.0.0.1 42710
 [server]   Yêu cầu 6: thành công 4, từ chối 2
 [server]   Xung đột 0, thử lại 0, hết lượt thử 0
 [server]   Hàng đợi max 0, chờ khóa quá hạn 0
-[server]   Xử lý µs: p50 1365 p95 4532 p99 4532
+[server]   Xử lý µs: p50 1136 p95 3286 p99 3286
 [server]   Thông lượng 1 yc/s
 [server]   Sai phạm 0: trùng chỗ 0
 [server]   Đã đặt 0/1 xe, 2 lượt báo đặt được
@@ -55,52 +55,52 @@ $ dotnet bin/Release/net10.0/BaiMR6.7_DatXe.dll server 127.0.0.1 42710
 $ dotnet bin/Release/net10.0/BaiMR6.7_DatXe.dll mo_phong 127.0.0.1 42710 --n 1000 --so-sanh
 [mo_phong] === khong_khoa: 1000 người × 1 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
-[mo_phong] 1000 yc xong trong 0.29 s = 3497 yc/s
-[mo_phong] Khứ hồi ms: p50 127.6 p95 216.0 p99 224.4
-[mo_phong] Thành công 197, từ chối 803
-[mo_phong]   lý do: het_cho 803
+[mo_phong] 1000 yc xong trong 0.15 s = 6531 yc/s
+[mo_phong] Khứ hồi ms: p50 78.6 p95 104.0 p99 107.9
+[mo_phong] Thành công 166, từ chối 834
+[mo_phong]   lý do: het_cho 834
 [mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
-[mo_phong] Máy chủ xử lý µs: p50 2538 p95 160629 p99 204041
-[mo_phong] Sai phạm 196: trùng chỗ 196
-[mo_phong]   ví dụ: xe 1: u145 khi u63 đang đặt
-[mo_phong]   ví dụ: xe 1: u45 khi u145 đang đặt
-[mo_phong] Đã đặt 1/1 xe, 197 lượt báo đặt được
+[mo_phong] Máy chủ xử lý µs: p50 2128 p95 49992 p99 59032
+[mo_phong] Sai phạm 165: trùng chỗ 165
+[mo_phong]   ví dụ: xe 1: u130 khi u21 đang đặt
+[mo_phong]   ví dụ: xe 1: u191 khi u130 đang đặt
+[mo_phong] Đã đặt 1/1 xe, 166 lượt báo đặt được
 [mo_phong] === khoa: 1000 người × 1 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
-[mo_phong] 1000 yc xong trong 1.35 s = 739 yc/s
-[mo_phong] Khứ hồi ms: p50 646.6 p95 1267.1 p99 1327.6
+[mo_phong] 1000 yc xong trong 1.33 s = 752 yc/s
+[mo_phong] Khứ hồi ms: p50 661.8 p95 1274.8 p99 1326.6
 [mo_phong] Thành công 1, từ chối 999
 [mo_phong]   lý do: het_cho 999
 [mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
-[mo_phong] Máy chủ xử lý µs: p50 222759 p95 518516 p99 725189
+[mo_phong] Máy chủ xử lý µs: p50 246547 p95 518482 p99 737320
 [mo_phong] Sai phạm 0: trùng chỗ 0
 [mo_phong] Đã đặt 1/1 xe, 1 lượt báo đặt được
 [mo_phong] === lac_quan: 1000 người × 1 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
-[mo_phong] 1000 yc xong trong 0.04 s = 28070 yc/s
-[mo_phong] Khứ hồi ms: p50 11.2 p95 37.9 p99 43.3
+[mo_phong] 1000 yc xong trong 0.07 s = 13828 yc/s
+[mo_phong] Khứ hồi ms: p50 14.2 p95 54.5 p99 62.1
 [mo_phong] Thành công 1, từ chối 999
 [mo_phong]   lý do: het_cho 999
 [mo_phong] Máy chủ: xung đột 11, thử lại 11, hàng đợi max 0
-[mo_phong] Máy chủ xử lý µs: p50 1467 p95 6994 p99 15103
+[mo_phong] Máy chủ xử lý µs: p50 2104 p95 18763 p99 35316
 [mo_phong] Sai phạm 0: trùng chỗ 0
 [mo_phong] Đã đặt 1/1 xe, 1 lượt báo đặt được
 [mo_phong] === hang_doi: 1000 người × 1 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
-[mo_phong] 1000 yc xong trong 1.29 s = 773 yc/s
-[mo_phong] Khứ hồi ms: p50 619.2 p95 1224.3 p99 1273.9
+[mo_phong] 1000 yc xong trong 1.23 s = 811 yc/s
+[mo_phong] Khứ hồi ms: p50 631.4 p95 1173.4 p99 1221.4
 [mo_phong] Thành công 1, từ chối 999
 [mo_phong]   lý do: het_cho 999
-[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 997
-[mo_phong] Máy chủ xử lý µs: p50 612951 p95 1216045 p99 1264626
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 972
+[mo_phong] Máy chủ xử lý µs: p50 631182 p95 1172980 p99 1221042
 [mo_phong] Sai phạm 0: trùng chỗ 0
 [mo_phong] Đã đặt 1/1 xe, 1 lượt báo đặt được
 [mo_phong] Bảng so sánh (1000 người × 1 lần, 200 kết nối):
   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
-  khong_khoa          197      196        0  3497   224.4
-  khoa                  1        0        0   739  1327.6
-  lac_quan              1        0       11 28070    43.3
-  hang_doi              1        0        0   773  1273.9
+  khong_khoa          166      165        0  6531   107.9
+  khoa                  1        0        0   752  1326.6
+  lac_quan              1        0       11 13828    62.1
+  hang_doi              1        0        0   811  1221.4
 
 ===== qt10 =====
 $ dotnet bin/Release/net10.0/BaiMR6.7_DatXe.dll khach 127.0.0.1 42710 dat_lai so_xe=10
@@ -111,52 +111,52 @@ $ dotnet bin/Release/net10.0/BaiMR6.7_DatXe.dll khach 127.0.0.1 42710 dat_lai so
 $ dotnet bin/Release/net10.0/BaiMR6.7_DatXe.dll mo_phong 127.0.0.1 42710 --n 2000 --so-sanh
 [mo_phong] === khong_khoa: 2000 người × 1 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
-[mo_phong] 2000 yc xong trong 0.15 s = 13109 yc/s
-[mo_phong] Khứ hồi ms: p50 41.2 p95 65.0 p99 78.0
-[mo_phong] Thành công 84, từ chối 1916
-[mo_phong]   lý do: het_cho 1916
+[mo_phong] 2000 yc xong trong 0.14 s = 14750 yc/s
+[mo_phong] Khứ hồi ms: p50 72.3 p95 87.3 p99 90.9
+[mo_phong] Thành công 161, từ chối 1839
+[mo_phong]   lý do: het_cho 1839
 [mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
-[mo_phong] Máy chủ xử lý µs: p50 2058 p95 13030 p99 21342
-[mo_phong] Sai phạm 74: trùng chỗ 74
-[mo_phong]   ví dụ: xe 3: u107 khi u189 đang đặt
-[mo_phong]   ví dụ: xe 4: u31 khi u196 đang đặt
-[mo_phong] Đã đặt 10/10 xe, 84 lượt báo đặt được
+[mo_phong] Máy chủ xử lý µs: p50 1122 p95 6573 p99 18575
+[mo_phong] Sai phạm 151: trùng chỗ 151
+[mo_phong]   ví dụ: xe 4: u158 khi u102 đang đặt
+[mo_phong]   ví dụ: xe 2: u82 khi u86 đang đặt
+[mo_phong] Đã đặt 10/10 xe, 161 lượt báo đặt được
 [mo_phong] === khoa: 2000 người × 1 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
-[mo_phong] 2000 yc xong trong 2.54 s = 788 yc/s
-[mo_phong] Khứ hồi ms: p50 1325.8 p95 2425.5 p99 2517.9
+[mo_phong] 2000 yc xong trong 2.30 s = 871 yc/s
+[mo_phong] Khứ hồi ms: p50 1128.0 p95 2179.3 p99 2271.1
 [mo_phong] Thành công 10, từ chối 1990
 [mo_phong]   lý do: het_cho 1990
 [mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
-[mo_phong] Máy chủ xử lý µs: p50 215788 p95 505231 p99 646159
+[mo_phong] Máy chủ xử lý µs: p50 130012 p95 625044 p99 904468
 [mo_phong] Sai phạm 0: trùng chỗ 0
 [mo_phong] Đã đặt 10/10 xe, 10 lượt báo đặt được
 [mo_phong] === lac_quan: 2000 người × 1 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
-[mo_phong] 2000 yc xong trong 0.11 s = 17512 yc/s
-[mo_phong] Khứ hồi ms: p50 27.2 p95 72.2 p99 107.3
+[mo_phong] 2000 yc xong trong 0.07 s = 29963 yc/s
+[mo_phong] Khứ hồi ms: p50 8.5 p95 18.1 p99 22.6
 [mo_phong] Thành công 10, từ chối 1990
 [mo_phong]   lý do: het_cho 1990
-[mo_phong] Máy chủ: xung đột 28, thử lại 28, hàng đợi max 0
-[mo_phong] Máy chủ xử lý µs: p50 1223 p95 5166 p99 51839
+[mo_phong] Máy chủ: xung đột 25, thử lại 25, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1110 p95 2406 p99 3423
 [mo_phong] Sai phạm 0: trùng chỗ 0
 [mo_phong] Đã đặt 10/10 xe, 10 lượt báo đặt được
 [mo_phong] === hang_doi: 2000 người × 1 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
-[mo_phong] 2000 yc xong trong 2.61 s = 767 yc/s
-[mo_phong] Khứ hồi ms: p50 1336.6 p95 2486.5 p99 2585.4
+[mo_phong] 2000 yc xong trong 2.30 s = 869 yc/s
+[mo_phong] Khứ hồi ms: p50 1188.2 p95 2197.0 p99 2279.7
 [mo_phong] Thành công 10, từ chối 1990
 [mo_phong]   lý do: het_cho 1990
 [mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 1997
-[mo_phong] Máy chủ xử lý µs: p50 1336401 p95 2480413 p99 2576315
+[mo_phong] Máy chủ xử lý µs: p50 1185790 p95 2182554 p99 2272890
 [mo_phong] Sai phạm 0: trùng chỗ 0
 [mo_phong] Đã đặt 10/10 xe, 10 lượt báo đặt được
 [mo_phong] Bảng so sánh (2000 người × 1 lần, 200 kết nối):
   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
-  khong_khoa           84       74        0 13109    78.0
-  khoa                 10        0        0   788  2517.9
-  lac_quan             10        0       28 17512   107.3
-  hang_doi             10        0        0   767  2585.4
+  khong_khoa          161      151        0 14750    90.9
+  khoa                 10        0        0   871  2271.1
+  lac_quan             10        0       25 29963    22.6
+  hang_doi             10        0        0   869  2279.7
 
 ===== qt1 =====
 $ dotnet bin/Release/net10.0/BaiMR6.7_DatXe.dll khach 127.0.0.1 42710 dat_lai so_xe=1
@@ -169,7 +169,7 @@ $ dotnet bin/Release/net10.0/BaiMR6.7_DatXe.dll dat_xe An 127.0.0.1 42710 --thoi
 [An]   đón: Lê Lợi × Lý Tự Trọng
 [An]   đến: Đồng Khởi × Lê Thánh Tôn
 [An] > Đặt xe – đang tìm tài xế… (dự kiến 62.000 đ)
-[An]   ĐẶT THÀNH CÔNG – tài xế Hùng (5.2 ms)
+[An]   ĐẶT THÀNH CÔNG – tài xế Hùng (3.8 ms)
 [An]   51A-123.45, xe trắng, đến sau 8 phút, cước 62.000 đ
 [An] * Xe 1 (Hùng) nhận khách An
 [An] Xe trống: 0/1
@@ -196,7 +196,7 @@ $ dotnet bin/Release/net10.0/BaiMR6.7_DatXe.dll dat_xe 'Bình' 127.0.0.1 42710
 [Bình] * An hủy chuyến, xe 1 trống
 [Bình] Xe trống: 1/1
 [Bình] > Đặt xe – đang tìm tài xế… (dự kiến 52.000 đ)
-[Bình]   ĐẶT THÀNH CÔNG – tài xế Hùng (2.3 ms)
+[Bình]   ĐẶT THÀNH CÔNG – tài xế Hùng (1.7 ms)
 [Bình]   51A-123.45, xe trắng, đến sau 8 phút, cước 52.000 đ
 [Bình] * Xe 1 (Hùng) nhận khách Bình
 [Bình] Xe trống: 0/1

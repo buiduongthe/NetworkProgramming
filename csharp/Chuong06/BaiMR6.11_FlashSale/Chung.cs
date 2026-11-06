@@ -14,8 +14,8 @@ namespace BaiMR6_11;
 // Khung dùng chung cho nhóm bài mở rộng "tranh chấp tài nguyên" MR6.6–MR6.13 (bài đầu: MR6.6 Đấu giá).
 //
 // Tệp này GIỐNG NHAU ở các bài (chỉ khác dòng namespace); nghiệp vụ riêng của từng bài nằm ở MayChu.cs (lớp con
-// của MayChuCoSo, lớp con của SoKiemToan) và phần "NGHIỆP VỤ" của MoPhong.cs. Từ MR6.9: bảng ô của KhoTranhChap là
-// ConcurrentDictionary (thêm ô khi đang chạy, không chép cả bảng) và SoKiemToan có thêm CongSaiPham(). Gồm:
+// của MayChuCoSo, lớp con của SoKiemToan) và phần "NGHIỆP VỤ" của MoPhong.cs. Bảng ô của KhoTranhChap là ConcurrentDictionary
+// (thêm ô khi đang chạy, không chép cả bảng); SoKiemToan có CongSaiPham(). Gồm:
 //   1. Giao thức: GuiJson, MaHoa, DocDong (mỗi dòng một JSON UTF-8 kết thúc "\n", tối đa 64 KB), TenHopLe,
 //      DocLenhStdin ("@t lệnh"), DocThamSo ("khoa=gia_tri").
 //   2. Đo đạc: PhanVi (theo hạng gần nhất), ThongKe (đếm yêu cầu, độ trễ xử lý µs, yc/s).

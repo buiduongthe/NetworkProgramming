@@ -14,7 +14,8 @@ namespace BaiMR6_6;
 // Khung dùng chung cho nhóm bài mở rộng "tranh chấp tài nguyên" MR6.6–MR6.13 (bài đầu: MR6.6 Đấu giá).
 //
 // Tệp này GIỐNG NHAU ở các bài (chỉ khác dòng namespace); nghiệp vụ riêng của từng bài nằm ở MayChu.cs (lớp con
-// của MayChuCoSo, lớp con của SoKiemToan) và phần "NGHIỆP VỤ" của MoPhong.cs. Gồm:
+// của MayChuCoSo, lớp con của SoKiemToan) và phần "NGHIỆP VỤ" của MoPhong.cs. Bảng ô của KhoTranhChap là ConcurrentDictionary
+// (thêm ô khi đang chạy, không chép cả bảng); SoKiemToan có CongSaiPham(). Gồm:
 //   1. Giao thức: GuiJson, MaHoa, DocDong (mỗi dòng một JSON UTF-8 kết thúc "\n", tối đa 64 KB), TenHopLe,
 //      DocLenhStdin ("@t lệnh"), DocThamSo ("khoa=gia_tri").
 //   2. Đo đạc: PhanVi (theo hạng gần nhất), ThongKe (đếm yêu cầu, độ trễ xử lý µs, yc/s).
@@ -521,8 +522,11 @@ sealed class KhoTranhChap
     volatile string cheDo;
     double treMs;
     public bool KhoaNgayTho { get; set; }            // khoa: true = khóa theo thứ tự cacKhoa (có thể khóa chết)
-    volatile Dictionary<string, O> o = [];           // chỉ đọc sau khi dựng xong (thay nguyên bảng khi đặt lại)
-    Dictionary<string, O>? dangDung;                 // bảng mới đang dựng (XoaHet ... XongDung)
+    // Bảng ô: ConcurrentDictionary vì bài có thể THÊM ô khi đang chạy (MR6.9: ô của từng người quay, MR6.13: ô lượt
+    // mua) trong lúc các luồng khác đang đọc; giá trị trong mỗi ô vẫn đi qua 4 chế độ như trước. Đặt lại: dựng bảng
+    // mới rồi thay nguyên bảng (XoaHet ... XongDung).
+    volatile ConcurrentDictionary<string, O> o = new();
+    volatile ConcurrentDictionary<string, O>? dangDung;  // bảng mới đang dựng (XoaHet ... XongDung)
     readonly object khoaCas = new();                 // lac_quan: khóa rất ngắn quanh đọc ảnh chụp và so sánh-và-đổi
     readonly object cong = new();
     bool dongCong;
@@ -544,13 +548,10 @@ sealed class KhoTranhChap
     // ------------------------------------------------------------ ô tài nguyên
     /// <summary>Bắt đầu dựng lại kho (chỉ gọi khi cổng đóng): các ô mới thêm bằng DatO, XongDung() mới thay bảng –
     /// trong lúc dựng, luồng hiển thị vẫn đọc được bảng cũ trọn vẹn.</summary>
-    public void XoaHet() => dangDung = [];
+    public void XoaHet() => dangDung = new();
 
-    public void DatO(string khoa, object giaTri)
-    {
-        if (dangDung != null) dangDung[khoa] = new O(giaTri);
-        else o = new Dictionary<string, O>(o) { [khoa] = new O(giaTri) };
-    }
+    /// <summary>Tạo (hoặc thay) một ô – lúc dựng kho, hoặc khi đang chạy (ô mới: chưa luồng nào chạm tới).</summary>
+    public void DatO(string khoa, object giaTri) => (dangDung ?? o)[khoa] = new O(giaTri);
 
     public void XongDung()
     {
@@ -559,7 +560,8 @@ sealed class KhoTranhChap
         dangDung = null;
     }
 
-    /// <summary>Đọc không khóa (để hiển thị): giá trị là record bất biến được thay nguyên đối tượng nên luôn trọn vẹn.</summary>
+    /// <summary>Đọc không khóa (để hiển thị): giá trị là record bất biến được thay nguyên đối tượng nên luôn trọn vẹn.
+    /// Ô không có -> KeyNotFoundException.</summary>
     public object Doc(string khoa) => o[khoa].GiaTri;
 
     public bool Co(string khoa) => o.ContainsKey(khoa);
@@ -806,6 +808,9 @@ abstract class SoKiemToan
         Dem[ma]++;
         if (viDu.Count < 5) viDu.Add(moTa);
     }
+
+    /// <summary>Cộng thêm n vào bộ đếm sai phạm (không thêm ví dụ) – ví dụ MR6.13 đếm theo số vé bán vượt.</summary>
+    protected void CongSaiPham(string ma, long n) => Dem[ma] += n;
 
     protected virtual void KiemTra(object gd) { }
 
