@@ -888,7 +888,14 @@ final class GiaoDienChung {
             f.repaint();
         });
         Thread.sleep(300);                                          // chờ vẽ xong
-        javax.swing.SwingUtilities.invokeAndWait(() -> r[0] = new java.awt.Rectangle(f.getLocationOnScreen(), f.getSize()));
+        javax.swing.SwingUtilities.invokeAndWait(() -> {
+            r[0] = new java.awt.Rectangle(f.getLocationOnScreen(), f.getSize());
+            if (System.getProperty("os.name", "").startsWith("Windows")) {   // bỏ viền co giãn trong suốt của Windows 10/11
+                java.awt.Insets in = f.getInsets();
+                int b = Math.max(0, in.left - 1), d = Math.max(0, in.bottom - 1);
+                r[0] = new java.awt.Rectangle(r[0].x + b, r[0].y, r[0].width - 2 * b, r[0].height - d);
+            }
+        });
         java.util.List<java.awt.Image> ds = new java.awt.Robot().createMultiResolutionScreenCapture(r[0]).getResolutionVariants();
         java.awt.Image a = ds.get(ds.size() - 1);
         java.awt.image.BufferedImage kq = new java.awt.image.BufferedImage(a.getWidth(null), a.getHeight(null),

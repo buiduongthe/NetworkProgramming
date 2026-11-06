@@ -74,6 +74,9 @@ GOI_Y = {
     'mvn': 'cần JDK; công cụ tự tải Apache Maven khi đã có Java',
     'curl': 'curl.exe có sẵn từ Windows 10 1803',
 }
+GOI_PIP = {'playwright': 'playwright && py -3 -m playwright install chromium', 'PIL': 'pillow',
+           'grpc': 'grpcio grpcio-tools', 'grpc_tools': 'grpcio-tools', 'aiosmtpd': 'aiosmtpd',
+           'sounddevice': 'sounddevice'}
 # Thư mục cài mặc định của một số công cụ không tự thêm vào PATH
 CHO_CAI = {
     'mosquitto': [r'%ProgramFiles%\mosquitto'],
@@ -563,6 +566,9 @@ def _chay(spec, thu_muc, cwd, env, setup, ds, rel):
                 'Address already in use', 'Hết thời gian chờ', 'Kịch bản chờ quá lâu'):
         if mau in txt:
             canh_bao.append(mau)
+    for m in sorted(set(re.findall(r"No module named '([\w.]+)'", txt))):   # gợi ý cài mô-đun Python còn thiếu
+        goc = m.split('.')[0]
+        canh_bao.append(f'thiếu mô-đun Python {goc} (cài: py -3 -m pip install --user {GOI_PIP.get(goc, goc)})')
     return ('ĐÃ CHẠY' if not canh_bao else 'CẦN XEM'), ', '.join(canh_bao), moi
 
 
