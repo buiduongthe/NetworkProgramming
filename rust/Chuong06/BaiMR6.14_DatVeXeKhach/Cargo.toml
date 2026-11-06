@@ -1,0 +1,15 @@
+[package]
+name = "mr6_14_dat_ve_xe_khach"
+version = "0.1.0"
+edition = "2021"
+description = "Bài mở rộng MR6.14 – Đặt vé xe khách theo chặng: xe giường nằm 40 chỗ / xe ghế 50 chỗ, tài nguyên là cặp (chỗ, chặng); giữ chỗ có thời hạn, 4 cách xử lý tranh chấp, sổ kiểm toán, bộ mô phỏng tải"
+publish = false
+
+[dependencies]
+ctrlc = "=3.4.7"         # Ctrl+C: máy chủ in tổng kết rồi dừng (công cụ demo dừng server bằng SIGINT)
+serde_json = { version = "=1.0.154", features = ["preserve_order"] }   # giữ thứ tự khóa như dict của Python
+socket2 = "=0.5.10"      # socket nghe với backlog 1024 (std::net dùng backlog cố định)
+chrono = { version = "=0.4.41", default-features = false, features = ["clock"] }   # giờ địa phương HH:MM:SS
+miniz_oxide = "=0.8.9"   # nén zlib cho bộ ghi PNG viết tay (ảnh chụp giao diện)
+# --- Ứng dụng giao diện (server_gui, dat_ve_gui, demo_gui) ---
+eframe = { version = "=0.29.1", default-features = false, features = ["default_fonts", "glow", "x11", "wayland"] }
