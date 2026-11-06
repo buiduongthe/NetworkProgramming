@@ -871,14 +871,33 @@ final class GiaoDienChung {
     // ===================================================================== chụp ảnh (DemoGui)
     /** Chụp một cửa sổ bằng java.awt.Robot (gọi ngoài EDT). */
     static BufferedImage chup(JFrame f) throws Exception {
-        Rectangle[] r = new Rectangle[1];
-        SwingUtilities.invokeAndWait(() -> {
+        return chupKhung(f);
+    }
+
+    /** Chụp khung cửa sổ bằng java.awt.Robot (gọi ngoài EDT). Trên màn hình thật (Windows) cửa sổ có thể nằm một
+     *  phần ngoài màn hình (bố cục dựng cho Xvfb 2600×1700): tạm đưa về góc trên trái màn hình, chụp rồi trả về chỗ
+     *  cũ. Lấy biến thể độ phân giải gốc của màn hình (HiDPI); dưới Xvfb chỉ có một biến thể nên như trước. */
+    static java.awt.image.BufferedImage chupKhung(java.awt.Window f) throws Exception {
+        java.awt.Rectangle[] r = new java.awt.Rectangle[1];
+        java.awt.Point[] cu = new java.awt.Point[1];
+        javax.swing.SwingUtilities.invokeAndWait(() -> {
+            java.awt.Rectangle man = f.getGraphicsConfiguration().getBounds();
+            cu[0] = f.getLocation();
+            if (!man.contains(new java.awt.Rectangle(f.getLocationOnScreen(), f.getSize()))) f.setLocation(man.x, man.y);
             f.toFront();
             f.repaint();
-            r[0] = new Rectangle(f.getLocationOnScreen(), f.getSize());
         });
         Thread.sleep(300);                                          // chờ vẽ xong
-        return new Robot().createScreenCapture(r[0]);
+        javax.swing.SwingUtilities.invokeAndWait(() -> r[0] = new java.awt.Rectangle(f.getLocationOnScreen(), f.getSize()));
+        java.util.List<java.awt.Image> ds = new java.awt.Robot().createMultiResolutionScreenCapture(r[0]).getResolutionVariants();
+        java.awt.Image a = ds.get(ds.size() - 1);
+        java.awt.image.BufferedImage kq = new java.awt.image.BufferedImage(a.getWidth(null), a.getHeight(null),
+                java.awt.image.BufferedImage.TYPE_INT_RGB);
+        java.awt.Graphics2D g = kq.createGraphics();
+        g.drawImage(a, 0, 0, null);
+        g.dispose();
+        if (!cu[0].equals(r[0].getLocation())) javax.swing.SwingUtilities.invokeAndWait(() -> f.setLocation(cu[0]));
+        return kq;
     }
 
     /** Ghép ảnh theo hàng (căn trên), các hàng xếp dọc (căn trái), nền #d0d0d0, viền 4 – như convert +append/-append. */

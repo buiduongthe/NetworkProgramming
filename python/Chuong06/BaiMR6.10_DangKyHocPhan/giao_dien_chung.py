@@ -15,12 +15,12 @@ HangDoiGiaoDien; các số liệu đọc định kỳ bằng root.after(...).
 """
 import os
 import queue
-import subprocess
 import threading
 import time
 import tkinter as tk
 from tkinter import ttk
 
+import chup_anh
 from chung import CHE_DO, TEN_CHE_DO
 from khach import KetNoiKhach
 
@@ -580,19 +580,19 @@ def chay_kich_ban(root, gen, bao, het_gio=30.0):
 
 
 def chup(cua_so, duong):
-    """Chụp một cửa sổ Tk (cả khung viền) bằng `import` của ImageMagick."""
+    """Chụp một cửa sổ Tk (cả khung viền): ImageMagick `import` trên Linux, Pillow trên Windows (chup_anh.py)."""
     cua_so.update()
-    subprocess.run(["import", "-window", cua_so.wm_frame(), duong], check=True)
+    chup_anh.chup(cua_so, duong)
 
 
 def ghep_anh(hang, ra):
-    """hang: danh sách các hàng, mỗi hàng là danh sách tệp ảnh -> ghép thành một ảnh (convert)."""
-    lenh = ["convert"]
+    """hang: danh sách các hàng, mỗi hàng là danh sách tệp ảnh -> ghép thành một ảnh (như convert)."""
+    lenh = []
     for h in hang:
         lenh += ["(", *h, "-background", "#d0d0d0", "-gravity", "north", "+append", ")"]
     lenh += ["-background", "#d0d0d0", "-gravity", "west", "-append", "-bordercolor", "#d0d0d0",
              "-border", "4", ra]
-    subprocess.run(lenh, check=True)
+    chup_anh.convert(lenh)
     for h in hang:
         for f in h:
             os.remove(f)

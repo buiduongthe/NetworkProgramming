@@ -13,7 +13,7 @@
     {"name": "bat_dong_bo", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll", "bat_dong_bo"]},
     {"name": "phoi_hop", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll", "phoi_hop"]},
     {"name": "so_sanh", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll", "so_sanh"]},
-    {"name": "html", "cmd": ["sh", "-c", "dotnet bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll tat_ca --html mo_phong.html | tail -n 1 && python3 chup_hoat_hinh.py mo_phong.html ket_qua_gui.png"],
+    {"name": "html", "cmd": ["sh", "-c", "dotnet bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll tat_ca --html mo_phong.html | tail -n 1 && python3 chup_hoat_hinh.py mo_phong.html ket_qua_gui.png"], "cmd_windows": [["@dong_cuoi", "1", "dotnet", "bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll", "tat_ca", "--html", "mo_phong.html"], ["python3", "chup_hoat_hinh.py", "mo_phong.html", "ket_qua_gui.png"]], "dung_khi_loi_windows": true,
      "show": ["dotnet", "bin/Release/net10.0/BaiMR1.2_MoPhongGiaoThuc.dll", "tat_ca", "--html", "mo_phong.html"], "timeout": 90}
   ],
   "titles": {"tcp": "Cửa sổ 1 – TCP – bắt tay, cwnd, mất gói, FIN",

@@ -1,5 +1,5 @@
 {
-  "ghi_chu": "Bản dòng lệnh chạy được trên Linux/macOS/Windows bằng tools/demo.py; ứng dụng WinForms (chỉ Windows) có kịch bản riêng GiaoDien/demo.json, chạy bằng tools/demo_windows.ps1",
+  "ghi_chu": "Bản dòng lệnh chạy được trên Linux/macOS/Windows bằng tools/demo.py; ứng dụng WinForms (chỉ Windows) có kịch bản riêng GiaoDien/demo.json, chạy bằng tools\\demo_windows.py (công cụ lưu ảnh với hậu tố _windows, ví dụ ket_qua_gui_windows.png)",
   "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
   "processes": [
     {"name": "don_dong_bo", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR5.6_MoPhongThucThiTacVu.dll", "don_dong_bo"]},

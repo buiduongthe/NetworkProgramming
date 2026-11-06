@@ -13,7 +13,7 @@
     {"name": "bat_dong_bo", "cmd": ["../../target/release/mr1_2_mo_phong_giao_thuc", "bat_dong_bo"]},
     {"name": "phoi_hop", "cmd": ["../../target/release/mr1_2_mo_phong_giao_thuc", "phoi_hop"]},
     {"name": "so_sanh", "cmd": ["../../target/release/mr1_2_mo_phong_giao_thuc", "so_sanh"]},
-    {"name": "html", "cmd": ["sh", "-c", "../../target/release/mr1_2_mo_phong_giao_thuc tat_ca --html mo_phong.html | tail -n 1 && python3 chup_hoat_hinh.py mo_phong.html ket_qua_gui.png"],
+    {"name": "html", "cmd": ["sh", "-c", "../../target/release/mr1_2_mo_phong_giao_thuc tat_ca --html mo_phong.html | tail -n 1 && python3 chup_hoat_hinh.py mo_phong.html ket_qua_gui.png"], "cmd_windows": [["@dong_cuoi", "1", "../../target/release/mr1_2_mo_phong_giao_thuc", "tat_ca", "--html", "mo_phong.html"], ["python3", "chup_hoat_hinh.py", "mo_phong.html", "ket_qua_gui.png"]], "dung_khi_loi_windows": true,
      "show": ["../../target/release/mr1_2_mo_phong_giao_thuc", "tat_ca", "--html", "mo_phong.html"], "timeout": 90}
   ],
   "titles": {"tcp": "Cửa sổ 1 – TCP – bắt tay, cwnd, mất gói, FIN",

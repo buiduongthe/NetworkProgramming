@@ -5,7 +5,7 @@
     {"name": "A", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.1_TatServerAnToan.dll", "khach", "A", "127.0.0.1", "42610", "1500"], "background": true, "wait": 0.4},
     {"name": "B", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.1_TatServerAnToan.dll", "khach", "B", "127.0.0.1", "42610", "4000"], "background": true, "wait": 0.4},
     {"name": "C", "cmd": ["python3", "../../../python/Chuong06/BaiMR6.1_TatServerAnToan/khach.py", "C", "127.0.0.1", "42610", "100"], "background": true, "wait": 0.6},
-    {"name": "quan_tri", "cmd": ["sh", "-c", "echo \"Gửi SIGTERM tới PID $(cat server.pid)\"; kill -TERM $(cat server.pid)"], "show": ["sh", "-c", "kill -TERM $(cat server.pid)"], "wait": 0.3},
+    {"name": "quan_tri", "cmd": ["sh", "-c", "echo \"Gửi SIGTERM tới PID $(cat server.pid)\"; kill -TERM $(cat server.pid)"], "cmd_windows": [["@echo", "Windows không có SIGTERM: gửi Ctrl+C (SIGINT) tới máy chủ"], ["@ctrl_c", "server"]], "show_windows": "rem Windows không có kill -TERM: bấm Ctrl+C trong cửa sổ máy chủ", "show": ["sh", "-c", "kill -TERM $(cat server.pid)"], "wait": 0.3},
     {"name": "D", "cmd": ["dotnet", "bin/Release/net10.0/BaiMR6.1_TatServerAnToan.dll", "khach", "D", "127.0.0.1", "42610", "100"], "wait": 3.0}
   ],
   "titles": {"server": "Cửa sổ 1 – server (hạn chờ tắt 2000 ms)",
@@ -13,5 +13,6 @@
              "B": "Cửa sổ 3 – client B (việc 4000 ms)",
              "C": "Cửa sổ 4 – client C bản Python (việc ngắn rồi rỗi)",
              "quan_tri": "Cửa sổ 5 – quản trị gửi SIGTERM",
-             "D": "Cửa sổ 6 – client D đến sau khi bắt đầu tắt"}
+             "D": "Cửa sổ 6 – client D đến sau khi bắt đầu tắt"},
+  "titles_windows": {"quan_tri": "Cửa sổ 5 – quản trị gửi Ctrl+C (Windows không có SIGTERM)"}
 }

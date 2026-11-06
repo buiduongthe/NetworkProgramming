@@ -1,6 +1,6 @@
 {
   "nen_tang": "windows",
-  "ghi_chu": "WinForms chỉ chạy trên Windows: chạy bằng tools/demo_windows.ps1 (PowerShell) thay cho tools/demo.py; ket_qua.png dựng từ nhật ký bằng tools/render_output.py",
+  "ghi_chu": "WinForms chỉ chạy trên Windows: chạy bằng tools\\demo_windows.py thay cho tools/demo.py; ket_qua.png dựng từ nhật ký bằng tools/render_output.py (công cụ lưu ảnh với hậu tố _windows, ví dụ ket_qua_gui_windows.png)",
   "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
   "processes": [
     {"name": "server", "cmd": ["bin\\Release\\net10.0-windows\\Bai5.3_GiaoDienBatDongBo.exe", "server", "127.0.0.1", "9506", "1500"], "background": true, "wait": 2.0},

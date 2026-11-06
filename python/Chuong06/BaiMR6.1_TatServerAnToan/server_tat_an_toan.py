@@ -96,7 +96,11 @@ async def main():
     loop = asyncio.get_running_loop()
     received = []
     for sig in (signal.SIGTERM, signal.SIGINT):
-        loop.add_signal_handler(sig, lambda s=sig: (received.append(s.name), stopping.set()))
+        try:
+            loop.add_signal_handler(sig, lambda s=sig: (received.append(s.name), stopping.set()))
+        except NotImplementedError:      # Windows: không có add_signal_handler -> signal.signal (Ctrl+C là SIGINT)
+            signal.signal(sig, lambda _n, _f, s=sig: loop.call_soon_threadsafe(
+                lambda: (received.append(s.name), stopping.set())))
     with open("server.pid", "w") as f:
         f.write(str(os.getpid()))
     log(f"Lắng nghe tại {a.host}:{a.port}, PID ghi vào server.pid")

@@ -1,6 +1,6 @@
 {
   "nen_tang": "windows",
-  "ghi_chu": "WinForms chỉ chạy trên Windows: chạy bằng tools/demo_windows.ps1 csharp\\Chuong06\\BaiMR6.2_HoiThoaiAmThanh\\GiaoDien; kịch bản demo dùng micro giả lập, không mở micro/loa thật; ảnh ghi ra ..\\ket_qua_gui.png",
+  "ghi_chu": "WinForms chỉ chạy trên Windows: chạy bằng tools\\demo_windows.py csharp\\Chuong06\\BaiMR6.2_HoiThoaiAmThanh\\GiaoDien; kịch bản demo dùng micro giả lập, không mở micro/loa thật; ảnh ghi ra ..\\ket_qua_gui.png (công cụ lưu ảnh với hậu tố _windows, ví dụ ket_qua_gui_windows.png)",
   "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
   "processes": [
     {"name": "gui", "cmd": ["bin\\Release\\net10.0-windows\\BaiMR6.2_GiaoDien.exe", "demo", "127.0.0.1", "42625", "42626", "..\\ket_qua_gui.png"], "timeout": 90}

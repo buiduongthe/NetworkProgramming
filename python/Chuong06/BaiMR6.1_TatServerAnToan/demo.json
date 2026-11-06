@@ -4,7 +4,7 @@
     {"name": "A", "cmd": ["python3", "khach.py", "A", "127.0.0.1", "41610", "1500"], "background": true, "wait": 0.1},
     {"name": "B", "cmd": ["python3", "khach.py", "B", "127.0.0.1", "41610", "4000"], "background": true, "wait": 0.1},
     {"name": "C", "cmd": ["python3", "khach.py", "C", "127.0.0.1", "41610", "100"], "background": true, "wait": 0.4},
-    {"name": "quan_tri", "cmd": ["sh", "-c", "echo \"Gửi SIGTERM tới PID $(cat server.pid)\"; kill -TERM $(cat server.pid)"],
+    {"name": "quan_tri", "cmd": ["sh", "-c", "echo \"Gửi SIGTERM tới PID $(cat server.pid)\"; kill -TERM $(cat server.pid)"], "cmd_windows": [["@echo", "Windows không có SIGTERM: gửi Ctrl+C (SIGINT) tới máy chủ"], ["@ctrl_c", "server"]], "show_windows": "rem Windows không có kill -TERM: bấm Ctrl+C trong cửa sổ máy chủ",
      "show": ["sh", "-c", "kill -TERM $(cat server.pid)"], "wait": 0.3},
     {"name": "D", "cmd": ["python3", "khach.py", "D", "127.0.0.1", "41610", "100"], "wait": 3.0}
   ],
@@ -13,5 +13,6 @@
              "B": "Cửa sổ 3 – client B (việc 4000 ms)",
              "C": "Cửa sổ 4 – client C (việc ngắn rồi rỗi)",
              "quan_tri": "Cửa sổ 5 – quản trị gửi SIGTERM",
-             "D": "Cửa sổ 6 – client D đến sau khi bắt đầu tắt"}
+             "D": "Cửa sổ 6 – client D đến sau khi bắt đầu tắt"},
+  "titles_windows": {"quan_tri": "Cửa sổ 5 – quản trị gửi Ctrl+C (Windows không có SIGTERM)"}
 }

@@ -48,7 +48,7 @@
         "sh",
         "-c",
         "SMTP_PASS=sai-mat-khau exec java -cp out SmtpClient localhost 9763 cert.pem"
-      ],
+      ], "cmd_windows": ["env", "SMTP_PASS=sai-mat-khau", "java", "-cp", "out", "SmtpClient", "localhost", "9763", "cert.pem"],
       "show": [
         "SMTP_PASS=sai-mat-khau",
         "java",
@@ -65,5 +65,6 @@
     "server": "Cửa sổ 1 – server SMTP thử (aiosmtpd)",
     "client": "Cửa sổ 2 – client SMTP",
     "client_sai": "Cửa sổ 3 – client, sai mật khẩu"
-  }
+  },
+  "setup_windows": [["javac", "-encoding", "UTF-8", "-d", "out", "Reader.java", "SmtpClient.java"], ["openssl", "req", "-x509", "-newkey", "rsa:2048", "-nodes", "-days", "30", "-keyout", "key.pem", "-out", "cert.pem", "-subj", "/CN=localhost", "-addext", "subjectAltName=DNS:localhost,IP:127.0.0.1"]]
 }

@@ -80,4 +80,16 @@ Lần đầu dùng camera/micro, macOS hỏi quyền cho ứng dụng Terminal �
 
 ## 4. Chạy thử trên Windows bằng tệp .bat
 
-Trên máy tác giả, thư mục gốc của kho có `THU_MENU.bat` (menu chọn bài × ngôn ngữ) và thư mục `THU\` (mỗi bài có giao diện/thiết bị thật một tệp cho từng ngôn ngữ, cùng `00_KIEM_TRA_CAI_DAT.bat`). Mỗi tệp tự kiểm tra công cụ (thiếu thì in lệnh cài như trên), biên dịch, mở các cửa sổ cần thiết và ghi nhật ký vào thư mục `_log`. Hai thư mục/tệp này không đưa lên GitHub (xem `.gitignore`). Chạy kịch bản tự động của bản C# WinForms: `powershell -NoProfile -ExecutionPolicy Bypass -File tools\demo_windows.ps1 <thư mục bài>`.
+Trên máy tác giả, thư mục gốc của kho có `THU_MENU.bat` (menu chọn bài × ngôn ngữ) và thư mục `THU\` (mỗi bài có giao diện/thiết bị thật một tệp cho từng ngôn ngữ, cùng `00_KIEM_TRA_CAI_DAT.bat`). Mỗi tệp tự kiểm tra công cụ (thiếu thì in lệnh cài như trên), biên dịch, mở các cửa sổ cần thiết và ghi nhật ký vào thư mục `_log`. Hai thư mục/tệp này không đưa lên GitHub (xem `.gitignore`). 
+
+### 4.1. Chạy kịch bản và chụp kết quả trên Windows
+
+`tools\demo_windows.py` chạy đúng kịch bản `demo.json` của từng bài trên Windows và lưu kết quả với hậu tố `_windows` (`ket_qua_windows.txt`, `ket_qua_windows.png`, `ket_qua_gui_windows.png`…), không đè kết quả Linux. Cách dùng xem mục *Tái lập kết quả thực thi* trong [README](../README.md#tái-lập-kết-quả-thực-thi). Cần thêm:
+
+| Thành phần | Lệnh cài | Dùng cho |
+|---|---|---|
+| Pillow (Python) | `py -3 -m pip install --user pillow` | vẽ ảnh kết quả; chụp và ghép ảnh giao diện bản Python |
+| Playwright + Chromium (Python) | `py -3 -m pip install --user playwright` rồi `py -3 -m playwright install chromium` | ảnh hoạt hình của MR1.2 (mọi ngôn ngữ) |
+| curl | có sẵn (`curl.exe`, Windows 10 1803 trở lên) | Bài 7.2 |
+
+Công cụ báo "BỎ QUA – thiếu …" kèm lệnh cài khi thiếu công cụ của bài (dotnet, javac, cargo, go, gcc, ffmpeg, mosquitto, openssl, protoc). Bản C# WinForms (thư mục `GiaoDien\`) chỉ chạy được trên Windows và cũng được công cụ chạy. `tools\demo_windows.ps1` cũ giờ chỉ gọi `tools\demo_windows.py` với cùng đối số.

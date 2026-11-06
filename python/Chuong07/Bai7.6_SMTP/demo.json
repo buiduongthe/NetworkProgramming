@@ -4,9 +4,10 @@
   "processes": [
     {"name": "server", "cmd": ["python3", "smtp_server_thu.py", "127.0.0.1", "9761"], "background": true, "wait": 2.0},
     {"name": "client", "cmd": ["python3", "smtp_client.py", "localhost", "9761", "cert.pem"]},
-    {"name": "client_sai", "cmd": ["sh", "-c", "SMTP_PASS=sai-mat-khau exec python3 smtp_client.py localhost 9761 cert.pem"],
+    {"name": "client_sai", "cmd": ["sh", "-c", "SMTP_PASS=sai-mat-khau exec python3 smtp_client.py localhost 9761 cert.pem"], "cmd_windows": ["env", "SMTP_PASS=sai-mat-khau", "python3", "smtp_client.py", "localhost", "9761", "cert.pem"],
      "show": ["SMTP_PASS=sai-mat-khau", "python3", "smtp_client.py", "localhost", "9761", "cert.pem"]}
   ],
   "titles": {"server": "Cửa sổ 1 – server SMTP thử (aiosmtpd)", "client": "Cửa sổ 2 – client SMTP",
-             "client_sai": "Cửa sổ 3 – client, sai mật khẩu"}
+             "client_sai": "Cửa sổ 3 – client, sai mật khẩu"},
+  "setup_windows": [["openssl", "req", "-x509", "-newkey", "rsa:2048", "-nodes", "-days", "30", "-keyout", "key.pem", "-out", "cert.pem", "-subj", "/CN=localhost", "-addext", "subjectAltName=DNS:localhost,IP:127.0.0.1"]]
 }

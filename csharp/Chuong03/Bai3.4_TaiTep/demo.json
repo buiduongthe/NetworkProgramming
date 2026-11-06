@@ -5,7 +5,7 @@
     {"name": "server", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "server", "127.0.0.1", "9342"], "background": true, "wait": 1.5},
     {"name": "client", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "client", "127.0.0.1", "9342"], "stdin": "put mau.txt\nput khong_co.txt\nTCP\n"},
     {"name": "kiem_thu", "cmd": ["dotnet", "run", "--no-build", "-c", "Release", "--", "kiemthu", "127.0.0.1", "9342"]},
-    {"name": "thu_muc", "cmd": ["sh", "-c", "ls -1A uploads; sha256sum mau.txt uploads/mau.txt | cut -c1-16,65-"]}
+    {"name": "thu_muc", "cmd": ["sh", "-c", "ls -1A uploads; sha256sum mau.txt uploads/mau.txt | cut -c1-16,65-"], "cmd_windows": [["@ls", "uploads"], ["@sha256_16", "mau.txt", "uploads/mau.txt"]], "show_windows": "dir /b uploads & rem SHA-256 (16 ký tự đầu) của mau.txt và uploads\\mau.txt"}
   ],
   "titles": {"server": "Cửa sổ 1 – server", "client": "Cửa sổ 2 – client", "kiem_thu": "Cửa sổ 3 – client kiểm thử", "thu_muc": "Cửa sổ 4 – thư mục tải lên"}
 }

@@ -9,10 +9,10 @@ kết quả, chụp cửa sổ lần nữa. Hai ảnh được ghép thành ket_
 Chạy:  xvfb-run -a python3 demo_gui.py <host> <port> <cổng_không_có_server> [tệp_ảnh]
 """
 import asyncio
-import subprocess
 import sys
 import tkinter as tk
 
+import chup_anh
 from lookup_gui import LookupWindow, run_gui
 
 
@@ -22,7 +22,7 @@ def log(text):
 
 def snapshot(win, path):
     win.root.update()
-    subprocess.run(["import", "-window", win.root.wm_frame(), path], check=True)
+    chup_anh.chup(win.root, path)
 
 
 async def wait_until(cond, timeout=10.0):
@@ -54,9 +54,9 @@ async def scenario(win, port, bad_port, out):
     log(f"Kết quả: {win.txt_result['text']} – trạng thái '{win.lbl_status['text']}'")
     log(f"Trong lúc chờ, đồng hồ giao diện được vẽ lại {win.ticks - t0} lần (không đứng hình)")
     snapshot(win, ".gui_2.png")
-    subprocess.run(["convert", ".gui_1.png", ".gui_2.png", "-bordercolor", "#f5f5f5",
-                    "-border", "8", "+append", out], check=True)
-    subprocess.run(["rm", "-f", ".gui_1.png", ".gui_2.png"])
+    chup_anh.convert([".gui_1.png", ".gui_2.png", "-bordercolor", "#f5f5f5",
+                      "-border", "8", "+append", out])
+    chup_anh.xoa(".gui_1.png", ".gui_2.png")
     log(f"Đã chụp cửa sổ: {out}")
     win.txt_term.delete(0, "end"); win.txt_term.insert(0, "XYZ")
     win.btn_lookup.invoke()                               # tra cứu thuật ngữ không có: phản hồi 404

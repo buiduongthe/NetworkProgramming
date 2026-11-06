@@ -13,9 +13,10 @@ Chạy:  python3 ung_dung.py            (Windows: py ung_dung.py)
        python3 ung_dung.py --demo     kịch bản tự thao tác, chụp cửa sổ thành ket_qua_gui.png (cần X11 +
                                       ImageMagick, ví dụ dưới xvfb-run)
 """
-import subprocess
 import sys
 import time
+
+import chup_anh
 import tkinter as tk
 from tkinter import font as tkfont
 from tkinter import ttk
@@ -313,7 +314,7 @@ def demo(app):
 
     def chup(tep):
         root.update()
-        subprocess.run(["import", "-window", root.wm_frame(), tep], check=True)
+        chup_anh.chup(root, tep)
 
     cho(500)
     print("[gui] Bấm 'Đa luồng – đồng bộ', dừng ở 3.8 s: U đã chen ngang Luồng T1, "
@@ -356,9 +357,9 @@ def demo(app):
     s = L.chi_so(app.ket_qua[0][1])
     print(f"[gui]   U đến 3.3 s, chờ {L.giay(s['u_cho'])} s, chen ngang {s['chen']} lần, "
           f"hoàn tất {L.giay(s['tong'])} s", flush=True)
-    subprocess.run(["convert", ".gui_1.png", ".gui_2.png", "-bordercolor", "#d0d4dc", "-border", "4",
-                    "-append", "ket_qua_gui.png"], check=True)
-    subprocess.run(["rm", "-f", ".gui_1.png", ".gui_2.png"])
+    chup_anh.convert([".gui_1.png", ".gui_2.png", "-bordercolor", "#d0d4dc", "-border", "4",
+                      "-append", "ket_qua_gui.png"])
+    chup_anh.xoa(".gui_1.png", ".gui_2.png")
     print("[gui] Đã chụp cửa sổ: ket_qua_gui.png", flush=True)
     root.destroy()
 

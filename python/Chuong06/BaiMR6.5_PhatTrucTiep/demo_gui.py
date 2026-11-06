@@ -11,10 +11,10 @@ và người xem A thành ket_qua_gui_tep.png).
 Chạy:  xvfb-run -a -s "-screen 0 2000x1400x24" python3 demo_gui.py [host] [cổng_tcp] [cổng_udp] [tệp_ảnh]
 """
 import os
-import subprocess
 import sys
 import tkinter as tk
 
+import chup_anh
 from camera import MAU_THU, co_ffmpeg
 from tep_video import tao_tep_mau
 from phat_gui import CuaSoPhat
@@ -52,7 +52,7 @@ def in_so_lieu(sv, p, ds):
 
 def chup(cua_so, duong):
     cua_so.update()
-    subprocess.run(["import", "-window", cua_so.wm_frame(), duong], check=True)
+    chup_anh.chup(cua_so, duong)
 
 
 def kich_ban(root, sv, p, ds, out):
@@ -88,9 +88,9 @@ def kich_ban(root, sv, p, ds, out):
     for i, w in enumerate([root, p.root, a.root, b.root]):
         tam.append(f".gui_{i}.png")
         chup(w, tam[-1])
-    subprocess.run(["convert", "(", tam[0], tam[1], "-background", "#d0d0d0", "-gravity", "north",
-                    "+append", ")", "(", tam[2], tam[3], "+append", ")", "-background", "#d0d0d0",
-                    "-gravity", "west", "-append", "-bordercolor", "#d0d0d0", "-border", "4", out], check=True)
+    chup_anh.convert(["(", tam[0], tam[1], "-background", "#d0d0d0", "-gravity", "north",
+                      "+append", ")", "(", tam[2], tam[3], "+append", ")", "-background", "#d0d0d0",
+                      "-gravity", "west", "-append", "-bordercolor", "#d0d0d0", "-border", "4", out])
     for f in tam:
         os.remove(f)
     log(f"   Đã ghi {out} ({os.path.getsize(out) // 1024} KB)")
@@ -131,8 +131,8 @@ def kich_ban(root, sv, p, ds, out):
         chup(p.root, tam[0])
         chup(a.root, tam[1])
         ra = os.path.join(os.path.dirname(out) or ".", "ket_qua_gui_tep.png")
-        subprocess.run(["convert", tam[0], tam[1], "-background", "#d0d0d0", "-gravity", "north", "+append",
-                        "-bordercolor", "#d0d0d0", "-border", "4", ra], check=True)
+        chup_anh.convert([tam[0], tam[1], "-background", "#d0d0d0", "-gravity", "north", "+append",
+                          "-bordercolor", "#d0d0d0", "-border", "4", ra])
         for f in tam:
             os.remove(f)
         log(f"   Đã ghi {ra} ({os.path.getsize(ra) // 1024} KB)")

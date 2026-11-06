@@ -43,7 +43,7 @@
         "sh",
         "curl_demo.sh",
         "21720"
-      ]
+      ], "cmd_windows": [["@echo", "> curl -i http://127.0.0.1:21720/api/v1/terms/UDP"], ["curl", "-s", "-i", "http://127.0.0.1:21720/api/v1/terms/UDP"], ["@echo", ""], ["@echo", ""], ["@echo", "> curl -i -H \"Transfer-Encoding: chunked\" -d \"{\\\"term\\\":\\\"A\\\",\\\"text\\\":\\\"B\\\"}\" http://127.0.0.1:21720/api/v1/terms"], ["curl", "-s", "-i", "-H", "Transfer-Encoding: chunked", "-d", "{\"term\":\"A\",\"text\":\"B\"}", "http://127.0.0.1:21720/api/v1/terms"], ["@echo", ""], ["@echo", ""], ["@echo", "> curl -i -X POST -H \"Content-Length: 4000000000\" http://127.0.0.1:21720/api/v1/terms"], ["curl", "-s", "-i", "-X", "POST", "-H", "Content-Length: 4000000000", "http://127.0.0.1:21720/api/v1/terms"], ["@echo", ""]], "show_windows": "rem ba yêu cầu curl.exe (in từng lệnh bên dưới)"
     }
   ],
   "titles": {

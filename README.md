@@ -41,8 +41,9 @@ NetworkProgramming/
 │   ├── DanhMucBai.md         Danh mục bài, ánh xạ Bài ↔ Mã giả ↔ Mục giáo trình
 │   └── BaiMoRong.md          Bài mở rộng và nhận xét tài liệu tham khảo
 ├── tools/
-│   ├── demo.py               Chạy kịch bản demo.json của một bài, lưu kết quả thật
-│   ├── render_output.py      Vẽ nhật ký đầu ra thành ảnh cửa sổ dòng lệnh
+│   ├── demo.py               Chạy kịch bản demo.json của một bài, lưu kết quả thật (Linux)
+│   ├── demo_windows.py       Chạy kịch bản demo.json trên Windows, lưu kết quả *_windows.*
+│   ├── render_output.py      Vẽ nhật ký đầu ra thành ảnh cửa sổ dòng lệnh (kiểu Linux hoặc Windows)
 │   └── gen_docs.py           Sinh danh mục bài từ docs/_chapters/*.json, docs/_status/*.json
 ├── csharp/                   C# (.NET 10) – NetworkProgramming.sln gồm 39 dự án
 │   └── Chuong01 … Chuong08/BaiN.k_TenBai/
@@ -112,6 +113,15 @@ Mỗi bài có tệp `demo.json` mô tả kịch bản minh họa: bước biên
 python3 tools/demo.py python/Chuong03/Bai3.1_EchoTCP
 ```
 Công cụ ghi `ket_qua.txt` (toàn bộ đầu ra theo từng tiến trình) và `ket_qua.png` (ảnh cửa sổ dòng lệnh). Kịch bản dùng cổng riêng cho từng bài nên có thể chạy nhiều bài liên tiếp mà không xung đột. Cần thư viện Pillow (`pip install pillow`) để vẽ ảnh.
+
+Trên **Windows**, cùng kịch bản chạy bằng `tools/demo_windows.py` (từ thư mục gốc kho, trong Command Prompt hoặc PowerShell):
+```bat
+py -3 tools\demo_windows.py python\Chuong03\Bai3.1_EchoTCP   &rem một bài
+py -3 tools\demo_windows.py MR6.6 Bai3.1                      &rem theo mã bài, mọi ngôn ngữ
+py -3 tools\demo_windows.py java --bo-qua-da-chay              &rem cả một ngôn ngữ, bỏ bài đã chạy
+py -3 tools\demo_windows.py                                    &rem tất cả bài (vài giờ)
+```
+Kết quả lưu theo hệ điều hành, không đè kết quả Linux: `ket_qua_windows.txt`, `ket_qua_windows.png` (ảnh cửa sổ dòng lệnh kiểu Windows) và ảnh giao diện do chương trình tự chụp như `ket_qua_gui_windows.png`. Công cụ tự chuyển lệnh Linux sang Windows (`python3` → `python`, `out/app` → `out\app.exe`, bỏ `xvfb-run`…); mỗi tiến trình chạy trong một console riêng mã trang UTF-8 và được dừng bằng Ctrl+C như khi bấm phím. Kịch bản có lệnh `sh`/`bash` khai báo bản Windows trong `demo.json` (`cmd_windows`, `setup_windows` – xem đầu tệp `tools/demo_windows.py`). Cuối đợt chạy công cụ in bảng tóm tắt (ĐÃ CHẠY / CẦN XEM / LỖI / BỎ QUA kèm lý do, ví dụ thiếu công cụ và lệnh cài) và ghi vào `_log\demo_windows\`. Khi chạy bài có giao diện, công cụ mở cửa sổ thật để chụp ảnh – không dùng chuột, bàn phím trong lúc chạy.
 
 ## Danh mục bài
 Ký hiệu: ✔ đã chạy và có ảnh kết quả; ○ chưa chạy trong môi trường kiểm thử (lý do trong [docs/DanhMucBai.md](docs/DanhMucBai.md)). Mỗi ký hiệu là liên kết tới thư mục bài.
@@ -244,7 +254,7 @@ Các bài dưới đây bổ sung chủ đề thực tiễn, gợi ý từ các 
 - **Đặt tên.** `ChuongNN/BaiN.k_TenKhongDau`; C#: một dự án mỗi bài, vai trò chọn bằng tham số (`server`, `client`…); Java: gói mặc định, một lớp `main` cho mỗi vai trò; Python: một tệp cho mỗi vai trò; Rust, Go: một chương trình mỗi bài, vai trò chọn bằng tham số như C#.
 
 ## Kiểm thử
-- Môi trường kiểm thử: Ubuntu 24.04 (Linux x86-64), .NET SDK 10.0.114, OpenJDK 21.0.12, Python 3.13.18 (Python 3.12 với Tk 8.6 cho giao diện), Rust 1.97.0, Go 1.24.7, mosquitto 2.0.18; các bài cần Windows hoặc cần tải thư viện (C# 5.3 WinForms; C#, Java, Go 7.5 gRPC) chạy trên Windows 11 x64 với .NET SDK 10.0.403, Temurin JDK 21.0.13, Maven 3.9.9, Go 1.27.3, protoc 36.2 bằng `tools/demo_windows.ps1`; tháng 11/2026.
+- Môi trường kiểm thử: Ubuntu 24.04 (Linux x86-64), .NET SDK 10.0.114, OpenJDK 21.0.12, Python 3.13.18 (Python 3.12 với Tk 8.6 cho giao diện), Rust 1.97.0, Go 1.24.7, mosquitto 2.0.18; các bài cần Windows hoặc cần tải thư viện (C# 5.3 WinForms; C#, Java, Go 7.5 gRPC) chạy trên Windows 11 x64 với .NET SDK 10.0.403, Temurin JDK 21.0.13, Maven 3.9.9, Go 1.27.3, protoc 36.2 bằng `tools/demo_windows.py` (trước đây `tools/demo_windows.ps1`); tháng 11/2026.
 - Mỗi phiên bản ✔ được biên dịch và chạy theo `demo.json`; ảnh kết quả phản ánh đúng đầu ra của lần chạy đó.
 - Quy trình GitHub Actions (`.github/workflows/build.yml`) biên dịch lại toàn bộ C#, Java, Rust, Go và kiểm tra cú pháp Python sau mỗi lần đẩy mã, gồm cả dự án Windows Forms (trên máy Windows) và dự án gRPC (có NuGet, Maven).
 - Một số kết quả phụ thuộc môi trường mạng (phân giải tên miền công cộng, cổng bị lọc, ICMP); README của bài ghi rõ khi kết quả trên máy khác có thể khác.

@@ -9,6 +9,7 @@ Chạy:  python3 chup_hoat_hinh.py <tệp.html> [tệp_ảnh.png]
 Cần:   pip install playwright pillow && playwright install chromium
 """
 import os
+import pathlib
 import sys
 
 from PIL import Image
@@ -27,7 +28,7 @@ def main():
         page = browser.new_page(viewport={"width": 1280, "height": 900})
         errors = []
         page.on("pageerror", lambda e: errors.append(str(e)))
-        page.goto("file://" + html)
+        page.goto(pathlib.Path(html).as_uri())          # file:///... đúng cả trên Windows (C:\...)
         page.wait_for_timeout(300)
         for i, (kb, t) in enumerate(SHOTS):
             page.evaluate(f"seek('{kb}', {t}, true)")

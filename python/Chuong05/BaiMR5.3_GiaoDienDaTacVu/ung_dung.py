@@ -17,13 +17,13 @@ Chạy:  python3 ung_dung.py <host> <port> [--demo]
 """
 import math
 import queue
-import subprocess
 import sys
 import threading
 import time
 import tkinter as tk
 from tkinter import ttk
 
+import chup_anh
 from tac_vu import Cancelled, Limiter, check_ports, download, lookup_names
 
 TICK_MS = 20
@@ -247,7 +247,7 @@ class App:
 def demo(app, out="ket_qua_gui.png"):
     def snapshot(path):
         app.root.update()
-        subprocess.run(["import", "-window", app.root.wm_frame(), path], check=True)
+        chup_anh.chup(app.root, path)
         app.skip_gap = True                       # thời gian chụp ảnh không tính vào thống kê
 
     def running():
@@ -282,9 +282,9 @@ def demo(app, out="ket_qua_gui.png"):
         app.btn_cancel_all.invoke()
         yield lambda: not running()
         yield 0.2
-        subprocess.run(["convert", ".gui_1.png", ".gui_2.png", "-bordercolor", "#d0d4dc",
-                        "-border", "6", "-append", out], check=True)
-        subprocess.run(["rm", "-f", ".gui_1.png", ".gui_2.png"])
+        chup_anh.convert([".gui_1.png", ".gui_2.png", "-bordercolor", "#d0d4dc",
+                          "-border", "6", "-append", out])
+        chup_anh.xoa(".gui_1.png", ".gui_2.png")
         app.log(f"Đã chụp cửa sổ: {out}")
         for phase, (n, s, mx) in app.gaps.items():
             app.log(f"Nhịp {phase:<17}: {n:>4} nhịp, TB {s / n:6.1f} ms, tối đa {mx:6.0f} ms")

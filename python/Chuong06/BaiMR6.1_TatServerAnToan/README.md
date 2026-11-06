@@ -37,7 +37,7 @@ Ba client A, B, C kết nối; C làm xong việc ngắn và đang rỗi. Khi qu
 - Hạn chờ của server phải nhỏ hơn thời gian mà trình quản lý tiến trình chờ trước khi gửi SIGKILL (ví dụ `docker stop` mặc định 10 s).
 - Với server HTTP, Go có sẵn `http.Server.Shutdown(ctx)` (từ Go 1.8) thực hiện các bước 1–3; sách *Go in Practice* (2016) còn dùng gói ngoài `manners` cho việc này, nay không cần nữa.
 - Trên Windows không có lệnh `kill -TERM`; dùng Ctrl+C (SIGINT) – server xử lý SIGINT giống SIGTERM.
-- `loop.add_signal_handler` chỉ có trên Unix (Linux, macOS); trên Windows cần bắt `KeyboardInterrupt` thay thế.
+- `loop.add_signal_handler` chỉ có trên Unix (Linux, macOS); trên Windows bản này tự chuyển sang `signal.signal` và đánh thức vòng lặp bằng `loop.call_soon_threadsafe`.
 - Bài tự theo dõi tác vụ của từng kết nối thay vì dùng `Server.wait_closed()`: từ Python 3.12 hàm này chờ cả các kết nối đang mở, nên hành vi khác nhau giữa các phiên bản.
 - Kiểm thử: Linux, Python 3.13.18.
 

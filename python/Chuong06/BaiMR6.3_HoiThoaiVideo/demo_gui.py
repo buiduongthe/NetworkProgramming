@@ -10,10 +10,10 @@ kbit/s, rồi chụp các cửa sổ thành ket_qua_gui.png.
 Chạy:  xvfb-run -a -s "-screen 0 1400x1100x24" python3 demo_gui.py [host] [cổng_tcp] [cổng_udp] [tệp_ảnh]
 """
 import os
-import subprocess
 import sys
 import tkinter as tk
 
+import chup_anh
 from camera import GIA_LAP, MAU_THU
 from khach_gui import CuaSoKhach
 from server_gui import CuaSoServer
@@ -45,7 +45,7 @@ def in_so_lieu(sv, ds):
 
 def chup(cua_so, duong):
     cua_so.update()
-    subprocess.run(["import", "-window", cua_so.wm_frame(), duong], check=True)
+    chup_anh.chup(cua_so, duong)
 
 
 def kich_ban(root, sv, ds, out):
@@ -96,9 +96,9 @@ def kich_ban(root, sv, ds, out):
     for i, w in enumerate([root] + [cs.root for cs in ds.values()]):
         tam.append(f".gui_{i}.png")
         chup(w, tam[-1])
-    subprocess.run(["convert", tam[0], "(", *tam[1:], "-bordercolor", "#d0d0d0", "-border", "4",
-                    "+append", ")", "-background", "#d0d0d0", "-gravity", "center", "-append",
-                    "-bordercolor", "#d0d0d0", "-border", "4", out], check=True)
+    chup_anh.convert([tam[0], "(", *tam[1:], "-bordercolor", "#d0d0d0", "-border", "4",
+                      "+append", ")", "-background", "#d0d0d0", "-gravity", "center", "-append",
+                      "-bordercolor", "#d0d0d0", "-border", "4", out])
     for p in tam:
         os.remove(p)
     log(f"   Đã ghi {out} ({os.path.getsize(out) // 1024} KB)")

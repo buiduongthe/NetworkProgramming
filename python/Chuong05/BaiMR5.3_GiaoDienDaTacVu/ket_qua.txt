@@ -5,17 +5,19 @@ $ python3 may_chu_thu.py 127.0.0.1 41530
 [server] HTTP GET /tep 256 KB, nghỉ 90 ms mỗi khối
 [server] HTTP GET /tep 384 KB, nghỉ 70 ms mỗi khối
 [server] HTTP GET /tep 320 KB, nghỉ 50 ms mỗi khối
-[server] HTTP: client đóng kết nối giữa chừng (208/256 KB)
 [server] HTTP GET /tep 256 KB, nghỉ 120 ms mỗi khối
+[server] HTTP: client đóng kết nối giữa chừng (208/256 KB)
 [server] HTTP GET /tep 256 KB, nghỉ 60 ms mỗi khối
 [server] HTTP GET /tep 256 KB, nghỉ 90 ms mỗi khối
 [server] HTTP GET /tep 384 KB, nghỉ 70 ms mỗi khối
 [server] HTTP GET /tep 256 KB, nghỉ 80 ms mỗi khối
 [server] HTTP GET /tep 256 KB, nghỉ 120 ms mỗi khối
-[server] HTTP GET /tep 256 KB, nghỉ 60 ms mỗi khối
 [server] HTTP GET /tep 256 KB, nghỉ 90 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 60 ms mỗi khối
 [server] HTTP GET /tep 384 KB, nghỉ 70 ms mỗi khối
+[server] HTTP GET /tep 256 KB, nghỉ 120 ms mỗi khối
 [server] HTTP: client đóng kết nối giữa chừng (176/256 KB)
+[server] HTTP: client đóng kết nối giữa chừng (16/256 KB)
 [server] HTTP: client đóng kết nối giữa chừng (160/384 KB)
 [server] HTTP: client đóng kết nối giữa chừng (128/256 KB)
 [server] dừng
@@ -26,29 +28,29 @@ $ xvfb-run -a python3 ung_dung.py 127.0.0.1 41530 --demo
 [gui]   0.63 s  Bấm Kiểm tra cổng: 41530, 41531, 41532, 41533
 [gui]   0.63 s  Bấm Tra cứu tên: 5 tên qua UDP
 [gui]   1.53 s  Kịch bản bấm Hủy ở tác vụ #2
-[gui]   1.55 s  Tải 256 KB (60 ms/khối): xong 256 KB
-[gui]   1.64 s  Tải 256 KB (90 ms/khối): đã hủy
+[gui]   1.54 s  Tải 256 KB (60 ms/khối): xong 256 KB
+[gui]   1.63 s  Tải 256 KB (90 ms/khối): đã hủy
 [gui]   2.13 s  Chụp ảnh 1: 5 tác vụ chưa xong, 2 đang chờ lượt
-[gui]   2.26 s  Tải 384 KB (70 ms/khối): xong 384 KB
-[gui]   2.60 s  Tải 320 KB (50 ms/khối): xong 320 KB
-[gui]   2.75 s  Kiểm tra 4 cổng: 3 mở, 1 đóng
-[gui]   3.48 s  Tra cứu 5 tên: 4/5 tên có địa chỉ
-[gui]   4.39 s  Tải 256 KB (120 ms/khối): xong 256 KB
-[gui]   4.46 s  Bấm Tải tệp: 4 tệp, giới hạn đồng thời 3
-[gui]   4.77 s  Bấm Làm SAI: tải 256 KB ngay trên luồng giao diện…
-[gui]   5.97 s  Luồng giao diện bị chặn 1205 ms: đồng hồ, nút, thanh tiến trình đứng yên
-[gui]   5.97 s  Tải 256 KB (60 ms/khối): xong 256 KB
-[gui]   5.98 s  Tải 256 KB (90 ms/khối): xong 256 KB
-[gui]   6.15 s  Tải 384 KB (70 ms/khối): xong 384 KB
-[gui]   7.21 s  Tải 256 KB (120 ms/khối): xong 256 KB
-[gui]   7.30 s  Bấm Tải tệp: 4 tệp, giới hạn đồng thời 3
-[gui]   7.81 s  Bấm Hủy tất cả: 4 tác vụ
-[gui]   7.82 s  Tải 256 KB (120 ms/khối): đã hủy (khi đang chờ lượt)
-[gui]   7.85 s  Tải 256 KB (90 ms/khối): đã hủy
-[gui]   7.85 s  Tải 256 KB (60 ms/khối): đã hủy
-[gui]   7.88 s  Tải 384 KB (70 ms/khối): đã hủy
-[gui]   8.24 s  Đã chụp cửa sổ: ket_qua_gui.png
-[gui]   8.24 s  Nhịp rỗi              :   51 nhịp, TB   20.5 ms, tối đa     21 ms
-[gui]   8.24 s  Nhịp chạy song song   :  278 nhịp, TB   20.5 ms, tối đa     24 ms
-[gui]   8.24 s  Nhịp luồng GUI bị chặn:    1 nhịp, TB 1213.1 ms, tối đa   1213 ms
+[gui]   2.25 s  Tải 384 KB (70 ms/khối): xong 384 KB
+[gui]   2.50 s  Tải 320 KB (50 ms/khối): xong 320 KB
+[gui]   3.44 s  Tải 256 KB (120 ms/khối): xong 256 KB
+[gui]   3.47 s  Kiểm tra 4 cổng: 3 mở, 1 đóng
+[gui]   3.71 s  Tra cứu 5 tên: 4/5 tên có địa chỉ
+[gui]   3.80 s  Bấm Tải tệp: 4 tệp, giới hạn đồng thời 3
+[gui]   4.10 s  Bấm Làm SAI: tải 256 KB ngay trên luồng giao diện…
+[gui]   5.31 s  Luồng giao diện bị chặn 1205 ms: đồng hồ, nút, thanh tiến trình đứng yên
+[gui]   5.31 s  Tải 256 KB (60 ms/khối): xong 256 KB
+[gui]   5.31 s  Tải 256 KB (90 ms/khối): xong 256 KB
+[gui]   5.47 s  Tải 384 KB (70 ms/khối): xong 384 KB
+[gui]   6.53 s  Tải 256 KB (120 ms/khối): xong 256 KB
+[gui]   6.62 s  Bấm Tải tệp: 4 tệp, giới hạn đồng thời 3
+[gui]   7.13 s  Bấm Hủy tất cả: 4 tác vụ
+[gui]   7.20 s  Tải 256 KB (90 ms/khối): đã hủy
+[gui]   7.20 s  Tải 256 KB (60 ms/khối): đã hủy
+[gui]   7.20 s  Tải 256 KB (120 ms/khối): đã hủy
+[gui]   7.20 s  Tải 384 KB (70 ms/khối): đã hủy
+[gui]   7.56 s  Đã chụp cửa sổ: ket_qua_gui.png
+[gui]   7.56 s  Nhịp rỗi              :   52 nhịp, TB   20.4 ms, tối đa     21 ms
+[gui]   7.56 s  Nhịp chạy song song   :  246 nhịp, TB   20.5 ms, tối đa     22 ms
+[gui]   7.56 s  Nhịp luồng GUI bị chặn:    1 nhịp, TB 1214.7 ms, tối đa   1215 ms
 

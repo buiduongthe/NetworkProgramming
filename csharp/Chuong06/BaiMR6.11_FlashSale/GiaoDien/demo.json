@@ -1,6 +1,6 @@
 {
   "nen_tang": "windows",
-  "ghi_chu": "WinForms chỉ chạy trên Windows: chạy bằng tools/demo_windows.ps1 csharp\\Chuong06\\BaiMR6.11_FlashSale\\GiaoDien; kịch bản demo tự bấm nút trên máy chủ và 3 trang flash sale (An, Bình, Chi), chạy so sánh 4 chế độ; ảnh ghi ra ..\\ket_qua_gui.png và ..\\ket_qua_gui_tranh_chap.png",
+  "ghi_chu": "WinForms chỉ chạy trên Windows: chạy bằng tools\\demo_windows.py csharp\\Chuong06\\BaiMR6.11_FlashSale\\GiaoDien; kịch bản demo tự bấm nút trên máy chủ và 3 trang flash sale (An, Bình, Chi), chạy so sánh 4 chế độ; ảnh ghi ra ..\\ket_qua_gui.png và ..\\ket_qua_gui_tranh_chap.png (công cụ lưu ảnh với hậu tố _windows, ví dụ ket_qua_gui_windows.png)",
   "setup": [["dotnet", "build", "-c", "Release", "--nologo"]],
   "processes": [
     {"name": "gui", "cmd": ["bin\\Release\\net10.0-windows\\BaiMR6.11_GiaoDien.exe", "demo", "127.0.0.1", "42752", "..\\ket_qua_gui.png"], "timeout": 180}

@@ -75,7 +75,7 @@
         "sh",
         "-c",
         "LLM_BASE_URL=http://127.0.0.1:21811/v1 exec timeout -s INT 1.5 cargo run -q --release -- 'Giải thích MQTT.'"
-      ],
+      ], "cmd_windows": ["env", "LLM_BASE_URL=http://127.0.0.1:21811/v1", "timeout", "-s", "INT", "1.5", "cargo", "run", "-q", "--release", "--", "Giải thích MQTT."],
       "show": [
         "LLM_BASE_URL=http://127.0.0.1:21811/v1",
         "timeout",

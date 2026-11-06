@@ -1,10 +1,10 @@
 ===== server =====
 $ python3 lookup_server.py 127.0.0.1 9504 1500
 [server] Đang lắng nghe tại 127.0.0.1:9504, độ trễ giả lập 1500 ms
-[server] Client kết nối: 127.0.0.1:43942
-[server] Nhận từ 127.0.0.1:43942: {"op":"lookup","term":"TCP"}
-[server] Nhận từ 127.0.0.1:43942: {"op":"lookup","term":"XYZ"}
-[server] Client 127.0.0.1:43942 đã đóng kết nối
+[server] Client kết nối: 127.0.0.1:38848
+[server] Nhận từ 127.0.0.1:38848: {"op":"lookup","term":"TCP"}
+[server] Nhận từ 127.0.0.1:38848: {"op":"lookup","term":"XYZ"}
+[server] Client 127.0.0.1:38848 đã đóng kết nối
 [server] Dừng server
 
 ===== gui =====

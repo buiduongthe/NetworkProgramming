@@ -2,7 +2,7 @@
   "setup": [["javac", "-encoding", "UTF-8", "-d", "out", "Json.java", "Frame.java", "Jwt.java", "TaoToken.java", "TlsChatServer.java", "TlsChatClient.java"]],
   "env": {"TLS_KEY_PASS": "matkhau-lab", "CHAT_JWT_KEY": "khoa-ky-jwt-cua-phong-lab-0123456789", "TLS_CERT": "certs/chat.p12"},
   "processes": [
-    {"name": "chuanbi", "cmd": ["bash", "-c", "bash tao_chung_chi.sh && java -cp out TaoToken an certs/an.jwt && java -cp out TaoToken binh certs/binh_email.jwt email"]},
+    {"name": "chuanbi", "cmd": ["bash", "-c", "bash tao_chung_chi.sh && java -cp out TaoToken an certs/an.jwt && java -cp out TaoToken binh certs/binh_email.jwt email"], "cmd_windows": [["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "tao_chung_chi.ps1"], ["java", "-cp", "out", "TaoToken", "an", "certs/an.jwt"], ["java", "-cp", "out", "TaoToken", "binh", "certs/binh_email.jwt", "email"]], "dung_khi_loi_windows": true},
     {"name": "server", "cmd": ["java", "-cp", "out", "TlsChatServer", "127.0.0.1", "9842"], "background": true, "wait": 1.2},
     {"name": "tin_cay", "cmd": ["java", "-cp", "out", "TlsChatClient", "localhost", "9842", "certs/an.jwt", "certs/ca.crt"], "stdin": "Xin chào qua TLS\nTin nhắn đã được mã hóa\n"},
     {"name": "khong_tin_cay", "cmd": ["java", "-cp", "out", "TlsChatClient", "localhost", "9842", "certs/an.jwt"], "stdin": "Xin chào\n"},

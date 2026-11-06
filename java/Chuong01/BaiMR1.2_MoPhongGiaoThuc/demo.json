@@ -13,7 +13,7 @@
     {"name": "bat_dong_bo", "cmd": ["java", "-cp", "out", "MoPhong", "bat_dong_bo"]},
     {"name": "phoi_hop", "cmd": ["java", "-cp", "out", "MoPhong", "phoi_hop"]},
     {"name": "so_sanh", "cmd": ["java", "-cp", "out", "MoPhong", "so_sanh"]},
-    {"name": "html", "cmd": ["sh", "-c", "java -cp out MoPhong tat_ca --html mo_phong.html | tail -n 1 && python3 chup_hoat_hinh.py mo_phong.html ket_qua_gui.png"],
+    {"name": "html", "cmd": ["sh", "-c", "java -cp out MoPhong tat_ca --html mo_phong.html | tail -n 1 && python3 chup_hoat_hinh.py mo_phong.html ket_qua_gui.png"], "cmd_windows": [["@dong_cuoi", "1", "java", "-cp", "out", "MoPhong", "tat_ca", "--html", "mo_phong.html"], ["python3", "chup_hoat_hinh.py", "mo_phong.html", "ket_qua_gui.png"]], "dung_khi_loi_windows": true,
      "show": ["java", "-cp", "out", "MoPhong", "tat_ca", "--html", "mo_phong.html"], "timeout": 90}
   ],
   "titles": {"tcp": "Cửa sổ 1 – TCP – bắt tay, cwnd, mất gói, FIN",
