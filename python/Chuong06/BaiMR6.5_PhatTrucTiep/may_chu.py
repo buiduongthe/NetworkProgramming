@@ -89,8 +89,6 @@ class MayChuPhat:
         cong_udp = cong_udp or cong_tcp + 1
         srv = socket.create_server((host, cong_tcp))
         udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        if hasattr(socket, "SIO_UDP_CONNRESET"):   # Windows: tắt lỗi 10054 ở recvfrom (ICMP cổng đóng)
-            udp.ioctl(socket.SIO_UDP_CONNRESET, False)
         try:
             udp.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 1 << 20)
             udp.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 1 << 20)
@@ -278,6 +276,8 @@ class MayChuPhat:
                 goi, addr = sock.recvfrom(2048)
             except socket.timeout:
                 goi = None
+            except ConnectionResetError:  # Windows: lỗi 10054 do ICMP "cổng đóng" của gói gửi trước – bỏ qua
+                continue
             except OSError:
                 break
             bay_gio = time.monotonic()

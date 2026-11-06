@@ -74,8 +74,9 @@ pub fn bay_gio() -> f64 {
     T0.elapsed().as_secs_f64()
 }
 
-/// Ngủ `giay` giây. Windows: đồng hồ hệ thống mặc định ~15,6 ms làm `thread::sleep(1 ms)` ngủ tới 15 ms (độ trễ giả
-/// lập 0–1 ms thành 0–15 ms); lần gọi đầu xin độ phân giải 1 ms bằng `timeBeginPeriod(1)` (winmm) như bản C#.
+/// Ngủ `giay` giây, chính xác cả với độ trễ dưới 1 ms. Windows: đồng hồ hệ thống mặc định ~15,6 ms làm
+/// `thread::sleep(1 ms)` ngủ tới 15 ms (độ trễ giả lập 0–1 ms thành 0–15 ms); lần gọi đầu xin độ phân giải 1 ms bằng
+/// `timeBeginPeriod(1)` (winmm) như bản C#, và phần cuối (dưới 2 ms) chờ bận bằng `Instant` + `yield_now` như bản Java.
 pub fn ngu(giay: f64) {
     #[cfg(windows)]
     {
@@ -88,7 +89,19 @@ pub fn ngu(giay: f64) {
             timeBeginPeriod(1);
         });
     }
-    if giay > 0.0 {
+    if giay <= 0.0 {
+        return;
+    }
+    let den = Instant::now() + Duration::from_secs_f64(giay);
+    if cfg!(windows) {
+        let con = den.saturating_duration_since(Instant::now());
+        if con > Duration::from_millis(3) {
+            thread::sleep(con - Duration::from_millis(2));
+        }
+        while Instant::now() < den {
+            thread::yield_now();
+        }
+    } else {
         thread::sleep(Duration::from_secs_f64(giay));
     }
 }

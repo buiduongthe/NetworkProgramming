@@ -98,10 +98,10 @@ Một số khác biệt hành vi giữa Windows và Linux thấy rõ trong `ket_
 
 - Kết nối TCP tới cổng không có chương trình nghe trên máy cục bộ: Linux trả RST ngay ("Connection refused"); Windows gửi lại SYN vài lần nên mất khoảng 2 s mới báo "actively refused" – với thời gian chờ ngắn hơn 2 s, bài báo "hết thời gian chờ". `localhost` thử `::1` trước rồi mới tới `127.0.0.1` nên cũng chậm thêm ~2 s khi máy chủ chỉ nghe IPv4.
 - Đóng socket khi còn dữ liệu chưa đọc: Windows gửi RST, phía kia nhận "An existing connection was forcibly closed by the remote host" (10054) hoặc "aborted" (10053) thay vì kết thúc bình thường.
-- UDP: sau khi gửi tới một cổng đã đóng, Windows báo lỗi 10054 ở lần `recvfrom` kế tiếp (gói ICMP "port unreachable"); các bài Python tắt hành vi này bằng `SIO_UDP_CONNRESET`.
+- UDP: sau khi gửi tới một cổng đã đóng, Windows báo lỗi 10054 ở lần `recvfrom` kế tiếp (gói ICMP "port unreachable"); các bài Python (MR6.2, MR6.3, MR6.5) bỏ qua `ConnectionResetError` ở vòng nhận.
 - Không có tín hiệu SIGTERM: kịch bản MR6.1 gửi Ctrl+C (SIGINT) thay cho `kill -TERM`.
 - Đồng hồ ngủ mặc định của Windows ~15,6 ms: các bài cần độ trễ dưới 1 ms xin độ phân giải 1 ms (`timeBeginPeriod`, bản C#, Rust) hoặc chờ bận phần cuối (bản Java).
-- Java nhận tham số dòng lệnh theo bảng mã ANSI (cp1252) nên chữ Việt như "ở", "ượ" thành "?"; các chương trình Java nhận câu hỏi tiếng Việt đọc lại dòng lệnh gốc của tiến trình (`ProcessHandle.current().info().commandLine()`).
+- Java nhận tham số dòng lệnh theo bảng mã ANSI (cp1252) nên chữ Việt như "ở", "ượ" thành "?". Công cụ truyền lại nguyên văn qua biến môi trường `THAM_SO_UTF8` mà các chương trình Java nhận câu tiếng Việt (MR3.1, Bài 8.1, MR8.1, MR8.2) đọc; khi tự gõ lệnh, bật *Settings → Time & language → Language & region → Administrative language settings → Change system locale → Beta: Use Unicode UTF-8 for worldwide language support*.
 - Multicast: Go đặt `IP_MULTICAST_LOOP = 0` khi nghe nhóm; trên Windows tùy chọn này áp dụng ở phía nhận nên Bài 6.6 bản Go bật lại để nhận gói của chương trình phát cùng máy.
 
 Mục 7 của `CHAY_DEMO_WINDOWS.bat` cài một lượt các thư viện tùy chọn: `py -3 -m pip install --user pillow playwright aiosmtpd grpcio grpcio-tools`, `py -3 -m playwright install chromium`, `winget install -e --id EclipseFoundation.Mosquitto`.

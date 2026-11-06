@@ -28,6 +28,7 @@ Lệnh dựng sẵn dùng trong cmd_windows (không cần công cụ ngoài):
   ["@echo", "chuỗi"...]   ["@ls", "thư mục"]   ["@rm", "tệp"...]
   ["@sha256_16", "tệp"...]                   16 ký tự đầu SHA-256 + tên tệp (như sha256sum | cut -c1-16,65-)
   ["@head_c", "N", "nguồn", "đích"]          chép N byte đầu
+  ["@ghi_tep", "tệp", "nội dung"]            ghi tệp văn bản (\\n trong nội dung là xuống dòng)
   ["@dong_cuoi", "N", lệnh...]               chạy lệnh, chỉ giữ N dòng cuối đầu ra (như | tail -n N)
 
 Cách dùng (từ thư mục gốc kho mã, trong Command Prompt hoặc PowerShell):
@@ -157,6 +158,15 @@ def them_exe(a):
     return a
 
 
+def ansi_duoc(x):
+    """Chuỗi biểu diễn được bằng bảng mã ANSI của Windows (mbcs; trên hệ khác thử cp1252)."""
+    try:
+        x.encode('mbcs' if LA_WINDOWS else 'cp1252')
+        return True
+    except (UnicodeEncodeError, LookupError):
+        return False
+
+
 def la_python(c):
     return c in ('python3', 'python') or re.fullmatch(r'(/usr(/local)?/bin/)?python3(\.\d+)?', c) is not None
 
@@ -217,6 +227,14 @@ def chuyen(cmd):
         for i, a in enumerate(argv[:-1]):
             if a in ('-cp', '-classpath', '--class-path') and ':' in argv[i + 1]:
                 argv[i + 1] = argv[i + 1].replace(':', ';')
+        # Java nhận tham số theo bảng mã ANSI (cp1252…): chữ Việt ngoài bảng mã thành "?". Truyền lại nguyên văn qua
+        # biến môi trường THAM_SO_UTF8 (các chương trình Java nhận câu tiếng Việt đọc biến này – thamSoUnicode).
+        i = 1
+        while i < len(argv) and argv[i].startswith('-'):
+            i += 2 if argv[i] in ('-cp', '-classpath', '--class-path', '-p', '--module-path', '-jar') else 1
+        ts = argv[i + 1:]
+        if any(not ansi_duoc(x) for x in ts):
+            env['THAM_SO_UTF8'] = '\x1f'.join(ts)
     return Lenh(argv, env, han, ctrl, giu_cuoi=giu)
 
 
@@ -250,7 +268,7 @@ def hien_thi(p, ds):
             a = [a[0]] + [x for x in a[1:] if not x.startswith('-Dstd')]
         if '/' in a[0] and not a[0].startswith('@'):
             a[0] = a[0].replace('/', '\\')
-        tien = ' '.join(f'set {k}={v} &&' for k, v in l.env.items())
+        tien = ' '.join(f'set {k}={v} &&' for k, v in l.env.items() if k != 'THAM_SO_UTF8')
         phan.append((tien + ' ' if tien else '') + ' '.join(q(x) for x in a))
     return ' && '.join(phan)
 
@@ -379,6 +397,10 @@ class ChayBai:
             for x in a:
                 h = hashlib.sha256(open(os.path.join(cwd, x), 'rb').read()).hexdigest()
                 ghi(f'{h[:16]}  {x}\n')
+        elif t == '@ghi_tep':
+            os.makedirs(os.path.dirname(os.path.join(cwd, a[0])), exist_ok=True)
+            with open(os.path.join(cwd, a[0]), 'w', encoding='utf-8', newline='\n') as g:
+                g.write(' '.join(a[1:]).replace('\\n', '\n'))
         elif t == '@head_c':
             n, src, dst = int(a[0]), a[1], a[2]
             with open(os.path.join(cwd, src), 'rb') as s, open(os.path.join(cwd, dst), 'wb') as d:

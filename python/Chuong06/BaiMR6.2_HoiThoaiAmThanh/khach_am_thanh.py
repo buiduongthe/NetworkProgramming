@@ -145,8 +145,6 @@ def main():
 
     # ---- Kênh dữ liệu UDP: connect() để chỉ nhận gói từ đúng địa chỉ server
     udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    if hasattr(socket, "SIO_UDP_CONNRESET"):   # Windows: tắt lỗi 10054 ở recvfrom (ICMP cổng đóng)
-        udp.ioctl(socket.SIO_UDP_CONNRESET, False)
     udp.connect((a.host, chao["cong_udp"]))
 
     khoa = threading.Lock()

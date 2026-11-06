@@ -1,6 +1,6 @@
 {
   "processes": [
-    {"name": "broker", "cmd": ["mosquitto", "-p", "9781"], "background": true, "wait": 1.0},
+    {"name": "broker", "cmd": ["mosquitto", "-p", "9781"], "cmd_windows": ["mosquitto", "-c", "out/mosquitto_windows.conf"], "show_windows": "mosquitto -c out\\mosquitto_windows.conf   (cấu hình: cổng 9781, ghi nhật ký ra màn hình)", "background": true, "wait": 1.0},
     {"name": "dashboard", "cmd": ["python3", "dashboard.py", "localhost", "9781", "4"], "background": true, "wait": 1.0},
     {"name": "day1", "cmd": ["python3", "sensor.py", "day1", "localhost", "9781", "3", "1000"]},
     {"name": "day2", "cmd": ["python3", "sensor.py", "day2", "localhost", "9781", "2", "1000", "--mat-ket-noi"], "wait": 3.0},
@@ -8,5 +8,6 @@
   ],
   "titles": {"broker": "Cửa sổ 1 – broker mosquitto", "dashboard": "Cửa sổ 2 – bảng theo dõi (chạy từ đầu)",
              "day1": "Cửa sổ 3 – cảm biến day1", "day2": "Cửa sổ 4 – cảm biến day2 (mất kết nối)",
-             "dashboard2": "Cửa sổ 5 – bảng thứ hai, đăng ký muộn"}
+             "dashboard2": "Cửa sổ 5 – bảng thứ hai, đăng ký muộn"},
+  "setup_windows": [["@ghi_tep", "out/mosquitto_windows.conf", "listener 9781 127.0.0.1\\nlistener 9781 ::1\\nallow_anonymous true\\nlog_dest stdout\\nlog_type error\\nlog_type warning\\nlog_type notice\\nlog_type information\\n"]]
 }

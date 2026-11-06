@@ -131,39 +131,15 @@ public class LlmClient {
     }
 
     /** Windows: JVM đổi tham số dòng lệnh sang bảng mã ANSI của hệ thống (thường cp1252) nên chữ Việt như "ở", "ượ"
-     *  thành "?". Đọc lại dòng lệnh gốc (UTF-16) của tiến trình, tách theo quy tắc của Windows và lấy args.length
-     *  tham số cuối. Hệ điều hành khác (hoặc không đọc được) giữ nguyên args. */
+     *  thành "?" (kể cả dòng lệnh đọc lại qua ProcessHandle). Khi chạy bằng tools/demo_windows.py, công cụ truyền lại
+     *  nguyên văn các tham số qua biến môi trường THAM_SO_UTF8 (ngăn cách bằng ký tự U+001F) – biến môi trường trên
+     *  Windows là Unicode. Tự gõ lệnh trên Windows: bật "Beta: Use Unicode UTF-8 for worldwide language support"
+     *  (Settings > Time & language > Language & region > Administrative language settings). Hệ điều hành khác: giữ nguyên. */
     static String[] thamSoUnicode(String[] args) {
-        if (args.length == 0 || !System.getProperty("os.name", "").startsWith("Windows")) return args;
-        String dong = ProcessHandle.current().info().commandLine().orElse(null);
-        if (dong == null) return args;
-        java.util.List<String> ds = new java.util.ArrayList<>();
-        StringBuilder sb = new StringBuilder();
-        boolean trongNhay = false, co = false;
-        for (int i = 0; i < dong.length(); ) {
-            char c = dong.charAt(i);
-            if (c == '\\') {                                    // n dấu \ trước " -> n/2 dấu \ (+ " nếu n lẻ)
-                int n = 0;
-                while (i < dong.length() && dong.charAt(i) == '\\') { n++; i++; }
-                boolean nhay = i < dong.length() && dong.charAt(i) == '"';
-                sb.append("\\".repeat(nhay ? n / 2 : n));
-                if (nhay && n % 2 == 1) { sb.append('"'); i++; }
-                co = true;
-            } else if (c == '"') {
-                if (trongNhay && i + 1 < dong.length() && dong.charAt(i + 1) == '"') { sb.append('"'); i += 2; }
-                else { trongNhay = !trongNhay; i++; }
-                co = true;
-            } else if ((c == ' ' || c == '\t') && !trongNhay) {
-                if (co) { ds.add(sb.toString()); sb.setLength(0); co = false; }
-                i++;
-            } else { sb.append(c); co = true; i++; }
-        }
-        if (co) ds.add(sb.toString());
-        if (ds.size() < args.length) return args;
-        String[] kq = ds.subList(ds.size() - args.length, ds.size()).toArray(new String[0]);
-        for (int k = 0; k < args.length; k++)                      // tách lệch (tham số không hỏng mà khác) -> giữ nguyên
-            if (!args[k].equals(kq[k]) && !args[k].contains("?")) return args;
-        return kq;
+        String v = System.getenv("THAM_SO_UTF8");
+        if (v == null || !System.getProperty("os.name", "").startsWith("Windows")) return args;
+        String[] t = v.split("\u001f", -1);
+        return t.length == args.length ? t : args;
     }
 
     public static void main(String[] args) throws InterruptedException {

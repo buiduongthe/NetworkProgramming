@@ -17,7 +17,7 @@
         "mosquitto",
         "-p",
         "9782"
-      ],
+      ], "cmd_windows": ["mosquitto", "-c", "out/mosquitto_windows.conf"], "show_windows": "mosquitto -c out\\mosquitto_windows.conf   (cấu hình: cổng 9782, ghi nhật ký ra màn hình)",
       "background": true,
       "wait": 1.5
     },
@@ -101,5 +101,6 @@
     "day1": "Cửa sổ 3 – cảm biến day1",
     "day2": "Cửa sổ 4 – cảm biến day2 (mất kết nối)",
     "dashboard2": "Cửa sổ 5 – bảng thứ hai, đăng ký muộn"
-  }
+  },
+  "setup_windows": [["dotnet", "build", "-c", "Release", "-v", "q", "-nologo"], ["@ghi_tep", "out/mosquitto_windows.conf", "listener 9782 127.0.0.1\\nlistener 9782 ::1\\nallow_anonymous true\\nlog_dest stdout\\nlog_type error\\nlog_type warning\\nlog_type notice\\nlog_type information\\n"]]
 }

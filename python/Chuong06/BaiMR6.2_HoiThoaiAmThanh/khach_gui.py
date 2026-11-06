@@ -71,8 +71,6 @@ class KetNoiAmThanh:
                 raise OSError("server không trả lời 'chao'")
             tcp.settimeout(None)
             udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            if hasattr(socket, "SIO_UDP_CONNRESET"):   # Windows: tắt lỗi 10054 ở recvfrom (ICMP cổng đóng)
-                udp.ioctl(socket.SIO_UDP_CONNRESET, False)
             udp.connect((host, chao["cong_udp"]))          # chỉ nhận gói từ đúng server
         except (OSError, ValueError, KeyError) as e:
             tcp.close()
