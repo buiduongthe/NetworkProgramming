@@ -8,7 +8,7 @@
     "kiem_thu": {
       "java": "đã chạy"
     },
-    "ten": "Đăng ký học phần – 2000 sinh viên tranh 150 chỗ (3 lớp × 50): máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa theo từng lớp, lạc quan phiên bản + CAS, hàng đợi một luồng), đăng ký/hủy, bấm đúp và hai thiết bị, sổ kiểm toán (vượt sĩ số, ĐK trùng), bộ mô phỏng tải, cổng đăng ký học phần Swing",
+    "ten": "Đăng ký học phần – 2000 sinh viên tranh 3 lớp × 50 chỗ: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa theo lớp, lạc quan phiên bản + CAS, hàng đợi một luồng), đăng ký/hủy, sổ kiểm toán (vượt sĩ số, ĐK trùng), cổng đăng ký học phần như thật, bộ mô phỏng tải có rào xuất phát và pipelining",
     "ghi_chu": "Bản Java (JDK 21, chỉ thư viện chuẩn; Swing, java.awt.Robot dưới xvfb-run). Khung chép nguyên từ MR6.6 bản Java. Cổng 43740 (GUI 43742). So sánh 2000 sinh viên, 200 kết nối, trễ 0–2 ms: khong_khoa 1339 thành công, 1176 sai phạm (vượt sĩ số 1167, ĐK trùng 9; 1304/150 chỗ theo sổ); khoa 178/0 (2397 yc/s); lac_quan 182/0, 1240 xung đột (16969 yc/s); hang_doi 180/0 (844 yc/s); ba chế độ an toàn đúng 150/150 chỗ. Dòng lệnh giống hệt Python (bấm đúp -> 'đã đăng ký lớp này', lớp đủ rồi có chỗ sau khi An hủy). Chạy chéo: Python -> máy chủ Java (khong_khoa 1329/1164, còn lại 0) và Java -> máy chủ Python (khong_khoa 2006/1836, còn lại 0). Giao diện: khong_khoa + trễ 0–20 ms, sĩ số 1: cả ba 'Đăng ký thành công', 1 s sau hai người 'đã bị MẤT' (vượt sĩ số 2); khoa: 1 được, 2 'lớp đã đủ'. DangKyGui bỏ qua lớp vừa có kq mà chưa có cap_nhat tới sau (tránh báo nhầm 'bị MẤT' sau khi Hủy – lỗi thời điểm gặp ở bản Java; bản Python cùng logic có thể gặp hiếm)."
   }
 ]

@@ -1,0 +1,28 @@
+{
+  "setup": [["cargo", "build", "-q", "--release"]],
+  "processes": [
+    {"name": "server", "cmd": ["../../target/release/mr6_12_chuyen_khoan", "server", "127.0.0.1", "44760"], "background": true, "wait": 0.8},
+    {"name": "mp", "cmd": ["../../target/release/mr6_12_chuyen_khoan", "mo_phong", "127.0.0.1", "44760", "--n", "500", "--so-sanh"],
+     "timeout": 120, "wait": 0.3},
+    {"name": "qt", "cmd": ["../../target/release/mr6_12_chuyen_khoan", "khach", "127.0.0.1", "44760", "dat_lai", "khoa_ngay_tho=1", "so_tk=5"],
+     "timeout": 10, "wait": 0.1},
+    {"name": "kc", "cmd": ["../../target/release/mr6_12_chuyen_khoan", "mo_phong", "127.0.0.1", "44760", "--n", "20", "--lan", "2"],
+     "timeout": 60, "wait": 0.3},
+    {"name": "tt", "cmd": ["../../target/release/mr6_12_chuyen_khoan", "mo_phong", "127.0.0.1", "44760", "--n", "20", "--lan", "2", "--dat-lai"],
+     "timeout": 60, "wait": 0.3},
+    {"name": "A", "cmd": ["../../target/release/mr6_12_chuyen_khoan", "ngan_hang", "An", "127.0.0.1", "44760", "--thoi-gian", "4"],
+     "stdin": "@0.8 chuyen TK02 500000 tra tien sach\n@2.5 chuyen TK03 9000000\n", "background": true, "wait": 0.3},
+    {"name": "B", "cmd": ["../../target/release/mr6_12_chuyen_khoan", "ngan_hang", "Bình", "127.0.0.1", "44760", "--thoi-gian", "3.5"],
+     "stdin": "@0.5 chuyen TK01 300000\n@2.6 so_du\n", "timeout": 20, "wait": 1.0},
+    {"name": "gui", "cmd": ["xvfb-run", "-a", "-s", "-screen 0 2600x1700x24", "../../target/release/mr6_12_chuyen_khoan", "demo_gui", "127.0.0.1", "44762"],
+     "show": ["xvfb-run", "-a", "../../target/release/mr6_12_chuyen_khoan", "demo_gui", "127.0.0.1", "44762"], "timeout": 150}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ ngân hàng (đa luồng, chế độ khoa)",
+             "mp": "Cửa sổ 2 – mô phỏng 500 người × 5 lần, so sánh 4 chế độ",
+             "qt": "Cửa sổ 3 – quản trị (bật khóa ngây thơ, 5 tài khoản)",
+             "kc": "Cửa sổ 4 – 20 người chuyển chéo, khóa ngây thơ (khóa chết)",
+             "tt": "Cửa sổ 5 – đặt lại, khóa theo thứ tự mã (hết khóa chết)",
+             "A": "Cửa sổ 6 – khách hàng An (TK01)",
+             "B": "Cửa sổ 7 – khách hàng Bình (TK02), chuyển chéo cùng lúc",
+             "gui": "Cửa sổ 8 – ứng dụng giao diện (máy chủ + 3 ứng dụng ngân hàng)"}
+}

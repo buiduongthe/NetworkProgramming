@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.13_PhongCho",
+    "chuong": 6,
+    "ngon_ngu": [
+      "rust"
+    ],
+    "kiem_thu": {
+      "rust": "đã chạy (Linux, Rust 1.97.0, tools/demo.py: dòng lệnh server/mo_phong/khach/<người dùng> và giao diện egui demo_gui dưới Xvfb + Mesa llvmpipe; chạy chéo với Python cả hai chiều)"
+    },
+    "ten": "Phòng chờ ảo bán 500 vé concert – xếp hàng nhận số thứ tự, cấp lượt theo thùng token (chỉnh được khi chạy), lượt có hạn 20 s, chờ dài (long polling) cho_luot, giới hạn số yêu cầu mua đang xử lý (từ chối quá tải), công tắc bật/tắt phòng chờ; 4 cách xử lý tranh chấp trên phát số thứ tự, kho vé và ô lượt; sổ kiểm toán (vượt vé, sai lượt, đảo số FIFO)",
+    "ghi_chu": "Bản Rust. Gói Cargo mr6_13_phong_cho (server, mo_phong, so_sanh_phong_cho, khach, mua_ve, server_gui, phong_cho_gui, demo_gui). Khung Rust chép từ MR6.6 (chung.rs, khach.rs, mo_phong.rs, server.rs, gui_chung.rs), thêm giống nhau ở MR6.9–MR6.13: KhoTranhChap::dat_o/co_o (thêm MỘT ô O(1) khi đang chạy, không chép lại bảng), MayChu::dat_mot_tham_so, CuaSoServer::xong_mo_phong là pub; ô luot:<tên> tạo bằng dat_o khi cấp lượt; dat_toc_do dùng dat_mot_tham_so; server.rs thêm --tat-phong-cho, lệnh toc_do. Cổng 44770 (GUI 44772). Kết quả (1000 người, 200 người/s, thùng 20): khong_khoa 2985 thành công / 2970 sai phạm (vượt vé 2008, sai lượt 86, đảo số 876; sổ bán 2508/500), khoa 1437/0, lac_quan 1076/0 (13 719 xung đột), hang_doi 1596/0 (744 quá tải). Bật/tắt phòng chờ (khoa): tắt 205 mua được, 2792 lần quá tải, 671 bỏ cuộc, p99 369 ms; bật 196 mua được, 0 quá tải, p99 50 ms. Giao diện: phòng chờ 'Còn khoảng 148 người phía trước', hai tab của An ở khong_khoa cùng mua được (sai lượt 1). Chạy chéo: mô phỏng Rust -> máy chủ Python (khong_khoa 2988/2892, còn lại 0) và mô phỏng Python -> máy chủ Rust (khong_khoa 2408/2072, còn lại 0); so_sanh_phong_cho.py trên máy chủ Rust (tắt 2810 quá tải, bật 0); người mua Python + Rust cùng phòng chờ. Đọc thêm: Kung & Robinson 1981 (ACM TODS 6(2)), Coffman và cộng sự 1971 (ACM Computing Surveys 3(2))."
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.9_QuaySo",
+    "chuong": 6,
+    "ngon_ngu": [
+      "rust"
+    ],
+    "kiem_thu": {
+      "rust": "đã chạy (Linux, Rust 1.97.0, tools/demo.py: dòng lệnh server/mo_phong/khach/<người dùng> và giao diện egui demo_gui dưới Xvfb + Mesa llvmpipe; chạy chéo với Python cả hai chiều)"
+    },
+    "ten": "Quay số trúng thưởng – 100 000 lượt quay tranh 10 món quà: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa theo tài nguyên, lạc quan phiên bản + CAS, hàng đợi một luồng), mỗi người quay 1 lần (idempotency theo tên và theo ma_yc), sổ kiểm toán, vòng quay may mắn hoạt hình, bộ mô phỏng tải 100 000 người trên 400 kết nối",
+    "ghi_chu": "Bản Rust. Gói Cargo mr6_9_quay_so (server, mo_phong, khach, quay_so, server_gui, vong_quay_gui, demo_gui); crate ghim bằng = và Cargo.lock (serde_json 1.0.154 preserve_order, socket2 0.5.10, ctrlc 3.4.7, chrono 0.4.41, miniz_oxide 0.8.9, eframe/egui 0.29.1). Khung Rust chép từ MR6.6 (chung.rs, khach.rs, mo_phong.rs, server.rs, gui_chung.rs), thêm giống nhau ở MR6.9–MR6.13: KhoTranhChap::dat_o/co_o (thêm MỘT ô O(1) khi đang chạy, không chép lại bảng), MayChu::dat_mot_tham_so, CuaSoServer::xong_mo_phong là pub. Ô ng:<tên> tạo bằng dat_o (100 000 ô). Cổng 44730 (GUI 44732). Kết quả (p = 1/20): 6000 người khong_khoa 5940 thành công / 28 sai phạm (trao 38/10 quà), khoa 5940/0 (38 796 yc/s), lac_quan 5940/0 (58 xung đột), hang_doi 5940/0 (849 yc/s, hàng đợi max 5990); 100 000 người × 400 kết nối: khong_khoa 24 sai phạm (trao 27/10) trong 1,87 s, khoa 0 trong 2,42 s. Bình bấm đúp: lần hai 'đã quay rồi', gui_lai 1 nhận lap_lai. Giao diện: khong_khoa trễ 0–20 ms, 1 quà, p = 1: cả 3 cửa sổ cùng trúng Xe đạp (sai phạm 3); khoa: một người trúng, máy 2 của Bình bị từ chối. Chạy chéo: mô phỏng Rust -> máy chủ Python (khong_khoa 98 sai phạm, còn lại 0) và mô phỏng Python -> máy chủ Rust (khong_khoa 16, còn lại 0); người quay Python (quay x2, gui_lai 1) trên máy chủ Rust. Đọc thêm: Kung & Robinson 1981 (ACM TODS 6(2)), Coffman và cộng sự 1971 (ACM Computing Surveys 3(2))."
+  }
+]

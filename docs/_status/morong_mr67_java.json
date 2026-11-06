@@ -8,7 +8,7 @@
     "kiem_thu": {
       "java": "đã chạy"
     },
-    "ten": "Đặt xe – n người cùng bấm 'Đặt xe' cho m xe mỗi xe một chỗ: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa nhiều ô theo thứ tự, lạc quan phiên bản + CAS, hàng đợi một luồng), sổ kiểm toán đếm trùng chỗ, bộ mô phỏng tải, ứng dụng gọi xe Swing có bản đồ và xe chạy hoạt hình",
+    "ten": "Đặt xe – n người cùng bấm 'Đặt xe' cho m xe mỗi xe một chỗ: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa loại trừ nhiều ô theo thứ tự, lạc quan phiên bản + CAS, hàng đợi một luồng), sổ kiểm toán đếm trùng chỗ, bộ mô phỏng tải có rào xuất phát và pipelining, ứng dụng gọi xe có bản đồ và xe chạy hoạt hình",
     "ghi_chu": "Bản Java (JDK 21, chỉ thư viện chuẩn; Swing, java.awt.Robot dưới xvfb-run). Khung chép nguyên từ MR6.6 bản Java. Cổng 43710 (GUI 43712). Kết quả (trễ 0–2 ms, 200 kết nối): 1000 người / 1 xe: khong_khoa 42 người được báo thành công, 41 sai phạm trùng chỗ, 7862 yc/s (đa lõi thật nên nhiều hơn Python 7/6); khoa 1/0, 769 yc/s; lac_quan 1/0, 3 xung đột, 7386 yc/s; hang_doi 1/0, 799 yc/s, hàng đợi max 991. 2000 người / 10 xe: khong_khoa 17/7; khoa, lac_quan (37 xung đột), hang_doi 10/0. Dòng lệnh: An đặt được, Bình hết chỗ, An hủy, Bình đặt được (dòng in giống hệt Python). Chạy chéo: Python -> máy chủ Java (khong_khoa 200/199, còn lại 1/0) và Java -> máy chủ Python (khong_khoa 2/1, còn lại 1/0). Giao diện: khong_khoa + trễ 0–20 ms, An và Bình cùng được báo thành công, Bình sau đó thấy 'Tài xế Hùng đã nhận khách khác (An)' (sai phạm 1); khoa: 1 thành công, 2 hết chỗ; 3 xe: mỗi người một xe, xe chạy tới điểm đón. Đọc thêm: Kung & Robinson 1981, Coffman và cộng sự 1971."
   }
 ]

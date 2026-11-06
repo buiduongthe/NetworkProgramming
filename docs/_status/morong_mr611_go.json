@@ -8,7 +8,7 @@
     "kiem_thu": {
       "go": "đã chạy"
     },
-    "ten": "Flash sale – 10 000 người tranh kho 100 sản phẩm đúng giờ mở bán; một ô kho (điểm nóng), đồng hồ mở bán và 'hết hàng nhanh' ngoài vùng găng, sổ kiểm toán (tồn âm, lệch sổ), trang flash sale có đếm ngược và thanh tồn kho",
+    "ten": "Flash sale – 10 000 người cùng bấm MUA NGAY cho kho 100 sản phẩm: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa, lạc quan phiên bản + CAS, hàng đợi một luồng), đếm ngược mở bán, kiểm tra hết hàng nhanh không khóa, sổ kiểm toán (tồn âm, lệch sổ), trang flash sale như thật, bộ mô phỏng tải có rào xuất phát và pipelining",
     "ghi_chu": "Khung chép từ MR6.6 Go, nghiệp vụ ở tranhchap/nghiepvu.go, nguoiao.go; giao diện Fyne v2.6.3 (đã chạy demo_gui dưới Xvfb). Kết quả (trễ 0–1 ms): khong_khoa 6709 đơn / 16 560 sai phạm (bán 10 010/100), khoa 64/0 (31 141 yc/s), lac_quan 68/0 (787 xung đột, 79 179 yc/s), hang_doi 69/0 (878 yc/s). Kho 5 mở sau 3 s: An bấm sớm bị 'chưa mở bán', Chi 'chỉ còn 1 sản phẩm' rồi mua 1, 'HẾT HÀNG sau 1.94 s'. Giao diện: khong_khoa kho 3, cả ba cùng đơn FS00001, bán 5/3. Chạy chéo: mô phỏng Go -> máy chủ Python (khong_khoa 9617/23 786, còn lại 0) và mô phỏng Python -> máy chủ Go (2371/5786, còn lại 0). Đọc thêm: Kung & Robinson 1981 (ACM TODS 6(2)), Coffman và cộng sự 1971 (ACM Computing Surveys 3(2))."
   }
 ]

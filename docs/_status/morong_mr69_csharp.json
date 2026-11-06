@@ -8,7 +8,7 @@
     "kiem_thu": {
       "csharp": "đã chạy (bản dòng lệnh net10.0, Linux .NET 10.0.114, tools/demo.py; chạy chéo với Python cả hai chiều); ứng dụng WinForms net10.0-windows chưa chạy – cần Windows (chạy bằng tools/demo_windows.ps1 với thư mục GiaoDien), đã kiểm tra biên dịch với assembly tham chiếu WinForms"
     },
-    "ten": "Quay số trúng thưởng – 10 món quà, 100 000 lượt quay, mỗi người đúng một lượt: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (khóa theo ô người và ô quà, rút thăm ngoài vùng găng), sổ kiểm toán đếm quà trao thừa và quay hai lần, bộ mô phỏng 100 000 người trên 400 kết nối, vòng quay may mắn vẽ bằng GDI+",
+    "ten": "Quay số trúng thưởng – 100 000 lượt quay tranh 10 món quà: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa theo tài nguyên, lạc quan phiên bản + CAS, hàng đợi một luồng), mỗi người quay 1 lần (idempotency theo tên và theo ma_yc), sổ kiểm toán, vòng quay may mắn hoạt hình, bộ mô phỏng tải 100 000 người trên 400 kết nối",
     "ghi_chu": "Dự án BaiMR6.9_QuaySo.csproj (dòng lệnh) và GiaoDien/BaiMR6.9_GiaoDien.csproj (WinForms, dùng chung lõi ../*.cs). Cổng 42730 (GUI 42732). Kết quả: 6000 người, p = 1/20 – khong_khoa 5940 thành công, 72 sai phạm (thừa quà, trao 82/10); khoa 0, 17848 yc/s; lac_quan 0, 46 xung đột, 21775 yc/s; hang_doi 0, 767 yc/s, hàng đợi max 5994. 100 000 người/400 kết nối: khong_khoa 3.86 s, 25895 yc/s, trao 13/10; khoa 3.15 s, 31763 yc/s, 0 sai phạm. Bấm đúp: lượt 2 da_quay; gui_lai 1 nhận lap_lai. Chạy chéo: mô phỏng C# -> máy chủ Python (khong_khoa 37 sai phạm, còn lại 0); mô phỏng Python -> máy chủ C# (28, còn lại 0); quay_so hai chiều. Khung: bảng ô KhoTranhChap là ConcurrentDictionary (thêm ô khi đang chạy), SoKiemToan.CongSaiPham – khác MR6.6–MR6.8 C#."
   }
 ]

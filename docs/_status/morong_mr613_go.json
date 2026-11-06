@@ -8,7 +8,7 @@
     "kiem_thu": {
       "go": "đã chạy"
     },
-    "ten": "Phòng chờ ảo bán 500 vé – xếp hàng lấy số thứ tự, chờ dài (long polling) cho_luot, cấp lượt theo thùng token, lượt có hạn, giới hạn số yêu cầu mua đang xử lý (quá tải), sổ kiểm toán (vượt vé, sai lượt, đảo số thứ tự), so sánh bật/tắt phòng chờ, trang bán vé ba trang",
+    "ten": "Phòng chờ ảo bán 500 vé concert – xếp hàng nhận số thứ tự, cấp lượt theo thùng token (chỉnh được khi chạy), lượt có hạn 20 s, chờ dài (long polling) cho_luot, giới hạn số yêu cầu mua đang xử lý (từ chối quá tải), công tắc bật/tắt phòng chờ; 4 cách xử lý tranh chấp trên phát số thứ tự, kho vé và ô lượt; sổ kiểm toán (vượt vé, sai lượt, đảo số FIFO)",
     "ghi_chu": "Khung chép từ MR6.6 Go (chung_cli.go thêm móc lenhRieng cho lệnh stdin toc_do), nghiệp vụ ở tranhchap/nghiepvu.go, nguoiao.go (DoMua, SoSanhPhongCho; lệnh con so_sanh_phong_cho); giao diện Fyne v2.6.3 (đã chạy demo_gui dưới Xvfb, thêm ảnh ket_qua_gui_phong_cho.png). Kết quả (1000 người): khong_khoa 2995/2941 sai phạm (vượt 1964 vé, 95 sai lượt, 882 đảo số), khoa 1545/0, lac_quan 1086/0 (14 042 xung đột), hang_doi 1739/0. Bật/tắt phòng chờ (khoa): tắt 2734 quá tải / 679 bỏ cuộc, p99 526 ms; bật 326 / 78, p99 195 ms (máy chủ Python: bật 0 quá tải – ở Go các mua của người đã có lượt dồn lại sau 1000 lần phát số thứ tự tuần tự trong cùng kết nối gộp). Giao diện: hai tab của An cùng một lượt mua được hai đơn ở khong_khoa (sai lượt 1). Chạy chéo: mô phỏng Go -> máy chủ Python (khong_khoa 2979/2922, còn lại 0) và mô phỏng Python -> máy chủ Go (2635/2344, còn lại 0); người mua Go + Python chung hàng chờ của máy chủ Python. Đọc thêm: Kung & Robinson 1981 (ACM TODS 6(2)), Coffman và cộng sự 1971 (ACM Computing Surveys 3(2))."
   }
 ]

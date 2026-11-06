@@ -1,0 +1,189 @@
+===== server =====
+$ ../../target/release/mr6_11_flash_sale server 127.0.0.1 44750
+[server] Lắng nghe 127.0.0.1:44750; chế độ khoa, trễ 0–2 ms
+[server] Độ trễ xử lý: ngẫu nhiên 0–1 ms
+[server] Đặt lại (mo_sau_s=0.0)
+[server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
+[server] HẾT HÀNG sau 0.14 s mở bán
+[server] Độ trễ xử lý: ngẫu nhiên 0–1 ms
+[server] Lượt trước: khong_khoa, 10044 yc, tc 2791, sai phạm 6790
+[server] Đặt lại (mo_sau_s=0.0)
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] HẾT HÀNG sau 0.06 s mở bán
+[server] Độ trễ xử lý: ngẫu nhiên 0–1 ms
+[server] Lượt trước: khoa, 10000 yc, tc 70, sai phạm 0
+[server] Đặt lại (mo_sau_s=0.0)
+[server] Chế độ: lac_quan – Lạc quan (phiên bản + CAS)
+[server] HẾT HÀNG sau 0.04 s mở bán
+[server] Độ trễ xử lý: ngẫu nhiên 0–1 ms
+[server] Lượt trước: lac_quan, 10000 yc, tc 64, sai phạm 0
+[server] Đặt lại (mo_sau_s=0.0)
+[server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
+[server] HẾT HÀNG sau 0.08 s mở bán
+[server] hang_doi: 10000 yc, tc 64, từ chối 5609, sai phạm 0
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 10000 yc, tc 64, sai phạm 0
+[server] Đặt lại (ton_dau=5, mo_sau_s=3.0)
+[server] An vào
+[server] Bình vào
+[server] khoa: 1 yc, tc 0, từ chối 1, sai phạm 0
+[server] MỞ BÁN! 5 sản phẩm
+[server] An mua 2 – đơn FS00001, còn 3
+[server] Bình mua 2 – đơn FS00002, còn 1
+[server] Bình rời
+[server] Chi vào
+[server] Chi mua 1 – đơn FS00003, còn 0
+[server] HẾT HÀNG sau 1.99 s mở bán
+[server] Chi rời
+[server] An rời
+[server] khoa: 6 yc, tc 3, từ chối 3, sai phạm 0
+[server] Tổng kết (từ lần đặt lại cuối):
+[server]   Chế độ khoa, trễ xử lý 0–1 ms
+[server]   Yêu cầu 6: thành công 3, từ chối 3
+[server]   Xung đột 0, thử lại 0, hết lượt thử 0
+[server]   Hàng đợi max 0, chờ khóa quá hạn 0
+[server]   Xử lý µs: p50 695 p95 1177 p99 1177
+[server]   Thông lượng 1 yc/s
+[server]   Sai phạm 0: tồn âm 0, lệch sổ 0
+[server]   Bán 5/5 sp (3 đơn), tồn 0
+[server] Máy chủ đã dừng
+
+===== mp =====
+$ ../../target/release/mr6_11_flash_sale mo_phong 127.0.0.1 44750 --n 10000 --so-sanh --tre-ms 1
+[mo_phong] === khong_khoa: 10000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 10044 yc xong trong 0.02 s = 573844 yc/s
+[mo_phong] Khứ hồi ms: p50 38.5 p95 89.5 p99 99.1
+[mo_phong] Thành công 2791, từ chối 7253
+[mo_phong]   lý do: het_hang 7209, khong_du 44
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1 p95 4253 p99 12723
+[mo_phong] Sai phạm 6790: tồn âm 2725, lệch sổ 4065
+[mo_phong]   ví dụ: u1143 mua 1: bán 101/100
+[mo_phong]   ví dụ: u877 mua 1: bán 102/100
+[mo_phong] Bán 4165/100 sp (2791 đơn), tồn 0
+[mo_phong] === khoa: 10000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 10000 yc xong trong 0.18 s = 56773 yc/s
+[mo_phong] Khứ hồi ms: p50 104.0 p95 174.0 p99 179.8
+[mo_phong] Thành công 70, từ chối 9930
+[mo_phong]   lý do: het_hang 9930
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1 p95 2 p99 102052
+[mo_phong] Sai phạm 0: tồn âm 0, lệch sổ 0
+[mo_phong] Bán 100/100 sp (70 đơn), tồn 0
+[mo_phong] === lac_quan: 10000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 10000 yc xong trong 0.08 s = 120389 yc/s
+[mo_phong] Khứ hồi ms: p50 10.5 p95 38.6 p99 45.1
+[mo_phong] Thành công 64, từ chối 9936
+[mo_phong]   lý do: het_hang 9823, xung_dot 113
+[mo_phong] Máy chủ: xung đột 845, thử lại 732, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1 p95 2 p99 6410
+[mo_phong] Sai phạm 0: tồn âm 0, lệch sổ 0
+[mo_phong] Bán 100/100 sp (64 đơn), tồn 0
+[mo_phong] === hang_doi: 10000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 10000 yc xong trong 6.35 s = 1576 yc/s
+[mo_phong] Khứ hồi ms: p50 3203.6 p95 6010.7 p99 6274.8
+[mo_phong] Thành công 64, từ chối 9936
+[mo_phong]   lý do: het_hang 9936
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 9988
+[mo_phong] Máy chủ xử lý µs: p50 3199825 p95 6005703 p99 6274072
+[mo_phong] Sai phạm 0: tồn âm 0, lệch sổ 0
+[mo_phong] Bán 100/100 sp (64 đơn), tồn 0
+[mo_phong] Bảng so sánh (10000 người × 1 lần, 200 kết nối):
+  Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+  khong_khoa         2791     6790        0 573844    99.1
+  khoa                 70        0        0 56773   179.8
+  lac_quan             64        0      845 120389    45.1
+  hang_doi             64        0        0  1576  6274.8
+
+===== qt =====
+$ ../../target/release/mr6_11_flash_sale khach 127.0.0.1 44750 dat_lai ton_dau=5 mo_sau_s=3
+[quan_tri] > dat_lai ton_dau=5 mo_sau_s=3
+[quan_tri] OK
+
+===== A =====
+$ ../../target/release/mr6_11_flash_sale flash_sale An 127.0.0.1 44750 --thoi-gian 6
+[An] Vào trang sale (khoa): Tai nghe không dây TWS Pro
+[An]   1.990.000 đ -> 199.000 đ, kho 5/5
+[An]   mở bán sau 2.9 s
+[An] > MUA NGAY 1 sản phẩm
+[An]   TỪ CHỐI: chưa mở bán, còn 1.9 s
+[An] * MỞ BÁN! 5 sản phẩm
+[An] > MUA NGAY 2 sản phẩm
+[An]   ĐẶT HÀNG OK: đơn FS00001, 398.000 đ (1.1 ms)
+[An] * An mua 2 – đơn FS00001, còn 3
+[An] * Bình mua 2 – đơn FS00002, còn 1
+[An] * Chi mua 1 – đơn FS00003, còn 0
+[An] * HẾT HÀNG sau 1.99 s mở bán
+[An]   kho: HẾT HÀNG
+
+===== B =====
+$ ../../target/release/mr6_11_flash_sale flash_sale 'Bình' 127.0.0.1 44750
+[Bình] Vào trang sale (khoa): Tai nghe không dây TWS Pro
+[Bình]   1.990.000 đ -> 199.000 đ, kho 5/5
+[Bình]   mở bán sau 2.6 s
+[Bình] * MỞ BÁN! 5 sản phẩm
+[Bình] * An mua 2 – đơn FS00001, còn 3
+[Bình] > MUA NGAY 2 sản phẩm
+[Bình]   ĐẶT HÀNG OK: đơn FS00002, 398.000 đ (1.4 ms)
+[Bình] * Bình mua 2 – đơn FS00002, còn 1
+
+===== C =====
+$ ../../target/release/mr6_11_flash_sale flash_sale Chi 127.0.0.1 44750
+[Chi] Vào trang sale (khoa): Tai nghe không dây TWS Pro
+[Chi]   1.990.000 đ -> 199.000 đ, kho 1/5
+[Chi] > MUA NGAY 2 sản phẩm
+[Chi]   TỪ CHỐI: chỉ còn 1 sản phẩm
+[Chi] > MUA NGAY 1 sản phẩm
+[Chi]   ĐẶT HÀNG OK: đơn FS00003, 199.000 đ (1.2 ms)
+[Chi] * Chi mua 1 – đơn FS00003, còn 0
+[Chi] * HẾT HÀNG sau 1.99 s mở bán
+[Chi]   kho: HẾT HÀNG
+[Chi] > MUA NGAY 1 sản phẩm
+[Chi]   TỪ CHỐI: hết hàng
+
+===== gui =====
+$ xvfb-run -a ../../target/release/mr6_11_flash_sale demo_gui 127.0.0.1 44752
+[demo] 1. Máy chủ: START SERVER (chế độ khoa)
+[demo]    An, Bình, Chi: Kết nối
+[demo] 2. Đặt lại: kho 3 sản phẩm, mở bán sau 3 s
+[demo]    An thấy: 00:00:03, nút 'CHỜ MỞ BÁN' (disabled)
+[demo]    Mở bán: An (2), Bình (1), Chi (2) CÙNG bấm MUA NGAY
+[demo]    An: Đặt hàng thành công! Đơn FS00001 – 2 sp
+[demo]    Bình: Đặt hàng thành công! Đơn FS00002 – 1 sp
+[demo]    Chi: Rất tiếc, sản phẩm đã HẾT HÀNG
+[demo]    máy chủ: 3 yc, tc 2, từ chối 1, sai phạm 0
+[demo]    Bán 3/3 sp (2 đơn), tồn 0
+[demo] 3. Máy chủ: khong_khoa, độ trễ xử lý 0–20 ms; đặt lại
+[demo]    Mở bán: An (2), Bình (1), Chi (2) CÙNG bấm MUA NGAY
+[demo]    An: Đặt hàng thành công! Đơn FS00001 – 2 sp
+[demo]    Bình: Đặt hàng thành công! Đơn FS00001 – 1 sp
+[demo]    Chi: Đặt hàng thành công! Đơn FS00001 – 2 sp
+[demo]    máy chủ: 3 yc, tc 3, từ chối 0, sai phạm 4
+[demo]      ví dụ: Chi mua 2: bán 5/3
+[demo]    Bán 5/3 sp (3 đơn), tồn 1
+[demo]    Đã ghi ket_qua_gui_tranh_chap.png (194 KB)
+[demo] 4. Máy chủ: khoa, trễ 0–1 ms, kho 100; So sánh 4 chế độ
+[demo]   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+[demo]   khong_khoa         2772     6756        0 62360   152.6
+[demo]   khoa                 67        0        0 36625   268.0
+[demo]   lac_quan             75        0      944 129919    77.4
+[demo]   hang_doi             70        0        0  1559  6350.8
+[demo]    Sai phạm: khong_khoa
+[demo]    Không sai phạm: khoa, lac_quan, hang_doi
+[demo] 5. Đặt lại: kho 100, mở bán sau 4 s
+[demo]    Chi thấy: Bắt đầu sau 00:00:03, nút 'CHỜ MỞ BÁN'
+[demo] 6. Mở bán: An mua 2; 50 người ảo cùng mua; Bình mua 2
+[demo]    An: Đặt hàng thành công! Đơn FS00001 – 2 sp
+[demo]    Bình: Đặt hàng thành công! Đơn FS00052 – 2 sp
+[demo]    máy chủ: 52 yc, tc 52, từ chối 0, sai phạm 0
+[demo]    Bán 81/100 sp (52 đơn), tồn 19
+[demo] 7. Chụp cửa sổ (Chi: lúc đếm ngược)
+[demo]    Đã ghi ket_qua_gui.png (332 KB)
+[demo] 8. Máy chủ: STOP SERVER
+[demo]    An: Mất kết nối máy chủ
+[demo] Kết thúc
+

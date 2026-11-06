@@ -8,7 +8,7 @@
     "kiem_thu": {
       "csharp": "đã chạy (bản dòng lệnh net10.0, Linux .NET 10.0.114, tools/demo.py; chạy chéo với Python cả hai chiều); ứng dụng WinForms net10.0-windows chưa chạy – cần Windows (chạy bằng tools/demo_windows.ps1 với thư mục GiaoDien), đã kiểm tra biên dịch với assembly tham chiếu WinForms"
     },
-    "ten": "Đăng ký học phần – 3 lớp × 50, 2000 sinh viên cùng bấm Đăng ký: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (khóa theo từng lớp), sổ kiểm toán đếm vượt sĩ số và đăng ký trùng, bộ mô phỏng có thiết bị thứ hai và hủy đổi ý, cổng đăng ký học phần cảnh báo đăng ký bị mất",
+    "ten": "Đăng ký học phần – 2000 sinh viên tranh 3 lớp × 50 chỗ: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa theo lớp, lạc quan phiên bản + CAS, hàng đợi một luồng), đăng ký/hủy, sổ kiểm toán (vượt sĩ số, ĐK trùng), cổng đăng ký học phần như thật, bộ mô phỏng tải có rào xuất phát và pipelining",
     "ghi_chu": "Dự án BaiMR6.10_DangKyHocPhan.csproj (dòng lệnh) và GiaoDien/BaiMR6.10_GiaoDien.csproj (WinForms, dùng chung lõi ../*.cs). Cổng 42740 (GUI 42742). Kết quả: 2000 sinh viên – khong_khoa 2012 thành công, 1850 sai phạm (vượt sĩ số 1832, ĐK trùng 18; Đã ĐK 1970/150); khoa 184, 0, 2003 yc/s; lac_quan 190, 0, 2108 xung đột, 12510 yc/s; hang_doi 189, 0, 791 yc/s. Dòng lệnh: bấm đúp -> da_dang_ky, lớp đủ, hủy rồi người khác đăng ký được. Chạy chéo: mô phỏng C# -> máy chủ Python (850 sai phạm, còn lại 0); mô phỏng Python -> máy chủ C# (850, còn lại 0); dang_ky hai chiều. Khung: bảng ô KhoTranhChap là ConcurrentDictionary (thêm ô khi đang chạy), SoKiemToan.CongSaiPham – khác MR6.6–MR6.8 C#."
   }
 ]

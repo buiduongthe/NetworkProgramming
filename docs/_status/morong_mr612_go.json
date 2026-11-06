@@ -8,7 +8,7 @@
     "kiem_thu": {
       "go": "đã chạy"
     },
-    "ten": "Chuyển khoản ngân hàng – chuyển chéo A→B và B→A trên hai ô; khóa hai tài khoản theo thứ tự mã, khóa ngây thơ gây khóa chết (phát hiện bằng hết giờ chờ khóa 2 s), so sánh-và-đổi cả hai ô, sổ kiểm toán (tổng lệch, lệch TK, thấu chi), ứng dụng ngân hàng số có thẻ tài khoản",
+    "ten": "Chuyển khoản – n người chuyển tiền chéo nhau (A→B và B→A) giữa 5–20 tài khoản: máy chủ TCP đa luồng, mỗi thao tác chạm hai tài nguyên, 4 cách xử lý tranh chấp (không khóa, khóa hai tài khoản theo thứ tự mã, lạc quan CAS hai tài khoản nguyên tử, hàng đợi một luồng), khóa ngây thơ gây khóa chết và phát hiện bằng hết thời gian chờ khóa 2 s, sổ kiểm toán (tổng lệch, lệch TK, thấu chi), ứng dụng ngân hàng số",
     "ghi_chu": "Khung chép từ MR6.6 Go, nghiệp vụ ở tranhchap/nghiepvu.go, nguoiao.go; giao diện Fyne v2.6.3 (đã chạy demo_gui dưới Xvfb, thêm ảnh ket_qua_gui_khoa_chet.png). Kết quả (500 người × 5 lần): khong_khoa 2461/837 sai phạm (tổng tiền 71,3 triệu thay vì 50 triệu), khoa 2341/0 (931 yc/s), lac_quan 811/0 (8659 xung đột), hang_doi 2324/0. Khóa ngây thơ 20 × 2: 1/40 thành công, 39 khoa_cho_lau sau 2 s; khóa theo thứ tự: 39/40 trong 0,05 s. Giao diện: An nhận 'Khóa chết: chờ TK02 quá 2 s, đã hủy giao dịch', Bình thành công; khong_khoa ba người chuyển vòng: tổng tiền lệch. Chạy chéo: mô phỏng Go -> máy chủ Python (khong_khoa 2408/928, còn lại 0; khóa ngây thơ 4/40) và mô phỏng Python -> máy chủ Go (2415/828, còn lại 0; khóa ngây thơ 1/40); khách hàng Go + Python chuyển chéo trên máy chủ Python. Đọc thêm: Kung & Robinson 1981 (ACM TODS 6(2)), Coffman và cộng sự 1971 (ACM Computing Surveys 3(2))."
   }
 ]

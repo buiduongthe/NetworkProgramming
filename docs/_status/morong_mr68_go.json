@@ -8,7 +8,7 @@
     "kiem_thu": {
       "go": "đã chạy"
     },
-    "ten": "Đặt vé xem phim – phòng chiếu 8 × 12 ghế, giữ chỗ có thời hạn (TTL) rồi thanh toán, nhả ghế; khóa theo từng ghế, goroutine nền dọn ghế quá hạn, sổ kiểm toán (ghế trùng, thanh toán sai), sơ đồ ghế trực tiếp",
+    "ten": "Đặt vé xem phim – phòng chiếu 8 × 12 ghế, giữ chỗ có thời hạn (TTL 30 s, luồng nền dọn ghế quá hạn), thanh toán, nhả ghế: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (khóa theo từng ghế, nhiều ghế khóa theo thứ tự), sổ kiểm toán đếm ghế trùng và thanh toán sai, bộ mô phỏng tải ghế nóng và nhiều ghế, ứng dụng sơ đồ ghế cập nhật trực tiếp",
     "ghi_chu": "Khung chép từ MR6.6 Go, nghiệp vụ ở tranhchap/nghiepvu.go, nguoiao.go; giao diện Fyne v2.6.3 (mô-đun gui/, biên dịch trong container như MR6.6, đã chạy demo_gui dưới Xvfb). Kết quả: 500 người giữ ghế nóng E7: khong_khoa 6 thành công, 4 sai phạm (khong_giu 4), ba chế độ kia 2/0; 300 người × 3 lần nhiều ghế: khong_khoa 156/17 (chỉ bán 89/96), khoa 156/0, 8863 yc/s (gấp ≈ 16 lần hang_doi 562 yc/s – khóa theo từng ghế chạy song song đa lõi), lac_quan 160/0 (26 xung đột), hang_doi 150/0. Giữ chỗ 3 s: An hết hạn, Bình mua E7 (S1930-E7), An thanh toán muộn bị từ chối 'không do bạn giữ', Chi 'giữ chỗ F5 đã hết hạn'. Giao diện: khong_khoa trễ 0–20 ms, 3 người cùng 'ĐÃ GIỮ E8', 2 người thấy 'Ghế E8 đã bị An lấy mất!'. Chạy chéo: mô phỏng Go -> máy chủ Python (ghế nóng khong_khoa 15/13; nhiều ghế 181/64; còn lại 0) và mô phỏng Python -> máy chủ Go (ghế nóng 4/2; nhiều ghế 161/16; còn lại 0); người đặt vé Go + Python chung máy chủ Python. Đọc thêm: Kung & Robinson 1981 (ACM TODS 6(2)), Coffman và cộng sự 1971 (ACM Computing Surveys 3(2))."
   }
 ]

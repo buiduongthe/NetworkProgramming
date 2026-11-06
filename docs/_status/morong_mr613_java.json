@@ -8,7 +8,7 @@
     "kiem_thu": {
       "java": "đã chạy"
     },
-    "ten": "Phòng chờ ảo bán vé concert – hàng nghìn người tranh 500 vé: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (ô hàng, kho, lượt), thùng token cấp lượt, chờ dài (long polling), lượt có hạn 20 s, giới hạn xử lý (qua_tai), so sánh bật/tắt phòng chờ, sổ kiểm toán (vượt vé, sai lượt, đảo số), bộ mô phỏng tải, trang bán vé Swing ba trang",
+    "ten": "Phòng chờ ảo bán 500 vé concert – xếp hàng nhận số thứ tự, cấp lượt theo thùng token (chỉnh được khi chạy), lượt có hạn 20 s, chờ dài (long polling) cho_luot, giới hạn số yêu cầu mua đang xử lý (từ chối quá tải), công tắc bật/tắt phòng chờ; 4 cách xử lý tranh chấp trên phát số thứ tự, kho vé và ô lượt; sổ kiểm toán (vượt vé, sai lượt, đảo số FIFO)",
     "ghi_chu": "Bản Java (JDK 21, chỉ thư viện chuẩn; Swing, java.awt.Robot dưới xvfb-run). Khung chép nguyên từ MR6.6 bản Java. Cổng 43770 (GUI 43772). So sánh 1000 người, 200 kết nối, phòng chờ bật 200 người/s, trễ 0–2 ms: khong_khoa 2958 thành công, 2696 sai phạm (vượt vé 1815, sai lượt 58, đảo số 823; bán 2315/500 vé); khoa 1442/0; lac_quan 1352/0, 8021 xung đột; hang_doi 1626/0. Bật/tắt phòng chờ (khoa, 1000 người): tắt 203 người mua được, 2279 lần quá tải, 482 bỏ cuộc, p99 thời gian mua 457,1 ms; bật 199 mua được, 0 quá tải, p99 39,7 ms. Dòng lệnh giống hệt Python (chen ngang 'chưa tới lượt', bấm đúp 'lượt này đã dùng để mua'). Chạy chéo: Python -> máy chủ Java (khong_khoa 2457/2077, còn lại 0; tắt 2735 quá tải / bật 0) và Java -> máy chủ Python (khong_khoa 2978/2869, còn lại 0; tắt 2716 / bật 0). Giao diện: hai tab của An ở khong_khoa cùng mua bằng một lượt -> sai lượt 1; phòng chờ 300–400 người ảo, thanh tiến trình, đồng hồ lượt; nút So sánh bật/tắt phòng chờ chạy nền trong ServerGui."
   }
 ]

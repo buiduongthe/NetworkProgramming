@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.10_DangKyHocPhan",
+    "chuong": 6,
+    "ngon_ngu": [
+      "rust"
+    ],
+    "kiem_thu": {
+      "rust": "đã chạy (Linux, Rust 1.97.0, tools/demo.py: dòng lệnh server/mo_phong/khach/<người dùng> và giao diện egui demo_gui dưới Xvfb + Mesa llvmpipe; chạy chéo với Python cả hai chiều)"
+    },
+    "ten": "Đăng ký học phần – 2000 sinh viên tranh 3 lớp × 50 chỗ: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa theo lớp, lạc quan phiên bản + CAS, hàng đợi một luồng), đăng ký/hủy, sổ kiểm toán (vượt sĩ số, ĐK trùng), cổng đăng ký học phần như thật, bộ mô phỏng tải có rào xuất phát và pipelining",
+    "ghi_chu": "Bản Rust. Gói Cargo mr6_10_dang_ky_hoc_phan (server, mo_phong, khach, dang_ky, server_gui, dang_ky_gui, demo_gui). Khung Rust chép từ MR6.6 (chung.rs, khach.rs, mo_phong.rs, server.rs, gui_chung.rs), thêm giống nhau ở MR6.9–MR6.13: KhoTranhChap::dat_o/co_o (thêm MỘT ô O(1) khi đang chạy, không chép lại bảng), MayChu::dat_mot_tham_so, CuaSoServer::xong_mo_phong là pub. Ô lop:<mã> = BTreeSet tên sinh viên; thứ tự ưu tiên người ảo xáo bằng bộ sinh ngẫu nhiên gieo theo tên. Giao diện có sửa cap_nhat cũ như commit Python 74b983b (tập cho_cap_nhat: lớp vừa có kq bỏ qua khi đối chiếu tới cap_nhat mới). Cổng 44740 (GUI 44742). Kết quả (2000 sinh viên, 200 kết nối): khong_khoa 1854 thành công / 1683 sai phạm (Đã ĐK 1799/150 chỗ), khoa 186/0 (2503 yc/s), lac_quan 188/0 (1821 xung đột, 207 hết lượt thử), hang_doi 186/0 (871 yc/s, hàng đợi max 1997). Giao diện: khong_khoa sĩ số 1, 3 người cùng 'thành công', 1 giây sau 2 cửa sổ báo 'đã bị MẤT' (sai phạm 2); khoa: 1 được, 2 'lớp đã đủ'. Chạy chéo: mô phỏng Rust -> máy chủ Python (khong_khoa 2013/1850, còn lại 0) và mô phỏng Python -> máy chủ Rust (khong_khoa 1932/1771, còn lại 0); sinh viên Python bấm đúp + sinh viên Rust 'lớp đã đủ' trên máy chủ Rust. Đọc thêm: Kung & Robinson 1981 (ACM TODS 6(2)), Coffman và cộng sự 1971 (ACM Computing Surveys 3(2))."
+  }
+]

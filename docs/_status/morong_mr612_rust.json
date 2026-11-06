@@ -1,0 +1,14 @@
+[
+  {
+    "bai": "BaiMR6.12_ChuyenKhoan",
+    "chuong": 6,
+    "ngon_ngu": [
+      "rust"
+    ],
+    "kiem_thu": {
+      "rust": "đã chạy (Linux, Rust 1.97.0, tools/demo.py: dòng lệnh server/mo_phong/khach/<người dùng> và giao diện egui demo_gui dưới Xvfb + Mesa llvmpipe; chạy chéo với Python cả hai chiều)"
+    },
+    "ten": "Chuyển khoản – n người chuyển tiền chéo nhau (A→B và B→A) giữa 5–20 tài khoản: máy chủ TCP đa luồng, mỗi thao tác chạm hai tài nguyên, 4 cách xử lý tranh chấp (không khóa, khóa hai tài khoản theo thứ tự mã, lạc quan CAS hai tài khoản nguyên tử, hàng đợi một luồng), khóa ngây thơ gây khóa chết và phát hiện bằng hết thời gian chờ khóa 2 s, sổ kiểm toán (tổng lệch, lệch TK, thấu chi), ứng dụng ngân hàng số",
+    "ghi_chu": "Bản Rust. Gói Cargo mr6_12_chuyen_khoan (server, mo_phong, khach, ngan_hang, server_gui, ngan_hang_gui, demo_gui). Khung Rust chép từ MR6.6 (chung.rs, khach.rs, mo_phong.rs, server.rs, gui_chung.rs), thêm giống nhau ở MR6.9–MR6.13: KhoTranhChap::dat_o/co_o (thêm MỘT ô O(1) khi đang chạy, không chép lại bảng), MayChu::dat_mot_tham_so, CuaSoServer::xong_mo_phong là pub; server.rs của MR6.12/6.13 thêm CO_DONG_LENH (--khoa-ngay-tho), sau_khoi_dong, lenh_rieng. Cổng 44760 (GUI 44762). Kết quả (500 người × 5 lần, 10 tài khoản): khong_khoa 2428 thành công / 820 sai phạm (tổng tiền 61.100.000 đ, lệch +11.100.000 đ), khoa 2321/0 (1412 yc/s), lac_quan 1116/0 (7555 xung đột, 1076 hết lượt thử), hang_doi 2229/0 (851 yc/s). Khóa ngây thơ 20 người × 2 lần, 5 tài khoản: 40 yc trong 4,00 s, 35 khoa_cho_lau, 'khóa chết: … (+17 vụ)'; đặt lại khóa theo thứ tự: 39/40 thành công trong 0,04 s. Giao diện: khóa ngây thơ An→Bình + Bình→An: một giao dịch 'Khóa chết: … đã hủy'; khong_khoa vòng An→Bình→Chi→An: tổng tiền lệch (sai phạm 4). Chạy chéo: mô phỏng Rust -> máy chủ Python (khong_khoa 2427/720, còn lại 0) và mô phỏng Python -> máy chủ Rust (khong_khoa 2422/784, còn lại 0); mô phỏng Python khóa ngây thơ gặp khoa_cho_lau trên máy chủ Rust; khách Python + Rust chuyển chéo. Đọc thêm: Coffman và cộng sự 1971 (ACM Computing Surveys 3(2)), Kung & Robinson 1981 (ACM TODS 6(2))."
+  }
+]

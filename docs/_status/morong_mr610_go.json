@@ -8,7 +8,7 @@
     "kiem_thu": {
       "go": "đã chạy"
     },
-    "ten": "Đăng ký học phần – 2000 sinh viên tranh 3 lớp sĩ số 50; khóa theo từng lớp, thứ tự ưu tiên theo tên, 10 % đổi ý hủy, sổ kiểm toán (vượt sĩ số, đăng ký trùng), cổng đăng ký kiểu trang đào tạo, phát hiện 'đăng ký bị MẤT'",
+    "ten": "Đăng ký học phần – 2000 sinh viên tranh 3 lớp × 50 chỗ: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa theo lớp, lạc quan phiên bản + CAS, hàng đợi một luồng), đăng ký/hủy, sổ kiểm toán (vượt sĩ số, ĐK trùng), cổng đăng ký học phần như thật, bộ mô phỏng tải có rào xuất phát và pipelining",
     "ghi_chu": "Khung chép từ MR6.6 Go, nghiệp vụ ở tranhchap/nghiepvu.go, nguoiao.go; giao diện Fyne v2.6.3 (đã chạy demo_gui dưới Xvfb), có sửa lỗi cap_nhat cũ như Python commit 74b983b (tập choCN: lớp vừa có kq được bỏ qua khi đối chiếu tới khi có cap_nhat mới). Kết quả: khong_khoa 2012 thành công / 1850 sai phạm (1969 lượt nhận cho 150 chỗ), khoa 168/0 (1775 yc/s), lac_quan 176/0 (2107 xung đột, 35 986 yc/s), hang_doi 182/0 (598 yc/s). Giao diện: khong_khoa sĩ số 1, cả ba 'thành công', hai cửa sổ báo 'đã bị MẤT'. Chạy chéo: mô phỏng Go -> máy chủ Python (khong_khoa 2009/1850, còn lại 0) và mô phỏng Python -> máy chủ Go (2013/1850, còn lại 0). Đọc thêm: Kung & Robinson 1981 (ACM TODS 6(2)), Coffman và cộng sự 1971 (ACM Computing Surveys 3(2))."
   }
 ]

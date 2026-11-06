@@ -1,0 +1,201 @@
+===== server =====
+$ ../../target/release/mr6_9_quay_so server 127.0.0.1 44730 --p 0.05
+[server] Lắng nghe 127.0.0.1:44730; chế độ khoa, trễ 0–2 ms
+[server] Đặt lại
+[server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
+[server] Đã trao hết quà sau 563 lượt
+[server] Lượt trước: khong_khoa, 6000 yc, tc 5940, sai phạm 28
+[server] Đặt lại
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Đã trao hết quà sau 1004 lượt
+[server] Lượt trước: khoa, 6000 yc, tc 5940, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: lac_quan – Lạc quan (phiên bản + CAS)
+[server] Đã trao hết quà sau 482 lượt
+[server] Lượt trước: lac_quan, 6000 yc, tc 5940, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
+[server] Đã trao hết quà sau 199 lượt
+[server] hang_doi: 6000 yc, tc 2944, từ chối 60, sai phạm 0
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 6000 yc, tc 5940, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
+[server] Đã trao hết quà sau 526 lượt
+[server] khong_khoa: 46934 yc, tc 46128, từ chối 406, sai phạm 21
+[server] Lượt trước: khong_khoa, 100000 yc, tc 99007, sai phạm 24
+[server] Đặt lại
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Đã trao hết quà sau 323 lượt
+[server] Lượt trước: khoa, 100000 yc, tc 99000, sai phạm 0
+[server] Đặt lại (so_qua=1, p=1.0)
+[server] An vào
+[server] An trúng Xe đạp
+[server] Đã trao hết quà sau 1 lượt
+[server] khoa: 1 yc, tc 1, từ chối 0, sai phạm 0
+[server] An rời
+[server] Bình vào
+[server] Bình rời
+[server] khoa: 3 yc, tc 2, từ chối 1, sai phạm 0
+[server] Tổng kết (từ lần đặt lại cuối):
+[server]   Chế độ khoa, trễ xử lý 0–2 ms
+[server]   Yêu cầu 3: thành công 2, từ chối 1
+[server]   Xung đột 0, thử lại 0, hết lượt thử 0
+[server]   Hàng đợi max 0, chờ khóa quá hạn 0
+[server]   Xử lý µs: p50 1352 p95 4239 p99 4239
+[server]   Thông lượng 4 yc/s
+[server]   Sai phạm 0: thừa quà 0, quay 2 lần 0
+[server]   Trao 1/1 quà, 2 lượt, p 1
+[server] Máy chủ đã dừng
+
+===== mp =====
+$ ../../target/release/mr6_9_quay_so mo_phong 127.0.0.1 44730 --n 6000 --so-sanh
+[mo_phong] === khong_khoa: 6000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 6000 yc xong trong 0.17 s = 35677 yc/s
+[mo_phong] Khứ hồi ms: p50 38.5 p95 120.6 p99 142.4
+[mo_phong] Thành công 5940, từ chối 60
+[mo_phong]   lý do: da_quay 60
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1130 p95 2068 p99 2841
+[mo_phong] Sai phạm 28: thừa quà 28, quay 2 lần 0
+[mo_phong]   ví dụ: Đồng hồ: u786 rồi u747
+[mo_phong]   ví dụ: Điện thoại: u310 rồi u1314
+[mo_phong] Trao 38/10 quà, 5940 lượt, p 1/20
+[mo_phong] === khoa: 6000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 6000 yc xong trong 0.15 s = 38796 yc/s
+[mo_phong] Khứ hồi ms: p50 71.2 p95 138.5 p99 146.8
+[mo_phong] Thành công 5940, từ chối 60
+[mo_phong]   lý do: da_quay 60
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1637 p95 7035 p99 17250
+[mo_phong] Sai phạm 0: thừa quà 0, quay 2 lần 0
+[mo_phong] Trao 10/10 quà, 5940 lượt, p 1/20
+[mo_phong] === lac_quan: 6000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 6000 yc xong trong 0.14 s = 43982 yc/s
+[mo_phong] Khứ hồi ms: p50 29.1 p95 68.8 p99 74.1
+[mo_phong] Thành công 5940, từ chối 60
+[mo_phong]   lý do: da_quay 60
+[mo_phong] Máy chủ: xung đột 58, thử lại 58, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1300 p95 2974 p99 4652
+[mo_phong] Sai phạm 0: thừa quà 0, quay 2 lần 0
+[mo_phong] Trao 10/10 quà, 5940 lượt, p 1/20
+[mo_phong] === hang_doi: 6000 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 6000 yc xong trong 7.06 s = 849 yc/s
+[mo_phong] Khứ hồi ms: p50 3512.1 p95 6728.7 p99 6988.2
+[mo_phong] Thành công 5940, từ chối 60
+[mo_phong]   lý do: da_quay 60
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 5990
+[mo_phong] Máy chủ xử lý µs: p50 3511905 p95 6722890 p99 6982486
+[mo_phong] Sai phạm 0: thừa quà 0, quay 2 lần 0
+[mo_phong] Trao 10/10 quà, 5940 lượt, p 1/20
+[mo_phong] Bảng so sánh (6000 người × 1 lần, 200 kết nối):
+  Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+  khong_khoa         5940       28        0 35677   142.4
+  khoa               5940        0        0 38796   146.8
+  lac_quan           5940        0       58 43982    74.1
+  hang_doi           5940        0        0   849  6988.2
+
+===== mp2 =====
+$ ../../target/release/mr6_9_quay_so mo_phong 127.0.0.1 44730 --n 100000 --k 400 --che-do khong_khoa --dat-lai
+[mo_phong] === khong_khoa: 100000 người × 1 lần, 400 kết nối ===
+[mo_phong] Rào xuất phát: 400/400 kết nối sẵn sàng -> bắn
+[mo_phong] 100000 yc xong trong 1.87 s = 53593 yc/s
+[mo_phong] Khứ hồi ms: p50 1039.4 p95 1978.1 p99 2105.0
+[mo_phong] Thành công 99007, từ chối 993
+[mo_phong]   lý do: da_quay 993
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1693 p95 33081 p99 68133
+[mo_phong] Sai phạm 24: thừa quà 17, quay 2 lần 7
+[mo_phong]   ví dụ: Điện thoại: u4007 rồi u2829
+[mo_phong]   ví dụ: Đồng hồ: u2031 rồi u69
+[mo_phong] Trao 27/10 quà, 99007 lượt, p 1/20
+
+===== mp3 =====
+$ ../../target/release/mr6_9_quay_so mo_phong 127.0.0.1 44730 --n 100000 --k 400 --che-do khoa --dat-lai
+[mo_phong] === khoa: 100000 người × 1 lần, 400 kết nối ===
+[mo_phong] Rào xuất phát: 400/400 kết nối sẵn sàng -> bắn
+[mo_phong] 100000 yc xong trong 2.42 s = 41249 yc/s
+[mo_phong] Khứ hồi ms: p50 1126.9 p95 2205.6 p99 2396.7
+[mo_phong] Thành công 99000, từ chối 1000
+[mo_phong]   lý do: da_quay 1000
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1797 p95 42742 p99 64222
+[mo_phong] Sai phạm 0: thừa quà 0, quay 2 lần 0
+[mo_phong] Trao 10/10 quà, 99000 lượt, p 1/20
+
+===== qt =====
+$ ../../target/release/mr6_9_quay_so khach 127.0.0.1 44730 dat_lai so_qua=1 p=1
+[quan_tri] > dat_lai so_qua=1 p=1
+[quan_tri] OK
+
+===== A =====
+$ ../../target/release/mr6_9_quay_so quay_so An 127.0.0.1 44730
+[An] Vào vòng quay (khoa): còn 1/1 quà, p 1
+[An] > quay
+[An]   ma_yc 1: TRÚNG Xe đạp! (4.5 ms)
+[An] * An trúng Xe đạp
+[An] * Đã trao hết quà sau 1 lượt
+[An]   còn 0/1 quà
+
+===== B =====
+$ ../../target/release/mr6_9_quay_so quay_so 'Bình' 127.0.0.1 44730
+[Bình] Vào vòng quay (khoa): còn 0/1 quà, p 1
+[Bình] > quay x2 (bấm đúp: 2 yêu cầu liền nhau)
+[Bình]   ma_yc 1: Chúc may mắn lần sau (1.6 ms)
+[Bình]   ma_yc 2: TỪ CHỐI: đã quay rồi (không trúng) (2.6 ms)
+[Bình] > gửi lại ma_yc 1
+[Bình]   (ma_yc 1, lap_lai) Chúc may mắn lần sau
+
+===== gui =====
+$ xvfb-run -a ../../target/release/mr6_9_quay_so demo_gui 127.0.0.1 44732
+[demo] 1. Máy chủ: START SERVER (chế độ khoa)
+[demo]    An, Bình, Bình (máy 2): Kết nối
+[demo] 2. Đặt lại: 1 món quà, p = 1 (lượt đầu chắc trúng)
+[demo]    An, Bình, Bình (máy 2) CÙNG bấm QUAY
+[demo]    An: CHÚC MỪNG! Bạn trúng Xe đạp
+[demo]    Bình: Chúc bạn may mắn lần sau
+[demo]    Bình (máy 2): Bạn đã quay rồi – mỗi người 1 lượt
+[demo]    máy chủ: 3 yc, tc 2, từ chối 1, sai phạm 0
+[demo]    Trao 1/1 quà, 2 lượt, p 1
+[demo] 3. Máy chủ: khong_khoa, độ trễ xử lý 0–20 ms; Đặt lại
+[demo]    An, Bình, Bình (máy 2) CÙNG bấm QUAY
+[demo]    An: CHÚC MỪNG! Bạn trúng Xe đạp
+[demo]    Bình: CHÚC MỪNG! Bạn trúng Xe đạp
+[demo]    Bình (máy 2): CHÚC MỪNG! Bạn trúng Xe đạp
+[demo]    máy chủ: 3 yc, tc 3, từ chối 0, sai phạm 3
+[demo]      ví dụ: Bình quay lần 2
+[demo]      ví dụ: Xe đạp: Bình rồi Bình
+[demo]    Trao 3/1 quà, 3 lượt, p 1
+[demo]    Đã ghi ket_qua_gui_tranh_chap.png (213 KB)
+[demo] 4. Máy chủ: khoa, trễ 0–2 ms; 10 quà, p = 0.05 (1/20);
+[demo]    So sánh 4 chế độ, 10000 người
+[demo]   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+[demo]   khong_khoa         9900       18        0 33735   377.4
+[demo]   khoa               9900        0        0 30544   301.2
+[demo]   lac_quan           9900        0       48 25629   332.4
+[demo]   hang_doi           9900        0        0   747 13277.4
+[demo]    Sai phạm: khong_khoa
+[demo]    Không sai phạm: khoa, lac_quan, hang_doi
+[demo] 5. Đặt lại: 10 quà, p = 0.8; An quay, rồi Bình quay
+[demo]    Bình (máy 2) bấm QUAY
+[demo]    An: CHÚC MỪNG! Bạn trúng Loa
+[demo]    Bình: CHÚC MỪNG! Bạn trúng Máy ảnh
+[demo]    Bình (máy 2): Bạn đã quay rồi – mỗi người 1 lượt
+[demo] 6. Bắn đồng loạt 500 người (chế độ khoa)
+[demo]    máy chủ: 503 yc, tc 497, từ chối 6, sai phạm 0
+[demo]    Trao 10/10 quà, 497 lượt, p 0.8
+[demo]    Người trúng gần nhất (cửa sổ An):
+[demo]      08:04:20 u165   Tai nghe
+[demo]      08:04:20 u158   Nồi cơm điện
+[demo]      08:04:20 u129   Ba lô
+[demo]      08:04:20 u128   Đồng hồ
+[demo] 7. Chụp 4 cửa sổ
+[demo]    Đã ghi ket_qua_gui.png (569 KB)
+[demo] 8. Máy chủ: STOP SERVER
+[demo]    An: Mất kết nối máy chủ
+[demo] Kết thúc
+

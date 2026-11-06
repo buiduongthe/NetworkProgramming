@@ -8,7 +8,7 @@
     "kiem_thu": {
       "csharp": "đã chạy (bản dòng lệnh net10.0, Linux .NET 10.0.114, tools/demo.py; chạy chéo với Python cả hai chiều); ứng dụng WinForms net10.0-windows chưa chạy – cần Windows (chạy bằng tools/demo_windows.ps1 với thư mục GiaoDien), đã kiểm tra biên dịch với assembly tham chiếu WinForms"
     },
-    "ten": "Flash sale – kho 100, mở bán lúc T, 10 000 người cùng bấm MUA NGAY: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp trên một ô tồn kho, kiểm tra giờ mở bán và hết hàng nhanh ngoài vùng găng, sổ kiểm toán đếm tồn âm và lệch sổ, trang flash sale có đồng hồ đếm ngược",
+    "ten": "Flash sale – 10 000 người cùng bấm MUA NGAY cho kho 100 sản phẩm: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa, lạc quan phiên bản + CAS, hàng đợi một luồng), đếm ngược mở bán, kiểm tra hết hàng nhanh không khóa, sổ kiểm toán (tồn âm, lệch sổ), trang flash sale như thật, bộ mô phỏng tải có rào xuất phát và pipelining",
     "ghi_chu": "Dự án BaiMR6.11_FlashSale.csproj (dòng lệnh) và GiaoDien/BaiMR6.11_GiaoDien.csproj (WinForms, dùng chung lõi ../*.cs). Cổng 42750 (GUI 42752). Kết quả: 10 000 người, trễ 0–1 ms – khong_khoa 6233 đơn, 15355 sai phạm (tồn âm 6164, lệch sổ 9191); khoa 67 đơn, 0, 12118 yc/s; lac_quan 65, 0, 308 xung đột, 33233 yc/s; hang_doi 65, 0, 1530 yc/s, p99 6455 ms. Dòng lệnh: bấm sớm chua_mo, khong_du, hết hàng sau 2.10 s. Chạy chéo: mô phỏng C# -> máy chủ Python (12259 sai phạm, còn lại 0); mô phỏng Python -> máy chủ C# (7614, còn lại 0); flash_sale hai chiều. Khung: bảng ô KhoTranhChap là ConcurrentDictionary (thêm ô khi đang chạy), SoKiemToan.CongSaiPham – khác MR6.6–MR6.8 C#."
   }
 ]

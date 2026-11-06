@@ -8,7 +8,7 @@
     "kiem_thu": {
       "go": "đã chạy"
     },
-    "ten": "Quay số trúng thưởng – 10 món quà, 100 000 lượt quay trên 400 kết nối; mỗi người quay đúng 1 lần (idempotency theo tên), rút thăm ngoài vùng găng, khóa theo tài nguyên (ô kho quà + ô từng người), sổ kiểm toán (thừa quà, quay 2 lần), vòng quay may mắn quay và dừng đúng ô kết quả",
+    "ten": "Quay số trúng thưởng – 100 000 lượt quay tranh 10 món quà: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa theo tài nguyên, lạc quan phiên bản + CAS, hàng đợi một luồng), mỗi người quay 1 lần (idempotency theo tên và theo ma_yc), sổ kiểm toán, vòng quay may mắn hoạt hình, bộ mô phỏng tải 100 000 người trên 400 kết nối",
     "ghi_chu": "Khung chép từ MR6.6 Go, nghiệp vụ ở tranhchap/nghiepvu.go, nguoiao.go; giao diện Fyne v2.6.3 (mô-đun gui/, thêm golang.org/x/image/font/opentype để vẽ chữ xoay trên bánh xe; biên dịch trong container như MR6.6, đã chạy demo_gui dưới Xvfb). Kết quả (p = 1/20): 6000 người khong_khoa 5961 thành công / 71 sai phạm (trao 60/10 quà), khoa 5940/0 (52 054 yc/s), lac_quan 5940/0 (62 xung đột), hang_doi 5940/0 (603 yc/s); 100 000 người × 400 kết nối: khong_khoa 48 sai phạm (trao 31/10) trong 2,43 s, khoa 0 trong 2,66 s. Bình bấm đúp: lần hai 'đã quay rồi', gui_lai 1 nhận lap_lai. Giao diện: khong_khoa trễ 0–20 ms, 1 quà: nhiều người cùng trúng Xe đạp. Chạy chéo: mô phỏng Go -> máy chủ Python (khong_khoa 15 sai phạm, còn lại 0) và mô phỏng Python -> máy chủ Go (khong_khoa 33, còn lại 0); người quay Go + Python chung máy chủ Python. Đọc thêm: Kung & Robinson 1981 (ACM TODS 6(2)), Coffman và cộng sự 1971 (ACM Computing Surveys 3(2))."
   }
 ]

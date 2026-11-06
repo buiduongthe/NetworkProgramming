@@ -8,7 +8,7 @@
     "kiem_thu": {
       "java": "đã chạy"
     },
-    "ten": "Quay số trúng thưởng – 100 000 lượt quay tranh 10 món quà: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa theo tài nguyên, lạc quan phiên bản + CAS, hàng đợi một luồng), mỗi người quay 1 lần (idempotency theo tên và theo ma_yc), sổ kiểm toán, vòng quay may mắn hoạt hình Swing, bộ mô phỏng tải 100 000 người trên 400 kết nối",
+    "ten": "Quay số trúng thưởng – 100 000 lượt quay tranh 10 món quà: máy chủ TCP đa luồng, 4 cách xử lý tranh chấp (không khóa, khóa theo tài nguyên, lạc quan phiên bản + CAS, hàng đợi một luồng), mỗi người quay 1 lần (idempotency theo tên và theo ma_yc), sổ kiểm toán, vòng quay may mắn hoạt hình, bộ mô phỏng tải 100 000 người trên 400 kết nối",
     "ghi_chu": "Bản Java (JDK 21, chỉ thư viện chuẩn; Swing, java.awt.Robot dưới xvfb-run). Khung chép nguyên từ MR6.6 bản Java. Cổng 43730 (GUI 43732). So sánh 6000 người, 200 kết nối, p = 1/20, trễ 0–2 ms: khong_khoa 5941 thành công, 10 sai phạm (thừa quà 9, quay 2 lần 1; trao 19/10 quà); khoa 5940/0, 30762 yc/s; lac_quan 5940/0, 28 xung đột, 38514 yc/s; hang_doi 5940/0, 843 yc/s. 100 000 người trên 400 kết nối: khong_khoa 54610 yc/s, trao 15/10 quà (thừa quà 5); khoa 98853 yc/s, 0 sai phạm; 1000 thiết bị thứ hai bị từ chối da_quay. Đọc ô qua bằng kho.doc (không chụp cả kho) – bản đầu dùng anhChup chỉ đạt khoảng 3300 yc/s. Dòng lệnh: bấm đúp -> 'đã quay rồi', gui_lai ma_yc -> lap_lai (dòng in giống hệt Python). Chạy chéo: Python -> máy chủ Java (khong_khoa 2971/8, còn lại 0) và Java -> máy chủ Python (khong_khoa 2970/50, còn lại 0). Giao diện: khong_khoa + trễ 0–20 ms, 1 quà p = 1, cả ba cửa sổ cùng trúng Xe đạp (sai phạm 3); khoa: đúng một người trúng, thiết bị thứ hai bị từ chối."
   }
 ]
