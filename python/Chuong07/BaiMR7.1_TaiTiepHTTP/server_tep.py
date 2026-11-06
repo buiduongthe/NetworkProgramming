@@ -14,7 +14,19 @@ import hashlib
 import itertools
 import re
 import socket
+import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+
+class MayChuHTTP(ThreadingHTTPServer):
+    """ThreadingHTTPServer không in traceback khi client đóng ngang (Windows: đóng socket còn dữ liệu chưa đọc -> RST
+    -> ConnectionResetError/ConnectionAbortedError; mặc định http.server in cả traceback ra màn hình)."""
+
+    def handle_error(self, request, client_address):
+        if isinstance(sys.exc_info()[1], ConnectionError):
+            return
+        super().handle_error(request, client_address)
+
 
 OPTS = None
 DATA = b""
@@ -106,7 +118,7 @@ def main():
     SHA = hashlib.sha256(DATA).hexdigest()
     ETAG = f'"{SHA[:16]}"'
     cuts_left = OPTS.so_lan_cat
-    srv = ThreadingHTTPServer((OPTS.host, OPTS.port), Handler)
+    srv = MayChuHTTP((OPTS.host, OPTS.port), Handler)
     log(f"http://{OPTS.host}:{OPTS.port}/tep.bin, {len(DATA)} byte, ETag {ETAG}")
     try:
         srv.serve_forever()

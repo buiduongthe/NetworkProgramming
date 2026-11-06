@@ -103,6 +103,8 @@ class PhongAmThanh:
         """Mở socket và chạy 3 luồng nền; lỗi (cổng bận…) ném OSError cho cửa sổ báo."""
         srv = socket.create_server((host, cong_tcp))
         udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        if hasattr(socket, "SIO_UDP_CONNRESET"):   # Windows: tắt lỗi 10054 ở recvfrom (ICMP cổng đóng)
+            udp.ioctl(socket.SIO_UDP_CONNRESET, False)
         try:
             udp.bind((host, cong_udp))
         except OSError:

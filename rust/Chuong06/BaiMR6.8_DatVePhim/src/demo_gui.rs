@@ -270,6 +270,7 @@ impl DemoApp {
 
 impl eframe::App for DemoApp {
     fn update(&mut self, ctx: &egui::Context, _: &mut eframe::Frame) {
+        vua_man_hinh(ctx, 1900.0, 1400.0);
         self.ppp = ctx.pixels_per_point();
         self.chup.nhan(ctx);
         // ---- vẽ 4 cửa sổ con (vị trí tính theo kích thước thật của khung lần vẽ trước)
@@ -351,4 +352,21 @@ pub fn run(args: &[String]) {
     .unwrap_or_else(|e| log(&format!("Không mở được cửa sổ: {e}")));
     log("Kết thúc");
     std::process::exit(0);
+}
+
+/// Màn hình thật (Windows) thấp hơn khung demo dựng cho Xvfb 2600×1700: thu nhỏ toàn bộ giao diện (zoom) một lần
+/// cho vừa màn hình, để ảnh chụp đủ các cửa sổ con. Màn hình đủ lớn (Xvfb) thì giữ nguyên.
+fn vua_man_hinh(ctx: &egui::Context, rong: f32, cao: f32) {
+    let id = egui::Id::new("da_vua_man_hinh");
+    if ctx.data(|d| d.get_temp::<bool>(id)).is_some() {
+        return;
+    }
+    let Some(m) = ctx.input(|i| i.viewport().monitor_size) else { return };
+    let z0 = ctx.zoom_factor();
+    let z = ((m.y * z0 - 90.0) / cao).min((m.x * z0 - 20.0) / rong).min(1.0);
+    ctx.data_mut(|d| d.insert_temp(id, true));
+    if z < 0.999 {
+        ctx.set_zoom_factor(z);
+        ctx.send_viewport_cmd(egui::ViewportCommand::OuterPosition(egui::pos2(0.0, 0.0)));
+    }
 }

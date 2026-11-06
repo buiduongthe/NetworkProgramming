@@ -299,6 +299,8 @@ def main():
     cong_udp = int(sys.argv[3]) if len(sys.argv) > 3 else 41621
     srv = socket.create_server((host, cong_tcp))
     udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    if hasattr(socket, "SIO_UDP_CONNRESET"):   # Windows: tắt lỗi 10054 ở recvfrom (ICMP cổng đóng)
+        udp.ioctl(socket.SIO_UDP_CONNRESET, False)
     udp.bind((host, cong_udp))
     log(f"Điều khiển: TCP {host}:{cong_tcp}; âm thanh RTP: UDP {host}:{cong_udp}")
     log(f"PCM 16 bit mono 16 kHz; khung {KHUNG_MS} ms = {MAU_MOI_KHUNG} mẫu = {BYTE_MOI_KHUNG} B")

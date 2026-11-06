@@ -350,6 +350,8 @@ def main():
     cong_udp = int(sys.argv[3]) if len(sys.argv) > 3 else 41631
     srv = socket.create_server((host, cong_tcp))
     udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    if hasattr(socket, "SIO_UDP_CONNRESET"):   # Windows: tắt lỗi 10054 ở recvfrom (ICMP cổng đóng)
+        udp.ioctl(socket.SIO_UDP_CONNRESET, False)
     udp.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 1 << 20)   # đệm nhận lớn: mảnh đến dồn dập
     udp.bind((host, cong_udp))
     log(f"TCP {host}:{cong_tcp} điều khiển; UDP :{cong_udp} video")

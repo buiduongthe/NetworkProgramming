@@ -94,6 +94,8 @@ def main():
     log(f"Vào phòng, mã {ma}; {mo_ta} {RONG}x{CAO}, {a.fps} fps")
 
     udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    if hasattr(socket, "SIO_UDP_CONNRESET"):   # Windows: tắt lỗi 10054 ở recvfrom (ICMP cổng đóng)
+        udp.ioctl(socket.SIO_UDP_CONNRESET, False)
     udp.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 1 << 20)
     udp.connect((a.host, chao["cong_udp"]))                  # chỉ nhận datagram từ server
 

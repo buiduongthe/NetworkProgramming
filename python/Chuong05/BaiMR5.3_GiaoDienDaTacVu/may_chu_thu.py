@@ -16,6 +16,17 @@ import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
+
+class MayChuHTTP(ThreadingHTTPServer):
+    """ThreadingHTTPServer không in traceback khi client đóng ngang (Windows: đóng socket còn dữ liệu chưa đọc -> RST
+    -> ConnectionResetError/ConnectionAbortedError; mặc định http.server in cả traceback ra màn hình)."""
+
+    def handle_error(self, request, client_address):
+        if isinstance(sys.exc_info()[1], ConnectionError):
+            return
+        super().handle_error(request, client_address)
+
+
 CHUNK = 16 * 1024
 NAMES = {"router.lab": ("10.10.0.1", 100), "may-in.lab": ("10.10.0.21", 250),
          "camera-1.lab": ("10.10.0.31", 400), "nas.lab": ("10.10.0.40", 150)}
@@ -82,7 +93,7 @@ def open_port(host, port):
 
 def main():
     host, port = sys.argv[1], int(sys.argv[2])
-    httpd = ThreadingHTTPServer((host, port), FileHandler)
+    httpd = MayChuHTTP((host, port), FileHandler)
     threading.Thread(target=dns_server, args=(host, port), daemon=True).start()
     for p in (port + 1, port + 2):
         threading.Thread(target=open_port, args=(host, p), daemon=True).start()

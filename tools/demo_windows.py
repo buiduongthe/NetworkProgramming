@@ -209,7 +209,7 @@ def chuyen(cmd):
                     dung_san=ten)
     if c in ('sh', 'bash'):
         raise ValueError(f'lệnh {c} chưa có bản Windows – khai báo "cmd_windows" trong demo.json')
-    argv = [sys.executable if la_python(c) else c] + cmd[1:]
+    argv = [sys.executable if la_python(c) else c] + [sys.executable if a == 'python3' else a for a in cmd[1:]]
     argv = [argv[0]] + [them_exe(a) for a in argv[1:]]
     argv[0] = them_exe(argv[0])
     if os.path.basename(argv[0]) in ('java', 'java.exe'):    # Java ghi ra tệp theo bảng mã của hệ thống
@@ -275,6 +275,58 @@ def tim_lenh(c, cwd):
     return None
 
 
+def goi_y_mo_dun(txt):
+    """Gợi ý cài mô-đun Python còn thiếu (ModuleNotFoundError trong nhật ký)."""
+    kq = []
+    for m in sorted(set(re.findall(r"No module named '([\w.]+)'", txt))):
+        goc = m.split('.')[0]
+        kq.append(f'thiếu mô-đun Python {goc} (cài: py -3 -m pip install --user {GOI_PIP.get(goc, goc)})')
+    return kq
+
+
+def exe_cargo(argv, cwd):
+    """`cargo run [--release] [-q] [--bin X] [-- đối số]` -> [tệp .exe đã biên dịch, đối số...] nếu tệp đã có và mới hơn
+    mã nguồn. Trên Windows tệp .exe đang chạy bị khóa, nên `cargo run` thứ hai (client) trong khi `cargo run` thứ nhất
+    (server) còn chạy báo "failed to remove file ... Access is denied"."""
+    a = argv[2:]
+    doi_so = a[a.index('--') + 1:] if '--' in a else []
+    tuy = a[:a.index('--')] if '--' in a else a
+    ten = tuy[tuy.index('--bin') + 1] if '--bin' in tuy else None
+    if ten is None:
+        try:
+            m = re.search(r'^\[package\][^\[]*?^name\s*=\s*"([^"]+)"', open(os.path.join(cwd, 'Cargo.toml'),
+                          encoding='utf-8').read(), re.M | re.S)
+            ten = m.group(1) if m else None
+        except OSError:
+            return None
+    if not ten:
+        return None
+    hoso = 'release' if '--release' in tuy or '-r' in tuy else 'debug'
+    d = cwd
+    while True:                                   # thư mục target gần nhất (rust/.cargo/config.toml dùng target chung)
+        exe = os.path.join(d, 'target', hoso, ten + '.exe')
+        if os.path.isfile(exe):
+            break
+        if os.path.dirname(d) == d:
+            return None
+        d = os.path.dirname(d)
+    t = os.path.getmtime(exe)
+    for p in glob.glob(os.path.join(cwd, 'src', '**', '*.rs'), recursive=True) + [os.path.join(cwd, 'Cargo.toml')]:
+        if os.path.getmtime(p) > t:
+            return None                           # mã nguồn mới hơn: để cargo run biên dịch lại
+    return [exe] + doi_so
+
+
+def cho_san_sang(proc, duong_log, wait):
+    """Tiến trình nền: chờ nó in dòng đầu tiên (thường là "đang lắng nghe…") – tối đa 20 s, vì trên Windows lần chạy đầu
+    chậm hơn (go run/cargo run biên dịch, Windows Defender quét tệp .exe mới) – rồi chờ thêm `wait` giây như kịch bản."""
+    co_ban = os.path.getsize(duong_log)
+    han = time.time() + 20
+    while time.time() < han and proc.poll() is None and os.path.getsize(duong_log) <= co_ban:
+        time.sleep(0.1)
+    time.sleep(wait)
+
+
 # ------------------------------------------------------------------------------------------------ chạy lệnh
 class ChayBai:
     def __init__(self, thu_muc, env):
@@ -288,6 +340,8 @@ class ChayBai:
         if exe is None:
             raise FileNotFoundError(lenh.argv[0])
         argv = [exe] + lenh.argv[1:]
+        if LA_WINDOWS and os.path.basename(lenh.argv[0]) in ('cargo', 'cargo.exe') and lenh.argv[1:2] == ['run']:
+            argv = exe_cargo(lenh.argv, cwd) or argv
         stdin = subprocess.PIPE if stdin_text is not None else subprocess.DEVNULL
         if LA_WINDOWS:
             proc = subprocess.Popen([sys.executable, '-c', KHOI_CHAY, json.dumps({'cmd': argv, 'cwd': cwd})],
@@ -507,7 +561,9 @@ def _chay(spec, thu_muc, cwd, env, setup, ds, rel):
             ma = chay.chay_cho(l, f, None, cwd, 900)
             if ma != 0:
                 f.close()
-                return 'LỖI', f'bước chuẩn bị {" ".join(l.argv)} (mã {ma}) – xem {os.path.relpath(log_setup, GOC)}', []
+                goi_y = goi_y_mo_dun(open(log_setup, encoding='utf-8', errors='replace').read())
+                return 'LỖI', (f'bước chuẩn bị {" ".join(l.argv)} (mã {ma}) – xem {os.path.relpath(log_setup, GOC)}'
+                               + (', ' + ', '.join(goi_y) if goi_y else '')), []
     os.remove(log_setup)
     logs, mo = {}, []
     try:
@@ -523,7 +579,7 @@ def _chay(spec, thu_muc, cwd, env, setup, ds, rel):
                 proc = chay.mo(ls[0], f, p.get('stdin'), cwd, dong_stdin=False)
                 chay.nen[ten] = proc
                 mo.append((proc, f))
-                time.sleep(p.get('wait', 1.0))
+                cho_san_sang(proc, f.name, p.get('wait', 1.0))
             else:
                 for i, l in enumerate(ls):
                     ma = chay.chay_cho(l, f, p.get('stdin') if i == 0 else None, cwd, p.get('timeout', 30))
@@ -563,12 +619,11 @@ def _chay(spec, thu_muc, cwd, env, setup, ds, rel):
     txt = open(ra_txt, encoding='utf-8').read()
     canh_bao = []
     for mau in ('Traceback (most recent call last)', 'Unhandled exception', 'Exception in thread', 'panicked at',
-                'Address already in use', 'Hết thời gian chờ', 'Kịch bản chờ quá lâu'):
+                'Address already in use', '[demo] Hết thời gian chờ, dừng tiến trình', 'Kịch bản chờ quá lâu',
+                'Python was not found', 'is not recognized as an internal or external command'):
         if mau in txt:
             canh_bao.append(mau)
-    for m in sorted(set(re.findall(r"No module named '([\w.]+)'", txt))):   # gợi ý cài mô-đun Python còn thiếu
-        goc = m.split('.')[0]
-        canh_bao.append(f'thiếu mô-đun Python {goc} (cài: py -3 -m pip install --user {GOI_PIP.get(goc, goc)})')
+    canh_bao += goi_y_mo_dun(txt)
     return ('ĐÃ CHẠY' if not canh_bao else 'CẦN XEM'), ', '.join(canh_bao), moi
 
 
@@ -598,7 +653,28 @@ def khop(d, mau):
     return ten.split('_')[0] in ('Bai' + m, m, 'Bai' + m.removeprefix('Bai'))
 
 
+def lan_truoc_chua_dat():
+    """Các bài mà bảng tóm tắt gần nhất trong _log/demo_windows ghi khác ĐÃ CHẠY/ĐÃ CÓ (để chạy lại)."""
+    ds = sorted(glob.glob(os.path.join(LOG_DIR, 'tom_tat_*.txt')))
+    kq = set()
+    if ds:
+        for dong in open(ds[-1], encoding='utf-8').read().splitlines():
+            m = re.match(r'(CẦN XEM|LỖI|BỎ QUA)\s+(\S+)$', dong.strip())
+            if m:
+                kq.add(os.path.normcase(os.path.normpath(m.group(2))))
+    return kq
+
+
+CHUA_DAT = None
+
+
 def da_chay(d):
+    """Đã có kết quả Windows mới hơn mã nguồn, và lần chạy gần nhất không báo CẦN XEM / LỖI / BỎ QUA."""
+    global CHUA_DAT
+    if CHUA_DAT is None:
+        CHUA_DAT = lan_truoc_chua_dat()
+    if os.path.normcase(os.path.normpath(os.path.relpath(d, GOC))) in CHUA_DAT:
+        return False
     kq = os.path.join(d, 'ket_qua' + DUOI + '.txt')
     if not os.path.exists(kq):
         return False
@@ -614,7 +690,8 @@ def main():
     ap = argparse.ArgumentParser(description='Chạy demo.json trên Windows, lưu kết quả *_windows.*')
     ap.add_argument('muc', nargs='*', help='ngôn ngữ, thư mục (vd java\\Chuong03) hoặc mã bài (vd MR6.6, Bai3.1)')
     ap.add_argument('--ngon-ngu', help='chỉ các ngôn ngữ này, cách nhau dấu phẩy')
-    ap.add_argument('--bo-qua-da-chay', action='store_true', help='bỏ bài đã có ket_qua_windows.txt mới hơn mã nguồn')
+    ap.add_argument('--bo-qua-da-chay', action='store_true',
+                    help='bỏ bài đã có ket_qua_windows.txt mới hơn mã nguồn (trừ bài lần trước CẦN XEM/LỖI/BỎ QUA)')
     ap.add_argument('--khong-gui', action='store_true', help='bỏ các tiến trình giao diện')
     ap.add_argument('--chi-gui', action='store_true', help='chỉ các bài có giao diện')
     ap.add_argument('--tu', help='bắt đầu từ bài này (tiếp tục lần chạy trước)')

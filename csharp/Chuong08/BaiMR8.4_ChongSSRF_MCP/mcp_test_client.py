@@ -21,6 +21,17 @@ import sys
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
+
+class MayChuHTTP(ThreadingHTTPServer):
+    """ThreadingHTTPServer không in traceback khi client đóng ngang (Windows: đóng socket còn dữ liệu chưa đọc -> RST
+    -> ConnectionResetError/ConnectionAbortedError; mặc định http.server in cả traceback ra màn hình)."""
+
+    def handle_error(self, request, client_address):
+        if isinstance(sys.exc_info()[1], ConnectionError):
+            return
+        super().handle_error(request, client_address)
+
+
 BI_MAT = "SECRET_TOKEN=ABCD-1234-NOI-BO-KHONG-DUOC-LO"
 META_IP = "169.254.169.254"                              # IP siêu dữ liệu đám mây (ánh xạ về META)
 PUB_IP = "203.0.113.10"                                  # "công khai" (TEST-NET-3, ánh xạ về PUB)
@@ -78,7 +89,7 @@ def main():
     # Dựng ba server cục bộ.
     servers = []
     for kind, port in (("meta", meta_port), ("pub", pub_port), ("redir", redir_port)):
-        srv = ThreadingHTTPServer(("127.0.0.1", port), make_handler(kind))
+        srv = MayChuHTTP(("127.0.0.1", port), make_handler(kind))
         threading.Thread(target=srv.serve_forever, daemon=True).start()
         servers.append(srv)
     print(f"[client] Dựng META:127.0.0.1:{meta_port} (giữ bí mật), "

@@ -3,16 +3,16 @@ $ ../../target/release/mr6_6_dau_gia server 127.0.0.1 44700
 [server] Lắng nghe 127.0.0.1:44700; chế độ khoa, trễ 0–2 ms
 [server] Đặt lại (thoi_gian_s=0.0)
 [server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
-[server] Lượt trước: khong_khoa, 2500 yc, tc 394, sai phạm 353
+[server] Lượt trước: khong_khoa, 2500 yc, tc 508, sai phạm 476
 [server] Đặt lại (thoi_gian_s=0.0)
 [server] Chế độ: khoa – Khóa loại trừ (mutex)
-[server] Lượt trước: khoa, 2500 yc, tc 15, sai phạm 0
+[server] Lượt trước: khoa, 2500 yc, tc 20, sai phạm 0
 [server] Đặt lại (thoi_gian_s=0.0)
 [server] Chế độ: lac_quan – Lạc quan (phiên bản + CAS)
-[server] Lượt trước: lac_quan, 2500 yc, tc 66, sai phạm 0
+[server] Lượt trước: lac_quan, 2500 yc, tc 46, sai phạm 0
 [server] Đặt lại (thoi_gian_s=0.0)
 [server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
-[server] hang_doi: 1294 yc, tc 6, từ chối 789, sai phạm 0
+[server] hang_doi: 1431 yc, tc 6, từ chối 925, sai phạm 0
 [server] Chế độ: khoa – Khóa loại trừ (mutex)
 [server] Lượt trước: khoa, 2500 yc, tc 15, sai phạm 0
 [server] Đặt lại (thoi_gian_s=5.0, gia_han_s=3.0)
@@ -31,7 +31,7 @@ $ ../../target/release/mr6_6_dau_gia server 127.0.0.1 44700
 [server]   Yêu cầu 5: thành công 4, từ chối 1
 [server]   Xung đột 0, thử lại 0, hết lượt thử 0
 [server]   Hàng đợi max 0, chờ khóa quá hạn 0
-[server]   Xử lý µs: p50 604 p95 1790 p99 1790
+[server]   Xử lý µs: p50 1379 p95 1992 p99 1992
 [server]   Thông lượng 1 yc/s
 [server]   Sai phạm 0: giá thấp hơn 0, giá cuối sai 0
 [server]   Giá cuối 5.500.000 đ, thắng An
@@ -41,52 +41,52 @@ $ ../../target/release/mr6_6_dau_gia server 127.0.0.1 44700
 $ ../../target/release/mr6_6_dau_gia mo_phong 127.0.0.1 44700 --n 500 --so-sanh
 [mo_phong] === khong_khoa: 500 người × 5 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
-[mo_phong] 2500 yc xong trong 0.09 s = 27508 yc/s
-[mo_phong] Khứ hồi ms: p50 6.6 p95 44.3 p99 54.1
-[mo_phong] Thành công 394, từ chối 2106
-[mo_phong]   lý do: gia_thap 2106
+[mo_phong] 2500 yc xong trong 0.07 s = 37856 yc/s
+[mo_phong] Khứ hồi ms: p50 5.8 p95 27.3 p99 32.6
+[mo_phong] Thành công 508, từ chối 1992
+[mo_phong]   lý do: gia_thap 1992
 [mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
-[mo_phong] Máy chủ xử lý µs: p50 1809 p95 22995 p99 46499
-[mo_phong] Sai phạm 353: giá thấp hơn 353, giá cuối sai 0
-[mo_phong]   ví dụ: u154 5.100.000 đ sau 5.300.000 đ
-[mo_phong]   ví dụ: u38 5.200.000 đ sau 5.300.000 đ
-[mo_phong] Giá cuối 11.400.000 đ, dẫn đầu u500
+[mo_phong] Máy chủ xử lý µs: p50 1725 p95 16768 p99 26529
+[mo_phong] Sai phạm 476: giá thấp hơn 475, giá cuối sai 1
+[mo_phong]   ví dụ: u81 5.200.000 đ sau 5.300.000 đ
+[mo_phong]   ví dụ: u10 5.300.000 đ sau 5.300.000 đ
+[mo_phong] Giá cuối 10.300.000 đ, dẫn đầu u495
 [mo_phong] === khoa: 500 người × 5 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
-[mo_phong] 2500 yc xong trong 2.95 s = 848 yc/s
-[mo_phong] Khứ hồi ms: p50 479.9 p95 725.1 p99 731.5
-[mo_phong] Thành công 15, từ chối 2485
-[mo_phong]   lý do: gia_thap 2485
+[mo_phong] 2500 yc xong trong 2.86 s = 875 yc/s
+[mo_phong] Khứ hồi ms: p50 460.6 p95 692.6 p99 697.8
+[mo_phong] Thành công 20, từ chối 2480
+[mo_phong]   lý do: gia_thap 2480
 [mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
-[mo_phong] Máy chủ xử lý µs: p50 233074 p95 248793 p99 251550
+[mo_phong] Máy chủ xử lý µs: p50 221921 p95 240030 p99 244409
 [mo_phong] Sai phạm 0: giá thấp hơn 0, giá cuối sai 0
-[mo_phong] Giá cuối 7.100.000 đ, dẫn đầu u443
+[mo_phong] Giá cuối 7.100.000 đ, dẫn đầu u401
 [mo_phong] === lac_quan: 500 người × 5 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
-[mo_phong] 2500 yc xong trong 0.10 s = 24878 yc/s
-[mo_phong] Khứ hồi ms: p50 5.0 p95 58.8 p99 69.4
-[mo_phong] Thành công 66, từ chối 2434
-[mo_phong]   lý do: gia_thap 2434
-[mo_phong] Máy chủ: xung đột 182, thử lại 182, hàng đợi max 0
-[mo_phong] Máy chủ xử lý µs: p50 1523 p95 5171 p99 52799
+[mo_phong] 2500 yc xong trong 0.03 s = 99831 yc/s
+[mo_phong] Khứ hồi ms: p50 3.7 p95 9.2 p99 16.7
+[mo_phong] Thành công 46, từ chối 2454
+[mo_phong]   lý do: gia_thap 2454
+[mo_phong] Máy chủ: xung đột 178, thử lại 178, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1162 p95 2600 p99 3852
 [mo_phong] Sai phạm 0: giá thấp hơn 0, giá cuối sai 0
-[mo_phong] Giá cuối 13.700.000 đ, dẫn đầu u410
+[mo_phong] Giá cuối 10.200.000 đ, dẫn đầu u432
 [mo_phong] === hang_doi: 500 người × 5 lần, 200 kết nối ===
 [mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
 [mo_phong] 2500 yc xong trong 2.80 s = 892 yc/s
-[mo_phong] Khứ hồi ms: p50 557.5 p95 567.9 p99 571.3
+[mo_phong] Khứ hồi ms: p50 554.1 p95 569.4 p99 576.0
 [mo_phong] Thành công 15, từ chối 2485
 [mo_phong]   lý do: gia_thap 2485
 [mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 499
-[mo_phong] Máy chủ xử lý µs: p50 557316 p95 567687 p99 570855
+[mo_phong] Máy chủ xử lý µs: p50 553947 p95 569346 p99 575892
 [mo_phong] Sai phạm 0: giá thấp hơn 0, giá cuối sai 0
-[mo_phong] Giá cuối 6.600.000 đ, dẫn đầu u456
+[mo_phong] Giá cuối 6.800.000 đ, dẫn đầu u144
 [mo_phong] Bảng so sánh (500 người × 5 lần, 200 kết nối):
   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
-  khong_khoa          394      353        0 27508    54.1
-  khoa                 15        0        0   848   731.5
-  lac_quan             66        0      182 24878    69.4
-  hang_doi             15        0        0   892   571.3
+  khong_khoa          508      476        0 37856    32.6
+  khoa                 20        0        0   875   697.8
+  lac_quan             46        0      178 99831    16.7
+  hang_doi             15        0        0   892   576.0
 
 ===== qt =====
 $ ../../target/release/mr6_6_dau_gia khach 127.0.0.1 44700 dat_lai thoi_gian_s=5 gia_han_s=3
@@ -99,13 +99,13 @@ $ ../../target/release/mr6_6_dau_gia dau_gia An 127.0.0.1 44700 --thoi-gian 11
 [An]   giá 5.000.000 đ, bước 100.000 đ, còn 4.9 s
 [An] Giá mới 5.200.000 đ – Bình dẫn đầu
 [An] > trả 5.300.000 đ (+1 bước)
-[An]   CHẤP NHẬN (1.2 ms)
+[An]   CHẤP NHẬN (2.2 ms)
 [An] Giá mới 5.300.000 đ – An dẫn đầu
 [An] * Gia hạn: Bình trả giá phút cuối, còn 3 s
 [An] Giá mới 5.400.000 đ – Bình dẫn đầu
 [An]   Bạn bị trả giá cao hơn!
 [An] > trả 5.500.000 đ (+1 bước)
-[An]   CHẤP NHẬN (2.1 ms), phiên được GIA HẠN
+[An]   CHẤP NHẬN (1.2 ms), phiên được GIA HẠN
 [An] * Gia hạn: An trả giá phút cuối, còn 3 s
 [An] Giá mới 5.500.000 đ – An dẫn đầu
 [An] * Kết thúc phiên: An thắng với 5.500.000 đ
@@ -116,12 +116,12 @@ $ ../../target/release/mr6_6_dau_gia dau_gia 'Bình' 127.0.0.1 44700 --thoi-gian
 [Bình] Vào phòng: Bình gốm hoa lam (khoa)
 [Bình]   giá 5.000.000 đ, bước 100.000 đ, còn 4.6 s
 [Bình] > trả 5.200.000 đ (+2 bước)
-[Bình]   CHẤP NHẬN (0.8 ms)
+[Bình]   CHẤP NHẬN (2.2 ms)
 [Bình] Giá mới 5.200.000 đ – Bình dẫn đầu
 [Bình] Giá mới 5.300.000 đ – An dẫn đầu
 [Bình]   Bạn bị trả giá cao hơn!
 [Bình] > trả 5.400.000 đ (+1 bước)
-[Bình]   CHẤP NHẬN (0.8 ms), phiên được GIA HẠN
+[Bình]   CHẤP NHẬN (1.5 ms), phiên được GIA HẠN
 [Bình] * Gia hạn: Bình trả giá phút cuối, còn 3 s
 [Bình] Giá mới 5.400.000 đ – Bình dẫn đầu
 [Bình] * Gia hạn: An trả giá phút cuối, còn 3 s
@@ -138,43 +138,43 @@ $ xvfb-run -a ../../target/release/mr6_6_dau_gia demo_gui 127.0.0.1 44702
 [demo]    An, Bình, Chi: Kết nối
 [demo] 2. An bấm '+1 bước'
 [demo] 3. Bình và Chi CÙNG bấm '+1 bước' (cùng giá)
-[demo]    An: Bạn bị trả giá cao hơn! (Bình)
-[demo]    Bình: Bạn đang dẫn đầu
-[demo]    Chi: Bị từ chối: giá đã thay đổi
+[demo]    An: Bạn bị trả giá cao hơn! (Chi)
+[demo]    Bình: Bị từ chối: giá đã thay đổi
+[demo]    Chi: Bạn đang dẫn đầu
 [demo]    máy chủ: 3 yc, tc 2, từ chối 1, sai phạm 0
 [demo] 4. Máy chủ: khong_khoa, độ trễ xử lý 0–20 ms (CSDL chậm)
 [demo]    An, Bình, Chi CÙNG bấm '+1 bước'
-[demo]    An: Bạn bị trả giá cao hơn! (Bình)
-[demo]    Bình: Bạn đang dẫn đầu
-[demo]    Chi: Bạn bị trả giá cao hơn! (Bình)
+[demo]    An: Bạn bị trả giá cao hơn! (Chi)
+[demo]    Bình: Bạn bị trả giá cao hơn! (Chi)
+[demo]    Chi: Bạn đang dẫn đầu
 [demo]    máy chủ: 6 yc, tc 5, từ chối 1, sai phạm 3
-[demo]      ví dụ: Chi 5.300.000 đ sau 5.300.000 đ
 [demo]      ví dụ: Bình 5.300.000 đ sau 5.300.000 đ
+[demo]      ví dụ: Chi 5.300.000 đ sau 5.300.000 đ
 [demo]    Lịch sử trả giá (mới nhất trước):
-[demo]      08:55:51 Bình  5.300.000 đ
-[demo]      08:55:51 Chi   5.300.000 đ
-[demo]      08:55:51 An    5.300.000 đ
-[demo]      08:55:49 Bình  5.200.000 đ
-[demo]    Đã ghi ket_qua_gui_tranh_chap.png (202 KB)
+[demo]      12:23:49 Chi   5.300.000 đ
+[demo]      12:23:49 Bình  5.300.000 đ
+[demo]      12:23:49 An    5.300.000 đ
+[demo]      12:23:47 Chi   5.200.000 đ
+[demo]    Đã ghi ket_qua_gui_tranh_chap.png (205 KB)
 [demo] 5. Máy chủ: khoa, trễ 0–2 ms; So sánh 4 chế độ
 [demo]   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
-[demo]   khong_khoa          373      328        0 23436    94.4
-[demo]   khoa                 15        0        0   766   822.3
-[demo]   lac_quan             48        0      125 20850    77.0
-[demo]   hang_doi             13        0        0   846   613.7
+[demo]   khong_khoa          509      481        0 33018    30.2
+[demo]   khoa                 19        0        0   791   800.2
+[demo]   lac_quan             43        0      103 30809    33.5
+[demo]   hang_doi             12        0        0   875   603.3
 [demo]    Sai phạm: khong_khoa
 [demo]    Không sai phạm: khoa, lac_quan, hang_doi
 [demo] 6. Đặt lại: phiên 8 s, gia hạn 4 s; An '+1 bước'
-[demo]    Bình '+2 bước' khi còn 00:02.8
+[demo]    Bình '+2 bước' khi còn 00:02.9
 [demo]    -> đồng hồ An: 00:03.6 GIA HẠN!
 [demo] 7. An '+1 bước' khi còn 00:00.9
-[demo]    -> đồng hồ Bình: 00:03.5 GIA HẠN!
+[demo]    -> đồng hồ Bình: 00:03.6 GIA HẠN!
 [demo]    An: BẠN THẮNG! 5.400.000 đ
 [demo]    Bình: Kết thúc – An thắng
 [demo]    Chi: Kết thúc – An thắng
 [demo]    máy chủ: Giá cuối 5.400.000 đ, thắng An
 [demo] 8. Chụp 4 cửa sổ
-[demo]    Đã ghi ket_qua_gui.png (325 KB)
+[demo]    Đã ghi ket_qua_gui.png (323 KB)
 [demo] 9. Máy chủ: STOP SERVER
 [demo]    Bình: Mất kết nối máy chủ
 [demo] Kết thúc

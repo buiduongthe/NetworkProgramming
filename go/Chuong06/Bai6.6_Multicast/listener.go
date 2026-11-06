@@ -16,6 +16,7 @@ import (
 	"os/signal"
 	"strings"
 	"sync"
+	"syscall"
 	"time"
 )
 
@@ -78,6 +79,11 @@ func listener(cache *Cache, runMs int, mport int) {
 		fail("[listener] Không tham gia được nhóm: " + err.Error())
 	}
 	defer conn.Close()
+	// Go đặt IP_MULTICAST_LOOP = 0 cho socket này. Trên Windows tùy chọn ấy áp dụng ở phía NHẬN nên listener không
+	// thấy gói của announcer chạy cùng máy; bật lại (trên Linux nó chỉ ảnh hưởng phía gửi nên bật lại vô hại).
+	if rc, e := conn.SyscallConn(); e == nil {
+		rc.Control(func(fd uintptr) { _ = setsockoptInt(fd, syscall.IPPROTO_IP, syscall.IP_MULTICAST_LOOP, 1) })
+	}
 	fmt.Printf("[listener] Tham gia nhóm %s, nghe cổng %d\n", GROUP, mport)
 	end := time.Now().Add(time.Duration(runMs) * time.Millisecond)
 	if runMs > 0 {

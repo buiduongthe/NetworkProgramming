@@ -91,8 +91,15 @@ final class Chung {
     /** Đồng hồ đơn điệu (giây) – như time.monotonic() của Python. */
     static double bayGio() { return (System.nanoTime() - T0) / 1e9; }
 
-    /** Ngủ s giây (dưới 1 ms vẫn chính xác nhờ LockSupport.parkNanos). */
-    static void ngu(double s) { if (s > 0) LockSupport.parkNanos((long) (s * 1e9)); }
+    /** Ngủ s giây, chính xác cả với độ trễ dưới 1 ms. Windows: đồng hồ ngủ của hệ điều hành mặc định ~15,6 ms nên
+     *  parkNanos(1 ms) thường ngủ 2–16 ms; phần cuối (2 ms) chờ bận bằng System.nanoTime + Thread.yield. */
+    static void ngu(double s) {
+        if (s <= 0) return;
+        long den = System.nanoTime() + (long) (s * 1e9);
+        long con = den - System.nanoTime();
+        if (con > 3_000_000L) LockSupport.parkNanos(con - 2_000_000L);
+        while (System.nanoTime() < den) Thread.yield();
+    }
 
     static String f(String mau, Object... thamSo) { return String.format(Locale.ROOT, mau, thamSo); }
 

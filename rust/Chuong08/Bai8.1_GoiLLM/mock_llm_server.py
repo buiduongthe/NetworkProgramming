@@ -16,7 +16,19 @@ import argparse
 import json
 import threading
 import time
+import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+
+class MayChuHTTP(ThreadingHTTPServer):
+    """ThreadingHTTPServer không in traceback khi client đóng ngang (Windows: đóng socket còn dữ liệu chưa đọc -> RST
+    -> ConnectionResetError/ConnectionAbortedError; mặc định http.server in cả traceback ra màn hình)."""
+
+    def handle_error(self, request, client_address):
+        if isinstance(sys.exc_info()[1], ConnectionError):
+            return
+        super().handle_error(request, client_address)
+
 
 ANSWER = ("TCP là giao thức hướng kết nối, tin cậy và giữ đúng thứ tự; "
           "UDP không kết nối, nhẹ và nhanh hơn nhưng không bảo đảm dữ liệu tới nơi.")
@@ -122,7 +134,7 @@ def main():
     ap.add_argument("--retry-after", type=int, default=1, help="giá trị Retry-After (giây)")
     ap.add_argument("--cut-request", type=int, default=0, help="thứ tự yêu cầu bị ngắt giữa luồng")
     OPTS = ap.parse_args()
-    srv = ThreadingHTTPServer((OPTS.host, OPTS.port), Handler)
+    srv = MayChuHTTP((OPTS.host, OPTS.port), Handler)
     log(f"Server giả lập LLM tại http://{OPTS.host}:{OPTS.port}/v1 "
         f"(fail-first={OPTS.fail_first}, cut-request={OPTS.cut_request})")
     try:

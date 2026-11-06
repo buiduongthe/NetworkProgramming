@@ -150,7 +150,11 @@ func chupCuaSo(ds []fyne.Window) []image.Image {
 	var kq []image.Image
 	for _, w := range ds {
 		if !dungImport {
-			kq = append(kq, w.Canvas().Capture())
+			// Capture phải chạy trên luồng giao diện: gọi từ goroutine khác, OpenGL (WGL trên Windows) báo
+			// "Failed to make context current" và ảnh ra màu nền trống.
+			var anh image.Image
+			fyne.DoAndWait(func() { anh = w.Canvas().Capture() })
+			kq = append(kq, anh)
 			continue
 		}
 		fyne.DoAndWait(func() {

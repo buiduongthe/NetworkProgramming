@@ -74,7 +74,20 @@ pub fn bay_gio() -> f64 {
     T0.elapsed().as_secs_f64()
 }
 
+/// Ngủ `giay` giây. Windows: đồng hồ hệ thống mặc định ~15,6 ms làm `thread::sleep(1 ms)` ngủ tới 15 ms (độ trễ giả
+/// lập 0–1 ms thành 0–15 ms); lần gọi đầu xin độ phân giải 1 ms bằng `timeBeginPeriod(1)` (winmm) như bản C#.
 pub fn ngu(giay: f64) {
+    #[cfg(windows)]
+    {
+        #[link(name = "winmm")]
+        extern "system" {
+            fn timeBeginPeriod(u: u32) -> u32;
+        }
+        static MOT_LAN: std::sync::Once = std::sync::Once::new();
+        MOT_LAN.call_once(|| unsafe {
+            timeBeginPeriod(1);
+        });
+    }
     if giay > 0.0 {
         thread::sleep(Duration::from_secs_f64(giay));
     }

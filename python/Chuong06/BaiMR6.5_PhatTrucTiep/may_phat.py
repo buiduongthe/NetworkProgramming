@@ -66,6 +66,8 @@ class MayPhat:
                 raise OSError("server không trả lời 'chao'")
             tcp.settimeout(None)
             udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            if hasattr(socket, "SIO_UDP_CONNRESET"):   # Windows: tắt lỗi 10054 ở recvfrom (ICMP cổng đóng)
+                udp.ioctl(socket.SIO_UDP_CONNRESET, False)
             udp.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 1 << 20)
             udp.connect((host, tl["cong_udp"]))
         except (OSError, ValueError, KeyError) as e:

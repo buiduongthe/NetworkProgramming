@@ -18,6 +18,17 @@ import sys
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
+
+class MayChuHTTP(ThreadingHTTPServer):
+    """ThreadingHTTPServer không in traceback khi client đóng ngang (Windows: đóng socket còn dữ liệu chưa đọc -> RST
+    -> ConnectionResetError/ConnectionAbortedError; mặc định http.server in cả traceback ra màn hình)."""
+
+    def handle_error(self, request, client_address):
+        if isinstance(sys.exc_info()[1], ConnectionError):
+            return
+        super().handle_error(request, client_address)
+
+
 counter = 0
 lock = threading.Lock()
 
@@ -124,7 +135,7 @@ class Handler(BaseHTTPRequestHandler):
 def main():
     host = sys.argv[1] if len(sys.argv) > 1 else "127.0.0.1"
     port = int(sys.argv[2]) if len(sys.argv) > 2 else 9000
-    srv = ThreadingHTTPServer((host, port), Handler)
+    srv = MayChuHTTP((host, port), Handler)
     log(f"LLM giả lập (gọi công cụ) tại http://{host}:{port}/v1")
     try:
         srv.serve_forever()
