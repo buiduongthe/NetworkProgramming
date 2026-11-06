@@ -61,7 +61,7 @@ Giá mỗi chặng là **giá minh họa** (giường 220.000 / 130.000 / 170.00
 - `tranhchap/`: khung chung (như MR6.6) + `nghiepvu.go` (trạm, giá chặng, `BoTri(loaiXe)` – sơ đồ hai loại xe dùng chung cho máy chủ và giao diện; `MayChuDatVeXe`: giữ chỗ, thanh toán, nhả theo đoạn, dọn ô quá hạn trong `dinhKy`, số thứ tự lần ghi, `GheNong()`; luật sổ kiểm toán), `nguoiao.go` (`nguCanh`: ô bận theo những gì kết nối biết, chọn đoạn và chỗ trống; `nguoiAo`: lần đầu giữ ghế nóng cho đoạn ngẫu nhiên, giữ được thì thanh toán, bị từ chối thì đổi đoạn và chỗ; `ThamSoDatLai = {}`).
 - `main.go` (lệnh con `server`, `mo_phong`, `khach`, `dat_ve_xe`), `chung_cli.go`, `server.go` (tùy chọn `--ttl`, `--loai-xe`, `--ghe-nong`), `dat_ve_xe.go` (người đặt vé dòng lệnh, lệnh `xem` in sơ đồ xe theo chặng).
 - `gui/`: `chung_gui.go`, `ve.go` (khung chung), `server_gui.go`, `dat_ve_xe_gui.go` (`soDoXe`: sơ đồ xe vẽ thành ảnh, dùng ở cả hai cửa sổ; băng rôn nhà xe, thanh tuyến), `demo_gui.go`, `main.go`.
-- `demo.json`, `ket_qua.txt`, `ket_qua.png`: kịch bản và kết quả thực thi thật; `*_windows.*`: kết quả chạy trên Windows (gồm cả giao diện).
+- `demo.json`, `ket_qua.txt`, `ket_qua.png`: kịch bản và kết quả thực thi thật.
 
 ## Cách chạy
 Chạy trong thư mục bài (Go 1.24+):
@@ -80,13 +80,11 @@ out/app dat_ve_xe An 127.0.0.1 9000                            # gõ: giu SG DL 
 Muốn tái lập kết quả, chạy từ thư mục gốc của kho: `python3 tools/demo.py go/Chuong06/BaiMR6.14_DatVeXeKhach` (cổng 41785, giao diện 41787).
 
 ## Ứng dụng giao diện
-![Ứng dụng giao diện](ket_qua_gui_windows.png)
+![Ứng dụng giao diện](ket_qua_gui.png)
 
-Ảnh trên là lần chạy thật của `demo_gui` trên Windows (Fyne v2.6.3): bảng điều khiển máy chủ (trên trái), An (trên phải), Bình và Chi (dưới), cùng các bước với `demo_gui.py` của bản Python: xe giường nằm, `khoa`: An và Bình cùng giữ D01 Sài Gòn → Đà Lạt, Chi giữ D01 Đà Lạt → Nha Trang – một trong hai người đầu và Chi giữ được, hai người thanh toán; `khong_khoa`, trễ 0–20 ms: cả ba cùng giữ D02 Sài Gòn → Nha Trang → SAI PHẠM; So sánh 4 chế độ; đặt lại thành xe ghế 50 chỗ, giữ chỗ 6 s: An giữ 05, 06 Sài Gòn → Bảo Lộc rồi hết hạn, Bình mua 05, 06 Sài Gòn → Đà Lạt, Chi mua 05 Đà Lạt → Nha Trang, An giữ 10, 11, Chi chọn 21.
+*(Ảnh `ket_qua_gui.png` và `ket_qua_gui_tranh_chap.png` do `demo_gui` tự chụp khi chạy; máy dựng kho không tải được mô-đun Fyne nên bản trong kho chưa có ảnh Linux.)*
 
-![Tranh chấp với người dùng thật](ket_qua_gui_tranh_chap_windows.png)
-
-Ở bước `khong_khoa`, cả ba cùng nhận "ĐÃ GIỮ D02"; bản cập nhật kế tiếp cho thấy D02 thuộc một người ở cả 3 chặng, hai người kia thấy "Chỗ D02 đã bị … lấy mất!", ô **SAI PHẠM** chuyển đỏ (trùng chỗ 6 = 2 người bị đè × 3 chặng).
+Kịch bản `demo_gui` (cùng các bước và dòng `[demo] …` như `demo_gui.py` của bản Python): xe giường nằm, `khoa`: An và Bình cùng giữ D01 Sài Gòn → Đà Lạt, Chi giữ D01 Đà Lạt → Nha Trang – một trong hai người đầu và Chi giữ được, hai người thanh toán (cùng một giường bán hai vé); `khong_khoa`, trễ 0–20 ms: cả ba cùng giữ D02 Sài Gòn → Nha Trang → máy chủ trả lời "ĐÃ GIỮ" cho cả ba, sau `cap_nhat` hai người thấy "Chỗ D02 đã bị … lấy mất!" → SAI PHẠM (trùng chỗ 6 = 2 người bị đè × 3 chặng), chụp `ket_qua_gui_tranh_chap.png`; `khoa`: So sánh 4 chế độ; đặt lại thành xe ghế 50 chỗ, giữ chỗ 6 s: An giữ 05, 06 Sài Gòn → Bảo Lộc rồi hết hạn, Bình mua 05, 06 Sài Gòn → Đà Lạt, Chi mua 05 Đà Lạt → Nha Trang, An giữ 10, 11, Chi chọn 21; chụp 4 cửa sổ thành `ket_qua_gui.png`; STOP SERVER.
 
 - **Máy chủ** (`server_gui`): phần chung giống MR6.6; **tài nguyên**: sơ đồ xe thu nhỏ (mỗi chỗ có dải 3 vạch theo chặng, ghế nóng viền đỏ), số ô trống – đang giữ – đã bán, số chỗ đã bán theo từng chặng, ghế nóng đang thuộc ai ở chặng nào, ô **Giữ chỗ (s)**, **Loại xe** (`giuong`/`ghe`), **Ghế nóng** và nút **Đặt lại**.
 - **Đặt vé** (`dat_ve_xe_gui`): băng rôn nhà xe (tên, chuyến, loại xe, thời hạn giữ chỗ); chọn **Đi từ** và **Đến**, thanh tuyến 4 trạm tô đoạn đã chọn kèm giá từng chặng; **sơ đồ xe** có vô lăng ở đầu xe (xe giường: tầng dưới, tầng trên đặt cạnh nhau; xe ghế: lối đi giữa, hàng cuối 6 ghế); màu theo đoạn đang chọn: **trống**, **đang chọn**, **người khác giữ**, **đã bán**, **bạn giữ**, **vé của bạn**, kèm chú giải và **dải vạch theo chặng** ở chân mỗi chỗ; bấm chỗ để chọn/bỏ chọn (tối đa 6); "Chỗ đã chọn", tạm tính theo đoạn; nút **GIỮ CHỖ**; **đồng hồ giữ chỗ** đếm ngược (đỏ khi còn dưới 10 s); nút **THANH TOÁN** ghi tổng tiền; nút **Nhả chỗ**; khi đang giữ chỗ thì khóa ô chọn đoạn; dòng thông báo; "Vé của bạn" (chỗ và đoạn, ví dụ `05 SG→DL`). Sơ đồ đổi ngay khi người khác giữ hoặc mua (≤ 10 cập nhật/giây).
@@ -112,7 +110,7 @@ out/app_gui dat_ve_xe_gui Bình 127.0.0.1 41787
 - `tu`/`den` phải là số nguyên JSON (như `isinstance(x, int)` của Python): `2.0` bị từ chối `sai_du_lieu` ở mọi ngôn ngữ. Đổi chế độ hoặc đặt lại (kể cả đổi loại xe) đi qua cổng `TamDung` của khung.
 - Ở tình huống nhiều chỗ, `khong_khoa` kết thúc với "Bán 105/120 chỗ-chặng, giữ 12, sổ 79 vé": 12 ô bị "giữ mồ côi" bởi những người đã bị đè (họ thanh toán thì bị từ chối), và các ô này chỉ trống lại sau 30 s. Ba chế độ đúng bán được 115–120/120 chỗ-chặng (95–99 vé).
 - Tham số đặt lại của bộ mô phỏng rỗng: `--so-sanh` đặt lại sơ đồ xe mà vẫn giữ loại xe, thời hạn và ghế nóng hiện tại của máy chủ.
-- Kiểm thử: Linux, Go 1.24.7 (bản dòng lệnh); giao diện Fyne biên dịch và chạy trên Windows (ảnh `*_windows.png`; trong máy dựng kho không tải được mô-đun Fyne nên bản Linux chưa có ảnh giao diện).
+- Kiểm thử: Linux, Go 1.24.7 (bản dòng lệnh); giao diện Fyne biên dịch và chạy trên Windows (trong máy dựng kho không tải được mô-đun Fyne nên bản Linux chưa có ảnh giao diện).
 
 ## Bài tập gợi ý
 1. Đo số vé bán được cho giường nóng D01 khi máy chủ coi **cả giường là một ô** (sửa `khoiTao` để mỗi chỗ chỉ có ô `D01#0`, và `oYC` luôn là ô đó). So với cách chia theo chặng, nhà xe mất bao nhiêu doanh thu trong tình huống 300 người × 3 lần?

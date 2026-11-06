@@ -63,7 +63,7 @@ Giá mỗi chặng là **giá minh họa** (giường 220.000 / 130.000 / 170.00
 - `MoPhong.cs`: bộ mô phỏng tải; phần NGHIỆP VỤ là `NguCanh` (ô bận theo những gì kết nối biết, chọn đoạn và chỗ trống ngẫu nhiên), `NguoiAo` (lần đầu giữ ghế nóng cho một đoạn ngẫu nhiên, giữ được thì thanh toán, bị từ chối thì đổi đoạn và chỗ).
 - `DatVeXe.cs`: người đặt vé dòng lệnh (`giu SG DL D01`, `tt`, `nha`, `xem`, `thoat`). `Program.cs`: chọn vai trò `server | mo_phong | khach | dat_ve_xe`.
 - `GiaoDien/`: dự án WinForms `BaiMR6.14_GiaoDien.csproj` (dùng chung lõi ở thư mục cha): `GiaoDienChung.cs`, `FormServer.cs` (sơ đồ xe thu nhỏ, ghế nóng viền đỏ, số chỗ bán theo chặng), `FormDatVeXe.cs` (lớp `SoDoXe` vẽ xe bằng GDI+, dùng ở cả hai cửa sổ; băng rôn nhà xe, chọn đoạn, thanh tuyến, đồng hồ giữ chỗ), `DemoGui.cs`, `Program.cs`, `demo.json`.
-- `demo.json`, `ket_qua.txt`, `ket_qua.png`: kịch bản và kết quả thực thi thật; `*_windows.*`: kết quả chạy trên Windows.
+- `demo.json`, `ket_qua.txt`, `ket_qua.png`: kịch bản và kết quả thực thi thật.
 
 ## Cách chạy
 Cần .NET 10 SDK. Chạy trong thư mục bài:
@@ -81,13 +81,11 @@ dotnet run -c Release -- dat_ve_xe An 127.0.0.1 9000                    # gõ gi
 - Tái lập kết quả, từ thư mục gốc của kho: `python3 tools/demo.py csharp/Chuong06/BaiMR6.14_DatVeXeKhach` (cổng 42780).
 
 ## Ứng dụng giao diện
-![Ứng dụng giao diện](ket_qua_gui_windows.png)
+![Ứng dụng giao diện](ket_qua_gui.png)
 
-Ảnh trên là lần chạy thật của vai trò `demo` trên Windows (WinForms): bảng điều khiển máy chủ (trên trái), An (trên phải), Bình và Chi (dưới), cùng các bước với `demo_gui.py` của bản Python: xe giường nằm, `khoa`: An và Bình cùng giữ D01 Sài Gòn → Đà Lạt, Chi giữ D01 Đà Lạt → Nha Trang – một trong hai người đầu và Chi giữ được, hai người thanh toán; `khong_khoa`, trễ 0–20 ms: cả ba cùng giữ D02 Sài Gòn → Nha Trang → SAI PHẠM; So sánh 4 chế độ; đặt lại thành xe ghế 50 chỗ, giữ chỗ 6 s: An giữ 05, 06 Sài Gòn → Bảo Lộc rồi hết hạn, Bình mua 05, 06 Sài Gòn → Đà Lạt, Chi mua 05 Đà Lạt → Nha Trang, An giữ 10, 11, Chi chọn 21.
+*(Ảnh `ket_qua_gui.png` và `ket_qua_gui_tranh_chap.png` do vai trò `demo` tự chụp khi chạy trên Windows – WinForms không chạy trên Linux nên bản trong kho chưa có ảnh.)*
 
-![Tranh chấp với người dùng thật](ket_qua_gui_tranh_chap_windows.png)
-
-Ở bước `khong_khoa`, cả ba cùng nhận "ĐÃ GIỮ D02"; bản cập nhật kế tiếp cho thấy D02 thuộc một người ở cả 3 chặng, hai người kia thấy "Chỗ D02 đã bị … lấy mất!", ô **SAI PHẠM** chuyển đỏ (trùng chỗ 6 = 2 người bị đè × 3 chặng).
+Kịch bản `demo` (cùng các bước và dòng `[demo] …` như `demo_gui.py` của bản Python): xe giường nằm, `khoa`: An và Bình cùng giữ D01 Sài Gòn → Đà Lạt, Chi giữ D01 Đà Lạt → Nha Trang – một trong hai người đầu và Chi giữ được, hai người thanh toán (cùng một giường bán hai vé); `khong_khoa`, trễ 0–20 ms: cả ba cùng giữ D02 Sài Gòn → Nha Trang → máy chủ trả lời "ĐÃ GIỮ" cho cả ba, sau `cap_nhat` hai người thấy "Chỗ D02 đã bị … lấy mất!" → SAI PHẠM (trùng chỗ 6 = 2 người bị đè × 3 chặng), chụp `ket_qua_gui_tranh_chap.png`; `khoa`: So sánh 4 chế độ; đặt lại thành xe ghế 50 chỗ, giữ chỗ 6 s: An giữ 05, 06 Sài Gòn → Bảo Lộc rồi hết hạn, Bình mua 05, 06 Sài Gòn → Đà Lạt, Chi mua 05 Đà Lạt → Nha Trang, An giữ 10, 11, Chi chọn 21; chụp 4 cửa sổ thành `ket_qua_gui.png`; STOP SERVER.
 
 - **Máy chủ** (`server_gui`): phần chung giống MR6.6; **tài nguyên**: sơ đồ xe thu nhỏ (mỗi chỗ có dải 3 vạch theo chặng, ghế nóng viền đỏ), số ô trống – đang giữ – đã bán, số chỗ đã bán theo từng chặng, ghế nóng đang thuộc ai ở chặng nào, ô **Giữ chỗ (s)**, **Loại xe** (`giuong`/`ghe`), **Ghế nóng** và nút **Đặt lại**.
 - **Đặt vé** (`dat_ve_xe_gui`): băng rôn nhà xe (tên, chuyến, loại xe, thời hạn giữ chỗ); chọn **Đi từ** và **Đến**, thanh tuyến 4 trạm tô đoạn đã chọn kèm giá từng chặng; **sơ đồ xe** có vô lăng ở đầu xe (xe giường: tầng dưới, tầng trên đặt cạnh nhau; xe ghế: lối đi giữa, hàng cuối 6 ghế); màu theo đoạn đang chọn: **trống**, **đang chọn**, **người khác giữ**, **đã bán**, **bạn giữ**, **vé của bạn**, kèm chú giải và **dải vạch theo chặng** ở chân mỗi chỗ; bấm chỗ để chọn/bỏ chọn (tối đa 6); "Chỗ đã chọn", tạm tính theo đoạn; nút **GIỮ CHỖ**; **đồng hồ giữ chỗ** đếm ngược (đỏ khi còn dưới 10 s); nút **THANH TOÁN** ghi tổng tiền; nút **Nhả chỗ**; khi đang giữ chỗ thì khóa ô chọn đoạn; dòng thông báo; "Vé của bạn" (chỗ và đoạn, ví dụ `05 SG→DL`). Sơ đồ đổi ngay khi người khác giữ hoặc mua (≤ 10 cập nhật/giây).
@@ -114,7 +112,7 @@ dotnet run -c Release -- dat_ve_xe_gui Bình 127.0.0.1 42782
 - Giá trị mỗi ô là record bất biến `ChoChang`, mỗi lần ghi thay nguyên đối tượng, nên luồng đọc để hiển thị (`TrangThaiNghiepVu`) không bao giờ thấy một ô "nửa giữ nửa bán". Khi đặt lại sang loại xe khác, bảng ô cũ còn được đọc tới lúc bảng mới xong; ô chưa có được coi là trống.
 - Ở tình huống nhiều chỗ, `khong_khoa` kết thúc với "Bán 109/120 chỗ-chặng, giữ 9, sổ 92 vé": 9 ô bị "giữ mồ côi" bởi những người đã bị đè (họ thanh toán thì bị từ chối), và các ô này chỉ trống lại sau 30 s. Ba chế độ đúng bán được 117–120/120 chỗ-chặng (91–96 vé).
 - Tham số đặt lại của bộ mô phỏng rỗng: `--so-sanh` đặt lại sơ đồ xe mà vẫn giữ loại xe, thời hạn và ghế nóng hiện tại của máy chủ.
-- Kiểm thử: bản dòng lệnh chạy trên Linux (.NET 10.0.114) và Windows; ứng dụng WinForms biên dịch được với assembly tham chiếu WinForms trên Linux và chạy thật trên Windows (ảnh `*_windows.png`).
+- Kiểm thử: bản dòng lệnh chạy trên Linux (.NET 10.0.114) và Windows; ứng dụng WinForms biên dịch được với assembly tham chiếu WinForms trên Linux và chạy thật trên Windows.
 
 ## Bài tập gợi ý
 1. Đo số vé bán được cho giường nóng D01 khi máy chủ coi **cả giường là một ô** (sửa `KhoiTao` để mỗi chỗ chỉ có ô `D01#0`, và `oYC` luôn là ô đó). So với cách chia theo chặng, nhà xe mất bao nhiêu doanh thu trong tình huống 300 người × 3 lần?

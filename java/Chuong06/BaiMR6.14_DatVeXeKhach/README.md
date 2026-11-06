@@ -63,7 +63,7 @@ Giá mỗi chặng là **giá minh họa** (giường 220.000 / 130.000 / 170.00
 - `MoPhong.java`: bộ mô phỏng tải; phần NGHIỆP VỤ là `NguCanh` (ô bận theo những gì kết nối biết, chọn đoạn và chỗ trống ngẫu nhiên), `NguoiAo` (lần đầu giữ ghế nóng cho một đoạn ngẫu nhiên, giữ được thì thanh toán, bị từ chối thì đổi đoạn và chỗ), `thamSoDatLai()` = {}.
 - `DatVeXe.java`: người đặt vé bản dòng lệnh (lệnh `xem` in sơ đồ xe theo từng chặng).
 - `ServerGui.java`: bảng điều khiển máy chủ; `DatVeXeGui.java`: ứng dụng đặt vé (lớp `SoDoXe` vẽ xe, dùng ở cả hai cửa sổ); `DemoGui.java`: kịch bản tự bấm.
-- `demo.json`, `ket_qua.txt`, `ket_qua.png`, `ket_qua_gui.png`, `ket_qua_gui_tranh_chap.png`: kịch bản và kết quả thực thi thật; `*_windows.*`: kết quả chạy trên Windows.
+- `demo.json`, `ket_qua.txt`, `ket_qua.png`, `ket_qua_gui.png`, `ket_qua_gui_tranh_chap.png`: kịch bản và kết quả thực thi thật.
 
 ## Cách chạy
 Trong thư mục bài (cần JDK 21):
@@ -115,7 +115,7 @@ java -cp out DatVeXeGui Bình 127.0.0.1 43782
 - Ở tình huống nhiều chỗ, `khong_khoa` kết thúc với "Bán 112/120 chỗ-chặng, giữ 8, sổ 94 vé": 8 ô bị "giữ mồ côi" bởi những người đã bị đè (họ thanh toán thì bị từ chối), và các ô này chỉ trống lại sau 30 s. Ba chế độ đúng bán được 117–120/120 chỗ-chặng (93–107 vé).
 - Tham số đặt lại của bộ mô phỏng rỗng: `--so-sanh` đặt lại sơ đồ xe mà vẫn giữ loại xe, thời hạn và ghế nóng hiện tại của máy chủ.
 - Trong kịch bản giao diện, máy chủ, bộ mô phỏng và cửa sổ chạy trong một JVM nên yc/s thấp hơn bản dòng lệnh; kịch bản dùng `doClick(0)` và `setSelectedIndex` cho hai ô chọn đoạn.
-- Kiểm thử: Linux, OpenJDK 21.0.12 (dòng lệnh và giao diện dưới Xvfb) và Windows (ảnh `*_windows.png`).
+- Kiểm thử: Linux, OpenJDK 21.0.12 (dòng lệnh và giao diện dưới Xvfb) và Windows.
 
 ## Bài tập gợi ý
 1. Đo số vé bán được cho giường nóng D01 khi máy chủ coi **cả giường là một ô** (sửa `khoiTao` để mỗi chỗ chỉ có ô `D01#0`, và `oYC` luôn là ô đó). So với cách chia theo chặng, nhà xe mất bao nhiêu doanh thu trong tình huống 300 người × 3 lần?

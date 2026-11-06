@@ -62,7 +62,7 @@ Gói Cargo `mr6_14_dat_ve_xe_khach` (một chương trình, chọn vai trò bằ
 - **Khung chung (chép nguyên từ MR6.6):** `src/chung.rs`, `src/khach.rs`, `src/mo_phong.rs`, `src/server.rs`, `src/gui_chung.rs`.
 - **Nghiệp vụ:** `src/may_chu.rs` (trạm, giá chặng, `bo_tri(loai_xe)` – sơ đồ hai loại xe dùng chung cho máy chủ và giao diện; `DatVeXe: NghiepVu`, ô `Cho`, `LuatDatVeXe: LuatKiemToan`, dọn ô quá hạn trong `dinh_ky`, `ghe_nong`), `src/nguoi_ao.rs` (`NguCanh`: ô bận theo những gì kết nối biết, chọn đoạn và chỗ trống; `NguoiAo`: lần đầu giữ ghế nóng cho đoạn ngẫu nhiên, giữ được thì thanh toán, bị từ chối thì đổi đoạn và chỗ), `src/dat_ve_xe.rs` (người đặt vé dòng lệnh, in sơ đồ xe theo chặng).
 - **Giao diện:** `src/dat_ve_xe_gui.rs` (sơ đồ xe `SoDoXe` dùng chung với máy chủ, băng rôn nhà xe, chọn đoạn, thanh tuyến, ứng dụng đặt vé), `src/server_gui.rs` (khung "Tài nguyên"), `src/demo_gui.rs`, `src/main.rs`.
-- `Cargo.toml`, `Cargo.lock`, `demo.json`, `ket_qua.txt`, `ket_qua.png`, `ket_qua_gui.png`, `ket_qua_gui_tranh_chap.png`; `*_windows.*`: kết quả chạy trên Windows.
+- `Cargo.toml`, `Cargo.lock`, `demo.json`, `ket_qua.txt`, `ket_qua.png`, `ket_qua_gui.png`, `ket_qua_gui_tranh_chap.png`.
 
 ## Cách chạy
 Trong thư mục bài (`cargo build -q --release` một lần; `B=../../target/release/mr6_14_dat_ve_xe_khach`, Windows: `..\..\target\release\mr6_14_dat_ve_xe_khach.exe`):
@@ -110,7 +110,7 @@ $B dat_ve_xe_gui Bình 127.0.0.1 44782
 - Ở tình huống nhiều chỗ, `khong_khoa` kết thúc với "Bán 103/120 chỗ-chặng, giữ 16, sổ 85 vé": 16 ô bị "giữ mồ côi" bởi những người đã bị đè (họ thanh toán thì bị từ chối), và các ô này chỉ trống lại sau 30 s. Ba chế độ đúng bán được 118–119/120 chỗ-chặng (88–103 vé).
 - Tham số đặt lại của bộ mô phỏng rỗng: `--so-sanh` đặt lại sơ đồ xe mà vẫn giữ loại xe, thời hạn và ghế nóng hiện tại của máy chủ.
 - Trong kịch bản giao diện, máy chủ, bộ mô phỏng và cửa sổ cùng chạy trong một tiến trình, nên yc/s thấp hơn bản dòng lệnh.
-- Kiểm thử: Linux, Rust 1.97.0, tools/demo.py; giao diện egui 0.29.1 dưới Xvfb + Mesa llvmpipe, và Windows (ảnh `*_windows.png`).
+- Kiểm thử: Linux, Rust 1.97.0, tools/demo.py; giao diện egui 0.29.1 dưới Xvfb + Mesa llvmpipe, và Windows.
 
 ## Bài tập gợi ý
 1. Đo số vé bán được cho giường nóng D01 khi máy chủ coi **cả giường là một ô** (sửa `khoi_tao` để mỗi chỗ chỉ có ô `D01#0`, và `o_yc` luôn là ô đó). So với cách chia theo chặng, nhà xe mất bao nhiêu doanh thu trong tình huống 300 người × 3 lần?
