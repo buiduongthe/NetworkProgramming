@@ -316,6 +316,7 @@ func (x *cuaSoDatVeXe) ve() fyne.CanvasObject {
 	x.chonTu.SetSelected(tc.Tram[0])
 	x.chonDen.SetSelected(tc.Tram[len(tc.Tram)-1])
 	x.anhTuyen = oAnhTinh(x.veAnhTuyen(), 256, 40)
+	x.anhTuyen.Resize(fyne.NewSize(256, 40)) // trong container không bố cục: phải đặt kích thước, không thì ảnh rỗng
 	tuyen := container.NewWithoutLayout(x.anhTuyen)
 	for i := 0; i < len(tc.Tram); i++ {
 		t := chu(tc.MaTram[i], mChuToi, 10, true)

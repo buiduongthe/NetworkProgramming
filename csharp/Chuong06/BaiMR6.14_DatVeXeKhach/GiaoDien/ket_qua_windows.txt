@@ -1,0 +1,52 @@
+===== gui =====
+> bin\Release\net10.0-windows\BaiMR6.14_GiaoDien.exe demo 127.0.0.1 42782 ..\ket_qua_gui.png
+[demo] 1. Máy chủ: START SERVER (chế độ khoa, xe giường nằm, giữ chỗ 30 s)
+[demo]    An, Bình, Chi: Kết nối
+[demo] 2. An, Bình: D01 Sài Gòn → Đà Lạt; Chi: D01 Đà Lạt → Nha Trang; CÙNG bấm 'GIỮ CHỖ'
+[demo]    An: Đã giữ D01 – thanh toán trong 30 s
+[demo]    Bình: Không giữ được: chỗ D01 chặng Sài Gòn–Bảo Lộc đang có người giữ
+[demo]    Chi: Đã giữ D01 – thanh toán trong 30 s
+[demo]    máy chủ: 3 yc, tc 2, từ chối 1, sai phạm 0
+[demo] 3. An và Chi bấm 'THANH TOÁN'
+[demo]    An: Đặt vé thành công! 350.000 đ
+[demo]    Chi: Đặt vé thành công! 170.000 đ
+[demo]    máy chủ: Bán 3/120 chỗ-chặng, giữ 0, sổ 2 vé
+[demo] 4. Máy chủ: khong_khoa, độ trễ xử lý 0–20 ms (CSDL chậm)
+[demo]    Cả ba chọn D02 Sài Gòn → Nha Trang rồi CÙNG bấm 'GIỮ CHỖ'
+[demo]    An: máy chủ trả lời ĐÃ GIỮ D02
+[demo]    Bình: máy chủ trả lời ĐÃ GIỮ D02
+[demo]    Chi: máy chủ trả lời ĐÃ GIỮ D02
+[demo]    …sau cap_nhat của máy chủ:
+[demo]    An: Chỗ D02 đã bị Chi lấy mất!
+[demo]    Bình: Chỗ D02 đã bị Chi lấy mất!
+[demo]    Chi: Đã giữ D02 – thanh toán trong 30 s
+[demo]    máy chủ: 8 yc, tc 7, từ chối 1, sai phạm 6
+[demo]      ví dụ: D02 (Sài Gòn–Bảo Lộc) giữ cho Bình khi An đang giữ
+[demo]      ví dụ: D02 (Bảo Lộc–Đà Lạt) giữ cho Bình khi An đang giữ
+[demo]    D02 thuộc: Chi, Chi, Chi
+[demo]    Đã ghi ket_qua_gui_tranh_chap.png (106 KB)
+[demo] 5. khoa, trễ 0–2 ms; So sánh 4 chế độ (ghế nóng D01, đoạn ngẫu nhiên)
+[demo]   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+[demo]   khong_khoa           18       24        0 10043    30.8
+[demo]   khoa                  6        0        0   655   760.4
+[demo]   lac_quan              4        0       57 16464    30.4
+[demo]   hang_doi              4        0        0   554   897.9
+[demo]    Sai phạm: khong_khoa
+[demo]    Không sai phạm: khoa, lac_quan, hang_doi
+[demo] 6. Đặt lại: xe ghế ngồi 50 chỗ, giữ chỗ 6 s; An giữ 05, 06 Sài Gòn → Bảo Lộc (không thanh toán)
+[demo]    Bình bấm 06 (Sài Gòn → Đà Lạt): Chỗ 06 đang có người giữ trên đoạn này
+[demo]    hết hạn – An: Hết thời gian giữ chỗ – chỗ đã được nhả
+[demo]    Bình giữ 05, 06 Sài Gòn → Đà Lạt rồi thanh toán; Chi mua 05 Đà Lạt → Nha Trang
+[demo]    An giữ 10, 11 Sài Gòn → Nha Trang; Chi chọn 21
+[demo]    An: Đã giữ 10, 11 – thanh toán trong 6 s
+[demo]    Bình: Đặt vé thành công! 540.000 đ
+[demo]    Chi: Đặt vé thành công! 130.000 đ
+[demo]    An: đồng hồ giữ chỗ 00:05
+[demo]    máy chủ: Bán 5/150 chỗ-chặng, giữ 6, sổ 3 vé
+[demo]    máy chủ: 6 yc, tc 6, từ chối 0, sai phạm 0
+[demo] 7. Chụp 4 cửa sổ
+[demo]    Đã ghi ket_qua_gui.png (180 KB)
+[demo] 8. Máy chủ: STOP SERVER
+[demo]    Bình: Mất kết nối máy chủ
+[demo] Kết thúc
+
