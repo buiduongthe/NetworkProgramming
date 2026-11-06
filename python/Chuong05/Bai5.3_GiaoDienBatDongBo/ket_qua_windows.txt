@@ -1,0 +1,19 @@
+===== server =====
+> python lookup_server.py 127.0.0.1 9504 1500
+[server] Đang lắng nghe tại 127.0.0.1:9504, độ trễ giả lập 1500 ms
+[server] Client kết nối: 127.0.0.1:51236
+[server] Nhận từ 127.0.0.1:51236: {"op":"lookup","term":"TCP"}
+[server] Nhận từ 127.0.0.1:51236: {"op":"lookup","term":"XYZ"}
+[server] Client 127.0.0.1:51236 đã đóng kết nối
+[server] Dừng server
+
+===== gui =====
+> python demo_gui.py 127.0.0.1 9504 9505
+[gui] Kết nối cổng 9505: Lỗi: REFUSED
+[gui] Kết nối cổng 9504: Đã kết nối
+[gui] Đang chờ phản hồi: trạng thái 'Đang tra cứu...', nút Tra cứu disabled
+[gui] Kết quả: Giao thức truyền tin cậy, hướng kết nối – trạng thái 'Xong'
+[gui] Trong lúc chờ, đồng hồ giao diện được vẽ lại 12 lần (không đứng hình)
+[gui] Đã chụp cửa sổ: ket_qua_gui.png
+[gui] Tra cứu 'XYZ': (404) Không có thuật ngữ – trạng thái 'Xong'
+

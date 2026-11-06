@@ -1,0 +1,13 @@
+===== server =====
+> java -cp out EchoServer 127.0.0.1 9393
+[server] Đang lắng nghe tại 127.0.0.1:9393
+[server] Client kết nối: 127.0.0.1:51220
+[server] Client 127.0.0.1:51220 đã đóng kết nối
+
+===== client =====
+> java -cp out EchoClient 127.0.0.1 9393
+[client] Đã kết nối 127.0.0.1:9393. Nhập dòng cần gửi (Ctrl+Z/Ctrl+D để kết thúc).
+[client] Gửi: 'Xin chào' -> Nhận: 'Xin chào'
+[client] Gửi: 'Lập trình mạng' -> Nhận: 'Lập trình mạng'
+[client] Đã đóng kết nối
+

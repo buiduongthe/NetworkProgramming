@@ -1,0 +1,47 @@
+===== gui =====
+> bin\Release\net10.0-windows\BaiMR6.6_GiaoDien.exe demo 127.0.0.1 42702 ..\ket_qua_gui.png
+[demo] 1. Máy chủ: START SERVER (chế độ khoa, phiên 120 s)
+[demo]    An, Bình, Chi: Kết nối
+[demo] 2. An bấm '+1 bước'
+[demo] 3. Bình và Chi CÙNG bấm '+1 bước' (cùng giá)
+[demo]    An: Bạn bị trả giá cao hơn! (Bình)
+[demo]    Bình: Bạn đang dẫn đầu
+[demo]    Chi: Bị từ chối: giá đã thay đổi
+[demo]    máy chủ: 3 yc, tc 2, từ chối 1, sai phạm 0
+[demo] 4. Máy chủ: khong_khoa, độ trễ xử lý 0–20 ms (CSDL chậm)
+[demo]    An, Bình, Chi CÙNG bấm '+1 bước'
+[demo]    An: Bạn bị trả giá cao hơn! (Chi)
+[demo]    Bình: Bạn bị trả giá cao hơn! (Chi)
+[demo]    Chi: Bạn đang dẫn đầu
+[demo]    máy chủ: 6 yc, tc 5, từ chối 1, sai phạm 3
+[demo]      ví dụ: Bình 5.300.000 đ sau 5.300.000 đ
+[demo]      ví dụ: Chi 5.300.000 đ sau 5.300.000 đ
+[demo]    Lịch sử trả giá (mới nhất trước):
+[demo]      09:41:47 Chi   5.300.000 đ
+[demo]      09:41:47 Bình  5.300.000 đ
+[demo]      09:41:47 An    5.300.000 đ
+[demo]      09:41:46 Bình  5.200.000 đ
+[demo]    Đã ghi ket_qua_gui_tranh_chap.png (112 KB)
+[demo] 5. Máy chủ: khoa, trễ 0–2 ms; So sánh 4 chế độ
+[demo]   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+[demo]   khong_khoa          388      360        0 13444    72.2
+[demo]   khoa                174        0        0   569  2322.0
+[demo]   lac_quan             34        0      144 18379    72.7
+[demo]   hang_doi             16        0        0   574   903.1
+[demo]    Sai phạm: khong_khoa
+[demo]    Không sai phạm: khoa, lac_quan, hang_doi
+[demo] 6. Đặt lại: phiên 8 s, gia hạn 4 s; An '+1 bước'
+[demo]    Bình '+2 bước' khi còn 00:03.0
+[demo]    -> đồng hồ An: 00:03.6 GIA HẠN!
+[demo] 7. An '+1 bước' khi còn 00:00.9
+[demo]    -> đồng hồ Bình: 00:03.7 GIA HẠN!
+[demo]    An: BẠN THẮNG! 5.400.000 đ
+[demo]    Bình: Kết thúc – An thắng
+[demo]    Chi: Kết thúc – An thắng
+[demo]    máy chủ: Giá cuối 5.400.000 đ, thắng An
+[demo] 8. Chụp 4 cửa sổ
+[demo]    Đã ghi ket_qua_gui.png (183 KB)
+[demo] 9. Máy chủ: STOP SERVER
+[demo]    Bình: Mất kết nối máy chủ
+[demo] Kết thúc
+
