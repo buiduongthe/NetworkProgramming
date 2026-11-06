@@ -59,7 +59,7 @@ class CuaSoServerDatVeXe(CuaSoServerCoSo):
         except ValueError:
             raise ValueError("thời hạn giữ chỗ phải là số")
         nong = self.o_ts["ghe_nong"].get().strip().upper()
-        if nong != self.lop.tham_so["ghe_nong"] or ts["loai_xe"] == self.lop.tham_so["loai_xe"]:
+        if not (ts["loai_xe"] != self.lop.tham_so["loai_xe"] and nong == self.lop.ghe_nong()):
             ts["ghe_nong"] = nong                     # đổi loại xe mà không sửa ghế nóng: máy chủ tự chọn chỗ đầu
         return ts
 

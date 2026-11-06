@@ -1,0 +1,26 @@
+{
+  "env": {"LANGUAGE": "vi"},
+  "setup": [["go", "build", "-o", "out/app", "."],
+            ["go", "-C", "gui", "mod", "tidy"],
+            ["go", "-C", "gui", "build", "-o", "../out/app_gui", "."]],
+  "processes": [
+    {"name": "server", "cmd": ["out/app", "server", "127.0.0.1", "41785"], "background": true, "wait": 0.8},
+    {"name": "mp", "cmd": ["out/app", "mo_phong", "127.0.0.1", "41785", "--n", "500", "--so-sanh"], "timeout": 120, "wait": 0.3},
+    {"name": "qtng", "cmd": ["out/app", "khach", "127.0.0.1", "41785", "dat_lai", "ghe_nong="], "timeout": 10, "wait": 0.1},
+    {"name": "mpng", "cmd": ["out/app", "mo_phong", "127.0.0.1", "41785", "--n", "300", "--lan", "3", "--so-sanh"], "timeout": 120, "wait": 0.3},
+    {"name": "qtttl", "cmd": ["out/app", "khach", "127.0.0.1", "41785", "dat_lai", "ttl_s=3", "ghe_nong=D01"], "timeout": 10, "wait": 0.1},
+    {"name": "A", "cmd": ["out/app", "dat_ve_xe", "An", "127.0.0.1", "41785", "--thoi-gian", "6.8"], "stdin": "@0.5 giu SG DL D01\n@5.0 tt\n", "background": true, "wait": 0.3},
+    {"name": "C", "cmd": ["out/app", "dat_ve_xe", "Chi", "127.0.0.1", "41785", "--thoi-gian", "6.4"], "stdin": "@0.6 giu DL NT D01\n@1.2 tt\n", "background": true, "wait": 0.3},
+    {"name": "B", "cmd": ["out/app", "dat_ve_xe", "Bình", "127.0.0.1", "41785"], "stdin": "@0.8 giu SG BL D01\n@4.2 giu SG BL D01\n@4.5 tt\n@5.5 xem\n", "timeout": 20, "wait": 1.0},
+    {"name": "gui", "cmd": ["xvfb-run", "-a", "-s", "-screen 0 2600x1700x24", "out/app_gui", "demo_gui", "127.0.0.1", "41787"], "show": ["xvfb-run", "-a", "out/app_gui", "demo_gui", "127.0.0.1", "41787"], "timeout": 150}
+  ],
+  "titles": {"server": "Cửa sổ 1 – máy chủ đặt vé xe khách (khoa, giường nằm, giữ 30 s)",
+             "mp": "Cửa sổ 2 – 500 người giữ ghế nóng D01, đoạn ngẫu nhiên, 4 chế độ",
+             "qtng": "Cửa sổ 3 – quản trị (bỏ ghế nóng)",
+             "mpng": "Cửa sổ 4 – 300 người × 3 lần, chỗ và đoạn ngẫu nhiên",
+             "qtttl": "Cửa sổ 5 – quản trị (giữ chỗ 3 s, ghế nóng D01)",
+             "A": "Cửa sổ 6 – An giữ D01 Sài Gòn → Đà Lạt, không thanh toán kịp",
+             "C": "Cửa sổ 7 – Chi mua D01 Đà Lạt → Nha Trang (đoạn không chồng)",
+             "B": "Cửa sổ 8 – Bình mua D01 Sài Gòn → Bảo Lộc sau khi An hết hạn",
+             "gui": "Cửa sổ 9 – giao diện Fyne (máy chủ + 3 ứng dụng)"}
+}

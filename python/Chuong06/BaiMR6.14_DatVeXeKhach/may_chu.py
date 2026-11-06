@@ -131,12 +131,16 @@ class MayChuDatVeXe(MayChuCoSo):
         if "nha_xe" in ts and not 1 <= len(str(ts["nha_xe"])) <= 40:
             raise ValueError("tên nhà xe 1–40 ký tự")
 
+    def ghe_nong(self):
+        """Ghế nóng đang dùng: tham số ghe_nong nếu là chỗ của loại xe hiện tại, không thì chỗ đầu (D01 / 01) –
+        đổi loại xe mà không đặt ghe_nong thì ghế nóng tự về chỗ đầu; rỗng = không có ghế nóng."""
+        g = self.tham_so["ghe_nong"]
+        return g if not g or g in self.ghe_hop_le else self.ds_ghe[0]
+
     def _khoi_tao(self):
         self.bo_tri = bo_tri(self.tham_so["loai_xe"])
         self.ds_ghe = [x[0] for x in self.bo_tri]
         self.ghe_hop_le = set(self.ds_ghe)
-        if self.tham_so["ghe_nong"] and self.tham_so["ghe_nong"] not in self.ghe_hop_le:
-            self.tham_so["ghe_nong"] = self.ds_ghe[0]      # đổi loại xe: ghế nóng về chỗ đầu (D01 / 01)
         self.tat_ca_o = [f"{g}#{k}" for g in self.ds_ghe for k in range(SO_CHANG)]
         for o in self.tat_ca_o:
             self.kho.dat_o(o, _trong())
@@ -312,7 +316,7 @@ class MayChuDatVeXe(MayChuCoSo):
         ts = self.tham_so
         return {"phien": phien, "nha_xe": ts["nha_xe"], "chuyen": ts["chuyen"], "loai_xe": ts["loai_xe"],
                 "ten_xe": TEN_XE[ts["loai_xe"]], "tram": TRAM, "gia_chang": GIA_CHANG[ts["loai_xe"]],
-                "ttl_s": ts["ttl_s"], "ghe_nong": ts["ghe_nong"], "ghe": self.ds_ghe,
+                "ttl_s": ts["ttl_s"], "ghe_nong": self.ghe_nong(), "ghe": self.ds_ghe,
                 "bo_tri": [[t, h, c] for _, t, h, c in self.bo_tri], "so_do": so_do, "chu": chu,
                 "con_lai_ms": con_lai, "dem": dem}
 
