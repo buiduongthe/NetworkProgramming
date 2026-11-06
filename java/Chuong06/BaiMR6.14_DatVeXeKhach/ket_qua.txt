@@ -1,0 +1,289 @@
+===== server =====
+$ java -cp out ServerDatVeXe 127.0.0.1 43780
+[server] Lắng nghe 127.0.0.1:43780; chế độ khoa, trễ 0–2 ms
+[server] Đặt lại
+[server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
+[server] Lượt trước: khong_khoa, 507 yc, tc 10, sai phạm 4
+[server] Đặt lại
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 502 yc, tc 4, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: lac_quan – Lạc quan (phiên bản + CAS)
+[server] Lượt trước: lac_quan, 501 yc, tc 2, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 501 yc, tc 2, sai phạm 0
+[server] Đặt lại (ghe_nong=)
+[server] Đặt lại
+[server] Chế độ: khong_khoa – Không khóa (lỗi tranh chấp)
+[server] Lượt trước: khong_khoa, 886 yc, tc 152, sai phạm 9
+[server] Đặt lại
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 892 yc, tc 136, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: lac_quan – Lạc quan (phiên bản + CAS)
+[server] Lượt trước: lac_quan, 858 yc, tc 146, sai phạm 0
+[server] Đặt lại
+[server] Chế độ: hang_doi – Hàng đợi một luồng (actor)
+[server] Chế độ: khoa – Khóa loại trừ (mutex)
+[server] Lượt trước: khoa, 847 yc, tc 158, sai phạm 0
+[server] Đặt lại (ttl_s=3.0, ghe_nong=D01)
+[server] An vào
+[server] Chi vào
+[server] An giữ D01 (Sài Gòn → Đà Lạt, 3 s)
+[server] Bình vào
+[server] Chi giữ D01 (Đà Lạt → Nha Trang, 3 s)
+[server] Chi mua 1 vé D01 Đà Lạt → Nha Trang (170.000 đ)
+[server] Hết hạn giữ D01 (Sài Gòn–Bảo Lộc) (An), chỗ trống lại
+[server] Hết hạn giữ D01 (Bảo Lộc–Đà Lạt) (An), chỗ trống lại
+[server] Bình giữ D01 (Sài Gòn → Bảo Lộc, 3 s)
+[server] Bình mua 1 vé D01 Sài Gòn → Bảo Lộc (220.000 đ)
+[server] khoa: 7 yc, tc 5, từ chối 2, sai phạm 0
+[server] Bình rời
+[server] Chi rời
+[server] An rời
+[server] Tổng kết (từ lần đặt lại cuối):
+[server]   Chế độ khoa, trễ xử lý 0–2 ms
+[server]   Yêu cầu 7: thành công 5, từ chối 2
+[server]   Xung đột 0, thử lại 0, hết lượt thử 0
+[server]   Hàng đợi max 0, chờ khóa quá hạn 0
+[server]   Xử lý µs: p50 1786 p95 5790 p99 5790
+[server]   Thông lượng 2 yc/s
+[server]   Sai phạm 0: trùng chỗ 0, thanh toán sai 0
+[server]   Bán 2/120 chỗ-chặng, giữ 0, sổ 2 vé
+[server] Máy chủ đã dừng
+
+===== mp =====
+$ java -cp out MoPhong 127.0.0.1 43780 --n 500 --so-sanh
+[mo_phong] === khong_khoa: 500 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 507 yc xong trong 0.34 s = 1485 yc/s
+[mo_phong] Khứ hồi ms: p50 108.6 p95 321.0 p99 332.1
+[mo_phong] Thành công 10, từ chối 497
+[mo_phong]   lý do: dang_giu 391, da_ban 102, khong_giu 4
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 30330 p95 88784 p99 94381
+[mo_phong] Sai phạm 4: trùng chỗ 4, thanh toán sai 0
+[mo_phong]   ví dụ: D01 (Đà Lạt–Nha Trang) giữ cho u3 khi u8 đang giữ
+[mo_phong]   ví dụ: D01 (Sài Gòn–Bảo Lộc) giữ cho u85 khi u7 đang giữ
+[mo_phong] Bán 3/120 chỗ-chặng, giữ 0, sổ 3 vé
+[mo_phong] === khoa: 500 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 502 yc xong trong 0.55 s = 915 yc/s
+[mo_phong] Khứ hồi ms: p50 256.1 p95 509.2 p99 562.9
+[mo_phong] Thành công 4, từ chối 498
+[mo_phong]   lý do: da_ban 497, dang_giu 1
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 81591 p95 387457 p99 399565
+[mo_phong] Sai phạm 0: trùng chỗ 0, thanh toán sai 0
+[mo_phong] Bán 3/120 chỗ-chặng, giữ 0, sổ 2 vé
+[mo_phong] === lac_quan: 500 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 501 yc xong trong 0.02 s = 24820 yc/s
+[mo_phong] Khứ hồi ms: p50 3.6 p95 8.1 p99 11.0
+[mo_phong] Thành công 2, từ chối 499
+[mo_phong]   lý do: da_ban 496, dang_giu 3
+[mo_phong] Máy chủ: xung đột 1, thử lại 1, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1219 p95 2798 p99 3924
+[mo_phong] Sai phạm 0: trùng chỗ 0, thanh toán sai 0
+[mo_phong] Bán 3/120 chỗ-chặng, giữ 0, sổ 1 vé
+[mo_phong] === hang_doi: 500 người × 1 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 501 yc xong trong 0.57 s = 878 yc/s
+[mo_phong] Khứ hồi ms: p50 282.3 p95 501.5 p99 531.0
+[mo_phong] Thành công 2, từ chối 499
+[mo_phong]   lý do: da_ban 497, dang_giu 2
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 438
+[mo_phong] Máy chủ xử lý µs: p50 281267 p95 501446 p99 524269
+[mo_phong] Sai phạm 0: trùng chỗ 0, thanh toán sai 0
+[mo_phong] Bán 3/120 chỗ-chặng, giữ 0, sổ 1 vé
+[mo_phong] Bảng so sánh (500 người × 1 lần, 200 kết nối):
+  Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+  khong_khoa           10        4        0  1485   332.1
+  khoa                  4        0        0   915   562.9
+  lac_quan              2        0        1 24820    11.0
+  hang_doi              2        0        0   878   531.0
+
+===== qtng =====
+$ java -cp out Khach 127.0.0.1 43780 dat_lai ghe_nong=
+[quan_tri] > dat_lai ghe_nong=
+[quan_tri] OK
+
+===== mpng =====
+$ java -cp out MoPhong 127.0.0.1 43780 --n 300 --lan 3 --so-sanh
+[mo_phong] === khong_khoa: 300 người × 3 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 886 yc xong trong 0.10 s = 8457 yc/s
+[mo_phong] Khứ hồi ms: p50 6.6 p95 33.9 p99 54.6
+[mo_phong] Thành công 152, từ chối 734
+[mo_phong]   lý do: da_ban 645, dang_giu 83, khong_giu 6
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1417 p95 5171 p99 8840
+[mo_phong] Sai phạm 9: trùng chỗ 9, thanh toán sai 0
+[mo_phong]   ví dụ: D18 (Bảo Lộc–Đà Lạt) giữ cho u15 khi u18 đang giữ
+[mo_phong]   ví dụ: D19 (Bảo Lộc–Đà Lạt) giữ cho u15 khi u18 đang giữ
+[mo_phong] Bán 112/120 chỗ-chặng, giữ 8, sổ 94 vé
+[mo_phong] === khoa: 300 người × 3 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 892 yc xong trong 0.09 s = 9648 yc/s
+[mo_phong] Khứ hồi ms: p50 5.9 p95 26.7 p99 35.3
+[mo_phong] Thành công 136, từ chối 756
+[mo_phong]   lý do: da_ban 741, dang_giu 15
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 1522 p95 6503 p99 14093
+[mo_phong] Sai phạm 0: trùng chỗ 0, thanh toán sai 0
+[mo_phong] Bán 120/120 chỗ-chặng, giữ 0, sổ 93 vé
+[mo_phong] === lac_quan: 300 người × 3 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 858 yc xong trong 0.22 s = 3914 yc/s
+[mo_phong] Khứ hồi ms: p50 29.1 p95 95.8 p99 120.9
+[mo_phong] Thành công 146, từ chối 712
+[mo_phong]   lý do: da_ban 536, dang_giu 176
+[mo_phong] Máy chủ: xung đột 36, thử lại 36, hàng đợi max 0
+[mo_phong] Máy chủ xử lý µs: p50 11954 p95 56030 p99 101804
+[mo_phong] Sai phạm 0: trùng chỗ 0, thanh toán sai 0
+[mo_phong] Bán 117/120 chỗ-chặng, giữ 0, sổ 96 vé
+[mo_phong] === hang_doi: 300 người × 3 lần, 200 kết nối ===
+[mo_phong] Rào xuất phát: 200/200 kết nối sẵn sàng -> bắn
+[mo_phong] 847 yc xong trong 0.97 s = 875 yc/s
+[mo_phong] Khứ hồi ms: p50 272.6 p95 428.1 p99 510.0
+[mo_phong] Thành công 158, từ chối 689
+[mo_phong]   lý do: dang_giu 396, da_ban 293
+[mo_phong] Máy chủ: xung đột 0, thử lại 0, hàng đợi max 300
+[mo_phong] Máy chủ xử lý µs: p50 265062 p95 349733 p99 360246
+[mo_phong] Sai phạm 0: trùng chỗ 0, thanh toán sai 0
+[mo_phong] Bán 118/120 chỗ-chặng, giữ 0, sổ 107 vé
+[mo_phong] Bảng so sánh (300 người × 3 lần, 200 kết nối):
+  Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+  khong_khoa          152        9        0  8457    54.6
+  khoa                136        0        0  9648    35.3
+  lac_quan            146        0       36  3914   120.9
+  hang_doi            158        0        0   875   510.0
+
+===== qtttl =====
+$ java -cp out Khach 127.0.0.1 43780 dat_lai ttl_s=3 ghe_nong=D01
+[quan_tri] > dat_lai ttl_s=3 ghe_nong=D01
+[quan_tri] OK
+
+===== A =====
+$ java -cp out DatVeXe An 127.0.0.1 43780 --thoi-gian 6.8
+[An] Vào Xe khách Cao Nguyên: chuyến 07:30, xe giường nằm 40 chỗ (khoa)
+[An]   tuyến Sài Gòn – Bảo Lộc – Đà Lạt – Nha Trang; chỗ-chặng trống 120, giữ 0, bán 0; giữ chỗ 3 s
+[An] > giữ D01 Sài Gòn → Đà Lạt
+[An]   ĐÃ GIỮ (2.5 ms), 350.000 đ, thanh toán trong 3 s
+[An] * An giữ D01 (Sài Gòn → Đà Lạt, 3 s)
+[An] * Chi giữ D01 (Đà Lạt → Nha Trang, 3 s)
+[An] * Chi mua 1 vé D01 Đà Lạt → Nha Trang (170.000 đ)
+[An] * Hết hạn giữ D01 (Sài Gòn–Bảo Lộc) (An), chỗ trống lại
+[An] * Hết hạn giữ D01 (Bảo Lộc–Đà Lạt) (An), chỗ trống lại
+[An]   Hết thời gian giữ chỗ: D01 đã được nhả
+[An] * Bình giữ D01 (Sài Gòn → Bảo Lộc, 3 s)
+[An] > thanh toán D01 Sài Gòn → Đà Lạt
+[An]   TỪ CHỐI: giữ chỗ D01 đã hết hạn
+[An] * Bình mua 1 vé D01 Sài Gòn → Bảo Lộc (220.000 đ)
+
+===== C =====
+$ java -cp out DatVeXe Chi 127.0.0.1 43780 --thoi-gian 6.4
+[Chi] Vào Xe khách Cao Nguyên: chuyến 07:30, xe giường nằm 40 chỗ (khoa)
+[Chi]   tuyến Sài Gòn – Bảo Lộc – Đà Lạt – Nha Trang; chỗ-chặng trống 120, giữ 0, bán 0; giữ chỗ 3 s
+[Chi] * An giữ D01 (Sài Gòn → Đà Lạt, 3 s)
+[Chi] > giữ D01 Đà Lạt → Nha Trang
+[Chi]   ĐÃ GIỮ (2.7 ms), 170.000 đ, thanh toán trong 3 s
+[Chi] * Chi giữ D01 (Đà Lạt → Nha Trang, 3 s)
+[Chi] > thanh toán D01 Đà Lạt → Nha Trang
+[Chi]   ĐẶT VÉ THÀNH CÔNG (6.6 ms): 170.000 đ
+[Chi]   mã vé XK0730-D01-DLNT
+[Chi] * Chi mua 1 vé D01 Đà Lạt → Nha Trang (170.000 đ)
+[Chi] * Hết hạn giữ D01 (Sài Gòn–Bảo Lộc) (An), chỗ trống lại
+[Chi] * Hết hạn giữ D01 (Bảo Lộc–Đà Lạt) (An), chỗ trống lại
+[Chi] * Bình giữ D01 (Sài Gòn → Bảo Lộc, 3 s)
+[Chi] * Bình mua 1 vé D01 Sài Gòn → Bảo Lộc (220.000 đ)
+
+===== B =====
+$ java -cp out DatVeXe 'Bình' 127.0.0.1 43780
+[Bình] Vào Xe khách Cao Nguyên: chuyến 07:30, xe giường nằm 40 chỗ (khoa)
+[Bình]   tuyến Sài Gòn – Bảo Lộc – Đà Lạt – Nha Trang; chỗ-chặng trống 118, giữ 2, bán 0; giữ chỗ 3 s
+[Bình] * Chi giữ D01 (Đà Lạt → Nha Trang, 3 s)
+[Bình] > giữ D01 Sài Gòn → Bảo Lộc
+[Bình]   TỪ CHỐI: chỗ D01 chặng Sài Gòn–Bảo Lộc đang có người giữ
+[Bình] * Chi mua 1 vé D01 Đà Lạt → Nha Trang (170.000 đ)
+[Bình] * Hết hạn giữ D01 (Sài Gòn–Bảo Lộc) (An), chỗ trống lại
+[Bình] * Hết hạn giữ D01 (Bảo Lộc–Đà Lạt) (An), chỗ trống lại
+[Bình] > giữ D01 Sài Gòn → Bảo Lộc
+[Bình]   ĐÃ GIỮ (1.2 ms), 220.000 đ, thanh toán trong 3 s
+[Bình] * Bình giữ D01 (Sài Gòn → Bảo Lộc, 3 s)
+[Bình] > thanh toán D01 Sài Gòn → Bảo Lộc
+[Bình]   ĐẶT VÉ THÀNH CÔNG (3.8 ms): 220.000 đ
+[Bình]   mã vé XK0730-D01-SGBL
+[Bình] * Bình mua 1 vé D01 Sài Gòn → Bảo Lộc (220.000 đ)
+[Bình]   Xe giường nằm 40 chỗ – chặng: SG-BL | BL-DL | DL-NT
+[Bình]   Tầng dưới:
+[Bình]    D01:V.b D02:... D03:...
+[Bình]    D04:... D05:... D06:...
+[Bình]    D07:... D08:... D09:...
+[Bình]    D10:... D11:... D12:...
+[Bình]    D13:... D14:... D15:...
+[Bình]    D16:... D17:... D18:...
+[Bình]    D19:...         D20:...
+[Bình]   Tầng trên:
+[Bình]    T01:... T02:... T03:...
+[Bình]    T04:... T05:... T06:...
+[Bình]    T07:... T08:... T09:...
+[Bình]    T10:... T11:... T12:...
+[Bình]    T13:... T14:... T15:...
+[Bình]    T16:... T17:... T18:...
+[Bình]    T19:...         T20:...
+
+===== gui =====
+$ xvfb-run -a java -cp out DemoGui 127.0.0.1 43782
+[demo] 1. Máy chủ: START SERVER (chế độ khoa, xe giường nằm, giữ chỗ 30 s)
+[demo]    An, Bình, Chi: Kết nối
+[demo] 2. An, Bình: D01 Sài Gòn → Đà Lạt; Chi: D01 Đà Lạt → Nha Trang; CÙNG bấm 'GIỮ CHỖ'
+[demo]    An: Đã giữ D01 – thanh toán trong 30 s
+[demo]    Bình: Không giữ được: chỗ D01 chặng Sài Gòn–Bảo Lộc đang có người giữ
+[demo]    Chi: Đã giữ D01 – thanh toán trong 30 s
+[demo]    máy chủ: 3 yc, tc 2, từ chối 1, sai phạm 0
+[demo] 3. An và Chi bấm 'THANH TOÁN'
+[demo]    An: Đặt vé thành công! 350.000 đ
+[demo]    Chi: Đặt vé thành công! 170.000 đ
+[demo]    máy chủ: Bán 3/120 chỗ-chặng, giữ 0, sổ 2 vé
+[demo] 4. Máy chủ: khong_khoa, độ trễ xử lý 0–20 ms (CSDL chậm)
+[demo]    Cả ba chọn D02 Sài Gòn → Nha Trang rồi CÙNG bấm 'GIỮ CHỖ'
+[demo]    An: máy chủ trả lời ĐÃ GIỮ D02
+[demo]    Bình: máy chủ trả lời ĐÃ GIỮ D02
+[demo]    Chi: máy chủ trả lời ĐÃ GIỮ D02
+[demo]    …sau cap_nhat của máy chủ:
+[demo]    An: Đã giữ D02 – thanh toán trong 30 s
+[demo]    Bình: Chỗ D02 đã bị An lấy mất!
+[demo]    Chi: Chỗ D02 đã bị An lấy mất!
+[demo]    máy chủ: 8 yc, tc 7, từ chối 1, sai phạm 6
+[demo]      ví dụ: D02 (Sài Gòn–Bảo Lộc) giữ cho Bình khi Chi đang giữ
+[demo]      ví dụ: D02 (Bảo Lộc–Đà Lạt) giữ cho Bình khi Chi đang giữ
+[demo]    D02 thuộc: An, An, An
+[demo]    Đã ghi ket_qua_gui_tranh_chap.png (80 KB)
+[demo] 5. khoa, trễ 0–2 ms; So sánh 4 chế độ (ghế nóng D01, đoạn ngẫu nhiên)
+[demo]   Chế độ       Thành công Sai phạm Xung đột  yc/s  p99 ms
+[demo]   khong_khoa            7        1        0  3045    44.6
+[demo]   khoa                  6        0        0   842   611.9
+[demo]   lac_quan              4        0        7 19657    22.6
+[demo]   hang_doi              6        0        0   888   553.4
+[demo]    Sai phạm: khong_khoa
+[demo]    Không sai phạm: khoa, lac_quan, hang_doi
+[demo] 6. Đặt lại: xe ghế ngồi 50 chỗ, giữ chỗ 6 s; An giữ 05, 06 Sài Gòn → Bảo Lộc (không thanh toán)
+[demo]    Bình bấm 06 (Sài Gòn → Đà Lạt): Chỗ 06 đang có người giữ trên đoạn này
+[demo]    hết hạn – An: Hết thời gian giữ chỗ – chỗ đã được nhả
+[demo]    Bình giữ 05, 06 Sài Gòn → Đà Lạt rồi thanh toán; Chi mua 05 Đà Lạt → Nha Trang
+[demo]    An giữ 10, 11 Sài Gòn → Nha Trang; Chi chọn 21
+[demo]    An: Đã giữ 10, 11 – thanh toán trong 6 s
+[demo]    Bình: Đặt vé thành công! 540.000 đ
+[demo]    Chi: Đặt vé thành công! 130.000 đ
+[demo]    An: đồng hồ giữ chỗ 00:05
+[demo]    máy chủ: Bán 5/150 chỗ-chặng, giữ 6, sổ 3 vé
+[demo]    máy chủ: 6 yc, tc 6, từ chối 0, sai phạm 0
+[demo] 7. Chụp 4 cửa sổ
+[demo]    Đã ghi ket_qua_gui.png (155 KB)
+[demo] 8. Máy chủ: STOP SERVER
+[demo]    Bình: Mất kết nối máy chủ
+[demo] Kết thúc
+
