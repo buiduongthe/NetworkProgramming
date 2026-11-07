@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Biểu tượng ứng dụng: ống nghe trắng trên nền tròn xanh -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#0B7A43"
+        android:pathData="M24,2a22,22 0,1 0,0.01 0z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M17.6,21.8c1.6,3.1 4.1,5.6 7.2,7.2l2.4,-2.4c0.3,-0.3 0.8,-0.4 1.1,-0.3c1.2,0.4 2.5,0.6 3.9,0.6c0.6,0 1.1,0.5 1.1,1.1v3.8c0,0.6 -0.5,1.1 -1.1,1.1c-10.3,0 -18.7,-8.4 -18.7,-18.7c0,-0.6 0.5,-1.1 1.1,-1.1h3.9c0.6,0 1.1,0.5 1.1,1.1c0,1.4 0.2,2.7 0.6,3.9c0.1,0.4 0,0.8 -0.3,1.1l-2.3,2.4z" />
+</vector>

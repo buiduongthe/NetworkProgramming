@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Giao diện vẽ hoàn toàn bằng Compose; theme XML chỉ đặt màu nền lúc khởi động -->
+    <style name="Theme.GoiThoai" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/nen</item>
+        <item name="android:statusBarColor">@color/nen</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>
