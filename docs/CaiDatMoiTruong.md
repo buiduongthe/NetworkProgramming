@@ -47,6 +47,12 @@ Sau khi cài, **đóng hết cửa sổ dòng lệnh rồi mở lại** để bi
 | Mosquitto (MQTT broker) | `winget install -e --id EclipseFoundation.Mosquitto` | Bài 7.8 |
 | OpenSSL | `winget install -e --id ShiningLight.OpenSSL.Light` | Bài 7.6, 8.4 (tạo chứng chỉ thử) |
 | Module Go của gRPC | trong `go\`: `go mod download` | Bài 7.5 bản Go |
+| `aiortc`, `aiohttp`, `numpy` (Python) | `py -3 -m pip install --user aiortc aiohttp numpy` | MR6.15: máy chủ Python, điện thoại giả, tài xế giả lập (cũng là công cụ thử cho máy chủ Go) |
+| Mô-đun Go của Pion WebRTC | trong `go\Chuong06\BaiMR6.15_GoiThoaiTheoDoiXe\`: `go mod tidy` | MR6.15 bản Go (mô-đun riêng, tạo `go.sum`, cần mạng) |
+| ffmpeg | `winget install -e --id Gyan.FFmpeg` (như mục 1.2) | MR6.15: trộn hai bên của bản ghi cuộc gọi (không có thì chỉ có tệp từng bên) |
+| Android Studio (kèm JDK, Android SDK) | `winget install -e --id Google.AndroidStudio`; lần đầu mở để trình hướng dẫn cài Android SDK Platform 35 và đồng ý giấy phép SDK | MR6.15: app Android (`android\Chuong06\BaiMR6.15_GoiThoaiTheoDoiXe`) – **chép thư mục dự án sang đường dẫn không dấu** (ví dụ `C:\AndroidLTM\GoiThoaiLTM`) trước khi mở, vì Gradle/Android Gradle Plugin trên Windows lỗi với đường dẫn có chữ Việt |
+
+MR6.15 cần mở tường lửa cho điện thoại thật trong cùng Wi-Fi: TCP 8080 (báo hiệu, bảng điều khiển), TCP 1883 (MQTT) và UDP (bản Go: một cổng, mặc định 50000; bản Python: cổng ngẫu nhiên – bấm **Allow** cho `python.exe` ở mạng *Private* khi Windows hỏi).
 
 ICMP thô (Bài 7.7) cần chạy dòng lệnh với quyền quản trị (*Run as administrator*).
 
@@ -61,6 +67,8 @@ sudo apt install -y python3 python3-tk python3-pip openjdk-21-jdk ffmpeg \
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh     # Rust
 python3 -m pip install --user sounddevice                          # micro/loa thật (Python)
 sudo apt install -y mosquitto openssl maven                        # tùy chọn: Bài 7.8, 7.6/8.4, 7.5 (Java)
+python3 -m pip install --user aiortc aiohttp numpy                 # MR6.15: máy chủ Python, điện thoại giả
+# MR6.15 app Android: cài Android Studio (snap install android-studio --classic, hoặc tải từ developer.android.com)
 ```
 - `libasound2-dev`, `pkg-config`: ALSA cho crate `cpal` (Rust); `gcc`, `libgl1-mesa-dev`, `xorg-dev`: Fyne (Go); `libportaudio2`: `sounddevice` (Python).
 - Camera USB là `/dev/video0`; người dùng cần thuộc nhóm `video` (`sudo usermod -aG video $USER`, đăng nhập lại).

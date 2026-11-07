@@ -4,7 +4,7 @@ Kho mã nguồn đi kèm **Giáo trình Lập trình mạng** (Trường Đại 
 
 > **English summary.** Companion source code for the Vietnamese textbook *Network Programming*. Every pseudocode listing in the book is implemented in C#, Java and Python (the languages referenced by the book) and additionally in Rust and Go, using the standard socket APIs, from TCP/UDP client–server basics to asynchronous I/O, multi-client servers, broadcast/multicast, HTTP, WebSocket, SSE, gRPC, SMTP, ICMP, MQTT, LLM APIs, the Model Context Protocol (MCP) and TLS. Each example is self-contained, commented, and ships with a reproducible demo script and a screenshot of its real output.
 
-Quy mô: <!-- THONG_KE -->39 bài × 5 ngôn ngữ = 195 chương trình; 195 chương trình đã chạy và có ảnh kết quả thực thi; 31 bài mở rộng × 5 ngôn ngữ = 155 chương trình, 154 đã chạy<!-- /THONG_KE -->.
+Quy mô: <!-- THONG_KE -->39 bài × 5 ngôn ngữ = 195 chương trình; 195 chương trình đã chạy và có ảnh kết quả thực thi; 33 bài mở rộng × 5 ngôn ngữ = 163 chương trình, 161 đã chạy<!-- /THONG_KE -->.
 
 ## Mục lục
 - [Mục tiêu và nguyên tắc thiết kế](#mục-tiêu-và-nguyên-tắc-thiết-kế)
@@ -26,7 +26,7 @@ Giáo trình trình bày thuật toán bằng mã giả độc lập với ngôn
 
 Các nguyên tắc áp dụng thống nhất cho mọi bài:
 1. **Bám sát mã giả.** Cùng thứ tự bước, giá trị mặc định và cách xử lý lỗi như mã giả; chú thích cuối dòng ghi lệnh mã giả tương ứng (ví dụ `// LISTEN, backlog 16`). Khác biệt bắt buộc do nền tảng được ghi trong mục *Ghi chú* của README từng bài.
-2. **Mức socket cơ sở và thư viện chuẩn.** Ưu tiên lớp socket của thư viện chuẩn; không dùng thư viện ngoài, trừ bài gRPC (cần bộ sinh mã Protocol Buffers). Riêng Rust, thư viện chuẩn không có TLS, JSON, bất đồng bộ nên dùng một số crate phổ biến, phiên bản cố định trong `Cargo.lock` (ghi trong README từng bài).
+2. **Mức socket cơ sở và thư viện chuẩn.** Ưu tiên lớp socket của thư viện chuẩn; không dùng thư viện ngoài, trừ bài gRPC (cần bộ sinh mã Protocol Buffers) và bài mở rộng MR6.15 (WebRTC: aiortc, Pion, libwebrtc cho Android). Riêng Rust, thư viện chuẩn không có TLS, JSON, bất đồng bộ nên dùng một số crate phổ biến, phiên bản cố định trong `Cargo.lock` (ghi trong README từng bài).
 3. **Tự chứa.** Mỗi thư mục bài chạy độc lập; các thủ tục kế thừa từ chương trước (đọc cấu hình, kết nối an toàn, định khung JSON…) được chép gọn vào bài, có chú thích nguồn gốc mã giả.
 4. **Đơn giản, dễ đọc.** Mã ngắn, chú thích tiếng Việt cho người mới học; thông điệp in ra màn hình giống nhau giữa các ngôn ngữ để dễ đối chiếu.
 5. **Tái lập được.** Kết quả trong `ket_qua.txt` và `ket_qua.png` được sinh tự động từ lần chạy thật bằng `tools/demo.py`, không chỉnh sửa tay.
@@ -56,8 +56,10 @@ NetworkProgramming/
 │   └── Chuong01 … Chuong08/BaiN.k_TenBai/  (*.py, demo.json, README.md, ket_qua.*)
 ├── rust/                     Rust (≥ 1.85) – mỗi bài một gói Cargo, dùng chung rust/target
 │   └── Chuong01 … Chuong08/BaiN.k_TenBai/  (Cargo.toml, Cargo.lock, src/, demo.json, README.md, ket_qua.*)
-└── go/                       Go (≥ 1.24) – một module go/go.mod, chỉ thư viện chuẩn
-    └── Chuong01 … Chuong08/BaiN.k_TenBai/  (*.go, demo.json, README.md, ket_qua.*)
+├── go/                       Go (≥ 1.24) – một module go/go.mod, chỉ thư viện chuẩn
+│   └── Chuong01 … Chuong08/BaiN.k_TenBai/  (*.go, demo.json, README.md, ket_qua.*)
+└── android/                  App Android (Kotlin + Jetpack Compose) – chỉ bài mở rộng MR6.15, mở bằng Android Studio
+    └── Chuong06/BaiMR6.15_GoiThoaiTheoDoiXe/  (dự án Gradle, README.md)
 ```
 Bài mở rộng nằm cùng chương với chủ đề liên quan và có tên `BaiMRN.k_TenBai`, ví dụ `python/Chuong06/BaiMR6.1_…`.
 Tên thư mục bài giống nhau ở cả năm ngôn ngữ và trùng với dòng *“Mã nguồn C#, Java, Python”* in dưới mỗi mã giả trong giáo trình, ví dụ Mã giả 3.1 → `Chuong03/Bai3.1_EchoTCP`.
@@ -71,6 +73,7 @@ Tên thư mục bài giống nhau ở cả năm ngôn ngữ và trùng với dò
 | Rust | 1.85 trở lên | `cargo --version`; lần biên dịch đầu tải crate từ crates.io |
 | Go | 1.24 trở lên | `go version`; bài 7.5 cần thêm module gRPC (`go mod download`) |
 | Công cụ tùy chọn | – | `mosquitto` (bài 7.8), `openssl` (bài 7.6, 8.4), quyền quản trị cho ICMP thô (bài 7.7) |
+| Android Studio | 2024.2 trở lên (kèm JDK, Android SDK 35) | Chỉ cho app Android của bài mở rộng MR6.15; máy chủ của bài cần thêm `aiortc`, `aiohttp` (Python) hoặc mô-đun Pion (Go) |
 
 Bài 5.3 bản C# dùng Windows Forms nên chỉ chạy trên Windows.
 
@@ -241,6 +244,7 @@ Các bài dưới đây bổ sung chủ đề thực tiễn, gợi ý từ các 
 | `BaiMR6.12_ChuyenKhoan` | Chuyển khoản – n người chuyển tiền chéo nhau (A→B và B→A) giữa 5–20 tài khoản: máy chủ TCP đa luồng, mỗi thao tác chạm hai tài nguyên, 4 cách xử lý tranh chấp (không khóa, khóa hai tài khoản theo thứ tự mã, lạc quan CAS hai tài khoản nguyên tử, hàng đợi một luồng), khóa ngây thơ gây khóa chết và phát hiện bằng hết thời gian chờ khóa 2 s, sổ kiểm toán (tổng lệch, lệch TK, thấu chi), ứng dụng ngân hàng số | 6 | [C#](csharp/Chuong06/BaiMR6.12_ChuyenKhoan/), [Java](java/Chuong06/BaiMR6.12_ChuyenKhoan/), [Python](python/Chuong06/BaiMR6.12_ChuyenKhoan/), [Rust](rust/Chuong06/BaiMR6.12_ChuyenKhoan/), [Go](go/Chuong06/BaiMR6.12_ChuyenKhoan/) |
 | `BaiMR6.13_PhongCho` | Phòng chờ ảo bán 500 vé concert – xếp hàng nhận số thứ tự, cấp lượt theo thùng token (chỉnh được khi chạy), lượt có hạn 20 s, chờ dài (long polling) cho_luot, giới hạn số yêu cầu mua đang xử lý (từ chối quá tải), công tắc bật/tắt phòng chờ; 4 cách xử lý tranh chấp trên phát số thứ tự, kho vé và ô lượt; sổ kiểm toán (vượt vé, sai lượt, đảo số FIFO) | 6 | [C#](csharp/Chuong06/BaiMR6.13_PhongCho/), [Java](java/Chuong06/BaiMR6.13_PhongCho/), [Python](python/Chuong06/BaiMR6.13_PhongCho/), [Rust](rust/Chuong06/BaiMR6.13_PhongCho/), [Go](go/Chuong06/BaiMR6.13_PhongCho/) |
 | `BaiMR6.14_DatVeXeKhach` | Đặt vé xe khách theo chặng Sài Gòn – Bảo Lộc – Đà Lạt – Nha Trang: xe giường nằm 40 chỗ (2 tầng) hoặc xe ghế ngồi 50 chỗ, tài nguyên là cặp (chỗ, chặng) nên một chỗ bán được cho nhiều người đi các đoạn không chồng nhau; giữ chỗ có thời hạn, thanh toán, nhả; giá theo chặng; 4 cách xử lý tranh chấp trên ô chỗ#chặng; sổ kiểm toán (trùng chỗ, thanh toán sai) | 6 | [C#](csharp/Chuong06/BaiMR6.14_DatVeXeKhach/), [Java](java/Chuong06/BaiMR6.14_DatVeXeKhach/), [Python](python/Chuong06/BaiMR6.14_DatVeXeKhach/), [Rust](rust/Chuong06/BaiMR6.14_DatVeXeKhach/), [Go](go/Chuong06/BaiMR6.14_DatVeXeKhach/) |
+| `BaiMR6.15_GoiThoaiTheoDoiXe` | Gọi thoại qua máy chủ trung gian (WebSocket + WebRTC kiểu SFU, ghi âm Ogg/Opus) và theo dõi vị trí tài xế qua MQTT (retain, Last Will; GPS thật hoặc giả lập); bảng điều khiển web; app Android Kotlin + Compose | 6 | [Python](python/Chuong06/BaiMR6.15_GoiThoaiTheoDoiXe/), [Go](go/Chuong06/BaiMR6.15_GoiThoaiTheoDoiXe/), [Android](android/Chuong06/BaiMR6.15_GoiThoaiTheoDoiXe/) |
 | `BaiMR7.1_TaiTiepHTTP` | Tải tệp HTTP có tải tiếp: Range, If-Range, 206/416, thử lại có lùi thời gian, kiểm tra SHA-256 | 7 | [C#](csharp/Chuong07/BaiMR7.1_TaiTiepHTTP/), [Java](java/Chuong07/BaiMR7.1_TaiTiepHTTP/), [Python](python/Chuong07/BaiMR7.1_TaiTiepHTTP/), [Rust](rust/Chuong07/BaiMR7.1_TaiTiepHTTP/), [Go](go/Chuong07/BaiMR7.1_TaiTiepHTTP/) |
 | `BaiMR8.1_TacTuChanDoan` | Tác tử AI chẩn đoán mạng bằng gọi công cụ, có lớp kiểm soát (danh mục, lược đồ, chính sách đích, giới hạn vòng) | 8 | [C#](csharp/Chuong08/BaiMR8.1_TacTuChanDoan/), [Java](java/Chuong08/BaiMR8.1_TacTuChanDoan/), [Python](python/Chuong08/BaiMR8.1_TacTuChanDoan/), [Rust](rust/Chuong08/BaiMR8.1_TacTuChanDoan/), [Go](go/Chuong08/BaiMR8.1_TacTuChanDoan/) |
 | `BaiMR8.2_KiemDuyetCauHinhAI` | Kiểm duyệt cấu hình do LLM sinh: JSON, lược đồ, ngữ nghĩa, chính sách, vòng phản hồi | 8 | [C#](csharp/Chuong08/BaiMR8.2_KiemDuyetCauHinhAI/), [Java](java/Chuong08/BaiMR8.2_KiemDuyetCauHinhAI/), [Python](python/Chuong08/BaiMR8.2_KiemDuyetCauHinhAI/), [Rust](rust/Chuong08/BaiMR8.2_KiemDuyetCauHinhAI/), [Go](go/Chuong08/BaiMR8.2_KiemDuyetCauHinhAI/) |

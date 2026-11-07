@@ -12,6 +12,7 @@ CHUONG = {1: 'Tổng quan về lập trình mạng trong thời đại AI', 2: '
           5: 'Lập trình bất đồng bộ – Ứng dụng mạng có giao diện', 6: 'Mô hình Multi-Client Server – Broadcast và Multicast',
           7: 'Giao thức tầng ứng dụng và dịch vụ mạng hiện đại', 8: 'Lập trình mạng cho ứng dụng AI và an toàn bảo mật'}
 LANGS = [('csharp', 'C#'), ('java', 'Java'), ('python', 'Python'), ('rust', 'Rust'), ('go', 'Go')]
+LANGS_MO_RONG = LANGS + [('android', 'Android')]   # MR6.15 có thêm app Android (Kotlin)
 
 
 def mark(v):
@@ -56,7 +57,7 @@ def morong_table(items, rel=''):
     lines = ['| Bài | Nội dung | Chương liên quan | Ngôn ngữ |', '|---|---|:-:|---|']
     for b in items:
         ch = int(b['chuong'])
-        langs = ', '.join(f"[{n}]({rel}{k}/Chuong{ch:02d}/{b['bai']}/)" for k, n in LANGS if k in b['ngon_ngu'])
+        langs = ', '.join(f"[{n}]({rel}{k}/Chuong{ch:02d}/{b['bai']}/)" for k, n in LANGS_MO_RONG if k in b['ngon_ngu'])
         lines.append(f"| `{b['bai']}` | {b['ten']} | {ch} | {langs} |")
     return '\n'.join(lines)
 

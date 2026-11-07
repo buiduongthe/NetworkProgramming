@@ -1,0 +1,22 @@
+[
+  {
+    "bai": "BaiMR6.14_DatVeXeKhach",
+    "chuong": 6,
+    "ngon_ngu": [
+      "csharp",
+      "java",
+      "python",
+      "rust",
+      "go"
+    ],
+    "kiem_thu": {
+      "csharp": "đã chạy",
+      "java": "đã chạy",
+      "python": "đã chạy",
+      "rust": "đã chạy",
+      "go": "đã chạy"
+    },
+    "ten": "Đặt vé xe khách theo chặng Sài Gòn – Bảo Lộc – Đà Lạt – Nha Trang: xe giường nằm 40 chỗ (2 tầng) hoặc xe ghế ngồi 50 chỗ, tài nguyên là cặp (chỗ, chặng) nên một chỗ bán được cho nhiều người đi các đoạn không chồng nhau; giữ chỗ có thời hạn, thanh toán, nhả; giá theo chặng; 4 cách xử lý tranh chấp trên ô chỗ#chặng; sổ kiểm toán (trùng chỗ, thanh toán sai)",
+    "ghi_chu": "Khung MR6.6, mở rộng MR6.8 (giữ chỗ có thời hạn); tài nguyên là ô (chỗ, chặng). Chạy chéo 5 ngôn ngữ, giao diện ở cả 5 bản; kết quả Windows lưu kèm hậu tố _windows. Đọc thêm: Kung & Robinson 1981, Coffman và cộng sự 1971."
+  }
+]
