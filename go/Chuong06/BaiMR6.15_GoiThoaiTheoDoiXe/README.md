@@ -17,19 +17,19 @@ Giống bản Python (xem [README bản Python](../../../python/Chuong06/BaiMR6.
 Số liệu lấy từ `ket_qua.txt`, một lần chạy thật trên máy cục bộ (Linux, Go 1.24, 127.0.0.1) với **đúng kịch bản và đúng các công cụ Python** của bản Python (điện thoại giả, tài xế giả lập, khách theo dõi) – chính là phép thử chạy chéo: client Python, máy chủ Go.
 
 ```
-[may_chu] 07:21:27 call-20261107-072125: nhận âm thanh của Bình (audio/opus)
+[may_chu] 08:51:20 call-20261107-085119: nhận âm thanh của Bình (audio/opus)
 [Hùng]  12.2s đã nghe thấy âm 440 Hz của Bình (mức -16.5 dBFS)
 [Bình]   8.5s trong lúc giữ máy nghe được mức -120 dBFS (im lặng)
 [Bình]  11.6s đã nghe thấy âm 660 Hz của Hùng (mức -16.5 dBFS)
-[may_chu] 07:21:36 call-20261107-072125: đã trộn hai bên -> call-20261107-072125.ogg (lệch 3 ms)
-[may_chu] 07:21:41 mqtt: taixe-XT02 ngắt kết nối bất thường
+[may_chu] 08:51:29 call-20261107-085119: đã trộn hai bên -> call-20261107-085119.ogg (lệch -4 ms)
+[may_chu] 08:51:34 mqtt: taixe-XT02 ngắt kết nối bất thường
 ```
 
-- **Chuyển nguyên gói RTP.** Với mỗi bên, máy chủ đọc gói RTP Opus từ `TrackRemote` (`ReadRTP`) và ghi nguyên gói vào `TrackLocalStaticRTP` gửi cho bên kia (`WriteRTP`); Pion tự đổi SSRC và *payload type* cho đúng phiên bên kia. Không có bước giải mã – mã hóa lại như aiortc, nên CPU gần như chỉ dành cho mã hóa SRTP. Mức âm nghe được giữ nguyên −16,5 dBFS ở cả hai chiều (bản Python −17,6 đến −17,7 dBFS do qua thêm một lần mã hóa).
+- **Chuyển nguyên gói RTP.** Với mỗi bên, máy chủ đọc gói RTP Opus từ `TrackRemote` (`ReadRTP`) và ghi nguyên gói vào `TrackLocalStaticRTP` gửi cho bên kia (`WriteRTP`); Pion tự đổi SSRC và *payload type* cho đúng phiên bên kia. Không có bước giải mã – mã hóa lại như aiortc, nên CPU gần như chỉ dành cho mã hóa SRTP. Mức âm nghe được giữ nguyên −16,5 dBFS ở cả hai chiều (bản Python −17,1 đến −17,7 dBFS do qua thêm một lần mã hóa).
 - **Ghi âm bằng gói gốc.** `oggwriter` ghi thẳng gói Opus nhận được vào tệp Ogg, nên chất lượng và kích thước tệp từng bên phụ thuộc tốc độ bit **của điện thoại gửi**: với điện thoại giả (aiortc) mỗi tệp khoảng 150 KB cho 9 s (≈ 130 kbit/s), trong khi bản Python mã hóa lại ở 24 kbit/s nên chỉ khoảng 42 KB. Tệp trộn do `ffmpeg` mã hóa lại ở 32 kbit/s nên cả hai bản đều khoảng 51 KB.
 - **Giữ máy** chỉ là ngừng gọi `WriteRTP` (vẫn đọc và ghi âm), bên kia nhận im lặng (−120 dBFS).
 - **Một cổng UDP cho mọi kết nối.** `ice.NewMultiUDPMuxFromPort(50000)` cho mọi `RTCPeerConnection` dùng chung một socket UDP; gói STUN đầu tiên (mang *username fragment* của phiên) cho biết gói thuộc kết nối nào. Tường lửa chỉ cần mở **UDP 50000** (bản Python mở cổng ngẫu nhiên cho từng kết nối). `SetIncludeLoopbackCandidate(true)` để thử trên 127.0.0.1; chỉ dùng IPv4.
-- **Băng thông**: bảng điều khiển đo khoảng **258 kbit/s** cho một cuộc gọi (tổng kích thước gói RTP máy chủ chuyển đi trong 2 s, chưa tính phần SRTP và UDP/IP): đúng bằng tốc độ bit điện thoại giả gửi lên (≈ 130 kbit/s mỗi chiều) vì máy chủ chuyển nguyên gói. Bản Python đo 227 kbit/s theo tốc độ bit của bộ mã hóa trong aiortc.
+- **Băng thông**: bảng điều khiển đo khoảng **256 kbit/s** cho một cuộc gọi (tổng kích thước gói RTP máy chủ chuyển đi trong 2 s, chưa tính phần SRTP và UDP/IP): đúng bằng tốc độ bit điện thoại giả gửi lên (≈ 130 kbit/s mỗi chiều) vì máy chủ chuyển nguyên gói. Bản Python đo 227 kbit/s theo tốc độ bit của bộ mã hóa trong aiortc.
 - **Đọc RTCP của track gửi đi.** Mỗi `RTPSender` có một goroutine đọc RTCP (`sender.Read`) – bắt buộc để bộ chặn NACK và báo cáo nhận (RR/SR) của `interceptor` hoạt động. RTT ở bảng điều khiển là con số điện thoại tự đo và gửi lên (`thong_ke`), nên những giây đầu cuộc gọi có thể hiện "–" khi chưa có báo cáo RTCP.
 - **MQTT**: mỗi kết nối một goroutine đọc, ghi qua khóa riêng của kết nối; bảng đăng ký và tin giữ lại dùng chung một khóa. Hạn đọc (`SetReadDeadline`) = 1,5 × keepalive, quá hạn thì đóng và phát Last Will.
 
@@ -60,7 +60,7 @@ Muốn tái lập kết quả, chạy từ thư mục gốc của kho: `python3 
 ## Ứng dụng giao diện
 ![Bảng điều khiển máy chủ Go](ket_qua_gui.png)
 
-Ảnh chụp bảng điều khiển ở giây thứ 20 của kịch bản: 3 người trực tuyến, cuộc gọi An ↔ Hùng đang diễn ra, băng thông chuyển tiếp 257,6 kbit/s, 1,2 điểm vị trí/giây, bản ghi cuộc Bình ↔ Hùng, bản đồ có xe Hùng (giả lập) và xe XT02 (mất kết nối). Nhãn góc trên ghi "Bản Go (Pion)". Giao diện điện thoại: [app Android](../../../android/Chuong06/BaiMR6.15_GoiThoaiTheoDoiXe/).
+Ảnh chụp bảng điều khiển ở giây thứ 20 của kịch bản: 3 người trực tuyến, cuộc gọi An ↔ Hùng đang diễn ra, băng thông chuyển tiếp 256,3 kbit/s, 1,2 điểm vị trí/giây, bản ghi cuộc Bình ↔ Hùng, bản đồ có xe Hùng (giả lập) và xe XT02 (mất kết nối). Nhãn góc trên ghi "Bản Go (Pion)". Giao diện điện thoại: [app Android](../../../android/Chuong06/BaiMR6.15_GoiThoaiTheoDoiXe/).
 
 ## Kết quả thực thi
 ![Kết quả thực thi](ket_qua.png)

@@ -390,7 +390,11 @@ func (mc *MayChu) xuLyTin(nd *NguoiDung, loai string, tin M) {
 	c := mc.cuoc[maCuoc]
 	if c == nil || (nd != c.goi && nd != c.nghe) {
 		mc.mu.Unlock()
-		nd.gui(M{"loai": "loi", "ly_do": "không có cuộc gọi này", "ma_cuoc": maCuoc})
+		switch loai { // tin trễ của cuộc gọi vừa kết thúc (thống kê, ICE…) là bình thường: bỏ qua
+		case "thong_ke", "ice", "sdp", "giu_may", "tat_mic":
+		default:
+			nd.gui(M{"loai": "loi", "ly_do": "không có cuộc gọi này", "ma_cuoc": maCuoc})
+		}
 		return
 	}
 	trangThai := c.trangThai

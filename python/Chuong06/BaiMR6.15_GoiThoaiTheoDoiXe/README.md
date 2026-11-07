@@ -23,16 +23,16 @@ Số liệu lấy từ `ket_qua.txt`, một lần chạy thật trên máy cục
 ```
 [Hùng]  12.2s đã nghe thấy âm 440 Hz của Bình (mức -17.7 dBFS)
 [Bình]   8.5s trong lúc giữ máy nghe được mức -120 dBFS (im lặng)
-[Bình]  11.5s đã nghe thấy âm 660 Hz của Hùng (mức -17.6 dBFS)
-[may_chu] 07:15:57 call-20261107-071546: đã trộn hai bên -> call-20261107-071546.ogg (lệch 4 ms)
-[may_chu] 07:16:02 mqtt: taixe-XT02 ngắt kết nối bất thường
-[An]   0.0s Hùng (giả lập) 10.79155,106.71594 40 km/h – còn 2.46 km, khoảng 4 phút – điểm giữ lại khi mới đăng ký (trễ 0.60 s)
+[Bình]  11.6s đã nghe thấy âm 660 Hz của Hùng (mức -17.6 dBFS)
+[may_chu] 08:51:59 call-20261107-085148: đã trộn hai bên -> call-20261107-085148.ogg (lệch 2 ms)
+[may_chu] 08:52:03 mqtt: taixe-XT02 ngắt kết nối bất thường
+[An]   0.0s Hùng (giả lập) 10.79157,106.71597 40 km/h – còn 2.46 km, khoảng 4 phút – điểm giữ lại khi mới đăng ký (trễ 0.61 s)
 ```
 
 - **Báo hiệu và đường âm tách riêng.** WebSocket chỉ chở tin JSON điều khiển cuộc gọi (vài trăm byte); âm thanh đi trên UDP bằng RTP. Luồng một cuộc gọi: A gửi `goi` → máy chủ gửi `do_chuong` cho A và `cuoc_goi_den` cho B → B gửi `tra_loi` → máy chủ gửi `da_tra_loi` cho cả hai → **mỗi bên** tạo `RTCPeerConnection` tới máy chủ, gửi *offer* (SDP), nhận *answer* → âm thanh A → máy chủ → B. Đây là mô hình *offer/answer* của JSEP; ICE tìm đường UDP giữa điện thoại và máy chủ (trong LAN chỉ cần ứng viên *host*, không cần STUN/TURN).
 - **Âm thanh đúng là đi qua máy chủ.** Mỗi điện thoại giả phát một tần số riêng (Bình 440 Hz, Hùng 660 Hz) và phân tích FFT phần nghe được: Hùng nghe 440 Hz, Bình nghe 660 Hz. Khi Bình bấm **giữ máy**, máy chủ ngừng chuyển tiếp cả hai chiều và Bình đo được −120 dBFS (im lặng).
 - **SFU giải mã hay không giải mã.** aiortc nhận gói Opus, **giải mã thành PCM** rồi mã hóa lại khi gửi cho bên kia (lớp `TiepAm`), nên tốn CPU nhưng dễ chèn xử lý (ghi âm, tắt tiếng). Bảng điều khiển đo băng thông máy chủ gửi đi khoảng **227 kbit/s** cho một cuộc gọi hai bên. Bản Go (Pion) chỉ **chép nguyên gói RTP** sang bên kia và ghi thẳng gói Opus ra Ogg – nhẹ hơn nhiều, đúng cách các SFU thật làm.
-- **Ghi âm từng bên rồi trộn.** Mỗi bên một tệp `<mã cuộc>-<mã người>.ogg` (Opus 24 kbit/s, mono). Hai tệp bắt đầu lệch nhau vài ms (ở đây 4 ms), nên `ffmpeg` dùng `adelay` bù độ lệch rồi `amix` thành `<mã cuộc>.ogg`. Cuộc gọi bị từ chối hoặc không ghi âm thì chỉ có dòng lịch sử.
+- **Ghi âm từng bên rồi trộn.** Mỗi bên một tệp `<mã cuộc>-<mã người>.ogg` (Opus 24 kbit/s, mono). Hai tệp bắt đầu lệch nhau vài ms (ở đây 2 ms), nên `ffmpeg` dùng `adelay` bù độ lệch rồi `amix` thành `<mã cuộc>.ogg`. Cuộc gọi bị từ chối hoặc không ghi âm thì chỉ có dòng lịch sử.
 - **MQTT: retain và Last Will.** Vị trí gửi QoS 0 kèm cờ *retain*: An đăng ký sau khi Hùng đã chạy, vẫn nhận ngay điểm cuối cùng ("điểm giữ lại khi mới đăng ký"). Tài xế kết nối kèm di chúc `xe/<mã>/trangthai = mat_ket_noi`; xe XT02 đóng TCP đột ngột nên broker báo "ngắt kết nối bất thường" và tự phát di chúc, bảng điều khiển chuyển xe sang màu xám "mất kết nối". Thoát đúng cách (`DISCONNECT`) thì broker **không** phát di chúc.
 - **Ước tính thời gian tới.** Có `con_lai_m` (tài xế chạy theo tuyến biết quãng còn lại) thì dùng; không thì lấy đường chim bay (haversine) tới điểm đón × 1,3. Thời gian ≈ quãng đường / tốc độ, tốc độ dưới 15 km/h coi như 15 (kẹt xe, chờ đèn).
 
@@ -104,7 +104,7 @@ Muốn tái lập kết quả, chạy từ thư mục gốc của kho: `python3 
 ## Ứng dụng giao diện
 ![Bảng điều khiển máy chủ](ket_qua_gui.png)
 
-Ảnh trên chụp bảng điều khiển ở giây thứ 20 của kịch bản (Chromium không giao diện qua Playwright): 3 người trực tuyến (1 khách, 2 tài xế – Bình đã thoát), cuộc gọi An ↔ Hùng đang diễn ra (RTT 1 ms do cùng máy, không ghi âm, nút **Ngắt**), băng thông chuyển tiếp 226,9 kbit/s, 1,2 điểm vị trí/giây; bản ghi `call-20261107-071546.ogg` của cuộc Bình ↔ Hùng (9 s) có nút **Nghe** và **Tải về**; bản đồ có Hùng (cam: giả lập, kèm vệt đã đi) và "Xe thử 02" (xám: mất kết nối sau Last Will).
+Ảnh trên chụp bảng điều khiển ở giây thứ 20 của kịch bản (Chromium không giao diện qua Playwright): 3 người trực tuyến (1 khách, 2 tài xế – Bình đã thoát), cuộc gọi An ↔ Hùng đang diễn ra (không ghi âm, nút **Ngắt**), băng thông chuyển tiếp 227 kbit/s, 1,2 điểm vị trí/giây; bản ghi `call-20261107-085148.ogg` của cuộc Bình ↔ Hùng (9 s) có nút **Nghe** và **Tải về**; bản đồ có Hùng (cam: giả lập, kèm vệt đã đi) và "Xe thử 02" (xám: mất kết nối sau Last Will).
 
 Giao diện điện thoại là app Android Kotlin + Compose: [android/Chuong06/BaiMR6.15_GoiThoaiTheoDoiXe](../../../android/Chuong06/BaiMR6.15_GoiThoaiTheoDoiXe/).
 

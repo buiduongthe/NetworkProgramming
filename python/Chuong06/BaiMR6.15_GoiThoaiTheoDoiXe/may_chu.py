@@ -325,7 +325,9 @@ class MayChu:
             ds = [x for x in self.lich_su if nd.ma in (x["goi"]["ma"], x["nghe"]["ma"])]
             await nd.gui({"loai": "lich_su", "ds": ds[-50:][::-1]})
         elif c is None or nd not in (c.goi, c.nghe):
-            await nd.gui({"loai": "loi", "ly_do": "không có cuộc gọi này", "ma_cuoc": tin.get("ma_cuoc")})
+            # Tin trễ của cuộc gọi vừa kết thúc (thống kê, ICE gửi trước khi nhận da_ket_thuc) là bình thường: bỏ qua.
+            if loai not in ("thong_ke", "ice", "sdp", "giu_may", "tat_mic"):
+                await nd.gui({"loai": "loi", "ly_do": "không có cuộc gọi này", "ma_cuoc": tin.get("ma_cuoc")})
         elif loai == "tra_loi" and nd is c.nghe and c.trang_thai == "do_chuong":
             c.trang_thai, c.t_tra_loi = "dang_noi", time.time()
             if c.han_chuong:

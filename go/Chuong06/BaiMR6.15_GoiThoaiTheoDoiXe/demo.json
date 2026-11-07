@@ -112,7 +112,7 @@
     "--tan-so",
     "660",
     "--thoi-gian",
-    "26"
+    "45"
    ],
    "background": true,
    "wait": 0.3
@@ -137,7 +137,7 @@
     "--ly-do",
     "Gọi lại sau",
     "--thoi-gian",
-    "25"
+    "45"
    ],
    "background": true,
    "wait": 0.3

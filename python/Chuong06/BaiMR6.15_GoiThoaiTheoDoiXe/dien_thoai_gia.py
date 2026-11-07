@@ -229,8 +229,8 @@ class DienThoai:
                 self.log(f"{self.ten_kia} {'tắt' if t['tat_mic'] else 'bật'} micro")
         elif loai == "da_ket_thuc":
             self.log(f"cuộc gọi kết thúc: {t['ly_do']} ({t['ket_qua']}, {t['thoi_luong']:.1f} s)")
+            self.ma_cuoc = None                       # trước khi đóng: vòng thống kê không gửi thêm tin cho cuộc cũ
             await self.ket_thuc_am_thanh()
-            self.ma_cuoc = None
             if a.lich_su:
                 await self.gui(loai="lich_su")
         elif loai == "lich_su":

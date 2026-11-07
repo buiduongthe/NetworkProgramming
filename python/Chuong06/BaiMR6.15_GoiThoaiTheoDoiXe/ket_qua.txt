@@ -1,97 +1,95 @@
 ===== server =====
 $ python3 may_chu.py 127.0.0.1 41790 41791 --thu-muc ban_ghi_demo
-[may_chu] 07:15:42 Báo hiệu ws://127.0.0.1:41790/ws · MQTT 41791; bảng điều khiển http://127.0.0.1:41790/; ghi âm vào ban_ghi_demo
-[may_chu] 07:15:43 mqtt: taixe-51F12345 (127.0.0.1:44418) kết nối, keepalive 10 s
-[may_chu] 07:15:44 mqtt: taixe-XT02 (127.0.0.1:44428) kết nối, keepalive 10 s
-[may_chu] 07:15:44 mqtt: khach-An-1794010544 (127.0.0.1:44432) kết nối, keepalive 30 s
-[may_chu] 07:15:44 Hùng (0902, Tài xế · 51F-123.45 · Toyota Vios trắng) đăng nhập từ 127.0.0.1
-[may_chu] 07:15:45 Chi (0903, Tài xế · 51G-678.90 · Kia Morning đỏ) đăng nhập từ 127.0.0.1
-[may_chu] 07:15:45 Bình (0901, Khách · chuyến FS-0418 · đón tại 22 Nguyễn Huệ) đăng nhập từ 127.0.0.1
-[may_chu] 07:15:46 An (0904, Khách) đăng nhập từ 127.0.0.1
-[may_chu] 07:15:46 call-20261107-071546: Bình gọi Hùng (ghi âm)
-[may_chu] 07:15:48 call-20261107-071546: Hùng trả lời
-[may_chu] 07:15:48 call-20261107-071546: nhận âm thanh của Hùng
-[may_chu] 07:15:48 call-20261107-071546: nhận âm thanh của Bình
-[may_chu] 07:15:48 call-20261107-071546: WebRTC của Hùng: connecting
-[may_chu] 07:15:48 call-20261107-071546: WebRTC của Bình: connecting
-[may_chu] 07:15:48 call-20261107-071546: WebRTC của Bình: connected
-[may_chu] 07:15:48 call-20261107-071546: WebRTC của Hùng: connected
-[may_chu] 07:15:48 call-20261107-071548: An gọi Chi
-[may_chu] 07:15:49 call-20261107-071548: kết thúc (tu_choi: Gọi lại sau), thời lượng 00:00
-[may_chu] 07:15:57 call-20261107-071546: kết thúc (hoan_thanh: Bình kết thúc), thời lượng 00:09
-[may_chu] 07:15:57 call-20261107-071546: WebRTC của Hùng: closed
-[may_chu] 07:15:57 call-20261107-071546: WebRTC của Bình: closed
-[may_chu] 07:15:57 call-20261107-071546: đã trộn hai bên -> call-20261107-071546.ogg (lệch 4 ms)
-[may_chu] 07:15:59 call-20261107-071559: An gọi Hùng
-[may_chu] 07:15:59 Bình (0901) rời mạng
-[may_chu] 07:16:00 call-20261107-071559: Hùng trả lời
-[may_chu] 07:16:00 call-20261107-071559: nhận âm thanh của Hùng
-[may_chu] 07:16:00 call-20261107-071559: WebRTC của Hùng: connecting
-[may_chu] 07:16:00 call-20261107-071559: nhận âm thanh của An
-[may_chu] 07:16:00 call-20261107-071559: WebRTC của An: connecting
-[may_chu] 07:16:00 call-20261107-071559: WebRTC của Hùng: connected
-[may_chu] 07:16:00 call-20261107-071559: WebRTC của An: connected
-[may_chu] 07:16:02 mqtt: taixe-XT02 ngắt kết nối bất thường
-[may_chu] 07:16:08 call-20261107-071559: kết thúc (hoan_thanh: An kết thúc), thời lượng 00:08
-[may_chu] 07:16:08 call-20261107-071559: WebRTC của Hùng: closed
-[may_chu] 07:16:08 call-20261107-071559: WebRTC của An: closed
-[may_chu] 07:16:09 mqtt: khach-An-1794010544 ngắt kết nối
-[may_chu] 07:16:09 mqtt: taixe-51F12345 ngắt kết nối
-[may_chu] 07:16:10 An (0904) rời mạng
-[may_chu] 07:16:10 Chi (0903) rời mạng
-[may_chu] 07:16:10 Hùng (0902) rời mạng
-[may_chu] 07:16:11 Dừng. Đã phục vụ 4 người dùng, 3 cuộc gọi trong lịch sử, 41 tin MQTT
+[may_chu] 08:51:44 Báo hiệu ws://127.0.0.1:41790/ws · MQTT 41791; bảng điều khiển http://127.0.0.1:41790/; ghi âm vào ban_ghi_demo
+[may_chu] 08:51:45 mqtt: taixe-51F12345 (127.0.0.1:54272) kết nối, keepalive 10 s
+[may_chu] 08:51:45 mqtt: taixe-XT02 (127.0.0.1:54278) kết nối, keepalive 10 s
+[may_chu] 08:51:46 mqtt: khach-An-1794016306 (127.0.0.1:54294) kết nối, keepalive 30 s
+[may_chu] 08:51:46 Hùng (0902, Tài xế · 51F-123.45 · Toyota Vios trắng) đăng nhập từ 127.0.0.1
+[may_chu] 08:51:46 Chi (0903, Tài xế · 51G-678.90 · Kia Morning đỏ) đăng nhập từ 127.0.0.1
+[may_chu] 08:51:47 Bình (0901, Khách · chuyến FS-0418 · đón tại 22 Nguyễn Huệ) đăng nhập từ 127.0.0.1
+[may_chu] 08:51:47 An (0904, Khách) đăng nhập từ 127.0.0.1
+[may_chu] 08:51:48 call-20261107-085148: Bình gọi Hùng (ghi âm)
+[may_chu] 08:51:49 call-20261107-085148: Hùng trả lời
+[may_chu] 08:51:49 call-20261107-085148: nhận âm thanh của Bình
+[may_chu] 08:51:49 call-20261107-085148: nhận âm thanh của Hùng
+[may_chu] 08:51:49 call-20261107-085148: WebRTC của Bình: connecting
+[may_chu] 08:51:49 call-20261107-085148: WebRTC của Hùng: connecting
+[may_chu] 08:51:49 call-20261107-085148: WebRTC của Bình: connected
+[may_chu] 08:51:49 call-20261107-085148: WebRTC của Hùng: connected
+[may_chu] 08:51:50 call-20261107-085150: An gọi Chi
+[may_chu] 08:51:51 call-20261107-085150: kết thúc (tu_choi: Gọi lại sau), thời lượng 00:00
+[may_chu] 08:51:58 call-20261107-085148: kết thúc (hoan_thanh: Bình kết thúc), thời lượng 00:09
+[may_chu] 08:51:58 call-20261107-085148: WebRTC của Bình: closed
+[may_chu] 08:51:58 call-20261107-085148: WebRTC của Hùng: closed
+[may_chu] 08:51:59 call-20261107-085148: đã trộn hai bên -> call-20261107-085148.ogg (lệch 2 ms)
+[may_chu] 08:52:00 call-20261107-085200: An gọi Hùng
+[may_chu] 08:52:01 Bình (0901) rời mạng
+[may_chu] 08:52:02 call-20261107-085200: Hùng trả lời
+[may_chu] 08:52:02 call-20261107-085200: nhận âm thanh của Hùng
+[may_chu] 08:52:02 call-20261107-085200: WebRTC của Hùng: connecting
+[may_chu] 08:52:02 call-20261107-085200: nhận âm thanh của An
+[may_chu] 08:52:02 call-20261107-085200: WebRTC của An: connecting
+[may_chu] 08:52:02 call-20261107-085200: WebRTC của Hùng: connected
+[may_chu] 08:52:02 call-20261107-085200: WebRTC của An: connected
+[may_chu] 08:52:03 mqtt: taixe-XT02 ngắt kết nối bất thường
+[may_chu] 08:52:10 call-20261107-085200: kết thúc (hoan_thanh: An kết thúc), thời lượng 00:08
+[may_chu] 08:52:10 call-20261107-085200: WebRTC của Hùng: closed
+[may_chu] 08:52:10 call-20261107-085200: WebRTC của An: closed
+[may_chu] 08:52:11 mqtt: khach-An-1794016306 ngắt kết nối
+[may_chu] 08:52:11 mqtt: taixe-51F12345 ngắt kết nối
+[may_chu] 08:52:11 An (0904) rời mạng
+[may_chu] 08:52:12 Dừng. Đã phục vụ 4 người dùng, 3 cuộc gọi trong lịch sử, 41 tin MQTT
 
 ===== TX1 =====
 $ python3 tai_xe_gia.py 'Hùng' 51F12345 127.0.0.1 41791 --xe 'Toyota Vios trắng' --toc-do 40 --bat-dau 0.55 --thoi-gian 27
 [Hùng]   0.0s MQTT 127.0.0.1:41791 – Last Will xe/51F12345/trangthai=mat_ket_noi; tuyến Bến Thành → Thảo Điền (5.5 km), 40 km/h, gửi mỗi 1 s, nhiễu ± 5 m
-[Hùng]   0.0s #1 10.79155,106.71594 hướng 48°, còn 2.46 km
-[Hùng]   4.0s #5 10.79182,106.71622 hướng 48°, còn 2.41 km
-[Hùng]   9.0s #10 10.79215,106.71660 hướng 48°, còn 2.36 km
-[Hùng]  14.0s #15 10.79251,106.71701 hướng 48°, còn 2.30 km
-[Hùng]  19.0s #20 10.79282,106.71737 hướng 46°, còn 2.24 km
-[Hùng]  24.0s #25 10.79321,106.71768 hướng 46°, còn 2.19 km
+[Hùng]   0.0s #1 10.79157,106.71597 hướng 48°, còn 2.46 km
+[Hùng]   4.0s #5 10.79182,106.71621 hướng 48°, còn 2.41 km
+[Hùng]   9.0s #10 10.79215,106.71659 hướng 48°, còn 2.36 km
+[Hùng]  14.0s #15 10.79253,106.71701 hướng 48°, còn 2.30 km
+[Hùng]  19.0s #20 10.79284,106.71734 hướng 46°, còn 2.24 km
+[Hùng]  24.0s #25 10.79321,106.71775 hướng 46°, còn 2.19 km
 [Hùng]  26.0s nghỉ: gửi xe/51F12345/trangthai=nghi rồi DISCONNECT (đã gửi 27 điểm)
 
 ===== TX2 =====
 $ python3 tai_xe_gia.py 'Xe thử 02' XT02 127.0.0.1 41791 --tuyen 1 --toc-do 25 --nhieu 22 --chu-ky 2 --thoi-gian 20 --mat-song
 [Xe thử 02]   0.0s MQTT 127.0.0.1:41791 – Last Will xe/XT02/trangthai=mat_ket_noi; tuyến Vòng quanh khối nhà mẫu (2.1 km), 25 km/h, gửi mỗi 2 s, nhiễu ± 22 m
-[Xe thử 02]   0.0s #1 10.77642,106.69680 hướng 90°
-[Xe thử 02]   8.0s #5 10.77661,106.69726 hướng 90°
-[Xe thử 02]  18.0s #10 10.77650,106.69800 hướng 90°
+[Xe thử 02]   0.0s #1 10.77650,106.69675 hướng 90°
+[Xe thử 02]   8.0s #5 10.77649,106.69726 hướng 90°
+[Xe thử 02]  18.0s #10 10.77660,106.69784 hướng 90°
 [Xe thử 02]  18.0s mất sóng: đóng TCP không gửi DISCONNECT (đã gửi 10 điểm)
 
 ===== KH =====
 $ python3 khach_theo_doi.py An 51F12345 127.0.0.1 41791 --thoi-gian 25 --moi 5
 [An]   0.0s đăng ký xe/51F12345/vitri, xe/51F12345/trangthai
 [An]   0.0s trạng thái tài xế: truc_tuyen (tin giữ lại)
-[An]   0.0s Hùng (giả lập) 10.79155,106.71594 40 km/h – còn 2.46 km, khoảng 4 phút – điểm giữ lại khi mới đăng ký (trễ 0.60 s)
-[An]   3.4s Hùng (giả lập) 10.79182,106.71622 40 km/h – còn 2.41 km, khoảng 4 phút (trễ 0.00 s)
-[An]   8.4s Hùng (giả lập) 10.79215,106.71660 40 km/h – còn 2.35 km, khoảng 4 phút (trễ 0.00 s)
-[An]  13.4s Hùng (giả lập) 10.79251,106.71701 40 km/h – còn 2.30 km, khoảng 3 phút (trễ 0.00 s)
-[An]  18.4s Hùng (giả lập) 10.79282,106.71737 40 km/h – còn 2.24 km, khoảng 3 phút (trễ 0.00 s)
-[An]  23.4s Hùng (giả lập) 10.79321,106.71768 40 km/h – còn 2.19 km, khoảng 3 phút (trễ 0.00 s)
+[An]   0.0s Hùng (giả lập) 10.79157,106.71597 40 km/h – còn 2.46 km, khoảng 4 phút – điểm giữ lại khi mới đăng ký (trễ 0.61 s)
+[An]   3.4s Hùng (giả lập) 10.79182,106.71621 40 km/h – còn 2.41 km, khoảng 4 phút (trễ 0.00 s)
+[An]   8.4s Hùng (giả lập) 10.79215,106.71659 40 km/h – còn 2.35 km, khoảng 4 phút (trễ 0.00 s)
+[An]  13.4s Hùng (giả lập) 10.79253,106.71701 40 km/h – còn 2.30 km, khoảng 3 phút (trễ 0.00 s)
+[An]  18.4s Hùng (giả lập) 10.79284,106.71734 40 km/h – còn 2.24 km, khoảng 3 phút (trễ 0.00 s)
+[An]  23.4s Hùng (giả lập) 10.79321,106.71775 40 km/h – còn 2.19 km, khoảng 3 phút (trễ 0.00 s)
 [An]  25.0s nhận 26 điểm vị trí
 
 ===== H =====
-$ python3 dien_thoai_gia.py 'Hùng' 0902 127.0.0.1 41790 --vai-tro tai_xe --bien-so 51F-123.45 --xe 'Toyota Vios trắng' --tan-so 660 --thoi-gian 26
+$ python3 dien_thoai_gia.py 'Hùng' 0902 127.0.0.1 41790 --vai-tro tai_xe --bien-so 51F-123.45 --xe 'Toyota Vios trắng' --tan-so 660 --thoi-gian 45
 [Hùng]   0.0s đăng nhập máy chủ Python (aiortc) (mã xe 51F12345)
 [Hùng]   0.0s danh bạ trực tuyến: –
 [Hùng]   0.3s danh bạ trực tuyến: Chi
-[Hùng]   0.6s danh bạ trực tuyến: Bình, Chi
+[Hùng]   0.7s danh bạ trực tuyến: Bình, Chi
 [Hùng]   1.2s danh bạ trực tuyến: An, Bình, Chi
-[Hùng]   1.6s CUỘC GỌI ĐẾN từ Bình (Khách · chuyến FS-0418 · đón tại 22 Nguyễn Huệ) – sẽ được ghi âm
-[Hùng]   3.1s > trả lời
-[Hùng]   3.1s đã kết nối cuộc gọi – đang ghi âm
-[Hùng]   3.1s WebRTC tới máy chủ: connecting
+[Hùng]   1.7s CUỘC GỌI ĐẾN từ Bình (Khách · chuyến FS-0418 · đón tại 22 Nguyễn Huệ) – sẽ được ghi âm
+[Hùng]   3.2s > trả lời
+[Hùng]   3.2s đã kết nối cuộc gọi – đang ghi âm
+[Hùng]   3.2s WebRTC tới máy chủ: connecting
 [Hùng]   3.2s WebRTC tới máy chủ: connected
-[Hùng]   7.1s Bình đang giữ máy
-[Hùng]   9.1s Bình đã quay lại
-[Hùng]  12.1s cuộc gọi kết thúc: Bình kết thúc (hoan_thanh, 9.0 s)
-[Hùng]  12.1s WebRTC tới máy chủ: closed
+[Hùng]   7.2s Bình đang giữ máy
+[Hùng]   9.2s Bình đã quay lại
+[Hùng]  12.2s cuộc gọi kết thúc: Bình kết thúc (hoan_thanh, 9.0 s)
+[Hùng]  12.2s WebRTC tới máy chủ: closed
 [Hùng]  12.2s đã nghe thấy âm 440 Hz của Bình (mức -17.7 dBFS)
 [Hùng]  14.2s CUỘC GỌI ĐẾN từ An (Khách)
-[Hùng]  14.6s danh bạ trực tuyến: An, Chi
+[Hùng]  14.7s danh bạ trực tuyến: An, Chi
 [Hùng]  15.7s > trả lời
 [Hùng]  15.7s đã kết nối cuộc gọi
 [Hùng]  15.7s WebRTC tới máy chủ: connecting
@@ -100,41 +98,40 @@ $ python3 dien_thoai_gia.py 'Hùng' 0902 127.0.0.1 41790 --vai-tro tai_xe --bien
 [Hùng]  23.7s WebRTC tới máy chủ: closed
 [Hùng]  23.8s đã nghe thấy âm 440 Hz của An (mức -17.1 dBFS)
 [Hùng]  25.2s danh bạ trực tuyến: Chi
-[Hùng]  25.3s danh bạ trực tuyến: –
 
 ===== C =====
-$ python3 dien_thoai_gia.py Chi 0903 127.0.0.1 41790 --vai-tro tai_xe --bien-so 51G-678.90 --xe 'Kia Morning đỏ' --tra-loi tu_choi --ly-do 'Gọi lại sau' --thoi-gian 25
+$ python3 dien_thoai_gia.py Chi 0903 127.0.0.1 41790 --vai-tro tai_xe --bien-so 51G-678.90 --xe 'Kia Morning đỏ' --tra-loi tu_choi --ly-do 'Gọi lại sau' --thoi-gian 45
 [Chi]   0.0s đăng nhập máy chủ Python (aiortc) (mã xe 51G67890)
 [Chi]   0.0s danh bạ trực tuyến: Hùng
-[Chi]   0.3s danh bạ trực tuyến: Bình, Hùng
+[Chi]   0.4s danh bạ trực tuyến: Bình, Hùng
 [Chi]   0.8s danh bạ trực tuyến: An, Bình, Hùng
 [Chi]   3.3s CUỘC GỌI ĐẾN từ An (Khách)
 [Chi]   4.3s > từ chối: Gọi lại sau
 [Chi]   4.3s cuộc gọi kết thúc: Gọi lại sau (tu_choi, 0.0 s)
-[Chi]  14.3s danh bạ trực tuyến: An, Hùng
+[Chi]  14.4s danh bạ trực tuyến: An, Hùng
 [Chi]  24.8s danh bạ trực tuyến: Hùng
 
 ===== B =====
 $ python3 dien_thoai_gia.py 'Bình' 0901 127.0.0.1 41790 --chuyen FS-0418 --diem-don '22 Nguyễn Huệ' --ghi-am --goi 0902 1 --noi 9 --giu-may 4 6 --thoi-gian 14
 [Bình]   0.0s đăng nhập máy chủ Python (aiortc) (mã xe 0901)
 [Bình]   0.0s danh bạ trực tuyến: Chi, Hùng
-[Bình]   0.6s danh bạ trực tuyến: An, Chi, Hùng
+[Bình]   0.5s danh bạ trực tuyến: An, Chi, Hùng
 [Bình]   1.0s > gọi 0902
 [Bình]   1.0s đang đổ chuông bên Hùng (Tài xế · 51F-123.45 · Toyota Vios trắng)
 [Bình]   2.5s đã kết nối cuộc gọi – đang ghi âm
 [Bình]   2.5s WebRTC tới máy chủ: connecting
-[Bình]   2.6s WebRTC tới máy chủ: connected
+[Bình]   2.5s WebRTC tới máy chủ: connected
 [Bình]   6.5s > giữ máy
 [Bình]   8.5s > bỏ giữ máy
 [Bình]   8.5s trong lúc giữ máy nghe được mức -120 dBFS (im lặng)
 [Bình]  11.5s > kết thúc cuộc gọi
 [Bình]  11.5s cuộc gọi kết thúc: Bình kết thúc (hoan_thanh, 9.0 s)
 [Bình]  11.5s WebRTC tới máy chủ: closed
-[Bình]  11.5s đã nghe thấy âm 660 Hz của Hùng (mức -17.6 dBFS)
+[Bình]  11.6s đã nghe thấy âm 660 Hz của Hùng (mức -17.6 dBFS)
 
 ===== chup =====
 $ python3 chup_bang_dieu_khien.py http://127.0.0.1:41790/ ket_qua_gui.png --sau 20
-[chup]  20.4s đã chụp http://127.0.0.1:41790/ -> ket_qua_gui.png; số liệu: 3, 1, 226,9 kbit/s, 1,2
+[chup]  20.4s đã chụp http://127.0.0.1:41790/ -> ket_qua_gui.png; số liệu: 3, 1, 227 kbit/s, 1,2
 
 ===== A =====
 $ python3 dien_thoai_gia.py An 0904 127.0.0.1 41790 --goi 0903 2.5 --goi 0902 13 --noi 8 --lich-su --thoi-gian 24
@@ -143,17 +140,17 @@ $ python3 dien_thoai_gia.py An 0904 127.0.0.1 41790 --goi 0903 2.5 --goi 0902 13
 [An]   2.5s > gọi 0903
 [An]   2.5s đang đổ chuông bên Chi (Tài xế · 51G-678.90 · Kia Morning đỏ)
 [An]   3.5s cuộc gọi kết thúc: Gọi lại sau (tu_choi, 0.0 s)
-[An]   3.5s lịch sử: 2026-11-07 07:15:48 Chi tu_choi 0 s – không ghi âm
+[An]   3.5s lịch sử: 2026-11-07 08:51:50 Chi tu_choi 0 s – không ghi âm
 [An]  13.0s > gọi 0902
 [An]  13.0s đang đổ chuông bên Hùng (Tài xế · 51F-123.45 · Toyota Vios trắng)
-[An]  13.4s danh bạ trực tuyến: Chi, Hùng
+[An]  13.5s danh bạ trực tuyến: Chi, Hùng
 [An]  14.5s đã kết nối cuộc gọi
 [An]  14.5s WebRTC tới máy chủ: connecting
 [An]  14.5s WebRTC tới máy chủ: connected
 [An]  22.5s > kết thúc cuộc gọi
 [An]  22.5s cuộc gọi kết thúc: An kết thúc (hoan_thanh, 8.0 s)
 [An]  22.5s WebRTC tới máy chủ: closed
-[An]  22.5s đã nghe thấy âm 660 Hz của Hùng (mức -16.5 dBFS)
-[An]  22.5s lịch sử: 2026-11-07 07:15:59 Hùng hoan_thanh 8 s – không ghi âm
-[An]  22.5s lịch sử: 2026-11-07 07:15:48 Chi tu_choi 0 s – không ghi âm
+[An]  22.6s đã nghe thấy âm 660 Hz của Hùng (mức -16.5 dBFS)
+[An]  22.6s lịch sử: 2026-11-07 08:52:00 Hùng hoan_thanh 8 s – không ghi âm
+[An]  22.6s lịch sử: 2026-11-07 08:51:50 Chi tu_choi 0 s – không ghi âm
 
