@@ -37,12 +37,12 @@ Số liệu lấy từ `ket_qua.txt`, một lần chạy thật trên máy cục
 - `maychu.go`: `MayChu` (danh bạ, `xuLyWs` đọc tin JSON, `xuLyTin`, `batDauGoi`, `nhanOffer` tạo `RTCPeerConnection` và nối hai bên, `nhanIce`, `ketThuc` ghi lịch sử và gọi `tron` (ffmpeg), `nhanMqtt` cho bản đồ, `doBangThong`, `trangThai` cho `/api/trangthai`), `taoAPI` (codec Opus, interceptor, UDP mux), `taoChungChi` (`--tls`), `main` (các đường HTTP).
 - `mqtt.go`: MQTT broker tự viết.
 - `bang_dieu_khien.html`: trang bảng điều khiển (giống hệt bản Python).
-- `go.mod`: mô-đun riêng; `go.sum` tạo khi chạy `go mod tidy` (không đưa lên kho).
+- `go.mod`, `go.sum`: mô-đun riêng; `go.sum` ghim mã băm các mô-đun (sinh ở lần biên dịch đầu tiên khi kiểm thử trên Windows).
 - `demo.json`, `ket_qua.txt`, `ket_qua.png`, `ket_qua_gui.png`: kịch bản và kết quả thực thi thật (kịch bản gọi các công cụ trong thư mục bản Python).
 
 ## Cách chạy
 ```bash
-go mod tidy                                    # lần đầu: tải Pion, gorilla/websocket, tạo go.sum (cần mạng)
+go mod download                                # lần đầu: tải Pion, gorilla/websocket (cần mạng)
 go run . 0.0.0.0 8080 1883 --udp 50000         # báo hiệu 8080, MQTT 1883, WebRTC UDP 50000
 # hoặc biên dịch một lần: go build -o may_chu . (Windows: go build -o may_chu.exe .)
 ```
