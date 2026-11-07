@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Máy chủ Gọi thoại &amp; Theo dõi xe</title>
+<!-- Bài mở rộng MR6.15 – bảng điều khiển máy chủ. Trang tĩnh, mỗi giây lấy /api/trangthai (JSON) rồi vẽ lại;
+     dùng chung cho bản Python và bản Go. Phông Be Vietnam Pro tải từ Google Fonts nếu có mạng, không thì phông hệ thống. -->
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--nen:#F6F8F7;--chu:#13201A;--phu:#4A5A52;--vien:#E1E7E4;--xanh:#0B7A43;--cam:#B26A00;--do:#B3261E}
+*{box-sizing:border-box}
+body{margin:0;background:var(--nen);color:var(--chu);font-family:'Be Vietnam Pro',system-ui,sans-serif}
+a{color:var(--xanh)}a:hover{color:#075C32}
+header{background:#0F2A1E;color:#fff}
+.dau{max-width:1240px;margin:0 auto;padding:18px 24px;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between}
+h1{margin:0;font-size:20px;font-weight:700}
+.dau small{font-size:13px;color:#B9D3C5}
+.the-ban{padding:6px 12px;border-radius:999px;background:#1E4A35;font-size:13px}
+button{font:inherit;cursor:pointer}
+.nut-dung{height:36px;padding:0 16px;border-radius:18px;border:1px solid #3F6E58;background:transparent;color:#fff;font-size:13px;font-weight:600}
+main{max-width:1240px;margin:0 auto;padding:24px;display:flex;flex-direction:column;gap:24px}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.o{padding:18px 20px;border-radius:16px;background:#fff;border:1px solid var(--vien);display:flex;flex-direction:column;gap:4px}
+.o span:first-child{font-size:13px;color:var(--phu)}
+.o b{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums}
+.o span:last-child{font-size:12px;color:var(--phu)}
+.hang{display:flex;flex-wrap:wrap;gap:24px}
+section.khung{padding:20px;border-radius:16px;background:#fff;border:1px solid var(--vien);display:flex;flex-direction:column;gap:14px;min-width:0}
+h2{margin:0;font-size:17px;font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+th{text-align:left;color:var(--phu);font-size:12px;padding:8px 10px;font-weight:600;border-bottom:1px solid var(--vien)}
+td{padding:12px 10px;border-bottom:1px solid #EEF2F0;font-variant-numeric:tabular-nums}
+.ghi{display:inline-flex;align-items:center;gap:6px;color:var(--do);font-weight:600}
+.ghi i{width:8px;height:8px;border-radius:50%;background:#D93025}
+.nut-nho{height:32px;padding:0 12px;border-radius:16px;border:1px solid #B8C4BE;background:#fff;color:#34443C;font-size:12px}
+ul{list-style:none;margin:0;padding:0}
+.bg li{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:10px 0;border-bottom:1px solid #EEF2F0;font-size:14px}
+.bg code{font-family:ui-monospace,monospace;font-size:13px;flex:1 1 260px}
+.bg .meta{color:var(--phu);font-size:13px}
+.bg audio{width:100%;height:36px}
+.xe li{display:flex;align-items:center;gap:10px;font-size:14px;padding:3px 0}
+.xe .cham{width:10px;height:10px;border-radius:50%}
+.trong{color:var(--phu);font-size:14px}
+.chu-thich{margin:0;font-size:12px;color:var(--phu)}
+</style>
+</head>
+<body>
+<header><div class="dau">
+  <div style="display:flex;flex-direction:column;gap:2px"><h1>Máy chủ Gọi thoại &amp; Theo dõi xe</h1><small id="dia-chi">…</small></div>
+  <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><span class="the-ban" id="ban">…</span>
+    <button type="button" class="nut-dung" id="nut-dung">Dừng máy chủ</button></div>
+</div></header>
+<main>
+  <section class="kpi" aria-label="Số liệu" id="kpi"></section>
+  <div class="hang">
+    <section class="khung" aria-labelledby="h-goi" style="flex:999 1 560px">
+      <h2 id="h-goi">Cuộc gọi đang diễn ra</h2>
+      <div style="overflow-x:auto"><table>
+        <thead><tr><th scope="col">Hai bên</th><th scope="col">Thời lượng</th><th scope="col">RTT</th><th scope="col">Mất gói</th>
+          <th scope="col">Ghi âm</th><th scope="col"><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Thao tác</span></th></tr></thead>
+        <tbody id="cuoc"></tbody>
+      </table></div>
+      <h2 style="margin-top:8px">Bản ghi mới nhất</h2>
+      <ul class="bg" id="ban-ghi"></ul>
+    </section>
+    <section class="khung" aria-labelledby="h-xe" style="flex:1 1 360px">
+      <h2 id="h-xe">Tài xế trên bản đồ</h2>
+      <svg id="ban-do" viewBox="0 0 360 300" width="100%" role="img" aria-label="Bản đồ vị trí tài xế" style="border-radius:12px;display:block"></svg>
+      <ul class="xe" id="tai-xe"></ul>
+      <p class="chu-thich">Xanh: GPS thật · Cam: giả lập · Xám: mất kết nối / nghỉ</p>
+    </section>
+  </div>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const so = (x, n = 1) => x == null ? '–' : Number(x).toLocaleString('vi-VN', {maximumFractionDigits: n});
+const mb = b => (b / 1048576).toLocaleString('vi-VN', {maximumFractionDigits: 2}) + ' MB';
+function thoiGian(s) { const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60);
+  return h ? `${h} giờ ${m} phút` : m ? `${m} phút` : `${s} giây`; }
+let dangNghe = '';                 // tệp đang mở trình phát (giữ khi vẽ lại)
+
+function veKpi(d) {
+  const s = d.so_lieu;
+  const o = [['Người trực tuyến', s.truc_tuyen, `${s.khach} khách, ${s.tai_xe} tài xế`],
+             ['Cuộc gọi đang diễn ra', s.dang_goi, `${s.cuoc_hom_nay} cuộc hôm nay`],
+             ['Băng thông chuyển tiếp', so(s.kbit_s) + ' kbit/s', d.may_chu.ban.startsWith('Go') ? 'Opus, chỉ chuyển gói, không giải mã' : 'Opus, giải mã rồi mã hóa lại (aiortc)'],
+             ['Điểm vị trí / giây', so(s.diem_s), `MQTT QoS 0 · ${s.mqtt_ket_noi} kết nối`]];
+  $('kpi').innerHTML = o.map(([a, b, c]) => `<div class="o"><span>${esc(a)}</span><b>${esc(b)}</b><span>${esc(c)}</span></div>`).join('');
+}
+
+function veCuoc(d) {
+  $('cuoc').innerHTML = d.cuoc.length ? d.cuoc.map(c => `<tr>
+    <td style="font-weight:600">${esc(c.ai)}${c.giu_may ? ' <span class="trong">(giữ máy)</span>' : ''}</td>
+    <td>${esc(c.thoi_luong)}</td><td>${c.rtt_ms == null ? '–' : so(c.rtt_ms, 0) + ' ms'}</td>
+    <td>${c.mat_goi == null ? '–' : so(c.mat_goi) + ' %'}</td>
+    <td>${c.ghi_am ? '<span class="ghi"><i></i>Đang ghi</span>' : '<span class="trong">Không ghi</span>'}</td>
+    <td style="text-align:right"><button type="button" class="nut-nho" data-ngat="${esc(c.ma)}">Ngắt</button></td></tr>`).join('')
+    : '<tr><td colspan="6" class="trong">Chưa có cuộc gọi nào.</td></tr>';
+}
+
+function veBanGhi(d) {
+  const ds = d.ban_ghi;
+  if (!ds.length) { $('ban-ghi').innerHTML = '<li class="trong">Chưa có bản ghi.</li>'; return; }
+  $('ban-ghi').innerHTML = ds.map(r => `<li><code>${esc(r.tep)}</code>
+    <span class="meta">${esc(r.ai)} · ${esc(r.thoi_luong)} · ${mb(r.kich_thuoc)}</span>
+    <a href="#" data-nghe="${esc(r.tep)}">Nghe</a><a href="/banghi/${encodeURIComponent(r.tep)}" download>Tải về</a>
+    ${dangNghe === r.tep ? `<audio controls autoplay src="/banghi/${encodeURIComponent(r.tep)}"></audio>` : ''}</li>`).join('');
+}
+
+function veBanDo(d) {
+  const xs = d.tai_xe.filter(x => x.lat != null);
+  const svg = $('ban-do');
+  let nen = '<rect width="360" height="300" fill="#E6ECE7"/>';
+  for (let i = 1; i < 6; i++) nen += `<line x1="${i * 60}" y1="0" x2="${i * 60}" y2="300" stroke="#fff" stroke-width="2"/><line x1="0" y1="${i * 50}" x2="360" y2="${i * 50}" stroke="#fff" stroke-width="2"/>`;
+  if (!xs.length) { svg.innerHTML = nen + '<text x="180" y="155" text-anchor="middle" font-size="13" fill="#4A5A52">Chưa có tài xế gửi vị trí</text>'; return; }
+  const pts = xs.flatMap(x => x.vet.concat([[x.lat, x.lon]]));
+  let la0 = Math.min(...pts.map(p => p[0])), la1 = Math.max(...pts.map(p => p[0]));
+  let lo0 = Math.min(...pts.map(p => p[1])), lo1 = Math.max(...pts.map(p => p[1]));
+  const k = Math.cos((la0 + la1) / 2 * Math.PI / 180);              // phép chiếu phẳng: 1° kinh độ ngắn hơn ở vĩ độ cao
+  const rong = Math.max((lo1 - lo0) * k, 0.004), cao = Math.max(la1 - la0, 0.004);
+  const ti = Math.min(250 / rong, 220 / cao);                         // chừa lề cho nhãn tên
+  const cx = (lo0 + lo1) / 2, cy = (la0 + la1) / 2;
+  const P = (la, lo) => [170 + (lo - cx) * k * ti, 150 - (la - cy) * ti];
+  const mau = x => x.trang_thai === 'mat_ket_noi' || x.trang_thai === 'nghi' ? '#8A9590' : x.nguon === 'gps' ? '#0B7A43' : '#B26A00';
+  svg.setAttribute('aria-label', 'Bản đồ: ' + xs.map(x => `${x.ten} ${x.nguon === 'gps' ? 'GPS thật' : 'giả lập'}`).join(', '));
+  svg.innerHTML = nen + xs.map(x => {
+    const v = x.vet.map(p => P(p[0], p[1]).map(n => n.toFixed(1)).join(',')).join(' ');
+    const [px, py] = P(x.lat, x.lon);
+    return `<polyline points="${v}" fill="none" stroke="${mau(x)}" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="9" fill="${mau(x)}" stroke="#fff" stroke-width="3"/>
+      <text x="${(px > 250 ? px - 13 : px + 13).toFixed(1)}" y="${(py + 4).toFixed(1)}" text-anchor="${px > 250 ? 'end' : 'start'}" font-size="12" font-weight="600" fill="#13201A">${esc(x.ten)}</text>`;
+  }).join('');
+}
+
+function veTaiXe(d) {
+  $('tai-xe').innerHTML = d.tai_xe.length ? d.tai_xe.map(x => {
+    const tt = x.trang_thai === 'mat_ket_noi' ? 'mất kết nối' : x.trang_thai === 'nghi' ? 'nghỉ'
+      : (x.nguon === 'gps' ? `${so(x.cach_s, 0)} s trước` : 'giả lập');
+    return `<li><span class="cham" style="background:${x.trang_thai === 'mat_ket_noi' || x.trang_thai === 'nghi' ? '#8A9590' : x.nguon === 'gps' ? '#0B7A43' : '#B26A00'}"></span>
+      <span style="font-weight:600;flex:1 1 auto">${esc(x.ten)} <span class="trong">${esc(x.ma_xe)}</span></span>
+      <span class="trong">${so(x.toc_do, 0)} km/h · ${esc(tt)}</span></li>`; }).join('')
+    : '<li class="trong">Chưa có tài xế nào gửi vị trí.</li>';
+}
+
+async function capNhat() {
+  try {
+    const d = await (await fetch('/api/trangthai', {cache: 'no-store'})).json();
+    $('dia-chi').textContent = `${d.may_chu.dia_chi} · chạy ${thoiGian(d.may_chu.chay_s)}`;
+    $('ban').textContent = 'Bản ' + d.may_chu.ban;
+    veKpi(d); veCuoc(d); veBanDo(d); veTaiXe(d);
+    const khoa = JSON.stringify(d.ban_ghi) + dangNghe;                // không vẽ lại khi không đổi (để trình phát chạy tiếp)
+    if (khoa !== $('ban-ghi').dataset.khoa) { $('ban-ghi').dataset.khoa = khoa; veBanGhi(d); }
+  } catch (e) {
+    $('dia-chi').textContent = 'Mất kết nối tới máy chủ';
+  }
+}
+
+document.addEventListener('click', async e => {
+  const t = e.target;
+  if (t.dataset.ngat) { await fetch('/api/ngat/' + encodeURIComponent(t.dataset.ngat), {method: 'POST'}); capNhat(); }
+  if (t.dataset.nghe) { e.preventDefault(); dangNghe = dangNghe === t.dataset.nghe ? '' : t.dataset.nghe; capNhat(); }
+  if (t.id === 'nut-dung' && confirm('Dừng máy chủ? Mọi cuộc gọi đang diễn ra sẽ kết thúc.')) {
+    const r = await fetch('/api/dung', {method: 'POST'});
+    if (!r.ok) alert(await r.text());
+  }
+});
+capNhat();
+setInterval(capNhat, 1000);
+</script>
+</body>
+</html>

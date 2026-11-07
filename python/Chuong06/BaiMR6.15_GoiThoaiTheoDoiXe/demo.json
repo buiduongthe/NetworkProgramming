@@ -1,0 +1,212 @@
+{
+ "setup": [
+  [
+   "python3",
+   "-c",
+   "import shutil; shutil.rmtree('ban_ghi_demo', True)"
+  ]
+ ],
+ "processes": [
+  {
+   "name": "server",
+   "cmd": [
+    "python3",
+    "may_chu.py",
+    "127.0.0.1",
+    "41790",
+    "41791",
+    "--thu-muc",
+    "ban_ghi_demo"
+   ],
+   "background": true,
+   "wait": 1.5
+  },
+  {
+   "name": "TX1",
+   "cmd": [
+    "python3",
+    "tai_xe_gia.py",
+    "Hùng",
+    "51F12345",
+    "127.0.0.1",
+    "41791",
+    "--xe",
+    "Toyota Vios trắng",
+    "--toc-do",
+    "40",
+    "--bat-dau",
+    "0.55",
+    "--thoi-gian",
+    "27"
+   ],
+   "background": true,
+   "wait": 0.3
+  },
+  {
+   "name": "TX2",
+   "cmd": [
+    "python3",
+    "tai_xe_gia.py",
+    "Xe thử 02",
+    "XT02",
+    "127.0.0.1",
+    "41791",
+    "--tuyen",
+    "1",
+    "--toc-do",
+    "25",
+    "--nhieu",
+    "22",
+    "--chu-ky",
+    "2",
+    "--thoi-gian",
+    "20",
+    "--mat-song"
+   ],
+   "background": true,
+   "wait": 0.3
+  },
+  {
+   "name": "KH",
+   "cmd": [
+    "python3",
+    "khach_theo_doi.py",
+    "An",
+    "51F12345",
+    "127.0.0.1",
+    "41791",
+    "--thoi-gian",
+    "25",
+    "--moi",
+    "5"
+   ],
+   "background": true,
+   "wait": 0.3
+  },
+  {
+   "name": "H",
+   "cmd": [
+    "python3",
+    "dien_thoai_gia.py",
+    "Hùng",
+    "0902",
+    "127.0.0.1",
+    "41790",
+    "--vai-tro",
+    "tai_xe",
+    "--bien-so",
+    "51F-123.45",
+    "--xe",
+    "Toyota Vios trắng",
+    "--tan-so",
+    "660",
+    "--thoi-gian",
+    "26"
+   ],
+   "background": true,
+   "wait": 0.3
+  },
+  {
+   "name": "C",
+   "cmd": [
+    "python3",
+    "dien_thoai_gia.py",
+    "Chi",
+    "0903",
+    "127.0.0.1",
+    "41790",
+    "--vai-tro",
+    "tai_xe",
+    "--bien-so",
+    "51G-678.90",
+    "--xe",
+    "Kia Morning đỏ",
+    "--tra-loi",
+    "tu_choi",
+    "--ly-do",
+    "Gọi lại sau",
+    "--thoi-gian",
+    "25"
+   ],
+   "background": true,
+   "wait": 0.3
+  },
+  {
+   "name": "B",
+   "cmd": [
+    "python3",
+    "dien_thoai_gia.py",
+    "Bình",
+    "0901",
+    "127.0.0.1",
+    "41790",
+    "--chuyen",
+    "FS-0418",
+    "--diem-don",
+    "22 Nguyễn Huệ",
+    "--ghi-am",
+    "--goi",
+    "0902",
+    "1",
+    "--noi",
+    "9",
+    "--giu-may",
+    "4",
+    "6",
+    "--thoi-gian",
+    "14"
+   ],
+   "wait": 0.3,
+   "background": true
+  },
+  {
+   "name": "chup",
+   "cmd": [
+    "python3",
+    "chup_bang_dieu_khien.py",
+    "http://127.0.0.1:41790/",
+    "ket_qua_gui.png",
+    "--sau",
+    "20"
+   ],
+   "background": true,
+   "wait": 0.2,
+   "bo_qua_windows": "cần Playwright (Linux)"
+  },
+  {
+   "name": "A",
+   "cmd": [
+    "python3",
+    "dien_thoai_gia.py",
+    "An",
+    "0904",
+    "127.0.0.1",
+    "41790",
+    "--goi",
+    "0903",
+    "2.5",
+    "--goi",
+    "0902",
+    "13",
+    "--noi",
+    "8",
+    "--lich-su",
+    "--thoi-gian",
+    "24"
+   ],
+   "wait": 1,
+   "timeout": 40
+  }
+ ],
+ "titles": {
+  "server": "Cửa sổ 1 – máy chủ (WebSocket báo hiệu, WebRTC qua máy chủ, MQTT broker)",
+  "TX1": "Cửa sổ 2 – tài xế Hùng giả lập vị trí (MQTT, retain, Last Will)",
+  "TX2": "Cửa sổ 3 – tài xế Xe thử 02 (nhiễu ± 20 m, mất sóng ở cuối)",
+  "KH": "Cửa sổ 4 – khách An theo dõi xe 51F12345",
+  "H": "Cửa sổ 5 – điện thoại Hùng (tài xế, phát âm 660 Hz)",
+  "C": "Cửa sổ 6 – điện thoại Chi (từ chối – Gọi lại sau)",
+  "B": "Cửa sổ 7 – điện thoại Bình gọi Hùng (ghi âm, giữ máy, 440 Hz)",
+  "chup": "Cửa sổ 8 – chụp bảng điều khiển",
+  "A": "Cửa sổ 9 – điện thoại An gọi Chi (bị từ chối) rồi gọi Hùng"
+ }
+}

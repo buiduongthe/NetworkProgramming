@@ -66,3 +66,16 @@ CHAY_DEMO_*.bat
 THU_*.bat
 THU/
 _log/
+
+# Bài MR6.15: bản ghi cuộc gọi, chứng chỉ tự ký sinh khi chạy
+**/BaiMR6.15_*/ban_ghi/
+**/BaiMR6.15_*/ban_ghi_demo/
+**/BaiMR6.15_*/chung_chi/
+
+# Android (Gradle, Android Studio)
+.gradle/
+android/**/build/
+local.properties
+*.apk
+*.aab
+!**/gradle/wrapper/gradle-wrapper.jar
