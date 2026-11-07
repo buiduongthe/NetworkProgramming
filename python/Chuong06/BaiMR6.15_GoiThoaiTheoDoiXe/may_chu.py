@@ -40,6 +40,7 @@ import os
 import re
 import shutil
 import ssl
+import sys
 import time
 from collections import deque
 
@@ -50,6 +51,11 @@ from aiortc.contrib.media import MediaRelay
 from aiortc.sdp import candidate_from_sdp
 
 from mqtt_broker import MqttBroker
+
+# Windows: khi chuyển hướng đầu ra vào tệp, Python dùng bảng mã ANSI (cp1252) và báo lỗi với chữ Việt -> ép UTF-8.
+for _luong in (sys.stdout, sys.stderr):
+    if hasattr(_luong, "reconfigure"):
+        _luong.reconfigure(encoding="utf-8", errors="replace")
 
 THU_MUC = os.path.dirname(os.path.abspath(__file__))
 DO_CHUONG_TOI_DA = 30.0

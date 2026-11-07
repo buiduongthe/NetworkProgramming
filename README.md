@@ -4,7 +4,7 @@ Kho mã nguồn đi kèm **Giáo trình Lập trình mạng** (Trường Đại 
 
 > **English summary.** Companion source code for the Vietnamese textbook *Network Programming*. Every pseudocode listing in the book is implemented in C#, Java and Python (the languages referenced by the book) and additionally in Rust and Go, using the standard socket APIs, from TCP/UDP client–server basics to asynchronous I/O, multi-client servers, broadcast/multicast, HTTP, WebSocket, SSE, gRPC, SMTP, ICMP, MQTT, LLM APIs, the Model Context Protocol (MCP) and TLS. Each example is self-contained, commented, and ships with a reproducible demo script and a screenshot of its real output.
 
-Quy mô: <!-- THONG_KE -->39 bài × 5 ngôn ngữ = 195 chương trình; 195 chương trình đã chạy và có ảnh kết quả thực thi; 33 bài mở rộng × 5 ngôn ngữ = 163 chương trình, 161 đã chạy<!-- /THONG_KE -->.
+Quy mô: <!-- THONG_KE -->39 bài × 5 ngôn ngữ = 195 chương trình; 195 chương trình đã chạy và có ảnh kết quả thực thi; 33 bài mở rộng × 5 ngôn ngữ = 163 chương trình, 162 đã chạy<!-- /THONG_KE -->.
 
 ## Mục lục
 - [Mục tiêu và nguyên tắc thiết kế](#mục-tiêu-và-nguyên-tắc-thiết-kế)

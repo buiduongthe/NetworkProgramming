@@ -11,7 +11,13 @@ Khung gói MQTT: byte đầu = (loại << 4) | cờ; tiếp theo là "độ dài
 tối đa 4 byte); chuỗi UTF-8 có tiền tố độ dài 2 byte (big-endian).
 """
 import asyncio
+import sys
 import time
+
+# Windows: khi chuyển hướng đầu ra vào tệp, Python dùng bảng mã ANSI (cp1252) và báo lỗi với chữ Việt -> ép UTF-8.
+for _luong in (sys.stdout, sys.stderr):
+    if hasattr(_luong, "reconfigure"):
+        _luong.reconfigure(encoding="utf-8", errors="replace")
 
 CONNECT, CONNACK, PUBLISH, PUBACK = 1, 2, 3, 4
 SUBSCRIBE, SUBACK, UNSUBSCRIBE, UNSUBACK = 8, 9, 10, 11
@@ -217,7 +223,6 @@ class MqttBroker:
 
 
 if __name__ == "__main__":                            # chạy riêng: python mqtt_broker.py [host] [cổng]
-    import sys
 
     async def main():
         b = MqttBroker(lambda t: print(f"[mqtt] {time.strftime('%H:%M:%S')} {t}", flush=True))

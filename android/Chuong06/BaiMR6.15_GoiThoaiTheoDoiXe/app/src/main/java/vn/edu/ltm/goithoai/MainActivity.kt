@@ -20,7 +20,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Contacts
 import androidx.compose.material.icons.filled.DirectionsCar
@@ -132,7 +131,7 @@ class MainActivity : ComponentActivity() {
                         }
                     },
                 ) { dem ->
-                    Box(Modifier.fillMaxSize().background(Mau.nen).padding(dem).statusBarsPadding()) {
+                    Box(Modifier.fillMaxSize().background(Mau.nen).padding(dem)) {
                         when (vm.tab) {
                             0 -> ManHinhDanhBa(vm.danhBa, mayChu, vm::ngatKetNoi, vm::goi)
                             1 -> ManHinhLichSu(vm.lichSu, vm.caiDat.ma, mayChu, vm.trinhPhat, vm::ngatKetNoi, vm::taiLichSu,

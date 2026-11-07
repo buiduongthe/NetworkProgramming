@@ -66,7 +66,13 @@ fun BanDo(
             val o = ra(it)
             drawCircle(Mau.do_, 9.dp.toPx(), o)
             drawCircle(Mau.trang, 4.dp.toPx(), o)
-            if (nhanDich.isNotEmpty()) chu(do_, nhanDich, o + Offset(12.dp.toPx(), -8.dp.toPx()))
+            if (nhanDich.isNotEmpty()) {
+                // nhãn bên phải ghim; sát mép phải thì đặt sang bên trái để không bị cắt
+                val kq = do_.measure(nhanDich, kieu(12, androidx.compose.ui.text.font.FontWeight.Medium, Mau.chu))
+                val x = if (o.x + 12.dp.toPx() + kq.size.width > size.width - 4.dp.toPx())
+                    o.x - 12.dp.toPx() - kq.size.width else o.x + 12.dp.toPx()
+                drawText(kq, topLeft = Offset(x, o.y - kq.size.height / 2f))
+            }
         }
         xe?.let {
             val o = ra(it)

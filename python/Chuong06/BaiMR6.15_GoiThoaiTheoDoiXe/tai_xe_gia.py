@@ -16,9 +16,15 @@ import json
 import math
 import os
 import random
+import sys
 import time
 
 from mqtt_khach import MqttKhach
+
+# Windows: khi chuyển hướng đầu ra vào tệp, Python dùng bảng mã ANSI (cp1252) và báo lỗi với chữ Việt -> ép UTF-8.
+for _luong in (sys.stdout, sys.stderr):
+    if hasattr(_luong, "reconfigure"):
+        _luong.reconfigure(encoding="utf-8", errors="replace")
 
 R_TRAI_DAT = 6371000.0
 

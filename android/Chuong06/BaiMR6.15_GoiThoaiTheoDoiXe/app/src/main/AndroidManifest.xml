@@ -14,7 +14,7 @@
     <uses-feature android:name="android.hardware.microphone" android:required="false" />
     <uses-feature android:name="android.hardware.location.gps" android:required="false" />
 
-    <!-- usesCleartextTraffic: cho phép ws:// và http:// tới máy chủ trong mạng lab (bản --tls dùng wss://) -->
+    <!-- usesCleartextTraffic: cho phép ws:// và http:// tới máy chủ trong mạng lab (máy chủ chạy tùy chọn tls thì dùng wss://) -->
     <application
         android:allowBackup="false"
         android:icon="@drawable/ic_ung_dung"

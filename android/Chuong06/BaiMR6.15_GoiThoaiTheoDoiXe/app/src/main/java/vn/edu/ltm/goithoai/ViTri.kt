@@ -151,6 +151,7 @@ class TaiXeViTri(private val ctx: Context, private val scope: CoroutineScope) {
     fun chonCheDo(c: String) {
         if (c == cheDo) return
         if (c == "gps") dungGiaLap() else tatGps()
+        vet.clear()                                          // vết của nguồn cũ không nối sang nguồn mới
         cheDo = c
     }
 

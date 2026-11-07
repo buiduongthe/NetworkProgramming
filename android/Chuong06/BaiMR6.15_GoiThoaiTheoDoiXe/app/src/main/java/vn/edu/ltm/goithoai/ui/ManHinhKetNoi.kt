@@ -70,13 +70,14 @@ fun ManHinhKetNoi(c: CaiDat, dangKetNoi: Boolean, loi: String?, doi: (CaiDat) ->
                 O("Biển số", c.bienSo, Modifier.weight(1f)) { doi(c.copy(bienSo = it)) }
                 O("Xe", c.xe, Modifier.weight(1.4f)) { doi(c.copy(xe = it)) }
             }
-            O("Cổng MQTT (vị trí)", c.congMqtt, kieuPhim = KeyboardType.Number) { doi(c.copy(congMqtt = it.filter(Char::isDigit))) }
         } else {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 O("Mã chuyến", c.chuyen, Modifier.weight(1f)) { doi(c.copy(chuyen = it)) }
                 O("Điểm đón", c.diemDon, Modifier.weight(1.4f)) { doi(c.copy(diemDon = it)) }
             }
         }
+        // Cổng MQTT cho cả hai vai: tài xế gửi vị trí, khách nhận vị trí xe (cùng IP máy chủ)
+        O("Cổng MQTT (vị trí xe)", c.congMqtt, kieuPhim = KeyboardType.Number) { doi(c.copy(congMqtt = it.filter(Char::isDigit))) }
 
         Spacer(Modifier.height(12.dp))
         Row(

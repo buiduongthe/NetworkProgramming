@@ -61,13 +61,28 @@ Thử với một điện thoại: chạy thêm điện thoại giả và tài x
 
 **Máy ảo Android (emulator):** máy ảo thấy máy tính ở địa chỉ `10.0.2.2`; nhập `10.0.2.2` làm IP máy chủ. Chế độ "GPS thật" trên máy ảo nhận vị trí từ *Extended controls → Location* (đặt điểm hoặc phát tệp GPX/KML), tiện thử mà không cần ra đường. Micro máy ảo cần bật *Extended controls → Microphone → Virtual microphone uses host audio input*.
 
+## Kết quả thực thi
+![Ảnh chụp app trên máy ảo Android 15](ket_qua_app.png)
+
+Chụp màn hình thật của app (bản debug) trên máy ảo Android 15, máy chủ Python chạy trên cùng máy tính (cổng 18080, MQTT 11883):
+1. Màn hình kết nối (vai Khách, có ô cổng MQTT cho bản đồ chuyến đi).
+2. Danh bạ do máy chủ gửi: Chi, Hùng (điện thoại giả) trực tuyến; An, Tài xế Dũng ngoại tuyến.
+3–4. Gọi Hùng: đổ chuông, rồi trong cuộc gọi có ghi âm. RTT 2 ms, mất gói 0 %, Opus 17 kbit/s là số đo thật từ `getStats()`; máy chủ ghi "WebRTC của Bình: connected".
+5. Cuộc gọi đến từ An (điện thoại giả gọi tài xế Dũng), có thông báo ghi âm và trả lời nhanh.
+6. Lịch sử: cuộc gọi 47 s, bản ghi 316 kB tải từ máy chủ và phát bằng `MediaPlayer` (Ogg/Opus).
+7. Khách theo dõi tài xế Hùng (giả lập): còn 1,6 km, khoảng 4 phút, cập nhật 0 giây trước.
+8. Vai tài xế, giả lập tuyến Bến Thành → Thảo Điền: điểm gửi lên `xe/59A11122/vitri`; `khach_theo_doi.py` trên máy tính nhận đúng các điểm này.
+9. Vai tài xế, GPS thật: máy ảo nhận tọa độ bằng `adb emu geo fix`, app gửi mỗi giây.
+
+Khi app tài xế bị đóng đột ngột, màn hình khách hiện "Tài xế mất kết nối (Last Will)" – broker đã phát di chúc.
+
 ## Ghi chú
 - **Chỉ dùng trong mạng lab.** `usesCleartextTraffic="true"` cho phép `ws://` và `http://` tới máy chủ trong LAN; khi cần mã hóa dùng máy chủ `--tls` và vân tay. Ghi âm chỉ diễn ra khi người gọi đã đánh dấu đồng ý; người nghe thấy thông báo trước khi trả lời.
 - App **không chạy dịch vụ nền**: tắt màn hình hoặc chuyển app khác lâu thì hệ điều hành có thể đóng kết nối, nên app giữ màn hình sáng khi đang mở (`FLAG_KEEP_SCREEN_ON`). Ứng dụng thật cần *foreground service* (loại `microphone`, `location`), thông báo cuộc gọi đến (Firebase Cloud Messaging hoặc `ConnectionService`) – xem bài tập.
 - Phát bản ghi dùng `MediaPlayer` với tệp Ogg/Opus tải về bộ nhớ đệm; nếu máy không phát được, nút "Mở bằng ứng dụng khác" mở đường dẫn `http://<IP>:<cổng>/banghi/<tệp>` bằng trình duyệt.
 - Qua Internet (4G) cần thêm máy chủ STUN/TURN vào `RTCConfiguration` (`iceServers`), vì điện thoại nằm sau NAT của nhà mạng.
 - Bản đồ là hình chiếu phẳng quanh tâm vùng hiển thị (đủ chính xác cho vài km), không có đường phố; muốn có nền bản đồ thật có thể dùng osmdroid (OpenStreetMap) hoặc Google Maps SDK (cần khóa API, đặt qua biến môi trường/`local.properties`, không ghi vào mã).
-- Các tệp `MqttKhach.kt` và `HinhHoc.kt` là Kotlin thuần, đã biên dịch và chạy thử bằng trình biên dịch Kotlin trên JVM với broker MQTT của bản Python; phần còn lại cần Android SDK và được biên dịch trong Android Studio.
+- Kiểm thử: biên dịch bằng Gradle 8.11.1 + Android SDK 35 trên Windows 11 (JDK 21), chạy trên máy ảo Android 15 (API 35, x86_64) nối với máy chủ Python qua `10.0.2.2`, cùng điện thoại giả và tài xế giả lập của bản Python.
 
 ## Bài tập gợi ý
 1. Thêm *foreground service* giữ kết nối báo hiệu khi tắt màn hình và hiện thông báo toàn màn hình khi có cuộc gọi đến (`NotificationCompat.CallStyle`). Cần thêm những quyền nào trên Android 14?

@@ -10,11 +10,17 @@ Chạy:  python khach_theo_doi.py <tên> <mã xe> [host] [cổng_mqtt] [--don LA
 import argparse
 import asyncio
 import json
+import sys
 import time
 
 from mqtt_khach import MqttKhach
 from tai_xe_gia import khoang_cach
 
+
+# Windows: khi chuyển hướng đầu ra vào tệp, Python dùng bảng mã ANSI (cp1252) và báo lỗi với chữ Việt -> ép UTF-8.
+for _luong in (sys.stdout, sys.stderr):
+    if hasattr(_luong, "reconfigure"):
+        _luong.reconfigure(encoding="utf-8", errors="replace")
 
 async def main():
     ap = argparse.ArgumentParser(description="Khách theo dõi vị trí tài xế qua MQTT")

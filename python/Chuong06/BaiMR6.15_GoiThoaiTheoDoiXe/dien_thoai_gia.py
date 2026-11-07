@@ -16,12 +16,18 @@ import hashlib
 import json
 import math
 import ssl
+import sys
 import time
 
 import aiohttp
 import av
 import numpy as np
 from aiortc import MediaStreamTrack, RTCConfiguration, RTCPeerConnection, RTCSessionDescription
+
+# Windows: khi chuyển hướng đầu ra vào tệp, Python dùng bảng mã ANSI (cp1252) và báo lỗi với chữ Việt -> ép UTF-8.
+for _luong in (sys.stdout, sys.stderr):
+    if hasattr(_luong, "reconfigure"):
+        _luong.reconfigure(encoding="utf-8", errors="replace")
 
 MAU, KHUNG = 48000, 960
 
